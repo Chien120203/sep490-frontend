@@ -4,6 +4,9 @@ const API_CODE = {
   API_002: '/auth/reset-password',
   API_003: '/auth/get-otp',
   API_004: '/auth/refreshtoken',
+
+  //Customer
+  API_005: '/customer/list',
 };
 
 export default API_CODE;

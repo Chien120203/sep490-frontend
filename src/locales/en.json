@@ -222,7 +222,8 @@
       "create_utility_failed": "Create utility failed",
       "update_utility_success": "Update utility success",
       "update_utility_failed": "Update utility failed",
-      "get_bill_details_failed": "Get bill details failed"
+      "get_bill_details_failed": "Get bill details failed",
+      "get_customer_failed": "Get list customers failed"
     }
   },
   "contract": {
@@ -278,6 +279,64 @@
     "modal_confirm": {
       "title": "Confirm terminate contract",
       "message": "Please enter 'Terminate' to confirm terminate this contract"
+    },
+    "status_placeholder": "Contract status",
+    "room_placeholder": "Contract room",
+    "tenant_placeholder": "Contract tenant",
+    "type_placeholder": "Contract type",
+    "landlord_placeholder": "Contract landlord"
+  },
+  "customer": {
+    "title": "Customer",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "date": "Contract Date",
+    "status": "Status",
+    "type": "Type",
+    "room": "Room",
+    "tenant": "Tenant",
+    "landlord": "Landlord",
+    "statuses": {
+      "active": "Active",
+      "terminated": "Terminated",
+      "renewed": "Renewed"
+    },
+    "types": {
+      "monthly": "Monthly",
+      "quater": "Quater",
+      "half-year": "Half Year",
+      "year": "Yearly"
+    },
+    "create": {
+      "title": "Create Contract",
+      "contract_name": "Contract Name",
+      "duration": "Duration",
+      "deposit": "Deposit",
+      "room": "Room",
+      "type": "Type",
+      "tenants": "Tenants",
+      "landlord": "Landlord"
+    },
+    "detail": {
+      "title": "Contract Detail"
+    },
+    "table": {
+      "header": {
+        "code": "Customer Code",
+        "name": " Customer Names",
+        "phone": "Phone Number",
+        "fax": "Fax Code",
+        "address": "Address",
+        "email": "Email",
+        "action": "Action",
+        "director": "Director"
+      }
+    },
+    "modal_confirm": {
+      "title": "Confirm delete customer",
+      "message": "Please enter 'Delete' to confirm delete this customer"
     },
     "status_placeholder": "Contract status",
     "room_placeholder": "Contract room",
