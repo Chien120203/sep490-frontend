@@ -1,4 +1,4 @@
-export const JA_LOCALE = 'ja';
+export const VI_LOCALE = 'vi';
 export const EN_LOCALE = 'en';
 
 export const RULES_VALIDATION = {

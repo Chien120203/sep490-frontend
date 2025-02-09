@@ -47,7 +47,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import vClickOutside from "click-outside-vue3";
-import { JA_LOCALE, EN_LOCALE } from "@/constants/application";
+import { VI_LOCALE, EN_LOCALE } from "@/constants/application";
 import { useRouter } from "vue-router";
 import { i18n } from "@/utils/i18n";
 import { $exchangeRate, $globalLocale } from "@/utils/variables";
@@ -85,7 +85,7 @@ export default {
 
     return {
       selectedLanguage,
-      JA_LOCALE,
+      VI_LOCALE,
       EN_LOCALE,
       username,
       $globalLocale,
