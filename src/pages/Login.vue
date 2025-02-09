@@ -22,7 +22,7 @@
             ENGLISH
           </button>
         </div>
-        <div class="">
+        <div class="login-form-container">
           <Form
               class="login-form"
               @submit="handleSubmit"
@@ -33,7 +33,7 @@
               <Field
                   name="username"
                   type="text"
-                  class="form-control login-field js--login-field--user-account"
+                  class="form-control login-field"
                   :placeholder="$t('common.username')"
                   v-model="dataRequest.username"
                   maxlength="50"
@@ -54,7 +54,7 @@
               <Field
                   name="password"
                   type="password"
-                  class="form-control login-field js--login-field--password"
+                  class="form-control login-field"
                   :placeholder="$t('common.password')"
                   v-model="dataRequest.password"
                   maxlength="50"
@@ -71,9 +71,10 @@
               </p>
             </div>
             <div class="form-group forgot-password">
-              <a @click="openResetPassModal()" href="#"
-              ><span>{{ $t("common.forgot_password") }}</span></a
-              >
+              <!-- Forgot password styled as orange and aligned right -->
+              <a @click="openResetPassModal()" href="#" class="forgot-password-link">
+                <span>{{ $t("common.forgot_password") }}</span>
+              </a>
             </div>
 
             <button
@@ -104,8 +105,7 @@
                   :loading="loadingButton.value"
                   class="btn btn-save"
                   @click="getOtpCode()"
-              >{{ $t("common.get_otp") }}</el-button
-              >
+              >{{ $t("common.get_otp") }}</el-button>
             </div>
             <p v-if="validation.value.email" class="error-feedback">
               {{
@@ -166,8 +166,7 @@
                 :loading="loadingSaveButton.value"
                 class="btn btn-save"
                 @click="resetPassword"
-            >{{ $t("common.save") }}</el-button
-            >
+            >{{ $t("common.save") }}</el-button>
           </el-form-item>
         </el-form>
       </template>
@@ -238,22 +237,6 @@ export default {
       localStorage.setItem("CurrentLanguage", val);
       i18n.global.locale.value = val;
       $globalLocale.update(val);
-      getExchangeRate(val);
-    };
-
-    const getExchangeRate = async (locale) => {
-      await $services.CurrencyAPI.getExchangeRate(
-          {
-            language: locale,
-          },
-          (response) => {
-            let exchangeRate = response.data.result.rate;
-            localStorage.setItem("CurrentExchangeRate", exchangeRate);
-            $exchangeRate.update(exchangeRate);
-          },
-          (error) => {
-          }
-      );
     };
 
     const openResetPassModal = () => {
@@ -263,9 +246,6 @@ export default {
     // Lưu thông tin đăng nhập vào localStorage sau khi đăng nhập thành công
     const handleSubmit = (user) => {
       handleLogin(user);
-      // Lưu thông tin vào localStorage
-      localStorage.setItem('username', user.username); // Lưu tên đăng nhập
-      localStorage.setItem('loggedIn', 'true'); // Lưu trạng thái đăng nhập
     };
 
     const getOtpCode = () => {
@@ -314,3 +294,20 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.js--btn-login {
+  width: 100%;
+  padding: 15px 0;
+  font-size: 16px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.forgot-password-link {
+  color: #ff6600;
+  text-align: right;
+  display: block;
+}
+</style>

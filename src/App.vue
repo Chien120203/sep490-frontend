@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import {ref, onMounted, onBeforeUnmount, computed} from "vue";
 import Navbar from "@/components/common/Navbar.vue";
 import Sidebar from "@/components/common/Sidebar.vue";
 import { useAuthStore } from "@/store/auth.js";
@@ -73,7 +73,7 @@ export default {
     const isHovered = ref(false);
     const isWidth1025 = ref(window.innerWidth > 1025);
     const router = useRouter();
-    const loggedIn = ref(!!localStorage.getItem("username"));
+    const loggedIn = computed(() => !!localStorage.getItem("username"));
     const handleMenu = () => {
       isMenu.value = !isMenu.value;
     };

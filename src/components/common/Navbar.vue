@@ -5,9 +5,9 @@
         <div class="logo_nav">
           <a href="/">
             <img
-              src="@/assets/logo_login.png"
-              class="logo_zoom_in"
-              alt="logo"
+                src="@/assets/logo_login.png"
+                class="logo_zoom_in"
+                alt="logo"
             />
           </a>
         </div>
@@ -15,27 +15,27 @@
           <el-sub-menu index="1" mode="vertical">
             <template #title>
               <img
-                src="@/assets/images/avatar/avatar_001.png"
-                alt="logo"
-                class="avatar__img"
+                  src="@/assets/images/avatar/avatar_001.png"
+                  alt="logo"
+                  class="avatar__img"
               />
               {{ username }}
             </template>
-            <el-menu-item @click="logout()" index="1-1">
+            <el-menu-item @click="logout" index="1-1">
               {{ $t("common.logout") }}
             </el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="2">
             <template #title>
               {{
-                selectedLanguage === EN_LOCALE ? "ENGLISH" : "日本語"
+                selectedLanguage === EN_LOCALE ? "ENGLISH" : "Tiếng Việt"
               }}</template
             >
             <el-menu-item @click="changeLocale(EN_LOCALE)" index="3-1"
-              >ENGLISH</el-menu-item
+            >ENGLISH</el-menu-item
             >
-            <el-menu-item @click="changeLocale(JA_LOCALE)" index="3-2"
-              >日本語</el-menu-item
+            <el-menu-item @click="changeLocale(VI_LOCALE)" index="3-2"
+            >Tiếng Việt</el-menu-item
             >
           </el-sub-menu>
         </el-menu>
@@ -51,6 +51,7 @@ import { VI_LOCALE, EN_LOCALE } from "@/constants/application";
 import { useRouter } from "vue-router";
 import { i18n } from "@/utils/i18n";
 import { $exchangeRate, $globalLocale } from "@/utils/variables";
+import { useAuthStore } from "@/store/auth.js";
 
 export default {
   name: "Navbar",
@@ -59,10 +60,10 @@ export default {
   },
   setup() {
     const selectedLanguage = ref(
-      localStorage.getItem("CurrentLanguage") || EN_LOCALE
+        localStorage.getItem("CurrentLanguage") || EN_LOCALE
     );
     const router = useRouter();
-    const username = ref("Admin");
+    const username = ref(localStorage.getItem("username"));
 
     const changeLocale = (val) => {
       selectedLanguage.value = val;
@@ -71,7 +72,11 @@ export default {
       i18n.global.locale.value = val;
     };
 
-    const logout = async () => {
+    const authStore = useAuthStore();
+
+
+    const logout = () => {
+      authStore.handleLogout();
     };
 
     onMounted(() => {

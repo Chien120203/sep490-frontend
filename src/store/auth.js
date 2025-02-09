@@ -1,6 +1,5 @@
 import {defineStore} from "pinia";
 import {reactive} from "vue";
-import Cookies from "js-cookie";
 import {mixinMethods} from "@/utils/variables";
 import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
@@ -22,6 +21,7 @@ export const useAuthStore = defineStore(
     const loadingButton = reactive({value: false});
     const loadingSaveButton = reactive({value: false});
     const validation = reactive({value: {}});
+    const router = useRouter();
 
     const handleLogin = async (params) => {
       mixinMethods.startLoading();
@@ -36,6 +36,8 @@ export const useAuthStore = defineStore(
             localStorage.setItem('refreshToken', response.data.refreshToken);
             localStorage.setItem('isVerify', response.data.isVerify);
             validation.value = {};
+
+            router.push({name: PAGE_NAME.HOME});
           }
 
           mixinMethods.endLoading();
@@ -50,10 +52,18 @@ export const useAuthStore = defineStore(
       );
     };
 
-    const handleLogout = () => {
-      Cookies.remove("access_token");
-      Cookies.remove("highest_role");
-    };
+      const handleLogout = () => {
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("highest_role");
+          localStorage.removeItem("username");
+          localStorage.removeItem("email");
+          localStorage.removeItem("refreshToken");
+          localStorage.removeItem("isVerify");
+          localStorage.removeItem("CurrentLanguage");
+
+          router.push({name: PAGE_NAME.LOGIN});
+      };
+
 
     const getOTPCode = async (sentEmail) => {
       loadingButton.value = true;
