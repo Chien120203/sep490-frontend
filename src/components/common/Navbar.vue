@@ -46,15 +46,12 @@
 
 <script>
 import { ref, onMounted } from "vue";
-import Cookies from "js-cookie";
 import vClickOutside from "click-outside-vue3";
 import { JA_LOCALE, EN_LOCALE } from "@/constants/application";
-import { useAuthStore } from "@/store/auth.js";
 import { useRouter } from "vue-router";
 import { i18n } from "@/utils/i18n";
 import PAGE_NAME from "@/constants/route-name.js";
-import { $services } from "@/utils/variables";
-import { $exchangeRate, $globalLocale } from "../../utils/variables";
+import { $exchangeRate, $globalLocale } from "@/utils/variables";
 
 export default {
   name: "Navbar",
@@ -65,38 +62,17 @@ export default {
     const selectedLanguage = ref(
       localStorage.getItem("CurrentLanguage") || EN_LOCALE
     );
-    const authStore = useAuthStore();
-    const { handleLogout } = authStore;
     const router = useRouter();
-    const username = ref(Cookies.get("username"));
-    const role = ref(Cookies.get("highest_role"));
+    const username = ref("Admin");
 
     const changeLocale = (val) => {
       selectedLanguage.value = val;
       localStorage.setItem("CurrentLanguage", val);
       $globalLocale.update(val);
       i18n.global.locale.value = val;
-      getExchangeRate(val);
-    };
-
-    const getExchangeRate = async (locale) => {
-      await $services.CurrencyAPI.getExchangeRate(
-        {
-          language: locale,
-        },
-        (response) => {
-          location.reload();
-          let exchangeRate = response.data.result.rate;
-          localStorage.setItem("CurrentExchangeRate", exchangeRate);
-          $exchangeRate.update(exchangeRate);
-        },
-        (error) => {}
-      );
     };
 
     const logout = async () => {
-      await handleLogout();
-      router.push({ name: PAGE_NAME.LOGIN });
     };
 
     onMounted(() => {
@@ -113,7 +89,6 @@ export default {
       JA_LOCALE,
       EN_LOCALE,
       username,
-      role,
       $globalLocale,
       $exchangeRate,
       changeLocale,
