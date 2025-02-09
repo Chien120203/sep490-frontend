@@ -1,20 +1,16 @@
-import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import {defineStore} from "pinia";
+import {reactive} from "vue";
 import Cookies from "js-cookie";
-import { mixinMethods, $services } from "@/utils/variables";
-import { COOKIE_EXPIRE_TIME } from "@/constants/application";
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
-import { ADMIN } from "@/constants/roles.js";
-import PAGE_NAME from "@/constants/route-name.js";
+import {mixinMethods} from "@/utils/variables";
+import {useI18n} from "vue-i18n";
+import {useRouter} from "vue-router";
+import services from "@/plugins/services";
 
 export const useAuthStore = defineStore(
   "auth",
   () => {
-    const { t } = useI18n();
-    const loggedIn = reactive({ value: false });
-    const isShowModal = reactive({ value: false });
-    const router = useRouter();
+    const {t} = useI18n();
+    const isShowModal = reactive({value: false});
     const resetPasswordForm = reactive({
       value: {
         email: "",
@@ -23,42 +19,22 @@ export const useAuthStore = defineStore(
         confirmPassword: "",
       },
     });
-    const loadingButton = reactive({ value: false });
-    const loadingSaveButton = reactive({ value: false });
-    const validation = reactive({ value: {} });
+    const loadingButton = reactive({value: false});
+    const loadingSaveButton = reactive({value: false});
+    const validation = reactive({value: {}});
 
     const handleLogin = async (params) => {
       mixinMethods.startLoading();
-      await $services.AuthenticationAPI.login(
+      await services.AuthenticationAPI.login(
         params,
         (response) => {
           if (response.data) {
-            const access_token = response.data.token;
-            const refresh_token = response.data.refreshToken;
-            const highestRole = response.data.user.highestRole;
-            const userId = response.data.user.id;
-            const userName = response.data.user.username;
-            Cookies.set("user_id", userId, {
-              expires: parseInt(COOKIE_EXPIRE_TIME),
-            });
-            Cookies.set("username", userName, {
-              expires: parseInt(COOKIE_EXPIRE_TIME),
-            });
-            Cookies.set("highest_role", highestRole, {
-              expires: parseInt(COOKIE_EXPIRE_TIME),
-            });
-            Cookies.set("access_token", access_token, {
-              expires: parseInt(COOKIE_EXPIRE_TIME),
-            });
-            Cookies.set("refresh_token", refresh_token, {
-              expires: parseInt(COOKIE_EXPIRE_TIME),
-            });
-            if(highestRole !== ADMIN) {
-              router.push({name: PAGE_NAME.ROOM.LIST})
-            } else {
-              router.push({name: PAGE_NAME.USER.LIST})
-            }
-            loggedIn.value = true;
+            localStorage.setItem('username', response.data.username);
+            localStorage.setItem('role', response.data.role);
+            localStorage.setItem('accessToken', response.data.accessToken);
+            localStorage.setItem('email', response.data.email);
+            localStorage.setItem('refreshToken', response.data.refreshToken);
+            localStorage.setItem('isVerify', response.data.isVerify);
             validation.value = {};
           }
 
@@ -77,7 +53,6 @@ export const useAuthStore = defineStore(
     const handleLogout = () => {
       Cookies.remove("access_token");
       Cookies.remove("highest_role");
-      loggedIn.value = false;
     };
 
     const getOTPCode = async (sentEmail) => {
@@ -134,7 +109,6 @@ export const useAuthStore = defineStore(
     };
 
     return {
-      loggedIn,
       validation,
       loadingButton,
       resetPasswordForm,
@@ -145,6 +119,5 @@ export const useAuthStore = defineStore(
       handleLogout,
       resetNewPassword,
     };
-  },
-  {persist: true}
+  }
 );
