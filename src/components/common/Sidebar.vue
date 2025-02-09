@@ -107,12 +107,12 @@ export default {
     const isShowComponent = ref(true);
     const menuOpen = ref("");
     const listRouter = computed(() => [
-      // {
-      //   function_name: t("side_bar.label.user"),
-      //   function_page_name: PAGE_NAME.CUSTOMER.LIST,
-      //   function_icon: "IconUserGroup",
-      //   isShow: true, // set later
-      // }
+      {
+        function_name: t("side_bar.label.customer"),
+        function_page_name: PAGE_NAME.CUSTOMER.LIST,
+        function_icon: "IconUserGroup",
+        isShow: true, // set later
+      }
     ]);
 
     const listRouterOthers = computed(() => [
