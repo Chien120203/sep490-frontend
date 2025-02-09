@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loggedIn.value" class="main">
+  <div v-if="true" class="main">
     <div class="container-fluid" style="height: 100vh">
       <div class="row" style="height: 100%">
         <div
@@ -68,6 +68,7 @@ import { useRouter } from "vue-router";
 export default {
   components: { Navbar, Sidebar },
   setup() {
+    //refactor v-if later
     const isMenu = ref(false);
     const isHovered = ref(false);
     const isWidth1025 = ref(window.innerWidth > 1025);
