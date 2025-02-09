@@ -356,14 +356,14 @@ export const useCustomerStore = defineStore(
         address: "",
         email: "",
         director_name: "",
-        description: "",
         bank_account: "",
-        bank_name: ""
+        bank_name: "",
+        description: ""
       }
     })
 
     const getListCustomers = async (params) => {
-      mixinMethods.startLoading();
+      // mixinMethods.startLoading();
       await services.CustomerAPI.list(
         params,
         (response) => {

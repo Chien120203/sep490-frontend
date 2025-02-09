@@ -4,10 +4,9 @@
       <h3 class="page__ttl">{{ $t("customer.title") }}</h3>
       <div class="customer-btn-box customer-import-box">
         <el-row
-          v-if="1==1"
           class="mb-4"
         >
-          <el-button class="btn btn-save" @click="handleOpenModal(true)"
+          <el-button class="btn btn-save" @click="handleRedirectToCreate"
             >{{ $t("customer.add_new") }}
           </el-button>
         </el-row>
@@ -77,6 +76,8 @@ import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import { ADMIN, LANDLORD } from "@/constants/roles.js";
 import { mixinMethods } from "@/utils/variables";
 import {useCustomerStore} from "@/store/customer.js";
+import { useRouter } from "vue-router";
+import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
   name: "CustomerList",
@@ -101,6 +102,7 @@ export default {
       pageNo: 0,
     });
     const delete_id = ref();
+    const router = useRouter();
     const customerStore = useCustomerStore();
     const {
       validation,
@@ -150,10 +152,12 @@ export default {
       searchForms.value.endDate = mixinMethods.showDateTime(date[1]);
     };
 
-    const handleOpenModal = (isCreate = false) => {
+    const handleRedirectToCreate = () => {
+      router.push({name: PAGE_NAME.CUSTOMER.CREATE})
     };
 
     const handleGetCustomerDtls = (id) => {
+      router.push({name: PAGE_NAME.CUSTOMER.DEATILS, params: {id}});
     };
 
     const handleCloseModal = () => {
@@ -191,7 +195,7 @@ export default {
       handleGetCustomerDtls,
       handleCloseModal,
       handleConfirm,
-      handleOpenModal,
+      handleRedirectToCreate,
       handleSaveContract,
     };
   },
