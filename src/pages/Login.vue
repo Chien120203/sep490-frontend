@@ -2,11 +2,6 @@
   <div class="login">
     <div class="login-screen">
       <div class="login-item">
-        <div class="login-icon">
-          <span class="login-logo">
-            <img src="@/assets/logo_login.png" alt="logo" />
-          </span>
-        </div>
         <div class="login-language">
           <button
               @click="changeLocale(VI_LOCALE)"
@@ -200,7 +195,6 @@ export default {
     const authStore = useAuthStore();
     const {
       loadingButton,
-      loggedIn,
       loadingSaveButton,
       handleLogin,
       validation,
@@ -266,8 +260,12 @@ export default {
       isShowModal.value = true;
     };
 
+    // Lưu thông tin đăng nhập vào localStorage sau khi đăng nhập thành công
     const handleSubmit = (user) => {
       handleLogin(user);
+      // Lưu thông tin vào localStorage
+      localStorage.setItem('username', user.username); // Lưu tên đăng nhập
+      localStorage.setItem('loggedIn', 'true'); // Lưu trạng thái đăng nhập
     };
 
     const getOtpCode = () => {
@@ -292,7 +290,7 @@ export default {
       isShowModal.value = false;
       validation.value = {};
       resetPasswordForm.value = {};
-    }
+    };
 
     return {
       selectedLanguage,

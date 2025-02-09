@@ -4,7 +4,7 @@ import { AuthenticationAPI } from "@/services/AuthenticationAPI";
 
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
-  initializeService(axios, "/sep490");
+  initializeService(axios, "");
 })();
 
 const services = {

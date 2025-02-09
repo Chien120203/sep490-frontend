@@ -1,5 +1,5 @@
 <template>
-  <div v-if="true" class="main">
+  <div v-if="loggedIn" class="main">
     <div class="container-fluid" style="height: 100vh">
       <div class="row" style="height: 100%">
         <div
@@ -72,10 +72,8 @@ export default {
     const isMenu = ref(false);
     const isHovered = ref(false);
     const isWidth1025 = ref(window.innerWidth > 1025);
-    const authStore = useAuthStore();
-    const { loggedIn } = authStore;
     const router = useRouter();
-
+    const loggedIn = ref(!!localStorage.getItem("username"));
     const handleMenu = () => {
       isMenu.value = !isMenu.value;
     };
