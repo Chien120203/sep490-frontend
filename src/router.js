@@ -9,6 +9,7 @@ import Login from "@/pages/Login.vue";
 import Home from "@/pages/Home.vue";
 import Customer from  "@/pages/customer/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
+import CustomerDetails from "@/pages/customer/Save.vue";
 
 const routes = [
   {
@@ -37,6 +38,16 @@ const routes = [
         name: PAGE_NAME.CUSTOMER.LIST,
         component: CustomerList,
       },
+      {
+        path: PAGES.CUSTOMER_CREATE,
+        name: PAGE_NAME.CUSTOMER.CREATE,
+        component: CustomerDetails,
+      },
+      {
+        path: PAGES.CUSTOMER_DETAILS,
+        name: PAGE_NAME.CUSTOMER.DEATILS,
+        component: CustomerDetails,
+      }
     ]
   },
   {

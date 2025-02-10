@@ -303,24 +303,22 @@
       "terminated": "Terminated",
       "renewed": "Renewed"
     },
-    "types": {
-      "monthly": "Monthly",
-      "quater": "Quater",
-      "half-year": "Half Year",
-      "year": "Yearly"
+    "details": {
+      "title": "Update Customer",
+      "customer_code": "Customer Code",
+      "customer_name": "Customer Name",
+      "phone": "Phone",
+      "tax_code": "Tax Code",
+      "fax": "Fax",
+      "address": "Address",
+      "email": "Email",
+      "director_name": "Director Name",
+      "bank_account": "Bank Account",
+      "bank_name": "Bank Name",
+      "description": "Description"
     },
     "create": {
-      "title": "Create Contract",
-      "contract_name": "Contract Name",
-      "duration": "Duration",
-      "deposit": "Deposit",
-      "room": "Room",
-      "type": "Type",
-      "tenants": "Tenants",
-      "landlord": "Landlord"
-    },
-    "detail": {
-      "title": "Contract Detail"
+      "title": "Create Customer"
     },
     "table": {
       "header": {
@@ -512,7 +510,8 @@
       "profile": "Profile",
       "contract": "Contracts",
       "bill": "Bills",
-      "utility": "Utilities"
+      "utility": "Utilities",
+      "customer": "Customer"
     }
   },
   "room": {
@@ -630,5 +629,10 @@
   "E-CM-024": "Bill code is existed",
   "E-CM-025": "Utility name has been existed",
   "E-CM-026": "Utility name is duplicated",
-  "E-PW-001": "Password must be between {min} and {max} characters"
+  "E-CM-027": "Email is invalid",
+  "E-PW-001": "Password must be between {min} and {max} characters",
+  "E-CUS-001": "Customer code is required",
+  "E-CUS-004": "Tax code is required",
+  "E-CUS-005": "Phone number is invalid",
+  "E-CUS-006": "Fax number is invalid"
 }
