@@ -7,6 +7,11 @@ const API_CODE = {
 
   //Customer
   API_005: '/customer/list',
+  API_006: '/customer/create',
+  API_007: '/customer/:id',
+
+  //Customer Request
+  API_008: '/customer-req/list',
 };
 
 export default API_CODE;

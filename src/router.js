@@ -8,8 +8,10 @@ import Cookies from "js-cookie";
 import Login from "@/pages/Login.vue";
 import Home from "@/pages/Home.vue";
 import Customer from  "@/pages/customer/Index.vue"
+import Project from  "@/pages/project/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
 import CustomerDetails from "@/pages/customer/Save.vue";
+import ProjectList from "@/pages/project/ProjectList.vue";
 
 const routes = [
   {
@@ -34,7 +36,7 @@ const routes = [
     },
     children: [
       {
-        path: "",
+        path: PAGES.CUSTOMER,
         name: PAGE_NAME.CUSTOMER.LIST,
         component: CustomerList,
       },
@@ -47,6 +49,21 @@ const routes = [
         path: PAGES.CUSTOMER_DETAILS,
         name: PAGE_NAME.CUSTOMER.DEATILS,
         component: CustomerDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.PROJECT,
+    path: PAGES.PROJECT,
+    component: Project,
+    meta: {
+      middleware: [""],
+    },
+    children: [
+      {
+        path: PAGES.PROJECT,
+        name: PAGE_NAME.PROJECT.LIST,
+        component: ProjectList,
       }
     ]
   },

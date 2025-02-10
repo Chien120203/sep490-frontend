@@ -117,21 +117,16 @@ const showDateTime = (dateTime, formatString = undefined) => {
   ]).format(formatString);
 };
 
-const formatCurrency = (money, decimal = 0, s_delimiter = ",") => {
+const formatCurrency = (money, s_delimiter = ".") => {
   if (!money) return "";
 
-  const isJapaneseLocale = $globalLocale.value._value === "ja";
-  const currencySymbol = isJapaneseLocale ? "円" : "$";
-  const rex = "\\d(?=(\\d{3})+" + (decimal > 0 ? "\\D" : "$") + ")";
-  const convertedMoney = (money * $exchangeRate.value._value).toFixed(
-    Math.max(0, ~~decimal)
-  );
+  const currencySymbol = "₫";
+  const convertedMoney = Math.floor(money); // Ensure no decimals
 
-  const str = convertedMoney.replace(
-    new RegExp(rex, "g"),
-    "$&" + (s_delimiter || ",")
-  );
-  return isJapaneseLocale ? str + currencySymbol : currencySymbol + str;
+  const rex = "\\d(?=(\\d{3})+$)";
+  const formattedMoney = convertedMoney.toString().replace(new RegExp(rex, "g"), "$&" + s_delimiter);
+
+  return formattedMoney + " " + currencySymbol;
 };
 
 const handleChangeNumber = (number) => number.toString().replaceAll(",", "");

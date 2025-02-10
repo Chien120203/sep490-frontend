@@ -82,13 +82,12 @@ import IconUser from "@/svg/IconUser.vue";
 import IconUserGroup from "@/svg/IconUserGroup.vue";
 import IconContract from "@/svg/IconContract.vue";
 import IconBill from "@/svg/IconBill.vue";
+import ProjectIcon from "@/svg/ProjectIcon.vue";
 import IconRoom from "@/svg/IconRoom.vue";
 import IconUtility from "@/svg/IconUtility.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import Cookies from "js-cookie";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { ADMIN } from "@/constants/roles.js";
 
 export default {
   name: "Sidebar",
@@ -100,6 +99,7 @@ export default {
     IconUserGroup,
     IconUtility,
     IconContract,
+    ProjectIcon,
   },
   setup() {
     const { t } = useI18n();
@@ -111,6 +111,12 @@ export default {
         function_name: t("side_bar.label.customer"),
         function_page_name: PAGE_NAME.CUSTOMER.LIST,
         function_icon: "IconUserGroup",
+        isShow: true, // set later
+      },
+      {
+        function_name: t("side_bar.label.project"),
+        function_page_name: PAGE_NAME.PROJECT.LIST,
+        function_icon: "ProjectIcon",
         isShow: true, // set later
       }
     ]);

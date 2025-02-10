@@ -8,6 +8,9 @@ const PAGE_NAME = {
     DEATILS:"customer-details",
     CREATE:"customer-create",
   },
+  PROJECT: {
+    LIST: "project-list",
+  }
 };
 
 export default PAGE_NAME;

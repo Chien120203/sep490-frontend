@@ -2,6 +2,7 @@ import axios from "@/plugins/axios";
 import { initializeService } from "@/services/BaseService";
 import { AuthenticationAPI } from "@/services/AuthenticationAPI";
 import {CustomerAPI} from "@/services/CustomerAPI.js";
+import {ProjectAPI} from "@/services/ProjectAPI.js";
 
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
@@ -10,7 +11,8 @@ import {CustomerAPI} from "@/services/CustomerAPI.js";
 
 const services = {
   AuthenticationAPI,
-  CustomerAPI
+  CustomerAPI,
+  ProjectAPI
 };
 
 export default services;
