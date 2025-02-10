@@ -4,10 +4,14 @@ import {mixinMethods} from "@/utils/variables";
 import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
 import services from "@/plugins/services";
+import PAGE_NAME from "@/constants/route-name.js";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 export const useAuthStore = defineStore(
   "auth",
   () => {
+    const persist = usePersistanceStore();
+    const {loggedIn} = persist;
     const {t} = useI18n();
     const isShowModal = reactive({value: false});
     const resetPasswordForm = reactive({
@@ -29,6 +33,7 @@ export const useAuthStore = defineStore(
         params,
         (response) => {
           if (response.data) {
+            loggedIn.value = true;
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('role', response.data.role);
             localStorage.setItem('accessToken', response.data.accessToken);
@@ -52,17 +57,17 @@ export const useAuthStore = defineStore(
       );
     };
 
-      const handleLogout = () => {
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("highest_role");
-          localStorage.removeItem("username");
-          localStorage.removeItem("email");
-          localStorage.removeItem("refreshToken");
-          localStorage.removeItem("isVerify");
-          localStorage.removeItem("CurrentLanguage");
+    const handleLogout = () => {
+      loggedIn.value = false;
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("role");
+      localStorage.removeItem("username");
+      localStorage.removeItem("email");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("isVerify");
 
-          router.push({name: PAGE_NAME.LOGIN});
-      };
+      router.push({name: PAGE_NAME.LOGIN});
+    };
 
 
     const getOTPCode = async (sentEmail) => {
