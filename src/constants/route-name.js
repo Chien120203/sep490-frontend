@@ -13,6 +13,9 @@ const PAGE_NAME = {
     DETAILS:"user-details",
     CREATE:"user-create",
   },
+  PROJECT: {
+    LIST: "project-list",
+  }
 };
 
 export default PAGE_NAME;

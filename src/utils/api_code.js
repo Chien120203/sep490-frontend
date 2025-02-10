@@ -12,6 +12,9 @@ const API_CODE = {
   API_008: '/customer/create-customer',
   API_009: '/customer/delete-customer',
 
+  //project
+  API_PRJ_001: '/project/list-project',
+
   //User
   API_010: '/user/list',
 };

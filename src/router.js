@@ -1,18 +1,20 @@
 import { createWebHistory, createRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
-import { ADMIN, LANDLORD } from "@/constants/roles.js";
+import { ADMIN } from "@/constants/roles.js";
 
 // import pages
 import Login from "@/pages/Login.vue";
 import Home from "@/pages/Home.vue";
 import Customer from  "@/pages/customer/Index.vue"
 import User from  "@/pages/user/Index.vue"
+import Project from  "@/pages/project/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
 import CustomerDetails from "@/pages/customer/Save.vue";
 import UserList from "@/pages/user/UserList.vue";
 import UserDetails from "@/pages/user/Save.vue";
 import Forbidden from "@/pages/Forbidden.vue";
+import ProjectList from "@/pages/project/ProjectList.vue";
 
 const routes = [
   {
@@ -45,7 +47,7 @@ const routes = [
     },
     children: [
       {
-        path: "",
+        path: PAGES.CUSTOMER,
         name: PAGE_NAME.CUSTOMER.LIST,
         component: CustomerList,
       },
@@ -83,6 +85,21 @@ const routes = [
         path: PAGES.USER_DETAILS,
         name: PAGE_NAME.USER.DETAILS,
         component: UserDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.PROJECT,
+    path: PAGES.PROJECT,
+    component: Project,
+    meta: {
+      middleware: [""],
+    },
+    children: [
+      {
+        path: PAGES.PROJECT,
+        name: PAGE_NAME.PROJECT.LIST,
+        component: ProjectList,
       }
     ]
   },
