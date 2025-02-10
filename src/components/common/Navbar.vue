@@ -5,7 +5,7 @@
         <div class="logo_nav">
           <a href="/">
             <img
-                src="@/assets/logo_login.png"
+                src="@/assets/image-removebg-preview.png"
                 class="logo_zoom_in"
                 alt="logo"
             />

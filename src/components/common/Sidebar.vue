@@ -1,19 +1,19 @@
 <template>
   <div class="siderbar-block" v-if="isShowComponent">
     <div class="sidebar-logo">
-<!--      <a href="#"-->
-<!--        ><img-->
-<!--          src="@/assets/images/vmo_logo.svg"-->
-<!--          class="logo_zoom_in"-->
-<!--          alt="logo"-->
-<!--      /></a>-->
-<!--      <a href="#">-->
-<!--        <img-->
-<!--          src="@/assets/images/vmo_logo.svg"-->
-<!--          class="logo_zoom_out"-->
-<!--          alt="logo"-->
-<!--        />-->
-<!--      </a>-->
+      <a href="#"
+        ><img
+          src="@/assets/image-removebg-preview.png"
+          class="logo_zoom_in"
+          alt="logo"
+      /></a>
+      <a href="#">
+        <img
+          src="@/assets/image-removebg-preview.png"
+          class="logo_zoom_out"
+          alt="logo"
+        />
+      </a>
     </div>
     <div class="menu-box">
       <ul class="nav" v-if="listRouter.length">

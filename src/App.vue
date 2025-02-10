@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loggedIn" class="main">
+  <div v-if="true" class="main">
     <div class="container-fluid" style="height: 100vh">
       <div class="row" style="height: 100%">
         <div
