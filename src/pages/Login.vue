@@ -2,6 +2,9 @@
   <div class="login">
     <div class="login-screen">
       <div class="login-item">
+        <div class="login-icon">
+            <img src="@/assets/image-removebg-preview.png" alt="logo" />
+        </div>
         <div class="login-language">
           <button
               @click="changeLocale(VI_LOCALE)"

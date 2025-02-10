@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loggedIn" class="main">
+  <div v-if="loggedIn.value" class="main">
     <div class="container-fluid" style="height: 100vh">
       <div class="row" style="height: 100%">
         <div
@@ -62,18 +62,18 @@
 import {ref, onMounted, onBeforeUnmount, computed} from "vue";
 import Navbar from "@/components/common/Navbar.vue";
 import Sidebar from "@/components/common/Sidebar.vue";
-import { useAuthStore } from "@/store/auth.js";
 import { useRouter } from "vue-router";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 export default {
   components: { Navbar, Sidebar },
   setup() {
-    //refactor v-if later
+    const persist = usePersistanceStore();
+    const {loggedIn} = persist;
     const isMenu = ref(false);
     const isHovered = ref(false);
     const isWidth1025 = ref(window.innerWidth > 1025);
     const router = useRouter();
-    const loggedIn = computed(() => !!localStorage.getItem("username"));
     const handleMenu = () => {
       isMenu.value = !isMenu.value;
     };
