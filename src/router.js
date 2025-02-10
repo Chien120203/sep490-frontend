@@ -7,12 +7,37 @@ import Cookies from "js-cookie";
 // import pages
 import Login from "@/pages/Login.vue";
 import Home from "@/pages/Home.vue";
+import Customer from  "@/pages/customer/Index.vue"
+import CustomerList from "@/pages/customer/CustomerList.vue";
 
 const routes = [
   {
     name: PAGE_NAME.LOGIN,
     path: PAGES.LOGIN,
     component: Login,
+  },
+  {
+    name: PAGE_NAME.HOME,
+    path: PAGES.HOME,
+    component: Home,
+    meta: {
+      middleware: [""],
+    },
+  },
+  {
+    name: PAGE_NAME.CUSTOMER,
+    path: PAGES.CUSTOMER,
+    component: Customer,
+    meta: {
+      middleware: [""],
+    },
+    children: [
+      {
+        path: "",
+        name: PAGE_NAME.CUSTOMER.LIST,
+        component: CustomerList,
+      },
+    ]
   },
   {
     name: PAGE_NAME.HOME,
@@ -38,7 +63,7 @@ router.beforeEach((to, from, next) => {
 
   // Check if middleware exists and includes 'authentication'
   if (middleware && middleware.includes("authentication") && !token) {
-    return next(PAGES.LOGIN);
+    // return next(PAGES.LOGIN);
   }
 
   if (
