@@ -32,7 +32,7 @@ export const useAuthStore = defineStore(
       await services.AuthenticationAPI.login(
         params,
         (response) => {
-          if (response.data) {
+          if (response.data && response.success) {
             loggedIn.value = true;
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('role', response.data.role);
@@ -43,14 +43,13 @@ export const useAuthStore = defineStore(
             validation.value = {};
 
             router.push({name: PAGE_NAME.HOME});
+          } else {
+            mixinMethods.notifyError(t("response.message.login_fail"));
           }
 
           mixinMethods.endLoading();
         },
         (error) => {
-          validation.value = mixinMethods.handleErrorResponse(
-            error.responseCode
-          );
           mixinMethods.notifyError(t("response.message.login_fail"));
           mixinMethods.endLoading();
         }

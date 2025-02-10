@@ -19,7 +19,7 @@ const create = async (params, success, error) => {
 };
 
 const deleteCustomer = async (id, success, error) => {
-  await del(API_CODE.API_009 + "?customerId=" + id, {}, success, error);
+  await del(API_CODE.API_009 + "/" + id, {}, success, error);
 };
 
 export const CustomerAPI = {
