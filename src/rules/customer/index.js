@@ -1,0 +1,88 @@
+import { i18n } from '@/utils/i18n.js';
+import {
+  FAX_NUMBER,
+  MAX_CHARACTER, MAX_DESCRIPTION, PHONE_NUMBER, RULES_VALIDATION,
+  TAX_CODE
+} from "@/constants/application.js";
+
+export const CUSTOMER_RULES = {
+  customer_code: [
+    { required: true, message: i18n.global.t("E-CUS-001"), trigger: "blur" },
+    {
+      max: MAX_CHARACTER,
+      message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
+      trigger: "change",
+    },
+  ],
+  customer_name: [
+    {
+      max: MAX_CHARACTER,
+      message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
+      trigger: "change",
+    },
+  ],
+  tax_code: [
+    { required: true, message: i18n.global.t("E-CUS-004"), trigger: "blur" },
+    {
+      pattern: TAX_CODE,
+      message: i18n.global.t("E-CUS-004"),
+      trigger: "change",
+    },
+  ],
+  phone: [
+    {
+      pattern: PHONE_NUMBER,
+      message: i18n.global.t("E-CUS-005"),
+      trigger: "change",
+    },
+  ],
+  fax: [
+    {
+      pattern: FAX_NUMBER,
+      message: i18n.global.t("E-CUS-006"),
+      trigger: "change",
+    },
+  ],
+  bank_name: [
+    {
+      max: MAX_CHARACTER,
+      message: i18n.global.t("E-CM-027"),
+      trigger: "change",
+    },
+  ],
+  bank_account: [
+    {
+      max: MAX_CHARACTER,
+      message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
+      trigger: "change",
+    },
+  ],
+  email: [
+    {
+      pattern: RULES_VALIDATION.EMAIL_FORMAT,
+      message: i18n.global.t("E-CM-027"),
+      trigger: "change",
+    },
+  ],
+  address: [
+    {
+      max: MAX_CHARACTER,
+      message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
+      trigger: "change",
+    },
+  ],
+  director_name: [
+    {
+      max: MAX_CHARACTER,
+      message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
+      trigger: "change",
+    },
+  ],
+  description: [
+    {
+      max: MAX_DESCRIPTION,
+      message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
+      trigger: "change",
+    },
+  ],
+};

@@ -222,7 +222,8 @@
       "create_utility_failed": "Create utility failed",
       "update_utility_success": "Update utility success",
       "update_utility_failed": "Update utility failed",
-      "get_bill_details_failed": "Get bill details failed"
+      "get_bill_details_failed": "Get bill details failed",
+      "get_customer_failed": "Get list customers failed"
     }
   },
   "contract": {
@@ -278,6 +279,62 @@
     "modal_confirm": {
       "title": "Confirm terminate contract",
       "message": "Please enter 'Terminate' to confirm terminate this contract"
+    },
+    "status_placeholder": "Contract status",
+    "room_placeholder": "Contract room",
+    "tenant_placeholder": "Contract tenant",
+    "type_placeholder": "Contract type",
+    "landlord_placeholder": "Contract landlord"
+  },
+  "customer": {
+    "title": "Customer",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "date": "Contract Date",
+    "status": "Status",
+    "type": "Type",
+    "room": "Room",
+    "tenant": "Tenant",
+    "landlord": "Landlord",
+    "statuses": {
+      "active": "Active",
+      "terminated": "Terminated",
+      "renewed": "Renewed"
+    },
+    "details": {
+      "title": "Update Customer",
+      "customer_code": "Customer Code",
+      "customer_name": "Customer Name",
+      "phone": "Phone",
+      "tax_code": "Tax Code",
+      "fax": "Fax",
+      "address": "Address",
+      "email": "Email",
+      "director_name": "Director Name",
+      "bank_account": "Bank Account",
+      "bank_name": "Bank Name",
+      "description": "Description"
+    },
+    "create": {
+      "title": "Create Customer"
+    },
+    "table": {
+      "header": {
+        "code": "Customer Code",
+        "name": " Customer Names",
+        "phone": "Phone Number",
+        "fax": "Fax Code",
+        "address": "Address",
+        "email": "Email",
+        "action": "Action",
+        "director": "Director"
+      }
+    },
+    "modal_confirm": {
+      "title": "Confirm delete customer",
+      "message": "Please enter 'Delete' to confirm delete this customer"
     },
     "status_placeholder": "Contract status",
     "room_placeholder": "Contract room",
@@ -453,7 +510,8 @@
       "profile": "Profile",
       "contract": "Contracts",
       "bill": "Bills",
-      "utility": "Utilities"
+      "utility": "Utilities",
+      "customer": "Customer"
     }
   },
   "room": {
@@ -571,5 +629,10 @@
   "E-CM-024": "Bill code is existed",
   "E-CM-025": "Utility name has been existed",
   "E-CM-026": "Utility name is duplicated",
-  "E-PW-001": "Password must be between {min} and {max} characters"
+  "E-CM-027": "Email is invalid",
+  "E-PW-001": "Password must be between {min} and {max} characters",
+  "E-CUS-001": "Customer code is required",
+  "E-CUS-004": "Tax code is required",
+  "E-CUS-005": "Phone number is invalid",
+  "E-CUS-006": "Fax number is invalid"
 }

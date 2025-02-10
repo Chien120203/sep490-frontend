@@ -20,9 +20,12 @@ export const FRONT_END_URL = import.meta.env.VITE_FRONTEND_URL || "http://localh
 export const DEPARTMENT_ACTIVE = 1;
 
 export const MIN_CHARACTER = 1;
+export const TAX_CODE = "/^\\d{10}(-\\d{3})?$/";
+export const PHONE_NUMBER = "^(0|\\+84)(3[2-9]|5[2689]|7[0-9]|8[1-9]|9[0-9])\\d{7}$";
+export const FAX_NUMBER = "^(0|\\+84)(2[0-9]|3[0-9]|4[0-9]|5[0-9]|6[0-9]|7[0-9])\\d{6,7}$";
 export const MAX_CHARACTER = 255;
 export const MAX_SHORT_NUMBER = 20;
-export const MAX_LONG_TEXT = 32000;
+export const MAX_LENGTH_TEXT = 32000;
 export const MAX_DESCRIPTION = 2000;
 export const MAX_PRICE = 10000;
 export const MAX_CAPACITY = 50;
