@@ -1,19 +1,19 @@
 <template>
   <div class="siderbar-block" v-if="isShowComponent">
     <div class="sidebar-logo">
-      <a href="#"
-        ><img
-          src="@/assets/images/vmo_logo.svg"
-          class="logo_zoom_in"
-          alt="logo"
-      /></a>
-      <a href="#">
-        <img
-          src="@/assets/images/vmo_logo.svg"
-          class="logo_zoom_out"
-          alt="logo"
-        />
-      </a>
+<!--      <a href="#"-->
+<!--        ><img-->
+<!--          src="@/assets/images/vmo_logo.svg"-->
+<!--          class="logo_zoom_in"-->
+<!--          alt="logo"-->
+<!--      /></a>-->
+<!--      <a href="#">-->
+<!--        <img-->
+<!--          src="@/assets/images/vmo_logo.svg"-->
+<!--          class="logo_zoom_out"-->
+<!--          alt="logo"-->
+<!--        />-->
+<!--      </a>-->
     </div>
     <div class="menu-box">
       <ul class="nav" v-if="listRouter.length">
@@ -71,7 +71,7 @@
         </li>
       </ul>
     </div>
-    <p class="vmo-name">{{ $t("common.text_vmo") }}</p>
+
   </div>
 </template>
 
@@ -103,41 +103,16 @@ export default {
   },
   setup() {
     const { t } = useI18n();
-    const highest_role = Cookies.get("highest_role");
     const router = useRouter();
     const isShowComponent = ref(true);
     const menuOpen = ref("");
     const listRouter = computed(() => [
       {
-        function_name: t("side_bar.label.user"),
-        function_page_name: PAGE_NAME.USER.LIST,
+        function_name: t("side_bar.label.customer"),
+        function_page_name: PAGE_NAME.CUSTOMER.LIST,
         function_icon: "IconUserGroup",
-        isShow: highest_role == ADMIN,
-      },
-      {
-        function_name: t("side_bar.label.room"),
-        function_page_name: PAGE_NAME.ROOM.LIST,
-        function_icon: "IconRoom",
-        isShow: true,
-      },
-      {
-        function_name: t("side_bar.label.contract"),
-        function_page_name: PAGE_NAME.CONTRACT.LIST,
-        function_icon: "IconContract",
-        isShow: true,
-      },
-      {
-        function_name: t("side_bar.label.bill"),
-        function_page_name: PAGE_NAME.BILL.LIST,
-        function_icon: "IconBill",
-        isShow: true,
-      },
-      {
-        function_name: t("side_bar.label.utility"),
-        function_page_name: PAGE_NAME.UTILITY.LIST,
-        function_icon: "IconUtility",
-        isShow: highest_role == ADMIN,
-      },
+        isShow: true, // set later
+      }
     ]);
 
     const listRouterOthers = computed(() => [
