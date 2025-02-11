@@ -5,7 +5,7 @@ import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 
 export const useUserStore = defineStore(
-    "customer",
+    "user",
     () => {
         const {t} = useI18n();
         const validation = reactive({ value: {} });
@@ -196,7 +196,7 @@ export const useUserStore = defineStore(
         });
 
 
-        const getlistUsers = async (params) => {
+        const getListUsers = async (params) => {
             // mixinMethods.startLoading();
             await services.UserAPI.list(
                 params,
@@ -227,7 +227,7 @@ export const useUserStore = defineStore(
             currentPage,
             userDetails,
             isShowModalConfirm,
-            getlistUsers,
+            getListUsers,
             handleDeleteUser
         };
     }

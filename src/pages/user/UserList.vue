@@ -40,7 +40,7 @@
     </div>
 
     <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
-      <userTable
+      <UserTable
           :data="listUsers.value"
           @details="handleGetUserDtls"
           @delete="handleDisplayModal"
@@ -57,8 +57,8 @@
         :isConfirmByText="true"
         :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
-        :message="$t('user.modal_confirm.message')"
-        :title="$t('user.modal_confirm.title')"
+        :message="$t('user.delete.text_delete')"
+        :title="$t('user.delete.title_delete')"
     />
   </div>
 </template>
@@ -69,7 +69,7 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-import userTable from "./item/userTable.vue";
+import UserTable from "./item/UserTable.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
@@ -86,7 +86,7 @@ export default {
     IconCircleClose,
     SingleOptionSelect,
     LoadMore,
-    userTable,
+    UserTable,
     ModalConfirm,
   },
   setup() {
