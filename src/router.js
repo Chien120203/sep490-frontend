@@ -7,8 +7,11 @@ import { ADMIN, LANDLORD } from "@/constants/roles.js";
 import Login from "@/pages/Login.vue";
 import Home from "@/pages/Home.vue";
 import Customer from  "@/pages/customer/Index.vue"
+import User from  "@/pages/user/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
 import CustomerDetails from "@/pages/customer/Save.vue";
+import UserList from "@/pages/user/UserList.vue";
+import UserDetails from "@/pages/user/Save.vue";
 import Forbidden from "@/pages/Forbidden.vue";
 
 const routes = [
@@ -53,8 +56,33 @@ const routes = [
       },
       {
         path: PAGES.CUSTOMER_DETAILS,
-        name: PAGE_NAME.CUSTOMER.DEATILS,
+        name: PAGE_NAME.CUSTOMER.DETAILS,
         component: CustomerDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.USER,
+    path: PAGES.USER,
+    component: User,
+    meta: {
+      middleware: [""],
+    },
+    children: [
+      {
+        path: "",
+        name: PAGE_NAME.USER.LIST,
+        component: UserList,
+      },
+      {
+        path: PAGES.USER_CREATE,
+        name: PAGE_NAME.USER.CREATE,
+        component: UserDetails,
+      },
+      {
+        path: PAGES.USER_DETAILS,
+        name: PAGE_NAME.USER.DETAILS,
+        component: UserDetails,
       }
     ]
   },

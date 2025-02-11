@@ -1,34 +1,34 @@
 <template>
-  <div class="customer customer-list">
-    <div class="customer-header">
-      <h3 class="page__ttl">{{ $t("customer.title") }}</h3>
-      <div class="customer-btn-box customer-import-box">
+  <div class="user user-list">
+    <div class="user-header">
+      <h3 class="page__ttl">{{ $t("user.title") }}</h3>
+      <div class="user-btn-box user-import-box">
         <el-row
-          class="mb-4"
+            class="mb-4"
         >
           <el-button class="btn btn-save" @click="handleRedirectToCreate"
-            >{{ $t("customer.add_new") }}
+          >{{ $t("user.add_new") }}
           </el-button>
         </el-row>
       </div>
     </div>
-    <div class="customer-body">
-      <div class="customer-search">
-        <div class="customer-search-box col-md-9 col-lg-9">
-          <p class="customer-search__ttl">
-            {{ $t("customer.keyword") }}
+    <div class="user-body">
+      <div class="user-search">
+        <div class="user-search-box col-md-9 col-lg-9">
+          <p class="user-search__ttl">
+            {{ $t("user.keyword") }}
           </p>
           <div class="mb-0 ruleform">
             <el-input
-              :placeholder="$t('common.input_keyword')"
-              @keyup.enter="submitForm"
-              v-model="searchForms.searchValue"
-              prop="searchValue"
+                :placeholder="$t('common.input_keyword')"
+                @keyup.enter="submitForm"
+                v-model="searchForms.searchValue"
+                prop="searchValue"
             >
             </el-input>
           </div>
         </div>
-        <div class="btn-search-select col-md-3 col-lg-3 customer-box-btn-all">
+        <div class="btn-search-select col-md-3 col-lg-3 user-box-btn-all">
           <el-button class="btn btn-search" @click="submitForm()">
             {{ $t("common.search") }}</el-button
           >
@@ -40,25 +40,25 @@
     </div>
 
     <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
-      <CustomerTable
-        :data="listCustomers.value"
-        @details="handleGetCustomerDtls"
-        @delete="handleDisplayModal"
+      <userTable
+          :data="listUsers.value"
+          @details="handleGetUserDtls"
+          @delete="handleDisplayModal"
       />
       <LoadMore
-        :listData="listCustomers.value"
-        :totalItems="totalItems.value"
-        @loadMore="handleLoadMore"
+          :listData="listUsers.value"
+          :totalItems="totalItems.value"
+          @loadMore="handleLoadMore"
       />
     </div>
     <ModalConfirm
-      :isShowModal="isShowModalConfirm.value"
-      @close-modal="handleDisplayModal"
-      :isConfirmByText="true"
-      :confirmText="TEXT_CONFIRM_DELETE"
-      @confirmAction="handleConfirm"
-      :message="$t('customer.modal_confirm.message')"
-      :title="$t('customer.modal_confirm.title')"
+        :isShowModal="isShowModalConfirm.value"
+        @close-modal="handleDisplayModal"
+        :isConfirmByText="true"
+        :confirmText="TEXT_CONFIRM_DELETE"
+        @confirmAction="handleConfirm"
+        :message="$t('user.modal_confirm.message')"
+        :title="$t('user.modal_confirm.title')"
     />
   </div>
 </template>
@@ -69,24 +69,24 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-import CustomerTable from "./item/CustomerTable.vue";
+import userTable from "./item/userTable.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import { ADMIN, LANDLORD } from "@/constants/roles.js";
 import { mixinMethods } from "@/utils/variables";
-import {useCustomerStore} from "@/store/customer.js";
+import {useUserStore} from "@/store/user.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
-  name: "CustomerList",
+  name: "userList",
   components: {
     IconSetting,
     IconCircleClose,
     SingleOptionSelect,
     LoadMore,
-    CustomerTable,
+    userTable,
     ModalConfirm,
   },
   setup() {
@@ -103,24 +103,24 @@ export default {
     });
     const delete_id = ref();
     const router = useRouter();
-    const customerStore = useCustomerStore();
+    const userStore = useUserStore();
     const {
       validation,
-      listCustomers, // temporary
+      listUsers, // temporary
       totalItems,
       currentPage,
       isShowModalConfirm,
-      getListCustomers,
-      handleDeleteCustomer
-    } = customerStore;
+      getListUsers,
+      handleDeleteUser
+    } = userStore;
     const isDisabled = ref(false);
 
     onMounted(() => {
-      getListCustomers(searchForms.value);
+      getListUsers(searchForms.value);
     });
 
     onUnmounted(() => {
-      listCustomers.value = [];
+      listUsers.value = [];
     });
 
     const handleClear = () => {
@@ -138,13 +138,13 @@ export default {
     const submitForm = () => {
       searchForms.value.pageNo = 0;
       currentPage.value = 0;
-      getListCustomers(searchForms.value);
+      getListUsers(searchForms.value);
     };
 
     const handleLoadMore = () => {
       currentPage.value++;
       searchForms.value.pageNo++;
-      getListCustomers(searchForms.value);
+      getListUsers(searchForms.value);
     };
 
     const handleChangeDate = (date) => {
@@ -153,11 +153,11 @@ export default {
     };
 
     const handleRedirectToCreate = () => {
-      router.push({name: PAGE_NAME.CUSTOMER.CREATE})
+      router.push({name: PAGE_NAME.USER.CREATE})
     };
 
-    const handleGetCustomerDtls = (id) => {
-      router.push({name: PAGE_NAME.CUSTOMER.DETAILS, params: {id}});
+    const handleGetUserDtls = (id) => {
+      router.push({name: PAGE_NAME.USER.DETAILS, params: {id}});
     };
 
     const handleCloseModal = () => {
@@ -167,13 +167,13 @@ export default {
     const handleSaveContract = () => {
     };
 
-    const handleDisplayModal = (customer_id) => {
-      isShowModalConfirm.value = !!customer_id;
-      delete_id.value = customer_id;
+    const handleDisplayModal = (user_id) => {
+      isShowModalConfirm.value = !!user_id;
+      delete_id.value = user_id;
     };
 
     const handleConfirm = () => {
-        handleDeleteCustomer(delete_id.value);
+      handleDeleteUser(delete_id.value);
     };
 
     return {
@@ -185,14 +185,14 @@ export default {
       TEXT_CONFIRM_DELETE,
       validation,
       totalItems,
-      listCustomers,
+      listUsers,
       isShowModalConfirm,
       handleClear,
       submitForm,
       handleLoadMore,
       handleDisplayModal,
       handleChangeDate,
-      handleGetCustomerDtls,
+      handleGetUserDtls,
       handleCloseModal,
       handleConfirm,
       handleRedirectToCreate,
