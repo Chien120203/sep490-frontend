@@ -6,7 +6,7 @@ const API_CODE = {
   API_004: '/auth/refreshtoken',
 
   //Customer
-  API_005: '/customer/list',
+  API_005: '/customer/list-customer',
 
   //User
   API_006: '/user/list',

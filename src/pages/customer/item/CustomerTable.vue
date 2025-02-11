@@ -1,15 +1,14 @@
 <template>
   <el-table
-    :data="data"
-    max-height="400"
-    style="width: 100%"
-    class="el-tbl-custom room-tbl"
+      :data="data"
+      style="width: 100%; height: 95%"
+      class="el-tbl-custom room-tbl"
   >
     <el-table-column
-      type="index"
-      min-width="53"
-      :label="$t('common.no')"
-      align="right"
+        type="index"
+        min-width="53"
+        :label="$t('common.no')"
+        align="right"
     ></el-table-column>
     <el-table-column min-width="80">
       <template #header>
@@ -17,7 +16,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.customer_code }} </span>
+        <span class="data-table">{{ scope.row.customerCode ?? "-"}} </span>
       </template>
     </el-table-column>
     <el-table-column min-width="130">
@@ -27,7 +26,7 @@
 
       <template #default="scope">
         <span class="data-table"
-          >{{ scope.row.customer_name }}
+        >{{ scope.row.customerName ? scope.row.customerName : "-"}}
         </span>
       </template>
     </el-table-column>
@@ -38,7 +37,7 @@
 
       <template #default="scope">
         <span class="data-table"
-          >{{ scope.row.phone }}
+        >{{ scope.row.phone ? scope.row.phone : "-"}}
         </span>
       </template>
     </el-table-column>
@@ -48,7 +47,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.fax }} </span>
+        <span class="data-table">{{ scope.row.fax ? scope.row.fax : "-"}} </span>
       </template>
     </el-table-column>
     <el-table-column min-width="140">
@@ -57,7 +56,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.address }} </span>
+        <span class="data-table">{{ scope.row.address ? scope.row.address : "-"}} </span>
       </template>
     </el-table-column>
     <el-table-column min-width="130">
@@ -66,7 +65,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.email }} </span>
+        <span class="data-table">{{ scope.row.email ? scope.row.email : "-"}} </span>
       </template>
     </el-table-column>
     <el-table-column min-width="90">
@@ -161,7 +160,7 @@ export default {
   &-half-year {
     background: #4616d4;
   }
-  
+
   &-year {
     background: #772044;
   }
