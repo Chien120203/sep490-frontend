@@ -5,8 +5,13 @@ const PAGE_NAME = {
   FORBIDDEN: "forbidden",
   CUSTOMER: {
     LIST: "customer-list",
-    DEATILS:"customer-details",
+    DETAILS:"customer-details",
     CREATE:"customer-create",
+  },
+  USER: {
+    LIST: "user-list",
+    DETAILS:"user-details",
+    CREATE:"user-create",
   },
 };
 
