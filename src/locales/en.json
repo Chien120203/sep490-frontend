@@ -411,10 +411,10 @@
       "terminated": "Terminated"
     },
     "create": {
-      "title": "Create New Bill" 
+      "title": "Create New Bill"
     },
     "details": {
-      "title": "Bill Details" 
+      "title": "Bill Details"
     },
     "table": {
       "header": {
@@ -606,9 +606,9 @@
       "room_utilities_placeholder": "Room Utilities",
       "room_landlord_placeholder": "Room Landlord"
     },
-    "price_range": "Price Range", 
+    "price_range": "Price Range",
     "capacity": "Capacity",
-    "area": "Area", 
+    "area": "Area",
     "status_placeholder": "Room Status",
     "list_tenants": "List Tenants",
     "list_consumption": "List Consumption",
