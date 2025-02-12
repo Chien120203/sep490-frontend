@@ -18,7 +18,7 @@ export const useUserStore = defineStore(
             value: {
                 id: 0,
                 user_code: "",
-                user_name: "",
+                username: "",
                 email: "",
                 role: "",
                 dob:"",

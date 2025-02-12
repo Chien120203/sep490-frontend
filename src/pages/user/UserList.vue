@@ -91,15 +91,8 @@ export default {
   },
   setup() {
     const searchForms = ref({
-      searchValue: "",
-      status: null,
-      roomId: null,
-      startDate: "",
-      endDate: "",
-      tenantId: null,
-      type: null,
-      landlordId: null,
-      pageNo: 0,
+      keyWord: "",
+      pageNo: 1,
     });
     const delete_id = ref();
     const router = useRouter();
@@ -125,14 +118,6 @@ export default {
 
     const handleClear = () => {
       searchForms.value.searchValue = "";
-      searchForms.value.status = null;
-      searchForms.value.roomId = null;
-      searchForms.value.startDate = "";
-      searchForms.value.endDate = "";
-      searchForms.value.tenantId = null;
-      searchForms.value.type = null;
-      searchForms.value.landlordId = null;
-      dateRange.value = [];
     };
 
     const submitForm = () => {
@@ -145,11 +130,6 @@ export default {
       currentPage.value++;
       searchForms.value.pageNo++;
       getListUsers(searchForms.value);
-    };
-
-    const handleChangeDate = (date) => {
-      searchForms.value.startDate = mixinMethods.showDateTime(date[0]);
-      searchForms.value.endDate = mixinMethods.showDateTime(date[1]);
     };
 
     const handleRedirectToCreate = () => {
@@ -191,7 +171,6 @@ export default {
       submitForm,
       handleLoadMore,
       handleDisplayModal,
-      handleChangeDate,
       handleGetUserDtls,
       handleCloseModal,
       handleConfirm,

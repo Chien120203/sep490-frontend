@@ -525,12 +525,17 @@
         "phone": "Phone Number",
         "location": "Location",
         "role": "Role",
-        "action": "Action"
+        "action": "Action",
+        "code": "User Code"
       }
     },
     "modal_confirm": {
       "message_delete": "WARNING: You will delete user. Please type 'Delete' to continue.",
       "title_delete": "Delete User"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
     },
     "label_username": "Username",
     "label_fullname": "Full Name",
