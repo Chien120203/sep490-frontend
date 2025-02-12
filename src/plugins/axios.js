@@ -3,7 +3,7 @@ import { post } from "@/services/BaseService";
 import API_CODE from "@/utils/api_code";
 import {usePersistanceStore} from "@/store/persistance.js";
 import { FRONT_END_URL } from "@/constants/application";
-import { $PAGES } from "@/utils/variables";
+import PAGES from "@/utils/pages.js";
 
 const headers = {
   "x-locale": localStorage.getItem('CurrentLanguage') || "en",
@@ -85,7 +85,7 @@ axiosInstance.interceptors.request.use((request) => {
 
 const handleRedirect = (loggedIn) => {
   loggedIn.value = false;
-  location.href = FRONT_END_URL + $PAGES.LOGIN;
+  location.href = FRONT_END_URL + PAGES.LOGIN;
   return Promise.reject(error);
 };
 

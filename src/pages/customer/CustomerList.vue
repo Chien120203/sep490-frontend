@@ -53,7 +53,7 @@
     </div>
     <ModalConfirm
       :isShowModal="isShowModalConfirm.value"
-      @close-modal="handleDisplayModal"
+      @close-modal="closeModalConfirm"
       :isConfirmByText="true"
       :confirmText="TEXT_CONFIRM_DELETE"
       @confirmAction="handleConfirm"
@@ -149,6 +149,10 @@ export default {
       delete_id.value = customer_id;
     };
 
+    const closeModalConfirm = () => {
+      isShowModalConfirm.value = false;
+    }
+
     const handleConfirm = () => {
         handleDeleteCustomer(delete_id.value);
     };
@@ -164,6 +168,7 @@ export default {
       totalItems,
       listCustomers,
       isShowModalConfirm,
+      closeModalConfirm,
       handleClear,
       submitForm,
       handleLoadMore,

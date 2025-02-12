@@ -1,6 +1,6 @@
 <template>
   <div class="text-center" 
-    v-if="listData.length < totalItems"
+    v-if="listData?.length < totalItems"
   >
     <span
       @click="$emit('loadMore')"
