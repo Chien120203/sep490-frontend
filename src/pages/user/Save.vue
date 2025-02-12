@@ -91,6 +91,60 @@
                   v-if="validation.value && validation.value.email"
               >{{ $t(validation.value.email) }}</label>
             </el-form-item>
+
+            <el-form-item
+                :label="$t('user.details.role')"
+                prop="role"
+            >
+              <el-input
+                  v-model="userDetails.value.role"
+              />
+              <label
+                  class="error-feedback-user"
+                  v-if="validation.value && validation.value.role"
+              >{{ $t(validation.value.role) }}</label>
+            </el-form-item>
+
+            <el-form-item
+                :label="$t('user.details.dob')"
+                prop="dob"
+            >
+              <el-date-picker
+                  v-model="userDetails.value.dob"
+                  type="date"
+                  placeholder="Select Date"
+              />
+              <label
+                  class="error-feedback-user"
+                  v-if="validation.value && validation.value.dob"
+              >{{ $t(validation.value.dob) }}</label>
+            </el-form-item>
+
+            <el-form-item
+                :label="$t('user.details.full_name')"
+                prop="full_name"
+            >
+              <el-input
+                  v-model="userDetails.value.full_name"
+              />
+              <label
+                  class="error-feedback-user"
+                  v-if="validation.value && validation.value.full_name"
+              >{{ $t(validation.value.full_name) }}</label>
+            </el-form-item>
+
+            <el-form-item
+                :label="$t('user.details.gender')"
+                prop="gender"
+            >
+              <el-input
+                  v-model="userDetails.value.gender"
+              />
+              <label
+                  class="error-feedback-user"
+                  v-if="validation.value && validation.value.gender"
+              >{{ $t(validation.value.gender) }}</label>
+            </el-form-item>
           </div>
 
           <div class="item item-bib-add item-user-add">
@@ -119,7 +173,7 @@
   </div>
 </template>
 <script>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted,onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {USER_RULES} from "@/rules/user/index.js";
@@ -136,6 +190,9 @@ export default {
     const {
       userDetails,
       validation,
+      getUserDetails,
+      saveUser,
+      clearUserDetails
     } = userStore;
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
@@ -145,6 +202,13 @@ export default {
     };
 
     onMounted(() => {
+      if(isUpdate.value) {
+        getUserDetails({userId: route.params.id})
+      }
+    });
+
+    onUnmounted(() => {
+      clearUserDetails();
     });
 
     const updateContractDetails = () => {
@@ -155,9 +219,8 @@ export default {
     const submitForm = () => {
       ruleFormRef.value.validate((valid) => {
         if (valid) {
-          console.log("Form is valid:", userDetails.value);
-        } else {
-          console.error("Validation failed!");
+          let method = isUpdate.value ? "update" : "create";
+          saveUser(userDetails.value, method);
         }
       });
     };
