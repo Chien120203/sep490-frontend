@@ -7,9 +7,17 @@ const API_CODE = {
 
   //Customer
   API_005: '/customer/list',
+  API_006: '/customer/detail-customer',
+  API_007: '/customer/update-customer',
+  API_008: '/customer/create-customer',
+  API_009: '/customer/delete-customer',
 
   //User
-  API_006: '/user/list',
+  API_010: '/user/list',
+  API_011: '/user/detail-user',
+  API_012: '/user/update-user',
+  API_013: '/user/create-user',
+  API_014: '/user/delete-user',
 };
 
 export default API_CODE;
