@@ -1,7 +1,6 @@
 <template>
   <el-table
       :data="data"
-      max-height="400"
       style="width: 100%"
       class="el-tbl-custom room-tbl"
   >
@@ -11,31 +10,21 @@
         :label="$t('common.no')"
         align="right"
     ></el-table-column>
-
-    <el-table-column min-width="80">
+    <el-table-column min-width="130">
       <template #header>
-        <p v-html="$t('user.table.header.code')"></p>
+        <p v-html="$t('user.table.header.username')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.user_code }}</span>
+        <span class="data-table">{{ scope.row.username }}</span>
       </template>
     </el-table-column>
 
     <el-table-column min-width="130">
       <template #header>
-        <p v-html="$t('user.table.header.name')"></p>
+        <p v-html="$t('user.table.header.fullName')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.user_name }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column min-width="130">
-      <template #header>
-        <p v-html="$t('user.table.header.full_name')"></p>
-      </template>
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.full_name }}</span>
+        <span class="data-table">{{ scope.row.fullName }}</span>
       </template>
     </el-table-column>
 
@@ -53,7 +42,7 @@
         <p v-html="$t('user.table.header.dob')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.dob }}</span>
+        <span class="data-table">{{ formatDate(scope.row.dob) }}</span>
       </template>
     </el-table-column>
 
@@ -62,7 +51,16 @@
         <p v-html="$t('user.table.header.gender')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.gender }}</span>
+        <span class="data-table">{{ $t(getGender(scope.row.gender)) }}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column min-width="100">
+      <template #header>
+        <p v-html="$t('user.table.header.role')"></p>
+      </template>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.role }}</span>
       </template>
     </el-table-column>
 
@@ -96,6 +94,7 @@
 <script>
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import { mixinMethods } from "@/utils/variables";
 
 export default {
   components: {
@@ -109,7 +108,16 @@ export default {
     },
   },
   setup(props, { emit }) {
+    const formatDate = (date) => {
+      return mixinMethods.showDateTime(date);
+    }
+
+    const getGender = (gender) => {
+      return gender ? "user.gender.male" : "user.gender.female";
+    }
     return {
+      formatDate,
+      getGender
     };
   },
 };
