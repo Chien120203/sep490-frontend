@@ -131,6 +131,12 @@
       }
     }
 
+    &-table {
+      margin-top: 16px;
+      min-height: 400px;
+      height: 70%;
+    }
+
     .form-search {
       position: absolute;
       top: 100%;
@@ -436,6 +442,7 @@
   }
 
   .customer-body {
+    height: 10%;
     overflow-x: scroll;
 
     .form-search-box {
@@ -485,7 +492,7 @@
     top: -2px;
     z-index: 8;
     background: #fff;
-    height: 39px;
+    height: 5%;
     margin-bottom: 12px;
   }
 }

@@ -6,10 +6,14 @@ const API_CODE = {
   API_004: '/auth/refreshtoken',
 
   //Customer
-  API_005: '/customer/list',
+  API_005: '/customer/list-customer',
+  API_006: '/customer/detail-customer',
+  API_007: '/customer/update-customer',
+  API_008: '/customer/create-customer',
+  API_009: '/customer/delete-customer',
 
   //User
-  API_006: '/user/list',
+  API_010: '/user/list',
 };
 
 export default API_CODE;
