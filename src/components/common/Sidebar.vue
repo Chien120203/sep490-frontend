@@ -43,9 +43,36 @@
           </div>
         </li>
       </ul>
-      <p class="nav_others" v-if="listRouter.length">
-        {{ $t("common.other") }}
-      </p>
+      <ul class="nav" v-if="listRouterUsers.length">
+        <li
+            v-for="(route, index) in listRouterUsers"
+            :key="index"
+            class="nav-list"
+            style="border-bottom: 1px solid #d0d6da"
+        >
+          <div>
+            <a
+                v-if="route.isShow"
+                href="#"
+                @click.prevent="navigateChangeRoute(route)"
+                :class="classActive(route)"
+                class="js-sidenav-tooltip"
+                style="display: flex; align-items: center"
+            >
+              <component
+                  :is="route.function_icon"
+                  class="icon_sidebar"
+              ></component>
+              <span class="sidebar-text sidebar-custom siderbar_name">{{
+                  route.function_name
+                }}</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+<!--      <p class="nav_others" v-if="listRouter.length">-->
+<!--        {{ $t("common.other") }}-->
+<!--      </p>-->
       <ul class="nav">
         <li
           v-for="(route, index) in listRouterOthers"
@@ -115,6 +142,15 @@ export default {
       }
     ]);
 
+    const listRouterUsers = computed(() => [
+      {
+        function_name: t("side_bar.label.user"),
+        function_page_name: PAGE_NAME.USER.LIST,
+        function_icon: "IconUserGroup",
+        isShow: true, // set later
+      }
+    ]);
+
     const listRouterOthers = computed(() => [
       {
         function_name: t("side_bar.label.profile"),
@@ -123,6 +159,8 @@ export default {
         isShow: true,
       },
     ]);
+
+
     const currentPath = ref("");
 
     const navigateChangeRoute = async (route) => {
@@ -140,6 +178,7 @@ export default {
       isShowComponent,
       menuOpen,
       listRouter,
+      listRouterUsers,
       currentPath,
       listRouterOthers,
       navigateChangeRoute,

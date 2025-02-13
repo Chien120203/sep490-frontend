@@ -137,7 +137,7 @@ export default {
 @import "@/assets/styles/app.scss";
 
 .main-layout {
-  max-height: 91vh;
+  height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   padding-top: 2px;

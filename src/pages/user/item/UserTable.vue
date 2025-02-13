@@ -1,7 +1,8 @@
 <template>
   <el-table
       :data="data"
-      style="width: 100%; height: 95%"
+      max-height="400"
+      style="width: 100%"
       class="el-tbl-custom room-tbl"
   >
     <el-table-column
@@ -10,64 +11,52 @@
         :label="$t('common.no')"
         align="right"
     ></el-table-column>
+
     <el-table-column min-width="80">
       <template #header>
         <p v-html="$t('customer.table.header.code')"></p>
       </template>
-
       <template #default="scope">
-        <span class="data-table">{{ scope.row.customerCode ?? "-"}} </span>
+        <span class="data-table">{{ scope.row.user_code }}</span>
       </template>
     </el-table-column>
+
     <el-table-column min-width="130">
       <template #header>
         <p v-html="$t('customer.table.header.name')"></p>
       </template>
-
       <template #default="scope">
-        <span class="data-table"
-        >{{ scope.row.customerName ? scope.row.customerName : "-"}}
-        </span>
+        <span class="data-table">{{ scope.row.user_name }}</span>
       </template>
     </el-table-column>
+
     <el-table-column min-width="100">
       <template #header>
         <p v-html="$t('customer.table.header.phone')"></p>
       </template>
-
       <template #default="scope">
-        <span class="data-table"
-        >{{ scope.row.phone ? scope.row.phone : "-"}}
-        </span>
+        <span class="data-table">{{ scope.row.phone }}</span>
       </template>
     </el-table-column>
-    <el-table-column min-width="100">
-      <template #header>
-        <p v-html="$t('customer.table.header.fax')"></p>
-      </template>
 
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.fax ? scope.row.fax : "-"}} </span>
-      </template>
-    </el-table-column>
     <el-table-column min-width="140">
       <template #header>
         <p v-html="$t('customer.table.header.address')"></p>
       </template>
-
       <template #default="scope">
-        <span class="data-table">{{ scope.row.address ? scope.row.address : "-"}} </span>
+        <span class="data-table">{{ scope.row.address }}</span>
       </template>
     </el-table-column>
+
     <el-table-column min-width="130">
       <template #header>
         <p v-html="$t('customer.table.header.email')"></p>
       </template>
-
       <template #default="scope">
-        <span class="data-table">{{ scope.row.email ? scope.row.email : "-"}} </span>
+        <span class="data-table">{{ scope.row.email }}</span>
       </template>
     </el-table-column>
+
     <el-table-column min-width="90">
       <template #header>
         <p v-html="$t('customer.table.header.action')"></p>
@@ -120,7 +109,7 @@ export default {
   }
 }
 
-.customer {
+.user {
   &-status {
     background: #ccc;
     color: #fff !important;

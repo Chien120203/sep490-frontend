@@ -607,6 +607,7 @@ $screen-adjustment: $screen-lg-min + $sidebar-width-narrow - $breakpoint-wide;
 .main-block {
   position: relative;
   z-index: 2;
+  height: 100%;
 }
 
 .el-dialog {
