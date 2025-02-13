@@ -13,7 +13,7 @@ const API_CODE = {
   API_009: '/customer/delete-customer',
 
   //User
-  API_010: '/user/list',
+  API_010: '/admin/list-user',
   API_011: '/user/detail-user',
   API_012: '/user/update-user',
   API_013: '/user/create-user',

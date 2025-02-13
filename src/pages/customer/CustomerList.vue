@@ -73,7 +73,7 @@ import CustomerTable from "./item/CustomerTable.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
-import { ADMIN, LANDLORD } from "@/constants/roles.js";
+import { ADMIN } from "@/constants/roles.js";
 import { mixinMethods } from "@/utils/variables";
 import {useCustomerStore} from "@/store/customer.js";
 import { useRouter } from "vue-router";
@@ -180,7 +180,6 @@ export default {
       searchForms,
       NUMBER_FORMAT,
       ADMIN,
-      LANDLORD,
       isDisabled,
       TEXT_CONFIRM_DELETE,
       validation,

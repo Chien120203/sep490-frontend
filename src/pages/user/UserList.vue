@@ -40,7 +40,7 @@
     </div>
 
     <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
-      <userTable
+      <UserTable
           :data="listUsers.value"
           @details="handleGetUserDtls"
           @delete="handleDisplayModal"
@@ -69,7 +69,7 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-import userTable from "./item/userTable.vue";
+import UserTable from "./item/UserTable.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
@@ -86,20 +86,13 @@ export default {
     IconCircleClose,
     SingleOptionSelect,
     LoadMore,
-    userTable,
+    UserTable,
     ModalConfirm,
   },
   setup() {
     const searchForms = ref({
-      searchValue: "",
-      status: null,
-      roomId: null,
-      startDate: "",
-      endDate: "",
-      tenantId: null,
-      type: null,
-      landlordId: null,
-      pageNo: 0,
+      keyWord: "",
+      pageNo: 1,
     });
     const delete_id = ref();
     const router = useRouter();
@@ -125,14 +118,6 @@ export default {
 
     const handleClear = () => {
       searchForms.value.searchValue = "";
-      searchForms.value.status = null;
-      searchForms.value.roomId = null;
-      searchForms.value.startDate = "";
-      searchForms.value.endDate = "";
-      searchForms.value.tenantId = null;
-      searchForms.value.type = null;
-      searchForms.value.landlordId = null;
-      dateRange.value = [];
     };
 
     const submitForm = () => {
@@ -145,11 +130,6 @@ export default {
       currentPage.value++;
       searchForms.value.pageNo++;
       getListUsers(searchForms.value);
-    };
-
-    const handleChangeDate = (date) => {
-      searchForms.value.startDate = mixinMethods.showDateTime(date[0]);
-      searchForms.value.endDate = mixinMethods.showDateTime(date[1]);
     };
 
     const handleRedirectToCreate = () => {
@@ -191,7 +171,6 @@ export default {
       submitForm,
       handleLoadMore,
       handleDisplayModal,
-      handleChangeDate,
       handleGetUserDtls,
       handleCloseModal,
       handleConfirm,
