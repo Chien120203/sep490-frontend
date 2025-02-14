@@ -4,7 +4,7 @@ import {
 } from "@/constants/application.js";
 
 export const USER_RULES = {
-    user_code: [
+    username: [
         { required: true, message: i18n.global.t("E-USER-001"), trigger: "blur" },
         {
             max: MAX_CHARACTER,
@@ -12,7 +12,7 @@ export const USER_RULES = {
             trigger: "change",
         },
     ],
-    full_name: [
+    fullName: [
         {
             max: MAX_CHARACTER,
             message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
@@ -45,7 +45,6 @@ export const USER_RULES = {
         {
             max: MAX_MONTH,
             min: MIN_MONTH,
-            message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
             trigger: "change",
         },
     ],

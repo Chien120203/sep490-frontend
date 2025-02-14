@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
+    <div class="user-body-table" style="margin-top: 16px; min-height: 400px">
       <UserTable
           :data="listUsers.value"
           @details="handleGetUserDtls"
@@ -53,7 +53,7 @@
     </div>
     <ModalConfirm
         :isShowModal="isShowModalConfirm.value"
-        @close-modal="handleDisplayModal"
+        @close-modal="closeModalConfirm"
         :isConfirmByText="true"
         :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
@@ -91,8 +91,8 @@ export default {
   },
   setup() {
     const searchForms = ref({
-      keyWord: "",
-      pageNo: 1,
+      search: "",
+      pageIndex: 1,
     });
     const delete_id = ref();
     const router = useRouter();
@@ -117,18 +117,18 @@ export default {
     });
 
     const handleClear = () => {
-      searchForms.value.searchValue = "";
+      searchForms.value.search = "";
     };
 
     const submitForm = () => {
-      searchForms.value.pageNo = 0;
+      searchForms.value.pageIndex = 0;
       currentPage.value = 0;
       getListUsers(searchForms.value);
     };
 
     const handleLoadMore = () => {
       currentPage.value++;
-      searchForms.value.pageNo++;
+      searchForms.value.pageIndex++;
       getListUsers(searchForms.value);
     };
 
@@ -152,6 +152,10 @@ export default {
       delete_id.value = user_id;
     };
 
+    const closeModalConfirm = () => {
+      isShowModalConfirm.value = false;
+    }
+
     const handleConfirm = () => {
       handleDeleteUser(delete_id.value);
     };
@@ -167,6 +171,7 @@ export default {
       totalItems,
       listUsers,
       isShowModalConfirm,
+      closeModalConfirm,
       handleClear,
       submitForm,
       handleLoadMore,

@@ -14,7 +14,7 @@ const API_CODE = {
 
   //User
   API_010: '/admin/list-user',
-  API_011: '/admin/detail-user',
+  API_011: '/authen/user-profile-detail',
   API_012: '/admin/update-user',
   API_013: '/admin/create-user',
   API_014: '/admin/delete-user',
