@@ -18,8 +18,8 @@ const create = async (params, success, error) => {
     await post(API_CODE.API_013, params, success, error);
 };
 
-const deleteUser = async (params, success, error) => {
-    await del(API_CODE.API_014, params, success, error);
+const deleteUser = async (id, success, error) => {
+    await del(API_CODE.API_014 + "?userId=" + id, {}, success, error);
 };
 
 export const UserAPI = {
