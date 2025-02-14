@@ -17,10 +17,10 @@ const API_CODE = {
 
   //User
   API_010: '/admin/list-user',
-  API_011: '/user/detail-user',
-  API_012: '/user/update-user',
-  API_013: '/user/create-user',
-  API_014: '/user/delete-user',
+  API_011: '/authen/user-profile-detail',
+  API_012: '/admin/update-user',
+  API_013: '/admin/create-user',
+  API_014: '/admin/delete-user',
 };
 
 export default API_CODE;

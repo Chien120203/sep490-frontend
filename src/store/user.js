@@ -3,10 +3,10 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
-import UserList from "@/pages/user/UserList.vue";
+import userList from "@/pages/user/UserList.vue";
 
 export const useUserStore = defineStore(
-    "customer",
+    "user",
     () => {
         const {t} = useI18n();
         const validation = reactive({ value: {} });

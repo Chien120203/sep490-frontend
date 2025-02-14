@@ -1,7 +1,7 @@
 <template>
   <el-table
       :data="data"
-      style="width: 100%"
+      style="width: 100%; height: 95%"
       class="el-tbl-custom room-tbl"
   >
     <el-table-column
@@ -10,31 +10,21 @@
         :label="$t('common.no')"
         align="right"
     ></el-table-column>
-
-    <el-table-column min-width="80">
+    <el-table-column min-width="130">
       <template #header>
-        <p v-html="$t('user.table.header.code')"></p>
+        <p v-html="$t('user.table.header.username')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.user_code }}</span>
+        <span class="data-table">{{ scope.row.username ? scope.row.username : "-"}}</span>
       </template>
     </el-table-column>
 
     <el-table-column min-width="130">
       <template #header>
-        <p v-html="$t('user.table.header.name')"></p>
+        <p v-html="$t('user.table.header.fullName')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.username }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column min-width="130">
-      <template #header>
-        <p v-html="$t('user.table.header.full_name')"></p>
-      </template>
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.full_name }}</span>
+        <span class="data-table">{{ scope.row.fullName ? scope.row.fullName : "-"}}</span>
       </template>
     </el-table-column>
 
@@ -43,7 +33,7 @@
         <p v-html="$t('user.table.header.email')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.email }}</span>
+        <span class="data-table">{{ scope.row.email ? scope.row.email : "-"}}</span>
       </template>
     </el-table-column>
 
@@ -52,7 +42,7 @@
         <p v-html="$t('user.table.header.dob')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.dob) }}</span>
+        <span class="data-table">{{ formatDate(scope.row.dob)}}</span>
       </template>
     </el-table-column>
 
@@ -61,7 +51,16 @@
         <p v-html="$t('user.table.header.gender')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ $t(getGender(scope.row.gender)) }}</span>
+        <span class="data-table">{{ $t(getGender(scope.row.gender))}}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column min-width="100">
+      <template #header>
+        <p v-html="$t('user.table.header.role')"></p>
+      </template>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.role  ? scope.row.role : "-"}}</span>
       </template>
     </el-table-column>
 
@@ -70,7 +69,7 @@
         <p v-html="$t('user.table.header.phone')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.phone }}</span>
+        <span class="data-table">{{ scope.row.phone ? scope.row.phone : "-"}}</span>
       </template>
     </el-table-column>
 

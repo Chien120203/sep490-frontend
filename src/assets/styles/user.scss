@@ -131,6 +131,12 @@
       }
     }
 
+    &-table {
+      margin-top: 16px;
+      min-height: 400px;
+      height: 70%;
+    }
+
     .form-search {
       position: absolute;
       top: 100%;
@@ -308,7 +314,7 @@
     }
   }
 
-  .contract-table {
+  .user-table {
     margin-top: 16px;
     max-height: calc(74vh - 70px);
 
@@ -361,15 +367,15 @@
   }
 }
 
-.contract-tbl thead tr,
-.contract-tbl thead tr th {
+.user-tbl thead tr,
+.user-tbl thead tr th {
   background-color: #f0f0f0 !important;
   color: #000;
   border-top: 1px solid #B9B9B980;
   border-bottom: 1px solid #B9B9B980
 }
 
-.contract-attachment {
+.user-attachment {
   display: flex;
   align-items: center;
   &-icon {
@@ -401,7 +407,7 @@
   &-tag,
   &-account,
   &-status,
-  &-delete-contract {
+  &-delete-user {
     border: 1px solid #705FA5;
     background: #8171B2;
     color: #fff;
@@ -410,7 +416,7 @@
   }
 }
 
-.contract-btn__row {
+.user-btn__row {
   text-align: center;
   justify-content: center;
 }
@@ -429,13 +435,14 @@
 }
 
 @media (max-width: 1025px) {
-  .contract-search-box {
+  .user-search-box {
     margin-bottom: 16px;
     padding: 0 !important;
     width: 100%;
   }
 
-  .contract-body {
+  .user-body {
+    height: 10%;
     overflow-x: scroll;
 
     .form-search-box {
@@ -447,7 +454,7 @@
     }
   }
 
-  .contract-btn-detail {
+  .user-btn-detail {
     margin-bottom: 20px;
   }
 }
@@ -455,14 +462,14 @@
 
 
 @media (max-width: 1025px) {
-  .contract-import-box, .contract-btn-box {
+  .user-import-box, .user-btn-box {
     .mb-4 {
       justify-content: end !important;
     }
   }
 }
 
-.contract-btn-box--custom {
+.user-btn-box--custom {
   text-align: center;
   margin-top: 26px;
   padding-bottom: 20px;
@@ -480,11 +487,12 @@
 }
 
 @media (min-width: 1025px) {
-  .contract-header {
+  .user-header {
     position: sticky;
     top: -2px;
     z-index: 8;
     background: #fff;
-    height: 39px;
+    height: 5%;
+    margin-bottom: 12px;
   }
 }
