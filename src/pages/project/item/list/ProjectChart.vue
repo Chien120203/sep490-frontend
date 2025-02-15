@@ -15,10 +15,8 @@ import { defineProps } from "vue";
 import { DoughnutChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 
-// ✅ Register all required Chart.js components
 Chart.register(...registerables);
 
-// ✅ Define props to receive data from the parent
 defineProps({
   chartData: Object,
   chartOptions: Object,

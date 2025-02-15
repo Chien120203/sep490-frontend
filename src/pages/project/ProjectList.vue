@@ -107,7 +107,7 @@
     <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
       <ProjectTable
           :data="listProjects.value"
-          @details="handleGetProjectDtls"
+          @details="handleToProjectDtls"
           @delete="handleDeleteProject"
       />
       <LoadMore
@@ -139,12 +139,13 @@ import {NUMBER_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
 import {BUSINESS_EMPLOYEE} from "@/constants/roles.js"
 import {useRouter} from "vue-router";
 import {STATUSES} from "@/constants/project.js";
-import ProjectTable from "@/pages/project/item/ProjectTable.vue";
+import ProjectTable from "@/pages/project/item/list/ProjectTable.vue";
 import {useProjectStore} from "@/store/project.js";
 import {useCustomerStore} from "@/store/customer.js";
-import DonutChart from "./item/ProjectChart.vue";
-import FinancialSummary from "./item/FinancialSummary.vue";
-import TaskAndCR from "@/pages/project/item/TaskAndCR.vue";
+import DonutChart from "./item/list/ProjectChart.vue";
+import FinancialSummary from "./item/list/FinancialSummary.vue";
+import TaskAndCR from "@/pages/project/item/list/TaskAndCR.vue";
+import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
   name: "customer-reqList",
@@ -278,8 +279,8 @@ export default {
       router.push({name: ""})
     };
 
-    const handleGetCustomeReqDtls = (id) => {
-      router.push({name: "", params: {id}});
+    const handleToProjectDtls = (id) => {
+      router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id}});
     };
 
     const handleCloseModal = () => {
@@ -320,7 +321,7 @@ export default {
       handleCloseModal,
       handleConfirm,
       handleRedirectToCreate,
-      handleGetProjectDtls,
+      handleToProjectDtls,
       handleDeleteProject
     };
   },

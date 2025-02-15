@@ -112,7 +112,7 @@
 <script>
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
-import {mixinMethods} from "@/utils/variables";
+import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 
 export default {

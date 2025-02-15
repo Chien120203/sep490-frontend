@@ -15,6 +15,7 @@ import UserList from "@/pages/user/UserList.vue";
 import UserDetails from "@/pages/user/Save.vue";
 import Forbidden from "@/pages/Forbidden.vue";
 import ProjectList from "@/pages/project/ProjectList.vue";
+import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 
 const routes = [
   {
@@ -100,6 +101,11 @@ const routes = [
         path: PAGES.PROJECT,
         name: PAGE_NAME.PROJECT.LIST,
         component: ProjectList,
+      },
+      {
+        path: PAGES.PROJECT_DETAILS,
+        name: PAGE_NAME.PROJECT.DETAILS,
+        component: ProjectDetails,
       }
     ]
   },

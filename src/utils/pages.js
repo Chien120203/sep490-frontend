@@ -8,6 +8,8 @@ const PAGES = {
 
   //project
   PROJECT: "/project",
+  PROJECT_DETAILS: "/project/details",
+  //user
   USER: "/user",
   USER_CREATE: "/user/create",
   USER_DETAILS: "/user/:id",

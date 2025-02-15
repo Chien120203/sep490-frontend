@@ -348,18 +348,20 @@
       "renewed": "Renewed"
     },
     "details": {
-      "title": "Update Customer",
-      "customer_code": "Customer Code",
-      "customer_name": "Customer Name",
-      "phone": "Phone",
-      "tax_code": "Tax Code",
-      "fax": "Fax",
-      "address": "Address",
-      "email": "Email",
-      "director_name": "Director Name",
-      "bank_account": "Bank Account",
-      "bank_name": "Bank Name",
-      "description": "Description"
+      "title": "Project Details",
+      "financial_summary": "Financial Summary",
+      "change_request": "Change Request",
+      "change_request_table": {
+        "header": {
+          "request_code": "Request Code",
+          "request_name": "Request Name",
+          "requested_by": "Request By",
+          "change_type": "Request Type",
+          "status": "Request Status",
+          "request_date": "Request Date"
+        },
+        "action": "Action"
+      }
     },
     "create": {
       "title": "Create Customer"
