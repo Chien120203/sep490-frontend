@@ -201,13 +201,14 @@
       "create_user_failed": "Create user failed",
       "delete_user_failed": "Delete user failed",
       "delete_user_success": "Create user success",
+      "get_user_dtls_failed": "Get user details failed",
       "create_contract_success": "Create contract success",
       "create_contract_failed": "Create contract failed",
       "get_contract_details_failed": "Get contract details failed",
       "terminate_contract_success": "Terminate contract success",
       "terminate_contract_failed": "Terminate contract failed",
       "get_customer_failed": "Get list customers failed",
-      "get_customer_dtls_failed": "Get list customers details failed",
+      "get_customer_dtls_failed": "Get customer details failed",
       "save_customer_success": "Save Customer Success",
       "save_customer_failed": "Save Customer Failed",
       "delete_customer_success": "Delete Customer Success",
@@ -411,10 +412,10 @@
       "terminated": "Terminated"
     },
     "create": {
-      "title": "Create New Bill" 
+      "title": "Create New Bill"
     },
     "details": {
-      "title": "Bill Details" 
+      "title": "Bill Details"
     },
     "table": {
       "header": {
@@ -525,12 +526,45 @@
         "phone": "Phone Number",
         "location": "Location",
         "role": "Role",
-        "action": "Action"
+        "action": "Action",
+        "code": "User Code"
       }
+    },
+    "details": {
+      "title": "User Details",
+      "username": "User Name",
+      "fullName": "Full Name",
+      "dob": "Date of Birth",
+      "gender": "Gender",
+      "email": "Email",
+      "phone": "Phone Number",
+      "location": "Location",
+      "role": "Role",
+      "action": "Action",
+      "code": "User Code",
+      "description": "Description"
+    },
+    "create": {
+      "title": "Create New User",
+      "username": "User Name",
+      "fullName": "Full Name",
+      "dob": "Date of Birth",
+      "gender": "Gender",
+      "email": "Email",
+      "phone": "Phone Number",
+      "location": "Location",
+      "role": "Role",
+      "action": "Action",
+      "code": "User Code",
+      "description": "Description"
     },
     "modal_confirm": {
       "message_delete": "WARNING: You will delete user. Please type 'Delete' to continue.",
       "title_delete": "Delete User"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
     },
     "label_username": "Username",
     "label_fullname": "Full Name",
@@ -606,9 +640,9 @@
       "room_utilities_placeholder": "Room Utilities",
       "room_landlord_placeholder": "Room Landlord"
     },
-    "price_range": "Price Range", 
+    "price_range": "Price Range",
     "capacity": "Capacity",
-    "area": "Area", 
+    "area": "Area",
     "status_placeholder": "Room Status",
     "list_tenants": "List Tenants",
     "list_consumption": "List Consumption",

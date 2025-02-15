@@ -16,7 +16,11 @@ const API_CODE = {
   API_PRJ_001: '/project/list-project',
 
   //User
-  API_010: '/user/list',
+  API_010: '/admin/list-user',
+  API_011: '/authen/user-profile-detail',
+  API_012: '/admin/update-user',
+  API_013: '/admin/create-user',
+  API_014: '/admin/delete-user',
 };
 
 export default API_CODE;
