@@ -26,71 +26,92 @@
         >
           <div class="item item-bib-add">
             <el-form-item
-                prop="user_code"
+                prop="username"
                 class="custom-textarea required"
-                :label="$t('user.details.user_code')"
+                :label="$t('user.details.username')"
             >
-              <el-input
-                  v-model="userDetails.value.user_code"
-              />
+              <el-input v-model="userDetails.value.username"/>
               <label
                   class="error-feedback-user"
-                  v-if="validation.value && validation.value.user_code"
-              >{{ $t(validation.value.user_code) }}</label>
+                  v-if="validation && validation.value.username"
+              >{{ $t(validation.value.username) }}</label>
             </el-form-item>
 
             <el-form-item
-                :label="$t('user.details.user_name')"
-                class="custom-textarea"
-                prop="user_name"
+                prop="fullName"
+                class="custom-textarea required"
+                :label="$t('user.details.fullName')"
             >
-              <el-input
-                  v-model="userDetails.value.user_name"
-              />
+              <el-input v-model="userDetails.value.fullName"/>
               <label
                   class="error-feedback-user"
-                  v-if="validation.value && validation.value.user_name"
-              >{{ $t(validation.value.user_name) }}</label>
+                  v-if="validation && validation.value.fullName"
+              >{{ $t(validation.value.fullName) }}</label>
             </el-form-item>
 
             <el-form-item
-                :label="$t('user.details.phone')"
+                prop="email"
+                class="custom-textarea required"
+                :label="$t('user.details.email')"
+            >
+              <el-input v-model="userDetails.value.email"/>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.email"
+              >{{ $t(validation.value.email) }}</label>
+            </el-form-item>
+
+            <el-form-item
+              :label="$t('user.details.dob')"
+              prop="dob"
+              >
+              <el-date-picker
+                  v-model="userDetails.value.dob"
+                  type="date"
+                  placeholder="Select Date"
+              />
+              <label
+                  class="error-feedback-user"
+                  v-if="validation.value && validation.value.dob"
+              >{{ $t(validation.value.dob) }}</label>
+              </el-form-item>
+
+            <el-form-item
+                prop="gender"
+                class="custom-textarea required"
+                :label="$t('user.details.gender')"
+            >
+              <el-input v-model="userDetails.value.gender"/>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.gender"
+              >{{ $t(validation.value.gender) }}</label>
+            </el-form-item>
+
+            <el-form-item
+                prop="role"
+                class="custom-textarea required"
+                :label="$t('user.details.role')"
+            >
+              <el-input v-model="userDetails.value.role"/>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.role"
+              >{{ $t(validation.value.role) }}</label>
+            </el-form-item>
+
+            <el-form-item
                 prop="phone"
+                class="custom-textarea required"
+                :label="$t('user.details.phone')"
             >
-              <el-input
-                  v-model="userDetails.value.phone"
-              />
+              <el-input v-model="userDetails.value.phone"/>
               <label
                   class="error-feedback-user"
-                  v-if="validation.value && validation.value.phone"
+                  v-if="validation && validation.value.phone"
               >{{ $t(validation.value.phone) }}</label>
             </el-form-item>
 
-            <el-form-item
-                :label="$t('user.details.address')"
-                prop="address"
-            >
-              <el-input
-                  v-model="userDetails.value.address"
-              />
-              <label
-                  class="error-feedback-user"
-                  v-if="validation.value && validation.value.address"
-              >{{ $t(validation.value.address) }}</label>
-            </el-form-item>
-
-            <el-form-item
-                :label="$t('user.details.email')"
-                prop="email"
-            >
-              <el-input
-                  v-model="userDetails.value.email"
-              />
-              <label
-                  class="error-feedback-user"
-                  v-if="validation.value && validation.value.email"
-              >{{ $t(validation.value.email) }}</label>
-            </el-form-item>
           </div>
 
           <div class="item item-bib-add item-user-add">
@@ -119,7 +140,7 @@
   </div>
 </template>
 <script>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted,onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {USER_RULES} from "@/rules/user/index.js";
@@ -136,18 +157,26 @@ export default {
     const {
       userDetails,
       validation,
+      getUserDetails,
+      saveUser,
+      clearUserDetails
     } = userStore;
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
-    const handleBack = () => {
-      router.push({name: PAGE_NAME.USER.LIST});
-    };
 
     onMounted(() => {
+      if(isUpdate.value) {
+        getUserDetails({userId: route.params.id})
+      }
     });
 
-    const updateContractDetails = () => {
+    onUnmounted(() => {
+      clearUserDetails();
+    });
+
+    const handleBack = () => {
+      router.push({name: PAGE_NAME.USER.LIST});
     };
 
     const ruleFormRef = ref(null);
@@ -155,9 +184,8 @@ export default {
     const submitForm = () => {
       ruleFormRef.value.validate((valid) => {
         if (valid) {
-          console.log("Form is valid:", userDetails.value);
-        } else {
-          console.error("Validation failed!");
+          let method = isUpdate.value ? "update" : "create";
+          saveUser(userDetails.value, method);
         }
       });
     };
