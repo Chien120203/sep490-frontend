@@ -12,7 +12,7 @@ export const useCustomerStore = defineStore(
     const validation = reactive({ value: {} });
     const isShowModalConfirm = reactive({ value: false });
     const totalItems = reactive({ value: 0 });
-    const currentPage = reactive({ value: 0 });
+    const currentPage = reactive({ value: 1 });
     const listCustomers = reactive({ value: [] });
     const customerDetails = reactive({
       value: {
@@ -36,7 +36,7 @@ export const useCustomerStore = defineStore(
       await services.CustomerAPI.list(
         params,
         (response) => {
-          if (currentPage.value === 0) {
+          if (currentPage.value === 1) {
             listCustomers.value = response.data;
           } else {
             listCustomers.value = [...listCustomers.value, ...response.data];

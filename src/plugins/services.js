@@ -3,6 +3,7 @@ import { initializeService } from "@/services/BaseService";
 import { AuthenticationAPI } from "@/services/AuthenticationAPI";
 import {CustomerAPI} from "@/services/CustomerAPI.js";
 import {UserAPI} from "@/services/UserAPI.js";
+import {ProjectAPI} from "@/services/ProjectAPI.js";
 
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
@@ -12,6 +13,7 @@ import {UserAPI} from "@/services/UserAPI.js";
 const services = {
   AuthenticationAPI,
   CustomerAPI,
+  ProjectAPI,
   UserAPI
 };
 
