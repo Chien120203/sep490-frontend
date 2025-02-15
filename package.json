@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "chart.js": "^3.1.0",
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.6.5",
     "dotenv": "^16.4.5",
@@ -23,6 +24,7 @@
     "pusher-js": "^7.0",
     "vee-validate": "^4.3.5",
     "vue": "^3.4.37",
+    "vue-chart-3": "^3.1.8",
     "vue-i18n": "^9.1.9",
     "vue-router": "^4.0.6",
     "vuex": "^4.0.0",
