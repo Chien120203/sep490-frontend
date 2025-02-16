@@ -521,7 +521,9 @@
     "table": {
       "header": {
         "username": "User Name",
-        "fullname": "Full Name",
+        "fullName": "Full Name",
+        "dob": "Date of Birth",
+        "gender": "Gender",
         "email": "Email",
         "phone": "Phone Number",
         "location": "Location",
