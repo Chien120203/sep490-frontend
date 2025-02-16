@@ -22,8 +22,8 @@
             <el-input
               :placeholder="$t('common.input_keyword')"
               @keyup.enter="submitForm"
-              v-model="searchForms.searchValue"
-              prop="searchValue"
+              v-model="searchForms.search"
+              prop="search"
             >
             </el-input>
           </div>
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
+    <div class="customer-body-table" style="">
       <CustomerTable
         :data="listCustomers.value"
         @details="handleGetCustomerDtls"
@@ -53,7 +53,7 @@
     </div>
     <ModalConfirm
       :isShowModal="isShowModalConfirm.value"
-      @close-modal="handleDisplayModal"
+      @close-modal="closeModalConfirm"
       :isConfirmByText="true"
       :confirmText="TEXT_CONFIRM_DELETE"
       @confirmAction="handleConfirm"
@@ -91,15 +91,8 @@ export default {
   },
   setup() {
     const searchForms = ref({
-      searchValue: "",
-      status: null,
-      roomId: null,
-      startDate: "",
-      endDate: "",
-      tenantId: null,
-      type: null,
-      landlordId: null,
-      pageNo: 0,
+      search: "",
+      pageIndex: 1,
     });
     const delete_id = ref();
     const router = useRouter();
@@ -124,32 +117,19 @@ export default {
     });
 
     const handleClear = () => {
-      searchForms.value.searchValue = "";
-      searchForms.value.status = null;
-      searchForms.value.roomId = null;
-      searchForms.value.startDate = "";
-      searchForms.value.endDate = "";
-      searchForms.value.tenantId = null;
-      searchForms.value.type = null;
-      searchForms.value.landlordId = null;
-      dateRange.value = [];
+      searchForms.value.search = "";
     };
 
     const submitForm = () => {
-      searchForms.value.pageNo = 0;
-      currentPage.value = 0;
+      searchForms.value.pageIndex = 1;
+      currentPage.value = 1;
       getListCustomers(searchForms.value);
     };
 
     const handleLoadMore = () => {
       currentPage.value++;
-      searchForms.value.pageNo++;
+      searchForms.value.pageIndex++;
       getListCustomers(searchForms.value);
-    };
-
-    const handleChangeDate = (date) => {
-      searchForms.value.startDate = mixinMethods.showDateTime(date[0]);
-      searchForms.value.endDate = mixinMethods.showDateTime(date[1]);
     };
 
     const handleRedirectToCreate = () => {
@@ -164,13 +144,14 @@ export default {
       validation.value = [];
     };
 
-    const handleSaveContract = () => {
-    };
-
     const handleDisplayModal = (customer_id) => {
       isShowModalConfirm.value = !!customer_id;
       delete_id.value = customer_id;
     };
+
+    const closeModalConfirm = () => {
+      isShowModalConfirm.value = false;
+    }
 
     const handleConfirm = () => {
         handleDeleteCustomer(delete_id.value);
@@ -186,16 +167,15 @@ export default {
       totalItems,
       listCustomers,
       isShowModalConfirm,
+      closeModalConfirm,
       handleClear,
       submitForm,
       handleLoadMore,
       handleDisplayModal,
-      handleChangeDate,
       handleGetCustomerDtls,
       handleCloseModal,
       handleConfirm,
       handleRedirectToCreate,
-      handleSaveContract,
     };
   },
 };

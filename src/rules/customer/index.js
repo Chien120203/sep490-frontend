@@ -6,7 +6,7 @@ import {
 } from "@/constants/application.js";
 
 export const CUSTOMER_RULES = {
-  customer_code: [
+  customerCode: [
     { required: true, message: i18n.global.t("E-CUS-001"), trigger: "blur" },
     {
       max: MAX_CHARACTER,
@@ -14,18 +14,18 @@ export const CUSTOMER_RULES = {
       trigger: "change",
     },
   ],
-  customer_name: [
+  customerName: [
     {
       max: MAX_CHARACTER,
       message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
       trigger: "change",
     },
   ],
-  tax_code: [
+  taxCode: [
     { required: true, message: i18n.global.t("E-CUS-004"), trigger: "blur" },
     {
       pattern: TAX_CODE,
-      message: i18n.global.t("E-CUS-004"),
+      message: i18n.global.t("E-CUS-007"),
       trigger: "change",
     },
   ],
@@ -43,14 +43,14 @@ export const CUSTOMER_RULES = {
       trigger: "change",
     },
   ],
-  bank_name: [
+  bankName: [
     {
       max: MAX_CHARACTER,
       message: i18n.global.t("E-CM-027"),
       trigger: "change",
     },
   ],
-  bank_account: [
+  bankAccount: [
     {
       max: MAX_CHARACTER,
       message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
@@ -71,7 +71,7 @@ export const CUSTOMER_RULES = {
       trigger: "change",
     },
   ],
-  director_name: [
+  directorName: [
     {
       max: MAX_CHARACTER,
       message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
@@ -86,3 +86,4 @@ export const CUSTOMER_RULES = {
     },
   ],
 };
+

@@ -1,5 +1,4 @@
 import services from "@/plugins/services";
-import PAGES from "@/utils/pages.js";
 import { EN_LOCALE, DEFAULT_EXCHANGE_RATE } from "@/constants/application";
 import { ref } from "vue";
 import { mixins } from "@/helpers/mixins";
@@ -26,13 +25,11 @@ const globalLocale = {
 export const mixinMethods = mixins;
 export const $notify = ElNotification;
 export const $services = services;
-export const $PAGES = PAGES;
 export const $globalLocale = globalLocale;
 export const $exchangeRate = globalExhangeRate;
 
 export default {
   $services: services,
-  $PAGES: PAGES,
   $globalLocale: globalLocale,
   $exchangeRate: globalExhangeRate,
 };

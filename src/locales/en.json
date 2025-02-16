@@ -331,6 +331,66 @@
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
   },
+  "project": {
+    "title": "Project",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "customer": "Customer",
+    "status": "Status",
+    "type": "Type",
+    "room": "Room",
+    "tenant": "Tenant",
+    "landlord": "Landlord",
+    "statuses": {
+      "active": "Active",
+      "terminated": "Terminated",
+      "renewed": "Renewed"
+    },
+    "details": {
+      "title": "Project Details",
+      "financial_summary": "Financial Summary",
+      "change_request": "Change Request",
+      "change_request_table": {
+        "header": {
+          "request_code": "Request Code",
+          "request_name": "Request Name",
+          "requested_by": "Request By",
+          "change_type": "Request Type",
+          "status": "Request Status",
+          "request_date": "Request Date"
+        },
+        "action": "Action"
+      }
+    },
+    "create": {
+      "title": "Create Customer"
+    },
+    "table": {
+      "header": {
+        "code": "Project Code",
+        "name": " Project Name",
+        "customer": "Customer",
+        "type": "Construct Type",
+        "location": "Location",
+        "budget": "Budget",
+        "start_date": "Start Date",
+        "end_date": "End Date",
+        "status": "Status",
+        "action": "Action"
+      }
+    },
+    "modal_confirm": {
+      "title": "Confirm delete customer",
+      "message": "Please enter 'Delete' to confirm delete this customer"
+    },
+    "status_placeholder": "Contract status",
+    "room_placeholder": "Contract room",
+    "tenant_placeholder": "Contract tenant",
+    "type_placeholder": "Contract type",
+    "landlord_placeholder": "Contract landlord"
+  },
   "bill": {
     "title": "Bill",
     "bill_details_title": "Bill Information",
@@ -535,7 +595,8 @@
       "contract": "Contracts",
       "bill": "Bills",
       "utility": "Utilities",
-      "customer": "Customer"
+      "customer": "Customer",
+      "project": "Project"
     }
   },
   "room": {

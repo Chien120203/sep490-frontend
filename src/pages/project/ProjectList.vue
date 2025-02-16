@@ -1,0 +1,361 @@
+<template>
+  <div class="project project-list">
+    <div class="project-header">
+      <h3 class="page__ttl">{{ $t("project.title") }}</h3>
+      <div class="project-btn-box project-import-box">
+        <el-row
+            class="mb-4"
+        >
+          <el-button class="btn btn-save" @click="handleRedirectToCreate"
+          >{{ $t("project.add_new") }}
+          </el-button>
+        </el-row>
+      </div>
+    </div>
+
+    <!--    DASHBOARD AND USER TASK-->
+    <div v-if="role !== ''" class="project-container">
+      <div class="project-items">
+        <!--    charts-->
+        <div class="project-body">
+          <div class="project-chart">
+            <DonutChart :chart-data="chartData" :chart-options="chartOptions"/>
+          </div>
+        </div>
+
+        <!--    financialData-->
+        <div class="project-body">
+          <FinancialSummary :sections="financialData"/>
+        </div>
+      </div>
+      <!--    Task And CR-->
+      <div class="project-task">
+        <TaskAndCR :title="'HÔM NAY'" :date="'Thứ 5, ngày 13/02/2025'" :tasks="tasks"/>
+      </div>
+    </div>
+
+    <!--    search and filter-->
+    <div class="project-body">
+      <div class="project-search">
+        <div class="project-search-box col-md-9 col-lg-9">
+          <p class="project-search__ttl">
+            {{ $t("project.keyword") }}
+          </p>
+          <div class="mb-0 ruleform">
+            <el-input
+                :placeholder="$t('common.input_keyword')"
+                @keyup.enter="submitForm"
+                v-model="searchForms.searchValue"
+                prop="searchValue"
+            >
+              <template #append>
+                <span @click="handleSearchForm" class="btn-setting">
+                  <IconSetting/>
+                </span>
+              </template>
+            </el-input>
+          </div>
+        </div>
+        <div class="btn-search-select col-md-3 col-lg-3 project-box-btn-all">
+          <el-button class="btn btn-search" @click="submitForm()">
+            {{ $t("common.search") }}
+          </el-button
+          >
+          <el-button class="btn btn-clear" @click="handleClear()">
+            {{ $t("common.clear") }}
+          </el-button
+          >
+        </div>
+      </div>
+      <div class="form-search" :class="{ active: isShowBoxSearch }">
+        <div class="close-form">
+          <IconCircleClose @click="isShowBoxSearch = false"/>
+        </div>
+        <div class="form-search-box">
+          <div class="item">
+            <el-form-item :label="$t('project.customer')">
+              <el-select v-model="searchForms.customerId">
+                <el-option :label="$t('common.all')" value=""></el-option>
+                <el-option
+                    v-for="(cust, index) in listCustomers.value"
+                    :key="index"
+                    :label="cust.customerCode"
+                    :value="cust.id"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+          <div class="item">
+            <el-form-item :label="$t('project.status')">
+              <el-select v-model="searchForms.status">
+                <el-option :label="$t('common.all')" value=""></el-option>
+                <el-option
+                    v-for="(status, index) in STATUSES"
+                    :key="index"
+                    :label="status"
+                    :value="index"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
+      <ProjectTable
+          :data="listProjects.value"
+          @details="handleToProjectDtls"
+          @delete="handleDeleteProject"
+      />
+      <LoadMore
+          :listData="listProjects.value"
+          :totalItems="totalItems.value"
+          @loadMore="handleLoadMore"
+      />
+    </div>
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm.value"
+        @close-modal="handleDisplayModal"
+        :isConfirmByText="true"
+        :confirmText="TEXT_CONFIRM_DELETE"
+        @confirmAction="handleConfirm"
+        :message="$t('project.modal_confirm.message')"
+        :title="$t('project.modal_confirm.title')"
+    />
+  </div>
+</template>
+
+<script>
+import IconSetting from "@/svg/IconSettingMain.vue";
+import IconCircleClose from "@/svg/IconCircleClose.vue";
+import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
+import LoadMore from "@/components/common/LoadMore.vue";
+import ModalConfirm from "@/components/common/ModalConfirm.vue";
+import {onMounted, onUnmounted, reactive, ref} from "vue";
+import {NUMBER_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
+import {BUSINESS_EMPLOYEE} from "@/constants/roles.js"
+import {useRouter} from "vue-router";
+import {STATUSES} from "@/constants/project.js";
+import ProjectTable from "@/pages/project/item/list/ProjectTable.vue";
+import {useProjectStore} from "@/store/project.js";
+import {useCustomerStore} from "@/store/customer.js";
+import DonutChart from "./item/list/ProjectChart.vue";
+import FinancialSummary from "./item/list/FinancialSummary.vue";
+import TaskAndCR from "@/pages/project/item/list/TaskAndCR.vue";
+import PAGE_NAME from "@/constants/route-name.js";
+
+export default {
+  name: "customer-reqList",
+  components: {
+    ProjectTable,
+    IconSetting,
+    IconCircleClose,
+    SingleOptionSelect,
+    LoadMore,
+    ModalConfirm,
+    DonutChart,
+    TaskAndCR,
+    FinancialSummary,
+  },
+  setup() {
+    const searchForms = ref({
+      searchValue: "",
+      status: null,
+      customerId: null,
+      pageNo: 0,
+    });
+    const projectStore = useProjectStore();
+    const customerStore = useCustomerStore();
+    const isShowBoxSearch = ref(false);
+    const role = ref(localStorage.getItem('role'));
+    const {
+      validation,
+      listProjects, // temporary
+      totalItems,
+      currentPage,
+      projectDetails,
+      isShowModalConfirm,
+      getListProjects,
+      handleGetProjectDtls,
+      handleDeleteProject
+    } = projectStore;
+    const {
+      listCustomers,
+      getListCustomers
+    } = customerStore;
+    const delete_id = ref();
+    const router = useRouter();
+    const isDisabled = ref(false);
+
+    //sample data
+    const financialData = ref([
+      {
+        title: "CHỦ ĐẦU TƯ (CĐT)",
+        bgColor: "#DFF5E1",
+        data: [
+          {label: "Hợp đồng", value: 484974055904},
+          {label: "Đã thực hiện", value: 30226660535},
+          {label: "Đã nghiệm thu", value: 29676324721},
+          {label: "CĐT còn nợ", value: -18958404654},
+        ],
+      },
+      {
+        title: "NHÀ THẦU (NT)",
+        bgColor: "#FEE2E2",
+        data: [
+          {label: "Hợp đồng", value: 36644729318},
+          {label: "Đã thực hiện", value: 11101225831},
+          {label: "Còn nợ NT", value: -2580925000},
+        ],
+      },
+      {
+        title: "NHÀ CUNG CẤP (NCC)",
+        bgColor: "#FFF5D1",
+        data: [
+          {label: "Hợp đồng", value: 31715860099},
+          {label: "Còn nợ NCC", value: 5369219239},
+        ],
+      },
+    ]);
+    const tasks = ref([
+      {title: 'Công việc hôm nay', expanded: false, color: 'orange'},
+      {title: 'Lịch họp', expanded: false, color: 'green'},
+      {title: 'Đề xuất cần duyệt', expanded: false, color: 'blue'},
+      {title: 'Phiếu thu/chi cần duyệt', expanded: false, color: 'blue'},
+      {title: 'Văn bản cần xử lý', expanded: false, color: 'teal'},
+    ]);
+    const chartData = reactive({
+      labels: ["Kế hoạch", "Đang làm", "Tạm dừng", "Hoàn thành"],
+      datasets: [
+        {
+          data: [1, 33, 0, 0],
+          backgroundColor: ["#1E3A8A", "#3B82F6", "#FACC15", "#22C55E"],
+          hoverOffset: 4,
+        },
+      ],
+    });
+    const chartOptions = reactive({
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+        },
+      },
+    });
+
+    onMounted(() => {
+      getListProjects();
+      getListCustomers();
+    });
+
+    onUnmounted(() => {
+    });
+
+    const handleSearchForm = () => {
+      isShowBoxSearch.value = !isShowBoxSearch.value;
+    };
+
+    const handleClear = () => {
+      searchForms.value.searchValue = "";
+      searchForms.value.status = null;
+      searchForms.value.customerId = null;
+    };
+
+    const submitForm = () => {
+      searchForms.value.pageNo = 0;
+      currentPage.value = 0;
+    };
+
+    const handleLoadMore = () => {
+      currentPage.value++;
+      searchForms.value.pageNo++;
+    };
+
+    const handleRedirectToCreate = () => {
+      router.push({name: ""})
+    };
+
+    const handleToProjectDtls = (id) => {
+      router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id}});
+    };
+
+    const handleCloseModal = () => {
+      validation.value = [];
+    };
+
+    const handleDisplayModal = (customerReqId) => {
+      isShowModalConfirm.value = !!customerReqId;
+      delete_id.value = customerReqId;
+    };
+
+    const handleConfirm = () => {
+      handleDeleteCustomerReq(delete_id.value);
+    };
+
+    return {
+      NUMBER_FORMAT,
+      TEXT_CONFIRM_DELETE,
+      STATUSES,
+      BUSINESS_EMPLOYEE,
+      listProjects,
+      searchForms,
+      isDisabled,
+      role,
+      totalItems,
+      isShowModalConfirm,
+      listCustomers,
+      isShowBoxSearch,
+      tasks,
+      financialData,
+      chartOptions,
+      chartData,
+      handleSearchForm,
+      handleClear,
+      submitForm,
+      handleLoadMore,
+      handleDisplayModal,
+      handleCloseModal,
+      handleConfirm,
+      handleRedirectToCreate,
+      handleToProjectDtls,
+      handleDeleteProject
+    };
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.close-form {
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  right: 16px;
+  top: 10px;
+  cursor: pointer;
+
+  svg {
+    height: 30px;
+  }
+}
+
+.project-chart {
+  display: flex;
+  justify-content: center;
+}
+
+.project-container {
+  display: flex;
+
+  .project-items {
+    width: 80%;
+  }
+
+  .project-task {
+    width: 20%;
+  }
+}
+</style>

@@ -1,9 +1,12 @@
-.customer {
+.project {
   padding: 0 32px 0;
   height: 100%;
 
   &-detail {
     height: 100%;
+    &-collapse {
+      width: 100%;
+    }
   }
 
   @media (max-width: 1024px) {
@@ -129,12 +132,6 @@
         justify-content: center;
         cursor: pointer;
       }
-    }
-
-    &-table {
-      margin-top: 16px;
-      min-height: 400px;
-      height: 70%;
     }
 
     .form-search {
@@ -274,7 +271,7 @@
       }
     }
 
-    .customer {
+    .project {
       &-search {
         padding: 14px 11px;
         display: flex;
@@ -314,7 +311,7 @@
     }
   }
 
-  .customer-table {
+  .project-table {
     margin-top: 16px;
     max-height: calc(74vh - 70px);
 
@@ -367,15 +364,15 @@
   }
 }
 
-.customer-tbl thead tr,
-.customer-tbl thead tr th {
+.project-tbl thead tr,
+.project-tbl thead tr th {
   background-color: #f0f0f0 !important;
   color: #000;
   border-top: 1px solid #B9B9B980;
   border-bottom: 1px solid #B9B9B980
 }
 
-.customer-attachment {
+.project-attachment {
   display: flex;
   align-items: center;
   &-icon {
@@ -407,7 +404,7 @@
   &-tag,
   &-account,
   &-status,
-  &-delete-customer {
+  &-delete-project {
     border: 1px solid #705FA5;
     background: #8171B2;
     color: #fff;
@@ -416,7 +413,7 @@
   }
 }
 
-.customer-btn__row {
+.project-btn__row {
   text-align: center;
   justify-content: center;
 }
@@ -435,14 +432,13 @@
 }
 
 @media (max-width: 1025px) {
-  .customer-search-box {
+  .project-search-box {
     margin-bottom: 16px;
     padding: 0 !important;
     width: 100%;
   }
 
-  .customer-body {
-    height: 10%;
+  .project-body {
     overflow-x: scroll;
 
     .form-search-box {
@@ -454,7 +450,7 @@
     }
   }
 
-  .customer-btn-detail {
+  .project-btn-detail {
     margin-bottom: 20px;
   }
 }
@@ -462,14 +458,14 @@
 
 
 @media (max-width: 1025px) {
-  .customer-import-box, .customer-btn-box {
+  .project-import-box, .project-btn-box {
     .mb-4 {
       justify-content: end !important;
     }
   }
 }
 
-.customer-btn-box--custom {
+.project-btn-box--custom {
   text-align: center;
   margin-top: 26px;
   padding-bottom: 20px;
@@ -487,12 +483,12 @@
 }
 
 @media (min-width: 1025px) {
-  .customer-header {
+  .project-header {
     position: sticky;
     top: -2px;
     z-index: 8;
     background: #fff;
-    height: 5%;
+    height: 39px;
     margin-bottom: 12px;
   }
 }

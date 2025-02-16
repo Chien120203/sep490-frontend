@@ -9,9 +9,7 @@
           }}
         </h3>
         <div class="customer-btn-detail">
-          <div
-              class="item"
-          >
+          <div class="item">
             <el-button class="btn btn-save" @click="submitForm()">
               {{ $t("common.save") }}
             </el-button>
@@ -28,184 +26,85 @@
         >
           <div class="item item-bib-add">
             <el-form-item
-                prop="customer_code"
+                prop="customerCode"
                 class="custom-textarea required"
                 :label="$t('customer.details.customer_code')"
             >
-              <el-input
-                  v-model="customerDetails.value.customer_code"
-              />
-              <label
-                  class="error-feedback-customer"
-                  v-if="validation.value && validation.value.customer_code"
-              >{{ $t(validation.value.customer_code) }}</label
-              >
+              <el-input v-model="customerDetails.value.customerCode" />
+              <label class="error-feedback-customer" v-if="validation && validation.customerCode">
+                {{ $t(validation.customerCode) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                :label="$t('customer.details.customer_name')"
-                class="custom-textarea"
-                prop="customer_name"
-            >
-              <el-input
-                  v-model="customerDetails.value.customer_name"
-              />
-              <label
-                  class="error-feedback-customer"
-                  v-if="validation.value && validation.value.customer_name"
-              >{{ $t(validation.value.customer_name) }}</label
-              >
+            <el-form-item prop="customerName" class="custom-textarea" :label="$t('customer.details.customer_name')">
+              <el-input v-model="customerDetails.value.customerName" />
+              <label class="error-feedback-customer" v-if="validation && validation.customerName">
+                {{ $t(validation.customerName) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                :label="$t('customer.details.tax_code')"
-                prop="tax_code"
-                class="required"
-            >
-              <el-input
-                  v-model="customerDetails.value.tax_code"
-              />
-              <label
-                  class="error-feedback-customer"
-                  v-if="validation.value && validation.value.tax_code"
-              >{{ $t(validation.value.tax_code) }}</label>
+            <el-form-item prop="taxCode" class="required" :label="$t('customer.details.tax_code')">
+              <el-input v-model="customerDetails.value.taxCode" />
+              <label class="error-feedback-customer" v-if="validation && validation.taxCode">
+                {{ $t(validation.taxCode) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                :label="$t('customer.details.phone')"
-                prop="phone"
-                class=""
-            >
-              <el-input
-                  v-model="customerDetails.value.phone"
-              />
-              <label
-                  class="error-feedback-customer"
-                  v-if="validation.value && validation.value.phone"
-              >{{ $t(validation.value.phone) }}</label
-              >
+            <el-form-item prop="phone" :label="$t('customer.details.phone')">
+              <el-input v-model="customerDetails.value.phone" />
+              <label class="error-feedback-customer" v-if="validation && validation.phone">
+                {{ $t(validation.phone) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                class="custom-textarea"
-                :label="$t('customer.details.fax')"
-                prop="fax"
-            >
-              <el-input
-                  v-model="customerDetails.value.fax"
-              />
-              <label
-                  class="error-feedback-customer"
-                  v-if="validation.value && validation.value.fax"
-              >{{ $t(validation.value.fax) }}</label>
+            <el-form-item prop="fax" class="custom-textarea" :label="$t('customer.details.fax')">
+              <el-input v-model="customerDetails.value.fax" />
+              <label class="error-feedback-customer" v-if="validation && validation.fax">
+                {{ $t(validation.fax) }}
+              </label>
             </el-form-item>
           </div>
 
           <div class="item item-bib-add item-customer-add">
-            <el-form-item
-                prop="bank_name"
-                class=""
-                :label="$t('customer.details.bank_name')"
-            >
-              <el-input
-                  v-model="customerDetails.value.bank_name"
-                  class="custom-textarea"
-              />
-              <label
-                  class="error-feedback-customer"
-                  v-if="validation.value && validation.value.bank_name"
-              >{{ $t(validation.value.bank_name) }}</label
-              >
+            <el-form-item prop="bankName" :label="$t('customer.details.bank_name')">
+              <el-input v-model="customerDetails.value.bankName" class="custom-textarea" />
+              <label class="error-feedback-customer" v-if="validation && validation.bankName">
+                {{ $t(validation.bankName) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                prop="bank_account"
-                :label="$t('customer.details.bank_account')"
-                class="input-item"
-            >
-              <el-input
-                  v-model="customerDetails.value.bank_account"
-                  type="text"
-              ></el-input>
-              <label
-                  class="error-feedback-customer"
-                  v-if="
-                  validation.value && validation.value.bank_account
-                "
-              >{{ $t(validation.value.bank_account) }}</label
-              >
+            <el-form-item prop="bankAccount" :label="$t('customer.details.bank_account')" class="input-item">
+              <el-input v-model="customerDetails.value.bankAccount" type="text" />
+              <label class="error-feedback-customer" v-if="validation && validation.bankAccount">
+                {{ $t(validation.bankAccount) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                class="input-item"
-                :label="$t('customer.details.email')"
-                prop="contract_signed_cost"
-            >
-              <el-input
-                  v-model="customerDetails.value.email"
-                  class="custom-textarea"
-              ></el-input>
-              <label
-                  class="error-feedback-customer"
-                  v-if="
-                  validation.value && validation.value.email
-                "
-              >{{ $t(validation.value.email) }}</label
-              >
+            <el-form-item prop="email" class="input-item" :label="$t('customer.details.email')">
+              <el-input v-model="customerDetails.value.email" class="custom-textarea" />
+              <label class="error-feedback-customer" v-if="validation && validation.email">
+                {{ $t(validation.email) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                prop="address"
-                :label="$t('customer.details.address')"
-                class="input-item"
-            >
-              <el-input
-                  v-model="customerDetails.value.address"
-                  type="text"
-              ></el-input>
-              <label
-                  class="error-feedback-customer"
-                  v-if="
-                  validation.value && validation.value.address
-                "
-              >{{ $t(validation.value.address) }}</label
-              >
+            <el-form-item prop="address" class="input-item" :label="$t('customer.details.address')">
+              <el-input v-model="customerDetails.value.address" type="text" />
+              <label class="error-feedback-customer" v-if="validation && validation.address">
+                {{ $t(validation.address) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                prop="director_name"
-                :label="$t('customer.details.director_name')"
-                class="input-item"
-            >
-              <el-input
-                  v-model="customerDetails.value.director_name"
-                  type="text"
-              ></el-input>
-              <label
-                  class="error-feedback-customer"
-                  v-if="
-                  validation.value && validation.value.director_name
-                "
-              >{{ $t(validation.value.director_name) }}</label
-              >
+            <el-form-item prop="directorName" class="input-item" :label="$t('customer.details.director_name')">
+              <el-input v-model="customerDetails.value.directorName" type="text" />
+              <label class="error-feedback-customer" v-if="validation && validation.directorName">
+                {{ $t(validation.directorName) }}
+              </label>
             </el-form-item>
 
-            <el-form-item
-                prop="description"
-                class="custom-textarea"
-                :label="$t('customer.details.description')"
-            >
-              <el-input
-                  v-model="customerDetails.value.description"
-                  class="custom-textarea"
-                  type="textarea"
-                  :rows="4"
-              />
-              <label
-                  class="error-feedback-customer"
-                  v-if="validation.value && validation.value.description"
-              >
-                {{ $t(validation.value.description) }}
+            <el-form-item prop="description" class="custom-textarea" :label="$t('customer.details.description')">
+              <el-input v-model="customerDetails.value.description" class="custom-textarea" type="textarea" :rows="4" />
+              <label class="error-feedback-customer" v-if="validation && validation.description">
+                {{ $t(validation.description) }}
               </label>
             </el-form-item>
           </div>
@@ -215,7 +114,7 @@
   </div>
 </template>
 <script>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {CUSTOMER_RULES} from "@/rules/customer/index.js";
@@ -232,18 +131,26 @@ export default {
     const {
       customerDetails,
       validation,
+      getCustomerDetails,
+      saveCustomer,
+      clearCustomerDetails
     } = customerStore;
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
-    const handleBack = () => {
-      router.push({name: PAGE_NAME.CUSTOMER.LIST});
-    };
 
     onMounted(() => {
+      if(isUpdate.value) {
+        getCustomerDetails({customerId: route.params.id})
+      }
     });
 
-    const updateContractDetails = () => {
+    onUnmounted(() => {
+      clearCustomerDetails();
+    })
+
+    const handleBack = () => {
+      router.push({name: PAGE_NAME.CUSTOMER.LIST});
     };
 
     const ruleFormRef = ref(null);
@@ -251,9 +158,8 @@ export default {
     const submitForm = () => {
       ruleFormRef.value.validate((valid) => {
         if (valid) {
-          console.log("Form is valid:", customerDetails.value);
-        } else {
-          console.error("Validation failed!");
+          let method = isUpdate.value ? "update" : "create";
+          saveCustomer(customerDetails.value, method);
         }
       });
     };
