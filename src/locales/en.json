@@ -521,13 +521,15 @@
     "table": {
       "header": {
         "username": "User Name",
-        "fullname": "Full Name",
+        "fullName": "Full Name",
         "email": "Email",
         "phone": "Phone Number",
         "location": "Location",
         "role": "Role",
         "action": "Action",
-        "code": "User Code"
+        "code": "User Code",
+        "gender": "Gender",
+        "dob": "Date of Birth"
       }
     },
     "details": {

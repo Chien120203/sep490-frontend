@@ -1,26 +1,27 @@
 const API_CODE = {
   // Auth
-  API_001: '/authen/sign-in',
-  API_002: '/auth/reset-password',
-  API_003: '/auth/get-otp',
-  API_004: '/auth/refreshtoken',
+  API_AUTH_001: '/authen/sign-in',
+  API_AUTH_002: '/authen/verify-otp',
+  API_AUTH_003: '/authen/reset-password',
+  API_AUTH_004: '/authen/change-password',
+  // API_AUTH_005: '/authen/refreshtoken',
 
   //Customer
-  API_005: '/customer/list-customer',
-  API_006: '/customer/detail-customer',
-  API_007: '/customer/update-customer',
-  API_008: '/customer/create-customer',
-  API_009: '/customer/delete-customer',
+  API_CUS_001: '/customer/list-customer',
+  API_CUS_002: '/customer/detail-customer',
+  API_CUS_003: '/customer/update-customer',
+  API_CUS_004: '/customer/create-customer',
+  API_CUS_005: '/customer/delete-customer',
 
   //project
   API_PRJ_001: '/project/list-project',
 
   //User
-  API_010: '/admin/list-user',
-  API_011: '/authen/user-profile-detail',
-  API_012: '/admin/update-user',
-  API_013: '/admin/create-user',
-  API_014: '/admin/delete-user',
+  API_USER_001: '/admin/list-user',
+  API_USER_002: '/authen/user-profile-detail',
+  API_USER_003: '/admin/update-user',
+  API_USER_004: '/admin/create-user',
+  API_USER_005: '/admin/delete-user',
 };
 
 export default API_CODE;
