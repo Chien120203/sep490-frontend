@@ -71,7 +71,7 @@ export const useAuthStore = defineStore(
 
     const getOTPCode = async (sentEmail) => {
       loadingButton.value = true;
-      await $services.AuthenticationAPI.getOTP(
+      await services.AuthenticationAPI.getOTP(
         {
           email: sentEmail,
           type: "reset_password_email",
@@ -96,7 +96,7 @@ export const useAuthStore = defineStore(
 
     const resetNewPassword = async () => {
       loadingSaveButton.value = true;
-      await $services.AuthenticationAPI.resetPassword(
+      await services.AuthenticationAPI.resetPassword(
         {
           email: resetPasswordForm.value.email,
           otpCode: resetPasswordForm.value.otp,
