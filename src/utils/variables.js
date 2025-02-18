@@ -1,20 +1,9 @@
-import services from "@/plugins/services";
-import { EN_LOCALE, DEFAULT_EXCHANGE_RATE } from "@/constants/application";
+import { EN_LOCALE } from "@/constants/application";
 import { ref } from "vue";
 import { mixins } from "@/helpers/mixins";
-import { ElNotification } from "element-plus";
 
 const defaultLocale = localStorage.getItem("CurrentLanguage") || EN_LOCALE;
-const defaultExchangeRate =
-  localStorage.getItem("CurrentExchangeRate") || DEFAULT_EXCHANGE_RATE;
 const refDefaultLocale = ref(defaultLocale);
-const refExchangeRate = ref(defaultExchangeRate);
-const globalExhangeRate = {
-  value: refExchangeRate,
-  update(exchangeRate) {
-    refExchangeRate.value = exchangeRate;
-  },
-};
 const globalLocale = {
   value: refDefaultLocale,
   update(locale) {
@@ -23,13 +12,8 @@ const globalLocale = {
 };
 
 export const mixinMethods = mixins;
-export const $notify = ElNotification;
-export const $services = services;
 export const $globalLocale = globalLocale;
-export const $exchangeRate = globalExhangeRate;
 
 export default {
-  $services: services,
-  $globalLocale: globalLocale,
-  $exchangeRate: globalExhangeRate,
+  $globalLocale: globalLocale
 };

@@ -4,7 +4,7 @@ const API_CODE = {
   API_AUTH_002: '/authen/verify-otp',
   API_AUTH_003: '/authen/reset-password',
   API_AUTH_004: '/authen/change-password',
-  // API_AUTH_005: '/authen/refreshtoken',
+  API_AUTH_005: '/authen/refresh',
 
   //Customer
   API_CUS_001: '/customer/list-customer',

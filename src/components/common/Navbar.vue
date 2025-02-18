@@ -48,10 +48,8 @@
 import { ref, onMounted } from "vue";
 import vClickOutside from "click-outside-vue3";
 import { VI_LOCALE, EN_LOCALE } from "@/constants/application";
-import { useRouter } from "vue-router";
 import { i18n } from "@/utils/i18n";
-import PAGE_NAME from "@/constants/route-name.js";
-import { $exchangeRate, $globalLocale } from "@/utils/variables";
+import { $globalLocale } from "@/utils/variables";
 import { useAuthStore } from "@/store/auth.js";
 
 export default {
@@ -63,7 +61,6 @@ export default {
     const selectedLanguage = ref(
         localStorage.getItem("CurrentLanguage") || EN_LOCALE
     );
-    const router = useRouter();
     const username = ref(localStorage.getItem("username"));
 
     const changeLocale = (val) => {
@@ -95,7 +92,6 @@ export default {
       EN_LOCALE,
       username,
       $globalLocale,
-      $exchangeRate,
       changeLocale,
       logout,
     };

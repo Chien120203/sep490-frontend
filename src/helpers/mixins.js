@@ -1,9 +1,7 @@
 import { ref } from "vue";
 import { ElLoading } from "element-plus";
-import Cookies from "js-cookie";
 import moment from "moment";
 import { RULES_VALIDATION } from "@/constants/application";
-import { $exchangeRate, $globalLocale } from "@/utils/variables";
 import { ElNotification } from "element-plus";
 
 const screenLoading = ref(false);
@@ -36,14 +34,6 @@ const checkEmptyWithOutZero = (value) => {
     return value.trim().length === 0;
   return value === null || typeof value === "undefined" || value === "";
 };
-
-const saveAccessToken = (value) =>
-  Cookies.set("access_token", value, { expires: 90 });
-const saveExpiredDateTime = (value) =>
-  Cookies.set("expired_date_time", value, { expires: 90 });
-const saveUserId = (value) => Cookies.set("user_id", value, { expires: 90 });
-const saveRole = (role) => Cookies.set("role", role, { expires: 90 });
-const removeAccessToken = () => Cookies.remove("access_token");
 
 const arrayChunk = (array, size) => {
   const chunkedArr = [];
@@ -179,13 +169,8 @@ export const mixins = {
   startLoading,
   endLoading,
   checkEmptyWithOutZero,
-  saveAccessToken,
-  saveExpiredDateTime,
-  saveUserId,
-  saveRole,
   checkEmpty,
   formatCurrency,
-  removeAccessToken,
   formatInputCurrency,
   handleErrorResponse,
   arrayChunk,
