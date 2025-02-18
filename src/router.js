@@ -2,6 +2,7 @@ import { createWebHistory, createRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
 import { ADMIN } from "@/constants/roles.js";
+import {ADMIN_MIDDLEWARE, AUTHENTICATION_MIDDLEWARE} from "@/constants/middleware.js";
 
 // import pages
 import Login from "@/pages/Login.vue";
@@ -28,7 +29,7 @@ const routes = [
     path: PAGES.HOME,
     component: Home,
     meta: {
-      middleware: ["authentication"],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
   },
   {
@@ -44,7 +45,7 @@ const routes = [
     path: PAGES.CUSTOMER,
     component: Customer,
     meta: {
-      middleware: ["authentication"],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
     children: [
       {
@@ -69,7 +70,7 @@ const routes = [
     path: PAGES.USER,
     component: User,
     meta: {
-      middleware: [""],
+      middleware: [AUTHENTICATION_MIDDLEWARE, ADMIN_MIDDLEWARE],
     },
     children: [
       {
@@ -94,7 +95,7 @@ const routes = [
     path: PAGES.PROJECT,
     component: Project,
     meta: {
-      middleware: [""],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
     children: [
       {
@@ -114,7 +115,7 @@ const routes = [
     path: PAGES.HOME,
     component: Home,
     meta: {
-      middleware: ["authentication"],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
   }
 ];
@@ -132,24 +133,18 @@ router.beforeEach((to, from, next) => {
   const role = localStorage.getItem("role");
 
   // Check if middleware exists and includes 'authentication'
-  if (middleware && middleware.includes("authentication") && !token) {
+  if (middleware && middleware.includes(AUTHENTICATION_MIDDLEWARE) && !token) {
     return next(PAGES.LOGIN);
   }
 
-  // sua lai sau
-  // if (
-  //   middleware &&
-  //   middleware.includes("admin-role") &&
-  //   highest_role !== ADMIN
-  // ) {
-  //   return next(PAGES.FORBIDDEN);
-  // }
-
-  // sua lai theo logic sau
-  // if (middleware && middleware.includes("manager-role")) {
-  //   if (highest_role !== ADMIN && highest_role !== LANDLORD)
-  //     return next(PAGES.FORBIDDEN);
-  // }
+  // define middleware for user role here
+    if (
+    middleware &&
+    middleware.includes(ADMIN_MIDDLEWARE) &&
+      role !== ADMIN
+  ) {
+    return next(PAGES.FORBIDDEN);
+  }
 
   next();
 });

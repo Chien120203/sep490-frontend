@@ -1,5 +1,4 @@
 export const ADMIN = "Administrator";
-export const LANDLORD = "LANDLORD";
 export const USER = "User";
 export const CONSTRUCTION_EMPLOYEE = "Construction Employee";
 export const BUSINESS_EMPLOYEE = "Business Employee";
