@@ -17,14 +17,13 @@ export const useUserStore = defineStore(
         const userDetails = reactive({
             value: {
                 id: 0,
-                user_code: "",
                 username: "",
                 email: "",
                 role: "",
-                dob:"",
-                full_name: "",
+                fullName: "",
+                phone: "",
                 gender: "",
-                phone: ""
+                dob:""
             }
         });
 
@@ -112,15 +111,14 @@ export const useUserStore = defineStore(
 
         const clearUserDetails = () => {
             userDetails.value = {
-                    id: 0,
-                    user_code: "",
-                    user_name: "",
-                    email: "",
-                    role: "",
-                    dob:"",
-                    full_name: "",
-                    gender: "",
-                    phone: ""
+                id: 0,
+                username: "",
+                email: "",
+                role: "",
+                fullName: "",
+                phone: "",
+                gender: "",
+                dob:""
             };
         };
 

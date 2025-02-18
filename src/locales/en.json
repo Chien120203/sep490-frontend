@@ -522,6 +522,8 @@
       "header": {
         "username": "User Name",
         "fullName": "Full Name",
+        "dob": "Date of Birth",
+        "gender": "Gender",
         "email": "Email",
         "phone": "Phone Number",
         "location": "Location",
