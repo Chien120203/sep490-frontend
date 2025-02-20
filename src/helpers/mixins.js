@@ -134,34 +134,8 @@ const formatInputCurrency = (value, isEmpty = false, withoutComma = false) => {
 };
 
 const handleErrorResponse = (error) => {
-  const formattedErrors = {};
-  try {
-    for (const field in error) {
-      if (error.hasOwnProperty(field) && field !== "success") {
-        const errorValue = error[field];
-        if (!errorValue.includes(",")) {
-          formattedErrors[field] = { code: errorValue, options: {} };
-        } else {
-          const parts = errorValue.split(",").map((part) => part.trim());
-          const code = parts[0];
-          const options = {};
-          parts.slice(1).forEach((option) => {
-            const [key, value] = option.split(":").map((part) => part.trim());
-            if (key && value)
-              options[key] = isNaN(value) ? value : Number(value);
-          });
-          formattedErrors[field] = {
-            code: code.split(":")[1],
-            ...(Object.keys(options).length > 0 && { options }),
-          };
-        }
-      }
-    }
-  } catch (err) {
-    return formattedErrors;
-  }
 
-  return formattedErrors;
+  return;
 };
 
 export const mixins = {

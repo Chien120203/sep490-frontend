@@ -293,7 +293,7 @@
       "renewed": "Renewed"
     },
     "details": {
-      "title": "Update Customer",
+      "title": "Customer Details",
       "customer_code": "Customer Code",
       "customer_name": "Customer Name",
       "phone": "Phone",
@@ -726,6 +726,7 @@
   "E-PW-001": "Password must be between {min} and {max} characters",
 
   "E-CUS-001": "Customer code is required",
+  "E-CUS-002": "Duplicate Customer Code",
   "E-CUS-004": "Tax code is required",
   "E-CUS-005": "Phone number is invalid",
   "E-CUS-006": "Fax number is invalid",

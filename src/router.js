@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
-import { ADMIN } from "@/constants/roles.js";
-import {ADMIN_MIDDLEWARE, AUTHENTICATION_MIDDLEWARE} from "@/constants/middleware.js";
+import {ADMIN, BUSINESS_EMPLOYEE} from "@/constants/roles.js";
+import {ADMIN_MIDDLEWARE, AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE} from "@/constants/middleware.js";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 // import pages
 import Login from "@/pages/Login.vue";
@@ -45,7 +46,7 @@ const routes = [
     path: PAGES.CUSTOMER,
     component: Customer,
     meta: {
-      middleware: [AUTHENTICATION_MIDDLEWARE],
+      middleware: [AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE],
     },
     children: [
       {
@@ -109,14 +110,6 @@ const routes = [
         component: ProjectDetails,
       }
     ]
-  },
-  {
-    name: PAGE_NAME.HOME,
-    path: PAGES.HOME,
-    component: Home,
-    meta: {
-      middleware: [AUTHENTICATION_MIDDLEWARE],
-    },
   }
 ];
 
@@ -131,19 +124,23 @@ router.beforeEach((to, from, next) => {
   const { middleware } = to.meta || {}; // Safely access meta.middleware
   const token = localStorage.getItem("accessToken");
   const role = localStorage.getItem("role");
+  const persist = usePersistanceStore();
+  const {loggedIn} = persist;
 
   // Check if middleware exists and includes 'authentication'
   if (middleware && middleware.includes(AUTHENTICATION_MIDDLEWARE) && !token) {
+    loggedIn.value = false;
     return next(PAGES.LOGIN);
   }
 
-  // define middleware for user role here
+  //middleware for pages
+  if (middleware) {
     if (
-    middleware &&
-    middleware.includes(ADMIN_MIDDLEWARE) &&
-      role !== ADMIN
-  ) {
-    return next(PAGES.FORBIDDEN);
+      middleware.includes(BUSINESS_MIDDLEWARE) && role !== BUSINESS_EMPLOYEE ||
+      middleware.includes(ADMIN_MIDDLEWARE) && role !== ADMIN
+    ) {
+      if (to.path !== PAGES.FORBIDDEN) return next(PAGES.FORBIDDEN);
+    }
   }
 
   next();
