@@ -1,6 +1,8 @@
 export const STATUSES = [
-  'Bidding',
-  'status2',
-  'status3',
-  'status4'
+  'Status 1',
+  'Status 2',
+  'Status 3',
+  'Status 4',
+  'Status 5',
+  'Status 6'
 ]
