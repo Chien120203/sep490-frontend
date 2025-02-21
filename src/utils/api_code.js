@@ -14,7 +14,7 @@ const API_CODE = {
   API_CUS_005: '/customer/delete-customer',
 
   //project
-  API_PRJ_001: '/project/list-project',
+  API_PRJ_001: '/project/list',
 
   //User
   API_USER_001: '/admin/list-user',

@@ -113,8 +113,9 @@ const formatCurrency = (money, s_delimiter = ".") => {
   const currencySymbol = "₫";
   const convertedMoney = Math.floor(money); // Ensure no decimals
 
-  const rex = "\\d(?=(\\d{3})+$)";
-  const formattedMoney = convertedMoney.toString().replace(new RegExp(rex, "g"), "$&" + s_delimiter);
+  const formattedMoney = convertedMoney
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, s_delimiter); // Proper regex for thousand separator
 
   return formattedMoney + " " + currencySymbol;
 };
