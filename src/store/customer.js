@@ -31,12 +31,12 @@ export const useCustomerStore = defineStore(
       }
     });
 
-    const getListCustomers = async (params) => {
-      mixinMethods.startLoading();
+    const getListCustomers = async (params, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
       await services.CustomerAPI.list(
         params,
         (response) => {
-          if (currentPage.value === 0) {
+          if (currentPage.value === 1) {
             listCustomers.value = response.data;
           } else {
             listCustomers.value = [...listCustomers.value, ...response.data];
@@ -46,9 +46,9 @@ export const useCustomerStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          validation.value = mixinMethods.handleErrorResponse(
-            error.responseCode
-          );
+          // validation.value = mixinMethods.handleErrorResponse(
+          //   error.responseCode
+          // );
           mixinMethods.notifyError(t("response.message.get_customer_failed"));
           mixinMethods.endLoading();
         }
@@ -64,9 +64,9 @@ export const useCustomerStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          validation.value = mixinMethods.handleErrorResponse(
-            error.responseCode
-          );
+          // validation.value = mixinMethods.handleErrorResponse(
+          //   error.responseCode
+          // );
           mixinMethods.notifyError(t("response.message.get_customer_dtls_failed"));
           mixinMethods.endLoading();
         }
@@ -82,6 +82,7 @@ export const useCustomerStore = defineStore(
             customerDetails.value = response.data;
             mixinMethods.notifySuccess(t("response.message.save_customer_success"));
           }else {
+            validation.value = mixinMethods.handleErrorResponse(response);
             mixinMethods.notifyError(t("response.message.save_customer_failed"));
           }
           mixinMethods.endLoading();

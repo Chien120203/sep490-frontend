@@ -1,6 +1,8 @@
 export const STATUSES = [
-  'Bidding',
-  'status2',
-  'status3',
-  'status4'
+  'Receive Request',
+  'Planning',
+  'InProgress',
+  'Completed',
+  'Paused',
+  'Closed'
 ]

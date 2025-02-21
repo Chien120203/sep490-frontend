@@ -74,16 +74,14 @@
         <div class="form-search-box">
           <div class="item">
             <el-form-item :label="$t('project.customer')">
-              <el-select v-model="searchForms.customerId">
-                <el-option :label="$t('common.all')" value=""></el-option>
-                <el-option
-                    v-for="(cust, index) in listCustomers.value"
-                    :key="index"
-                    :label="cust.customerCode"
-                    :value="cust.id"
-                >
-                </el-option>
-              </el-select>
+              <SingleOptionSelect
+                  v-model="searchForms.customerId"
+                  :optionKeys="{ id: 'id', value: 'customerCode' }"
+                  :listData="listCustomers.value"
+                  :isRemote="true"
+                  :disabled="isDisabled"
+                  @remoteSearch="handleSearchCustomer"
+              />
             </el-form-item>
           </div>
           <div class="item">
@@ -104,7 +102,7 @@
       </div>
     </div>
 
-    <div class="bidding-body-table" style="margin-top: 16px; min-height: 400px">
+    <div class="bidding-body-table" style="margin-top: 10px; min-height: 480px; overflow-y: auto;">
       <ProjectTable
           :data="listProjects.value"
           @details="handleToProjectDtls"
@@ -162,10 +160,10 @@ export default {
   },
   setup() {
     const searchForms = ref({
-      searchValue: "",
+      keyWord: "",
       status: null,
       customerId: null,
-      pageNo: 0,
+      pageIndex: 1,
     });
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
@@ -248,7 +246,7 @@ export default {
     });
 
     onMounted(() => {
-      getListProjects();
+      getListProjects(searchForms.value);
       getListCustomers();
     });
 
@@ -266,13 +264,16 @@ export default {
     };
 
     const submitForm = () => {
-      searchForms.value.pageNo = 0;
-      currentPage.value = 0;
+      isShowBoxSearch.value = false;
+      searchForms.value.pageIndex = 1;
+      currentPage.value = 1;
+      getListProjects(searchForms.value);
     };
 
     const handleLoadMore = () => {
       currentPage.value++;
       searchForms.value.pageNo++;
+      getListProjects(searchForms.value);
     };
 
     const handleRedirectToCreate = () => {
@@ -296,6 +297,10 @@ export default {
       handleDeleteCustomerReq(delete_id.value);
     };
 
+    const handleSearchCustomer = (searchValue) => {
+      getListCustomers({search: searchValue, pageIndex: 1}, false);
+    }
+
     return {
       NUMBER_FORMAT,
       TEXT_CONFIRM_DELETE,
@@ -314,6 +319,7 @@ export default {
       chartOptions,
       chartData,
       handleSearchForm,
+      handleSearchCustomer,
       handleClear,
       submitForm,
       handleLoadMore,

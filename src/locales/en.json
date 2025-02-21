@@ -212,7 +212,8 @@
       "save_customer_success": "Save Customer Success",
       "save_customer_failed": "Save Customer Failed",
       "delete_customer_success": "Delete Customer Success",
-      "delete_customer_failed": "Delete Customer Failed"
+      "delete_customer_failed": "Delete Customer Failed",
+      "get_projects_failed": "Get list projects failed"
     }
   },
   "contract": {
