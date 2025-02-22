@@ -135,8 +135,10 @@ const formatInputCurrency = (value, isEmpty = false, withoutComma = false) => {
 };
 
 const handleErrorResponse = (error) => {
-
-  return;
+  return error.errors.reduce((acc, { field, message }) => {
+    acc[field] = message;
+    return acc;
+  }, {});
 };
 
 export const mixins = {
