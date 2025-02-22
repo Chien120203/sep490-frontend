@@ -212,7 +212,8 @@
       "save_customer_success": "Save Customer Success",
       "save_customer_failed": "Save Customer Failed",
       "delete_customer_success": "Delete Customer Success",
-      "delete_customer_failed": "Delete Customer Failed"
+      "delete_customer_failed": "Delete Customer Failed",
+      "get_projects_failed": "Get list projects failed"
     }
   },
   "contract": {
@@ -293,7 +294,7 @@
       "renewed": "Renewed"
     },
     "details": {
-      "title": "Update Customer",
+      "title": "Customer Details",
       "customer_code": "Customer Code",
       "customer_name": "Customer Name",
       "phone": "Phone",
@@ -521,13 +522,17 @@
     "table": {
       "header": {
         "username": "User Name",
-        "fullname": "Full Name",
+        "fullName": "Full Name",
+        "dob": "Date of Birth",
+        "gender": "Gender",
         "email": "Email",
         "phone": "Phone Number",
         "location": "Location",
         "role": "Role",
         "action": "Action",
-        "code": "User Code"
+        "code": "User Code",
+        "gender": "Gender",
+        "dob": "Date of Birth"
       }
     },
     "details": {
@@ -722,6 +727,7 @@
   "E-PW-001": "Password must be between {min} and {max} characters",
 
   "E-CUS-001": "Customer code is required",
+  "E-CUS-002": "Duplicate Customer Code",
   "E-CUS-004": "Tax code is required",
   "E-CUS-005": "Phone number is invalid",
   "E-CUS-006": "Fax number is invalid",

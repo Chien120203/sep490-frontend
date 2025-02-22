@@ -12,7 +12,7 @@ export const useCustomerStore = defineStore(
     const validation = reactive({ value: {} });
     const isShowModalConfirm = reactive({ value: false });
     const totalItems = reactive({ value: 0 });
-    const currentPage = reactive({ value: 1 });
+    const currentPage = reactive({ value: 0 });
     const listCustomers = reactive({ value: [] });
     const customerDetails = reactive({
       value: {
@@ -31,8 +31,8 @@ export const useCustomerStore = defineStore(
       }
     });
 
-    const getListCustomers = async (params) => {
-      mixinMethods.startLoading();
+    const getListCustomers = async (params, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
       await services.CustomerAPI.list(
         params,
         (response) => {
@@ -46,9 +46,9 @@ export const useCustomerStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          validation.value = mixinMethods.handleErrorResponse(
-            error.responseCode
-          );
+          // validation.value = mixinMethods.handleErrorResponse(
+          //   error.responseCode
+          // );
           mixinMethods.notifyError(t("response.message.get_customer_failed"));
           mixinMethods.endLoading();
         }
@@ -64,9 +64,9 @@ export const useCustomerStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          validation.value = mixinMethods.handleErrorResponse(
-            error.responseCode
-          );
+          // validation.value = mixinMethods.handleErrorResponse(
+          //   error.responseCode
+          // );
           mixinMethods.notifyError(t("response.message.get_customer_dtls_failed"));
           mixinMethods.endLoading();
         }
@@ -84,7 +84,7 @@ export const useCustomerStore = defineStore(
           }else {
             mixinMethods.notifyError(t("response.message.save_customer_failed"));
           }
-            mixinMethods.endLoading();
+          mixinMethods.endLoading();
         },
         () => {
           mixinMethods.notifyError(t("response.message.save_customer_failed"));

@@ -62,9 +62,9 @@
             </el-form-item>
 
             <el-form-item
-              :label="$t('user.details.dob')"
-              prop="dob"
-              >
+                :label="$t('user.details.dob')"
+                prop="dob"
+            >
               <el-date-picker
                   v-model="userDetails.value.dob"
                   type="date"
@@ -74,7 +74,7 @@
                   class="error-feedback-user"
                   v-if="validation.value && validation.value.dob"
               >{{ $t(validation.value.dob) }}</label>
-              </el-form-item>
+            </el-form-item>
 
             <el-form-item
                 prop="gender"

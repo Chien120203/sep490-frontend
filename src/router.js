@@ -1,7 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
-import { ADMIN } from "@/constants/roles.js";
+import {ADMIN, BUSINESS_EMPLOYEE} from "@/constants/roles.js";
+import {ADMIN_MIDDLEWARE, AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE} from "@/constants/middleware.js";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 // import pages
 import Login from "@/pages/Login.vue";
@@ -28,7 +30,7 @@ const routes = [
     path: PAGES.HOME,
     component: Home,
     meta: {
-      middleware: ["authentication"],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
   },
   {
@@ -44,7 +46,7 @@ const routes = [
     path: PAGES.CUSTOMER,
     component: Customer,
     meta: {
-      middleware: ["authentication"],
+      middleware: [AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE],
     },
     children: [
       {
@@ -69,7 +71,7 @@ const routes = [
     path: PAGES.USER,
     component: User,
     meta: {
-      middleware: [""],
+      middleware: [AUTHENTICATION_MIDDLEWARE, ADMIN_MIDDLEWARE],
     },
     children: [
       {
@@ -94,7 +96,7 @@ const routes = [
     path: PAGES.PROJECT,
     component: Project,
     meta: {
-      middleware: [""],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
     children: [
       {
@@ -108,14 +110,6 @@ const routes = [
         component: ProjectDetails,
       }
     ]
-  },
-  {
-    name: PAGE_NAME.HOME,
-    path: PAGES.HOME,
-    component: Home,
-    meta: {
-      middleware: ["authentication"],
-    },
   }
 ];
 
@@ -130,26 +124,24 @@ router.beforeEach((to, from, next) => {
   const { middleware } = to.meta || {}; // Safely access meta.middleware
   const token = localStorage.getItem("accessToken");
   const role = localStorage.getItem("role");
+  const persist = usePersistanceStore();
+  const {loggedIn} = persist;
 
   // Check if middleware exists and includes 'authentication'
-  if (middleware && middleware.includes("authentication") && !token) {
+  if (middleware && middleware.includes(AUTHENTICATION_MIDDLEWARE) && !token) {
+    loggedIn.value = false;
     return next(PAGES.LOGIN);
   }
 
-  // sua lai sau
-  // if (
-  //   middleware &&
-  //   middleware.includes("admin-role") &&
-  //   highest_role !== ADMIN
-  // ) {
-  //   return next(PAGES.FORBIDDEN);
-  // }
-
-  // sua lai theo logic sau
-  // if (middleware && middleware.includes("manager-role")) {
-  //   if (highest_role !== ADMIN && highest_role !== LANDLORD)
-  //     return next(PAGES.FORBIDDEN);
-  // }
+  //middleware for pages
+  if (middleware) {
+    if (
+      middleware.includes(BUSINESS_MIDDLEWARE) && role !== BUSINESS_EMPLOYEE ||
+      middleware.includes(ADMIN_MIDDLEWARE) && role !== ADMIN
+    ) {
+      if (to.path !== PAGES.FORBIDDEN) return next(PAGES.FORBIDDEN);
+    }
+  }
 
   next();
 });

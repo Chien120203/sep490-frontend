@@ -12,7 +12,7 @@
         <p v-html="$t('project.table.header.code')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.project_code }}</span>
+        <span class="data-table">{{ scope.row.projectCode }}</span>
       </template>
     </el-table-column>
 
@@ -21,7 +21,7 @@
         <p v-html="$t('project.table.header.name')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.project_name }}</span>
+        <span class="data-table">{{ scope.row.projectName }}</span>
       </template>
     </el-table-column>
 
@@ -30,7 +30,7 @@
         <p v-html="$t('project.table.header.customer')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.customer_id }}</span>
+        <span class="data-table">{{ scope.row.customer.customerCode ?? "-" }}</span>
       </template>
     </el-table-column>
 
@@ -39,7 +39,7 @@
         <p v-html="$t('project.table.header.type')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.construct_type }}</span>
+        <span class="data-table">{{ scope.row.constructType ?? "-" }}</span>
       </template>
     </el-table-column>
 
@@ -48,7 +48,7 @@
         <p v-html="$t('project.table.header.location')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.location }}</span>
+        <span class="data-table">{{ scope.row.location ?? "-" }}</span>
       </template>
     </el-table-column>
 
@@ -57,7 +57,7 @@
         <p v-html="$t('project.table.header.budget')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">${{ formatCurrency(scope.row.budget) }}</span>
+        <span class="data-table">{{ formatCurrency(scope.row.budget) ?? "-" }}</span>
       </template>
     </el-table-column>
 
@@ -66,7 +66,7 @@
         <p v-html="$t('project.table.header.start_date')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.start_date) }}</span>
+        <span class="data-table">{{ formatDate(scope.row.startDate) ?? "-" }}</span>
       </template>
     </el-table-column>
 
@@ -75,7 +75,7 @@
         <p v-html="$t('project.table.header.end_date')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.end_date) }}</span>
+        <span class="data-table">{{ formatDate(scope.row.endDate) ?? "-" }}</span>
       </template>
     </el-table-column>
 
@@ -84,7 +84,7 @@
         <p v-html="$t('project.table.header.status')"></p>
       </template>
       <template #default="scope">
-        <span :class="['project-status', statusClass(scope.row.status)]">
+        <span :class="['project-status']">
           {{ scope.row.status }}
         </span>
       </template>
@@ -128,7 +128,7 @@ export default {
   },
   setup() {
     const statusClass = (status) => {
-      switch (status.toLowerCase()) {
+      switch (status?.toLowerCase()) {
         case "in progress":
           return "project-inprogress";
         case "planning":

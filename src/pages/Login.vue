@@ -178,16 +178,15 @@
 </template>
 
 <script>
-import { ref, computed, watch, onMounted, reactive } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { VI_LOCALE, EN_LOCALE } from "@/constants/application";
 import { useI18n } from "vue-i18n";
 import { useAuthStore } from "@/store/auth.js";
-import { $exchangeRate, $globalLocale } from "@/utils/variables";
+import { $globalLocale } from "@/utils/variables";
 import { i18n } from "@/utils/i18n";
 import Modal from "@/components/common/Modal.vue";
-import { $services } from "@/utils/variables";
 
 export default {
   name: "Login",
