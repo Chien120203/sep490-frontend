@@ -62,11 +62,10 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import Navbar from "@/components/common/Navbar.vue";
 import Sidebar from "@/components/common/Sidebar.vue";
-import Footer from "@/components/common/Footer.vue";
 import { usePersistanceStore } from "@/store/persistance.js";
 
 export default {
-  components: { Navbar, Sidebar, Footer },
+  components: { Navbar, Sidebar },
   setup() {
     const persist = usePersistanceStore();
     const { loggedIn } = persist;
@@ -132,16 +131,5 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   padding-top: 2px;
-}
-
-.footer {
-  background: #f8f9fa;
-  padding: 10px;
-  text-align: center;
-  font-size: 14px;
-  color: #6c757d;
-  position: relative;
-  bottom: 0;
-  width: 100%;
 }
 </style>
