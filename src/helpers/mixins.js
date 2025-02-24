@@ -1,8 +1,8 @@
-import { ref } from "vue";
-import { ElLoading } from "element-plus";
+import {ref} from "vue";
+import {ElLoading} from "element-plus";
 import moment from "moment";
-import { RULES_VALIDATION } from "@/constants/application";
-import { ElNotification } from "element-plus";
+import {RULES_VALIDATION} from "@/constants/application";
+import {ElNotification} from "element-plus";
 
 const screenLoading = ref(false);
 let loadingInstance = null;
@@ -134,8 +134,14 @@ const formatInputCurrency = (value, isEmpty = false, withoutComma = false) => {
   return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+const formatNumberVietnam = (number) => {
+  if (number === null || number === undefined) return "";
+  return new Intl.NumberFormat("vi-VN").format(number);
+};
+
+
 const handleErrorResponse = (error) => {
-  return error.errors.reduce((acc, { field, message }) => {
+  return error.errors.reduce((acc, {field, message}) => {
     acc[field] = message;
     return acc;
   }, {});
@@ -148,6 +154,7 @@ export const mixins = {
   checkEmptyWithOutZero,
   checkEmpty,
   formatCurrency,
+  formatNumberVietnam,
   formatInputCurrency,
   handleErrorResponse,
   arrayChunk,

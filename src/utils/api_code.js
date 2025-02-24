@@ -15,6 +15,7 @@ const API_CODE = {
 
   //project
   API_PRJ_001: '/project/list',
+  API_PRJ_002: '/project/save',
 
   //User
   API_USER_001: '/admin/list-user',

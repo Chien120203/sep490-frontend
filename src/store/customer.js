@@ -46,9 +46,6 @@ export const useCustomerStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          // validation.value = mixinMethods.handleErrorResponse(
-          //   error.responseCode
-          // );
           mixinMethods.notifyError(t("response.message.get_customer_failed"));
           mixinMethods.endLoading();
         }

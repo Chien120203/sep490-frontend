@@ -123,6 +123,12 @@
         :message="$t('project.modal_confirm.message')"
         :title="$t('project.modal_confirm.title')"
     />
+    <ProjectCreateModal
+      :show="isShowModalCreate.value"
+      :projectDetails="projectDetails.value"
+      :validate="validation.value"
+      @close="handleDisplayCreateModal"
+    />
   </div>
 </template>
 
@@ -176,6 +182,7 @@ export default {
       currentPage,
       projectDetails,
       isShowModalConfirm,
+      isShowModalCreate,
       getListProjects,
       handleGetProjectDtls,
       handleDeleteProject
@@ -263,6 +270,10 @@ export default {
       searchForms.value.customerId = null;
     };
 
+    const handleDisplayCreateModal = (isClose = false) => {
+      isShowModalCreate.value = !!isClose;
+    }
+
     const submitForm = () => {
       isShowBoxSearch.value = false;
       searchForms.value.pageIndex = 1;
@@ -277,7 +288,7 @@ export default {
     };
 
     const handleRedirectToCreate = () => {
-      router.push({name: ""})
+      router.push({name: PAGE_NAME.PROJECT.CREATE})
     };
 
     const handleToProjectDtls = (id) => {
@@ -318,6 +329,9 @@ export default {
       financialData,
       chartOptions,
       chartData,
+      validation,
+      isShowModalCreate,
+      projectDetails,
       handleSearchForm,
       handleSearchCustomer,
       handleClear,
@@ -328,6 +342,7 @@ export default {
       handleConfirm,
       handleRedirectToCreate,
       handleToProjectDtls,
+      handleDisplayCreateModal,
       handleDeleteProject
     };
   },
