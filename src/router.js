@@ -18,6 +18,7 @@ import UserDetails from "@/pages/user/Save.vue";
 import Forbidden from "@/pages/Forbidden.vue";
 import ProjectList from "@/pages/project/ProjectList.vue";
 import ProjectDetails from "@/pages/project/ProjectDetails.vue";
+import ContractDetails from "@/pages/project/item/contract/ContractDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 
 const routes = [
@@ -121,6 +122,22 @@ const routes = [
         component: ProjectDetails,
       }
     ]
+  },
+  {
+    name: PAGE_NAME.CONTRACT.DETAILS,
+    path: PAGES.CONTRACT_DETAILS,
+    component: ContractDetails,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    }
+  },
+  {
+    name: PAGE_NAME.HOME,
+    path: PAGES.HOME,
+    component: Home,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    }
   }
 ];
 

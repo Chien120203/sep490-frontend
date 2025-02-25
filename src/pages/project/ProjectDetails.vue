@@ -90,6 +90,74 @@
                   @loadMore="handleLoadMore"
               />
             </el-collapse-item>
+            <el-collapse-item name="4">
+              <template #title>
+                <h3>{{ $t("contract.title") }}</h3>
+              </template>
+              <div class="project-body">
+                <div class="project-search">
+                  <div class="project-search-box col-md-9 col-lg-9">
+                    <p class="project-search__ttl">
+                      {{ $t("project.keyword") }}
+                    </p>
+                    <div class="mb-0 ruleform">
+                      <el-input
+                          :placeholder="$t('common.input_keyword')"
+                          @keyup.enter=""
+                          v-model="searchCRForms.searchValue"
+                          prop="searchValue"
+                      >
+                        <template #append>
+                <span @click="handleCRSearchForm" class="btn-setting">
+                  <IconSetting/>
+                </span>
+                        </template>
+                      </el-input>
+                    </div>
+                  </div>
+                  <div class="btn-search-select col-md-3 col-lg-3 project-box-btn-all">
+                    <el-button class="btn btn-search" @click="">
+                      {{ $t("common.search") }}
+                    </el-button
+                    >
+                    <el-button class="btn btn-clear" @click="">
+                      {{ $t("common.clear") }}
+                    </el-button
+                    >
+                  </div>
+                </div>
+                <div class="form-search" :class="{ active: isShowBoxSearch }">
+                  <div class="close-form">
+                    <IconCircleClose @click="isShowBoxSearch = false"/>
+                  </div>
+                  <div class="form-search-box">
+                    <div class="item">
+                      <el-form-item :label="$t('project.status')">
+                        <el-select v-model="searchCRForms.status">
+                          <el-option :label="$t('common.all')" value=""></el-option>
+                          <el-option
+                              v-for="(status, index) in STATUSES"
+                              :key="index"
+                              :label="status"
+                              :value="index"
+                          >
+                          </el-option>
+                        </el-select>
+                      </el-form-item>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ContractList
+                  :data="changeRequestData"
+                  @details="getContractDetails"
+              />
+              <LoadMore
+                  :listData="changeRequestData.value"
+                  :totalItems="10"
+                  @loadMore="handleLoadMore"
+              />
+            </el-collapse-item>
           </el-collapse>
         </el-col>
       </el-row>
@@ -114,10 +182,12 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
+import ContractList from "@/pages/project/item/contract/ContractList.vue";
 
 export default {
   name: "ProjectDetails",
   components: {
+    ContractList: ContractList,
     LoadMore,
     IconSetting,
     IconCircleClose,
@@ -134,6 +204,18 @@ export default {
     const router = useRouter();
     const projectStore = useProjectStore();
     const activeCollapseItems = ref(["3", "2"]);
+    const projectData = ref({
+      title: 'Cơ điện M&E',
+      startDate: '01/06/2023',
+      endDate: '02/03/2024',
+      status: 'Chậm trễ',
+      budget: 60000000000,
+      income: 33129000000,
+      expense: 25256700000,
+      plannedProgress: 98,
+      actualProgress: 23,
+      completedWorks: 97
+    });
     const changeRequestData = ref([
       {
         id: 1,
@@ -199,6 +281,15 @@ export default {
     onUnmounted(() => {
     });
 
+    const getContractDetails = (id) => {
+      router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
+    }
+
+    // const handleDisplayModal = (user_id) => {
+    //   isShowModalConfirm.value = !!user_id;
+    //   delete_id.value = user_id;
+    // };
+
     const handleRedirectToEdit = () => {
       router.push({name: PAGE_NAME.PROJECT.EDIT, params: {id: route.params.id}});
     }
@@ -246,6 +337,7 @@ export default {
       handleRedirectToEdit,
       onSubmit,
       handleCRSearchForm,
+      getContractDetails,
       handleAddTenants,
     };
   },
