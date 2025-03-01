@@ -5,7 +5,7 @@ import {
 
 export const PROJECT_RULES = {
   projectCode: [
-    { required: true, message: i18n.global.t("E-PRJ-001"), trigger: "blur" },
+    { required: true, message: i18n.global.t("E-PRJ-009"), trigger: "blur" },
     {
       max: MAX_CHARACTER,
       message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
@@ -20,7 +20,7 @@ export const PROJECT_RULES = {
     },
   ],
   customerId: [
-    { required: true, message: i18n.global.t("E-PRJ-002"), trigger: "blur" },
+    { required: true, message: i18n.global.t("E-PRJ-010"), trigger: "blur" },
   ],
   area: [
     { required: true, message: i18n.global.t("E-PRJ-003"), trigger: "blur" },

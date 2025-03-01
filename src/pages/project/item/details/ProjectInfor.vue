@@ -1,63 +1,87 @@
 <template>
   <div class="project-progress">
     <div class="header">
-      <h2>{{ project.title }}</h2>
+      <h2>{{$t('project.details.infor.project_name')}}: {{ project.projectName }}</h2>
       <div class="status">
-        <span>{{ project.status }}</span>
-        <span>({{ project.startDate }} - {{ project.endDate }})</span>
+        <el-button v-if="project.status === RECEIVE_STATUS" class="btn btn-save" @click="$emit('edit')">
+          {{ $t("common.edit") }}
+        </el-button>
       </div>
     </div>
 
-    <div class="budget">
-      <div class="spending">
-        <div>Budget</div>
-        <div>{{ project.budget.toLocaleString() }} VND</div>
+    <div class="details-container">
+      <div class="column">
+        <p><strong>{{$t('project.details.infor.project_code')}}:</strong> {{ project.projectCode }}</p>
+        <p><strong>{{$t('project.details.infor.customer')}}:</strong> {{ project?.customerCode }}</p>
+        <span><strong>{{$t('project.details.infor.status')}}:</strong> {{ $t(formatStatus(project.status)) }}</span>
       </div>
-      <div class="income">
-        <div>Income</div>
-        <div>{{ project.income.toLocaleString() }} VND</div>
+      <div class="column">
+        <p><strong>{{$t('project.details.infor.location')}}:</strong> {{ project.location }}</p>
+        <p><strong>{{$t('project.details.infor.area')}}:</strong> {{ project.area.toLocaleString() }}</p>
+        <span><strong>{{$t('project.details.infor.start_date') }} - {{$t('project.details.infor.end_date') }}:</strong> {{ formatDate(project.startDate) }} - {{ formatDate(project.endDate) }}</span>
       </div>
-      <div class="expense">
-        <div>Expense</div>
-        <div>{{ project.expense.toLocaleString() }} VND</div>
-      </div>
-    </div>
-
-    <div class="progress-bar">
-      <div class="progress">
-        <div class="planned" :style="{ width: project.plannedProgress + '%' }"></div>
-        <div class="actual" :style="{ width: project.actualProgress + '%' }"></div>
+      <div class="column">
+        <p><strong>{{$t('project.details.infor.construct_type')}}:</strong> {{ project.constructType }}</p>
+        <p><strong>{{$t('project.details.infor.budget')}}:</strong> {{ formatCurrency(project.budget) }}</p>
+        <p><strong>{{$t('project.details.infor.technical_reqs')}}:</strong> {{ project.technicalReqs }}</p>
       </div>
     </div>
 
-    <div class="work">
-      <p>{{ project.completedWorks }} Works Completed</p>
-      <div :style="{ width: project.completedWorks + '%' }"></div>
+    <div v-if="project.attachments && project.attachments.length" class="attachments">
+      <p><strong>{{$t('project.details.infor.attachment')}}: </strong></p>
+      <ul>
+        <li v-for="(attachment, index) in project.attachments" :key="index">
+          <a :href="attachment.webViewLink" target="_blank">
+            {{ attachment.name }}
+          </a>
+        </li>
+      </ul>
     </div>
+
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps } from 'vue';
+import {RECEIVE_STATUS, STATUS_LABELS} from "@/constants/project.js";
+import {mixinMethods} from "@/utils/variables.js";
+
+const formatStatus = (status) => {
+  return STATUS_LABELS[status] || 'Unknown';
+};
+
+const formatCurrency = (inputCurrency) => {
+  return mixinMethods.formatCurrency(inputCurrency);
+}
+
+const formatDate = (date) => {
+  return mixinMethods.showDateTime(date);
+}
 
 defineProps({
   project: {
     type: Object,
     required: true,
     default: () => ({
-      title: '',
-      startDate: '',
-      endDate: '',
-      status: '',
+      id: 0,
+      projectCode: "",
+      projectName: "",
+      customerId: "",
+      constructType: "",
+      location: "",
+      area: 0,
+      timeline: "",
+      purpose: "",
+      technicalReqs: "",
+      startDate: "",
+      endDate: "",
       budget: 0,
-      income: 0,
-      expense: 0,
-      plannedProgress: 0,
-      actualProgress: 0,
-      completedWorks: 0
+      status: 0,
+      attachment: "",
+      description: ""
     })
   }
-})
+});
 </script>
 
 <style scoped>
@@ -77,46 +101,32 @@ defineProps({
   color: #888;
 }
 
-.budget {
+.details-container {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  gap: 20px;
 }
 
-.spending, .income, .expense {
-  text-align: center;
+.column {
+  flex: 1;
 }
 
-.progress-bar {
-  height: 10px;
-  background-color: #ddd;
-  border-radius: 5px;
-  margin-bottom: 15px;
+.details p,
+.description p,
+.attachment p {
+  margin: 5px 0;
 }
 
-.progress {
-  display: flex;
+.btn-save {
+  margin-left: 12px;
 }
 
-.planned {
-  background-color: #4caf50;
-  height: 100%;
-  border-radius: 5px 0 0 5px;
+.attachment a {
+  color: #007bff;
+  text-decoration: none;
 }
 
-.actual {
-  background-color: #2196f3;
-  height: 100%;
-}
-
-.work {
-  display: flex;
-  align-items: center;
-}
-
-.work div {
-  height: 8px;
-  background-color: #2196f3;
-  border-radius: 4px;
+.attachment a:hover {
+  text-decoration: underline;
 }
 </style>

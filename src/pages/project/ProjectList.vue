@@ -283,7 +283,7 @@ export default {
 
     const handleLoadMore = () => {
       currentPage.value++;
-      searchForms.value.pageNo++;
+      searchForms.value.pageIndex++;
       getListProjects(searchForms.value);
     };
 

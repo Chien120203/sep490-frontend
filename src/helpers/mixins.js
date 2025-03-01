@@ -139,10 +139,27 @@ const formatNumberVietnam = (number) => {
   return new Intl.NumberFormat("vi-VN").format(number);
 };
 
+const base64ToFile = (base64String, fileName) => {
+  if(!base64String) return "";
+  const arr = base64String.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], fileName, { type: mime });
+};
+
 
 const handleErrorResponse = (error) => {
-  return error.errors.reduce((acc, {field, message}) => {
-    acc[field] = message;
+  return error.errors.reduce((acc, { field, message }) => {
+    field.split(",").map(f => f.trim()).forEach(f => {
+      acc[f] = message;
+    });
     return acc;
   }, {});
 };
@@ -163,4 +180,5 @@ export const mixins = {
   notifySuccess,
   validateInvalidEmail,
   showDateTime,
+  base64ToFile,
 };

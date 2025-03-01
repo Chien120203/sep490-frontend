@@ -5,7 +5,7 @@
         <h3 class="page__ttl">
           <span class="btn-back" @click="handleBack"><IconBackMain/></span>
           {{
-            $t('project.create.title')
+            isUpdate ? $t('project.create.title') : $t('project.edit.title')
           }}
         </h3>
         <div class="user-btn-detail">
@@ -181,22 +181,22 @@
               >{{ $t(validation.value.description) }}</label>
             </el-form-item>
 
-            <el-form-item prop="attachment" :label="$t('project.create.attachment')">
+            <el-form-item prop="attachments" :label="$t('project.create.attachment')">
               <FileUpload
+                  :existingFiles="projectDetails.value.attachments"
                   :allowedTypes="'.jpg,.png,.pdf,.docx'"
                   :fileLimit="3"
                   @file-selected="handleFileUpload"
               />
               <label
                   class="error-feedback-user"
-                  v-if="validation && validation.value.attachment"
+                  v-if="validation && validation.value.attachments"
               >
-                {{ $t(validation.value.attachment) }}
+                {{ $t(validation.value.attachments) }}
               </label>
             </el-form-item>
           </div>
         </el-form>
-
       </div>
     </div>
   </div>
@@ -218,7 +218,7 @@ import {DATE_FORMAT} from "@/constants/application.js";
 export default {
   components: {IconBackMain, SingleOptionSelect, FileUpload, PreviewAttachmentPDF},
   setup() {
-    const attachment = ref(null);
+    const attachments = ref(null);
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
     const {
@@ -229,6 +229,7 @@ export default {
       validation,
       projectDetails,
       saveProject,
+      getProjectDetails,
       clearProjectDetails
     } = projectStore;
     const route = useRoute();
@@ -236,6 +237,7 @@ export default {
     const router = useRouter();
 
     onMounted(() => {
+      if(route.params.id) getProjectDetails(route.params.id);
       getListCustomers({search: "", pageIndex: 1}, false);
     });
 
@@ -259,7 +261,7 @@ export default {
     };
 
     const handleFileUpload = (files) => {
-      projectDetails.value.attachment = files[0].content;
+      projectDetails.value.attachments = files;
     };
 
     const handleSearchCustomer = (searchValue) => {
@@ -278,7 +280,7 @@ export default {
       projectDetails,
       validation,
       listCustomers,
-      attachment,
+      attachments,
       formatCurrency,
       handleFileUpload,
       handleSearchCustomer,

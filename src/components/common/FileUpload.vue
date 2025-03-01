@@ -18,14 +18,19 @@
           class="file-item"
       >
         <span class="file-name">{{ file.name }}</span>
-        <button class="remove-btn" @click="removeFile(index)">✖</button>
+        <button type="button" class="remove-btn" @click="removeFile(index, file)">✖</button>
+        <button v-if="isUpdate" class="download-btn" @click="downloadFile(file.webContentLink)">
+          <IconDownload/>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import {ref, defineProps, defineEmits, onMounted, computed} from "vue";
+import {useRoute} from "vue-router";
+import IconDownload from "@/svg/IconDownload.vue";
 
 const props = defineProps({
   allowedTypes: {
@@ -36,11 +41,22 @@ const props = defineProps({
     type: Number,
     default: 3,
   },
+  existingFiles: {
+    type: Array,
+    default: () => [],
+  },
 });
 
-const emit = defineEmits(["file-selected"]);
+const emit = defineEmits(["file-selected", "file-removed"]);
+const route = useRoute();
+const isUpdate = computed(() => route.params.id);
+const fileList = computed(() => props.existingFiles);
 
-const fileList = ref([]);
+onMounted(() => {
+  // if(isUpdate.value) {
+  //   fileList.value = route.params.id ? props.existingFiles : [];
+  // }
+});
 
 const handleFileChange = (event) => {
   const files = Array.from(event.target.files);
@@ -53,19 +69,25 @@ const handleFileChange = (event) => {
   files.forEach((file) => {
     const reader = new FileReader();
     reader.onload = () => {
-      fileList.value.push({ name: file.name, content: reader.result });
+      fileList.value.push({name: file.name, content: reader.result});
       emit("file-selected", fileList.value);
     };
     reader.readAsDataURL(file);
   });
 
-  event.target.value = ""; // Reset file input to allow re-uploading the same file
+  event.target.value = "";
 };
 
-const removeFile = (index) => {
+const removeFile = (index, file) => {
   fileList.value.splice(index, 1);
+  emit("file-removed", file);
   emit("file-selected", fileList.value);
 };
+
+const downloadFile = (url) => {
+  window.open(url, "_blank");
+}
+
 </script>
 
 <style scoped>
@@ -79,6 +101,7 @@ const removeFile = (index) => {
 .upload-label {
   background-color: #3b3cac;
   color: white;
+  width: 160px;
   padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
@@ -110,24 +133,31 @@ input[type="file"] {
   background: #f4f4f4;
   padding: 5px 10px;
   border-radius: 5px;
+  min-width: 250px; /* Adjust based on your layout */
 }
 
 .file-name {
   font-size: 14px;
   color: #333;
+  flex-grow: 1; /* Ensures the name takes up remaining space */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.remove-btn {
-  color: #2b2929;
-  border: none;
+.download-btn, .remove-btn {
+  flex-shrink: 0; /* Prevents shrinking */
+  border: 0;
+  text-decoration: none;
+  font-size: 14px;
+  color: #3b3cac;
   cursor: pointer;
-  font-size: 12px;
-  padding: 0px 2px;
-  margin: 0 12px;
-  border-radius: 3px;
+  padding: 5px;
 }
 
-.remove-btn:hover {
+.download-btn:hover, .remove-btn:hover {
+  color: #445d8e;
   background: #d3cfcf;
+  border-radius: 3px;
 }
 </style>

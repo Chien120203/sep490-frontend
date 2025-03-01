@@ -18,7 +18,7 @@ import UserDetails from "@/pages/user/Save.vue";
 import Forbidden from "@/pages/Forbidden.vue";
 import ProjectList from "@/pages/project/ProjectList.vue";
 import ProjectDetails from "@/pages/project/ProjectDetails.vue";
-import ProjectCreate from "@/pages/project/Save.vue";
+import ProjectSave from "@/pages/project/Save.vue";
 
 const routes = [
   {
@@ -108,7 +108,12 @@ const routes = [
       {
         path: PAGES.PROJECT_CREATE,
         name: PAGE_NAME.PROJECT.CREATE,
-        component: ProjectCreate,
+        component: ProjectSave,
+      },
+      {
+        path: PAGES.PROJECT_EDIT,
+        name: PAGE_NAME.PROJECT.EDIT,
+        component: ProjectSave,
       },
       {
         path: PAGES.PROJECT_DETAILS,
