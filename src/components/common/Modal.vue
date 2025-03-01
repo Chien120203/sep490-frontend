@@ -1,15 +1,23 @@
 <template>
   <Transition name="modal">
     <div
-      v-if="show"
-      class="modal-mask"
-      :id="target"
-      :style="modalContainerStyle"
+        v-if="show"
+        class="modal-mask"
+        :id="target"
+        :style="modalContainerStyle"
     >
       <div class="modal-container" v-click-outside="handleClickOutside">
         <div class="modal-header" v-if="isShowHeader">
-          <slot name="header"></slot>
-          <IconCircleClose @click="$emit('close', true)" />
+          <slot name="header">
+            <div>
+              <span>
+                {{ modalTitle }}
+              </span>
+            </div>
+            <div>
+              <IconCircleClose @click="$emit('close', true)"/>
+            </div>
+          </slot>
         </div>
         <div class="modal-body">
           <slot name="body"></slot>
@@ -24,12 +32,12 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import {computed} from "vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import vClickOutside from "click-outside-vue3";
 
 export default {
-  components: { IconCircleClose },
+  components: {IconCircleClose},
   props: {
     show: {
       type: Boolean,
@@ -53,7 +61,8 @@ export default {
     },
     form: {
       type: Object,
-      default: () => {},
+      default: () => {
+      },
     },
     canClickOutside: {
       type: Boolean,
@@ -73,7 +82,7 @@ export default {
     clickOutside: vClickOutside.directive,
   },
 
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const modalContainerStyle = computed(() => {
       return {
         "--width": props.width,
@@ -83,8 +92,8 @@ export default {
 
     const handleClickOutside = async (event) => {
       if (
-        event.target.getAttribute("id") === props.target &&
-        props.canClickOutside
+          event.target.getAttribute("id") === props.target &&
+          props.canClickOutside
       ) {
         emit("close", true);
       }
@@ -137,7 +146,6 @@ export default {
   svg {
     cursor: pointer;
     position: absolute;
-    top: 5%;
     right: 1%;
     z-index: 10;
   }
@@ -152,7 +160,7 @@ export default {
 }
 
 .modal-body {
-  overflow-y: hidden;
+  overflow-y: scroll;
   height: 100%;
   padding: 16px;
 }

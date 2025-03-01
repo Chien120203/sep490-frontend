@@ -84,8 +84,8 @@
         <p v-html="$t('project.table.header.status')"></p>
       </template>
       <template #default="scope">
-        <span :class="['project-status']">
-          {{ scope.row.status }}
+        <span class="project-status" :class="statusClass(scope.row.status)">
+          {{ $t(formatStatus(scope.row.status)) }}
         </span>
       </template>
     </el-table-column>
@@ -114,6 +114,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
+import {STATUS_LABELS} from "@/constants/project.js";
 
 export default {
   components: {
@@ -128,17 +129,22 @@ export default {
   },
   setup() {
     const statusClass = (status) => {
-      switch (status?.toLowerCase()) {
-        case "in progress":
-          return "project-inprogress";
-        case "planning":
+      if (status == null) return ""; // Ensure status is not null or undefined
+      switch (status) {
+        case 0:
+          return "project-receive-planning";
+        case 1:
           return "project-planning";
-        case "ongoing":
-          return "project-ongoing";
-        case "completed":
+        case 2:
+          return "project-in-progress";
+        case 3:
           return "project-completed";
-        default:
+        case 4:
+          return "project-paused";
+        case 5:
           return "project-closed";
+        default:
+          return ""; // Handle unexpected values
       }
     };
 
@@ -150,8 +156,13 @@ export default {
       return mixinMethods.formatCurrency(inputCurrency);
     }
 
+    const formatStatus = (status) => {
+      return STATUS_LABELS[status] || 'Unknown';
+    };
+
     return {
       statusClass,
+      formatStatus,
       formatDate,
       formatCurrency
     };
@@ -167,18 +178,22 @@ export default {
     font-size: 12px;
     border-radius: 100px;
     display: block;
-    padding: 2px 16px;
+    padding: 2px 12px;
     line-height: 1.2;
     font-weight: 700;
     text-align: center;
   }
 
-  &-ongoing {
-    background: #36812a;
+  &-receive-planning {
+    background: #a62967;
   }
 
-  &-inprogress {
-    background: #8e3c9b;
+  &-planning {
+    background: #386498;
+  }
+
+  &-in-progress {
+    background: #28b5b5;
   }
 
   &-planning {
@@ -186,11 +201,15 @@ export default {
   }
 
   &-completed {
-    background: #2d47a3;
+    background: #3e8e22;
   }
 
   &-closed {
     background: #dc3545;
+  }
+
+  &-paused {
+    background: #4f1b6c;
   }
 }
 

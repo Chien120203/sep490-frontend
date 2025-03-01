@@ -62,11 +62,10 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import Navbar from "@/components/common/Navbar.vue";
 import Sidebar from "@/components/common/Sidebar.vue";
-import Footer from "@/components/common/Footer.vue";
 import { usePersistanceStore } from "@/store/persistance.js";
 
 export default {
-  components: { Navbar, Sidebar, Footer },
+  components: { Navbar, Sidebar },
   setup() {
     const persist = usePersistanceStore();
     const { loggedIn } = persist;

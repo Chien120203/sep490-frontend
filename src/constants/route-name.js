@@ -15,6 +15,8 @@ const PAGE_NAME = {
   },
   PROJECT: {
     LIST: "project-list",
+    CREATE: "project-create",
+    EDIT: "project-edit",
     DETAILS: "project-details",
   }
 };
