@@ -1,4 +1,4 @@
-import {defineStore} from "pinia";
+ import {defineStore} from "pinia";
 import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";

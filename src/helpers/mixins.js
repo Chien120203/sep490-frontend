@@ -1,8 +1,8 @@
-import { ref } from "vue";
-import { ElLoading } from "element-plus";
+import {ref} from "vue";
+import {ElLoading} from "element-plus";
 import moment from "moment";
-import { RULES_VALIDATION } from "@/constants/application";
-import { ElNotification } from "element-plus";
+import {RULES_VALIDATION} from "@/constants/application";
+import {ElNotification} from "element-plus";
 
 const screenLoading = ref(false);
 let loadingInstance = null;
@@ -134,9 +134,32 @@ const formatInputCurrency = (value, isEmpty = false, withoutComma = false) => {
   return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+const formatNumberVietnam = (number) => {
+  if (number === null || number === undefined) return "";
+  return new Intl.NumberFormat("vi-VN").format(number);
+};
+
+const base64ToFile = (base64String, fileName) => {
+  if(!base64String) return "";
+  const arr = base64String.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], fileName, { type: mime });
+};
+
+
 const handleErrorResponse = (error) => {
   return error.errors.reduce((acc, { field, message }) => {
-    acc[field] = message;
+    field.split(",").map(f => f.trim()).forEach(f => {
+      acc[f] = message;
+    });
     return acc;
   }, {});
 };
@@ -148,6 +171,7 @@ export const mixins = {
   checkEmptyWithOutZero,
   checkEmpty,
   formatCurrency,
+  formatNumberVietnam,
   formatInputCurrency,
   handleErrorResponse,
   arrayChunk,
@@ -156,4 +180,5 @@ export const mixins = {
   notifySuccess,
   validateInvalidEmail,
   showDateTime,
+  base64ToFile,
 };

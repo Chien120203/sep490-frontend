@@ -1,7 +1,7 @@
 <template>
   <div class="project-details-page">
     <div class="project-header">
-      <span class="btn-back" @click="handleBack"><IconBackMain /></span>
+      <span class="btn-back" @click="handleBack"><IconBackMain/></span>
       <h3 class="page__ttl">{{ $t("project.title") }}</h3>
     </div>
     <div class="project-details-infor">
@@ -13,10 +13,11 @@
                 <h3>{{ $t("project.details.title") }}</h3>
               </template>
               <ProjectInfor
-                  :project="projectData"
+                  :project="projectDetails.value"
+                  @edit="handleRedirectToEdit"
               />
             </el-collapse-item>
-            <el-collapse-item name="2" >
+            <el-collapse-item name="2">
               <template #title>
                 <h3>{{ $t("project.details.financial_summary") }}</h3>
               </template>
@@ -101,10 +102,10 @@ import Modal from "@/components/common/Modal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import { onMounted, onUnmounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
+import {onMounted, onUnmounted, ref} from "vue";
+import {useI18n} from "vue-i18n";
+import {useRoute, useRouter} from "vue-router";
+import {TEXT_CONFIRM_DELETE} from "@/constants/application.js";
 import ProjectInfor from "./item/details/ProjectInfor.vue"
 import FinancialSummary from "./item/list/FinancialSummary.vue";
 import ProjectCR from "./item/details/ProjectCR.vue";
@@ -112,6 +113,7 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
+import {useProjectStore} from "@/store/project.js";
 
 export default {
   name: "ProjectDetails",
@@ -127,22 +129,11 @@ export default {
     IconBackMain,
   },
   setup() {
-    const { t } = useI18n();
+    const {t} = useI18n();
     const route = useRoute();
     const router = useRouter();
+    const projectStore = useProjectStore();
     const activeCollapseItems = ref(["3", "2"]);
-    const projectData = ref({
-      title: 'Cơ điện M&E',
-      startDate: '01/06/2023',
-      endDate: '02/03/2024',
-      status: 'Chậm trễ',
-      budget: 60000000000,
-      income: 33129000000,
-      expense: 25256700000,
-      plannedProgress: 98,
-      actualProgress: 23,
-      completedWorks: 97
-    });
     const changeRequestData = ref([
       {
         id: 1,
@@ -195,16 +186,25 @@ export default {
     const searchCRForms = ref({
       searchValue: "",
     });
+    const {
+      getProjectDetails,
+      projectDetails
+    } = projectStore;
     const isShowBoxSearch = ref(false);
 
-    onMounted(async () => {
+    onMounted(() => {
+      getProjectDetails(route.params.id);
     });
 
     onUnmounted(() => {
     });
 
+    const handleRedirectToEdit = () => {
+      router.push({name: PAGE_NAME.PROJECT.EDIT, params: {id: route.params.id}});
+    }
+
     const handleBack = () => {
-      router.push({ name: PAGE_NAME.PROJECT.LIST });
+      router.push({name: PAGE_NAME.PROJECT.LIST});
     };
 
     const onSubmit = (isUpdate) => {
@@ -231,7 +231,7 @@ export default {
 
     return {
       financialData,
-      projectData,
+      projectDetails,
       changeRequestData,
       activeCollapseItems,
       searchCRForms,
@@ -243,6 +243,7 @@ export default {
       handleCloseModal,
       handleConfirm,
       handleOpenModalConfirm,
+      handleRedirectToEdit,
       onSubmit,
       handleCRSearchForm,
       handleAddTenants,
@@ -254,16 +255,20 @@ export default {
 <style scoped lang="scss">
 .project-details-page {
   padding: 20px;
+
   .project-header {
     display: flex;
     justify-content: left;
   }
+
   .project-details-infor {
     display: flex;
+
     .project-details-card-container {
       width: 40%;
       position: sticky;
     }
+
     .project-details-collapse {
       width: 60%;
       margin-left: 24px !important;

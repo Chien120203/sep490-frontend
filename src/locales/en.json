@@ -7,6 +7,7 @@
     "invoice_attachment": "Invoice Attachment",
     "contract": "Contract",
     "sales": "Sales",
+    "upload": "Click to upload",
     "status_note": "Status Note",
     "start_date": "Start Date",
     "end_date": "End Date",
@@ -53,6 +54,7 @@
     "error": "Error",
     "action": "Action",
     "cancel": "Cancel",
+    "download": "Download",
     "notthing_found": "Nothing Found",
     "status": "Status",
     "reset": "Reset",
@@ -118,6 +120,11 @@
       "in_progress": "Inprogress",
       "completed": "Completed",
       "closed": "Closed"
+    },
+    "file": {
+      "name": {
+        "default": "Defautl File Name"
+      }
     },
     "all_options": "All",
     "keyword": "Keyword",
@@ -213,7 +220,9 @@
       "save_customer_failed": "Save Customer Failed",
       "delete_customer_success": "Delete Customer Success",
       "delete_customer_failed": "Delete Customer Failed",
-      "get_projects_failed": "Get list projects failed"
+      "get_projects_failed": "Get list projects failed",
+      "save_project_success": "Save project success",
+      "save_project_failed": "Save project failed"
     }
   },
   "contract": {
@@ -345,9 +354,12 @@
     "tenant": "Tenant",
     "landlord": "Landlord",
     "statuses": {
-      "active": "Active",
-      "terminated": "Terminated",
-      "renewed": "Renewed"
+      "receive_reqs": "Receive Request",
+      "planning": "Planning",
+      "in_progress": "In Progress",
+      "complete": "Completed",
+      "paused": "Paused",
+      "close": "Closed"
     },
     "details": {
       "title": "Project Details",
@@ -363,10 +375,42 @@
           "request_date": "Request Date"
         },
         "action": "Action"
+      },
+      "infor": {
+        "project_code": "Project Code",
+        "project_name": "Project Name",
+        "customer": "Customer",
+        "construct_type": "Construct Type",
+        "area": "Area",
+        "location": "Location",
+        "purpose": "Purpose",
+        "technical_reqs": "Technical Requirements",
+        "start_date": "Start Date",
+        "end_date": "End Date",
+        "status": "Status",
+        "budget": "Budget",
+        "attachment": "Attachment",
+        "description": "Description"
       }
     },
     "create": {
-      "title": "Create Customer"
+      "title": "Create Project",
+      "project_code": "Project Code",
+      "project_name": "Project Name",
+      "customer": "Customer",
+      "construct_type": "Construct Type",
+      "area": "Area",
+      "purpose": "Purpose",
+      "technical_reqs": "Technical Requirements",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "budget": "Budget",
+      "attachment": "Attachment",
+      "description": "Description",
+      "upload_file": "Upload File"
+    },
+    "edit": {
+      "title": "Project Edit"
     },
     "table": {
       "header": {
@@ -730,6 +774,17 @@
   "E-CUS-005": "Phone number is invalid",
   "E-CUS-006": "Fax number is invalid",
   "E-CUS-007": "Tax code is invalid",
+
+  "E-PRJ-009": "Project code is required",
+  "E-PRJ-002": "Project code is duplicated",
+  "E-PRJ-003": "Area is required",
+  "E-PRJ-004": "Start date is required",
+  "E-PRJ-005": "End date is required",
+  "E-PRJ-006": "Budget is required",
+  "E-PRJ-007": "Purpose is required",
+  "E-PRJ-008": "Technical requirements is required",
+  "E-PRJ-001": "Start date must be before end date",
+  "E-PRJ-010": "Customer is required",
 
   "E-AUTHEN-001": "Your email already exists.",
   "E-AUTHEN-002": "Your username already exists.",

@@ -74,7 +74,6 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import { ADMIN } from "@/constants/roles.js";
-import { mixinMethods } from "@/utils/variables";
 import {useCustomerStore} from "@/store/customer.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";

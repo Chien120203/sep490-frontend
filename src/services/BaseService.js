@@ -51,6 +51,20 @@ const post = async (endpoint, params = {}, success, error, config = {}) => {
     .catch((e) => logError(e, error));
 };
 
+const postFormData = async (endpoint, formData, success, error, config = {}) => {
+  await api
+    .post(prefix + endpoint, formData, {
+      ...config,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    .then(processResponse)
+    .then(success)
+    .catch((e) => logError(e, error));
+};
+
+
 // Performs a PUT request
 const put = async (endpoint, params = {}, success, error) => {
   await api
@@ -96,6 +110,7 @@ export {
   get,
   post,
   put,
+  postFormData,
   del,
   patch,
   urlParse
