@@ -1,6 +1,7 @@
 const PAGES = {
   HOME: "/",
   LOGIN: "/login",
+
   //customer
   CUSTOMER: "/customer",
   CUSTOMER_CREATE: "/customer/create",
@@ -17,6 +18,10 @@ const PAGES = {
   USER_CREATE: "/user/create",
   USER_DETAILS: "/user/:id",
   FORBIDDEN: "/forbidden",
+
+  //contract
+  CONTRACT: "/contract",
+  CONTRACT_DETAILS: "/contract/:id",
 };
 
 export default PAGES;

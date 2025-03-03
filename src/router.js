@@ -121,6 +121,14 @@ const routes = [
         component: ProjectDetails,
       }
     ]
+  },
+  {
+    name: PAGE_NAME.HOME,
+    path: PAGES.HOME,
+    component: Home,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    }
   }
 ];
 
