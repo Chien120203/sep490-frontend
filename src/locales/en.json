@@ -316,6 +316,66 @@
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
   },
+  "site-survey": {
+    "title": "Site Survey",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "date": "Contract Date",
+    "status": "Status",
+    "type": "Type",
+    "room": "Room",
+    "tenant": "Tenant",
+    "landlord": "Landlord",
+    "statuses": {
+      "active": "Active",
+      "terminated": "Terminated",
+      "renewed": "Renewed"
+    },
+    "types": {
+      "monthly": "Monthly",
+      "quater": "Quater",
+      "half-year": "Half Year",
+      "year": "Yearly"
+    },
+    "create": {
+      "title": "Create Contract",
+      "contract_name": "Contract Name",
+      "duration": "Duration",
+      "deposit": "Deposit",
+      "room": "Room",
+      "type": "Type",
+      "tenants": "Tenants",
+      "landlord": "Landlord"
+    },
+    "detail": {
+      "title": "Contract Detail"
+    },
+    "table": {
+      "header": {
+        "name": "Contract Name",
+        "start_date": " Start Date",
+        "finish_date": " Finish Date",
+        "room": "Room Code",
+        "tenant": "Tenant",
+        "attachment": "Contract Attachment",
+        "action": "Action",
+        "status": "Status",
+        "type": "Type",
+        "landlord": "Landlord"
+      }
+    },
+    "modal_confirm": {
+      "title": "Confirm terminate contract",
+      "message": "Please enter 'Terminate' to confirm terminate this contract"
+    },
+    "status_placeholder": "Contract status",
+    "room_placeholder": "Contract room",
+    "tenant_placeholder": "Contract tenant",
+    "type_placeholder": "Contract type",
+    "landlord_placeholder": "Contract landlord"
+  },
   "customer": {
     "title": "Customer",
     "add_new": "Add New",
@@ -391,6 +451,7 @@
       "title": "Project Details",
       "financial_summary": "Financial Summary",
       "change_request": "Change Request",
+      "site_survey": "Site Survey",
       "change_request_table": {
         "header": {
           "request_code": "Request Code",

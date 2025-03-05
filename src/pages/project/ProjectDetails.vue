@@ -166,6 +166,15 @@
                   @loadMore="handleSearchContract"
               />
             </el-collapse-item>
+            <el-collapse-item name="5">
+              <template #title>
+                <h3>{{ $t("project.details.site_survey") }}</h3>
+              </template>
+              <SiteSurveyList
+                  :data="changeRequestData"
+                  @details = "getSiteSurveyList"
+              />
+            </el-collapse-item>
           </el-collapse>
         </el-col>
       </el-row>
@@ -190,13 +199,14 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
+import SiteSurveyList from "@/pages/project/item/site_survey/SiteSurveyList.vue";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
-import contractList from "@/pages/contract/item/ContractTable.vue";
 
 export default {
   name: "ProjectDetails",
   components: {
+    SiteSurveyList,
     ContractList: ContractList,
     LoadMore,
     IconSetting,
@@ -265,6 +275,9 @@ export default {
         ],
       },
     ]);
+    const siteSurveyDate = ref([
+
+    ]);
     const isShowBoxSearch = ref(false);
     const isShowBoxContractSearch = ref(false);
     const contractSearchForms = ref({
@@ -299,6 +312,10 @@ export default {
 
     const getContractDetails = (id) => {
       router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
+    }
+
+    const getSiteSurveyList = () => {
+      router.push({name: PAGE_NAME.SITE_SURVEY.DETAILS, prams: {id: route.params.id}})
     }
 
     const handleRedirectToEdit = () => {
@@ -360,6 +377,7 @@ export default {
       handleRedirectToCreate,
       handleRedirectToEdit,
       onSubmit,
+      getSiteSurveyList,
       handleContractSearchForm,
       handleClearSearchContractForm,
       handleSearchContract,
