@@ -18,6 +18,9 @@ const PAGE_NAME = {
     CREATE: "project-create",
     EDIT: "project-edit",
     DETAILS: "project-details",
+  },
+  SITE_SURVEY: {
+    DETAILS: "site-survey-details",
   }
 };
 

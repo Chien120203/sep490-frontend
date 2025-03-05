@@ -19,6 +19,7 @@ import Forbidden from "@/pages/Forbidden.vue";
 import ProjectList from "@/pages/project/ProjectList.vue";
 import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
+import SiteSurveyDetails from "@/pages/project/item/site_survey/SiteSurveyDetails.vue";
 
 const routes = [
   {
@@ -121,7 +122,15 @@ const routes = [
         component: ProjectDetails,
       }
     ]
-  }
+  },
+  {
+    name: PAGE_NAME.SITE_SURVEY.DETAILS,
+    path: PAGES.SITE_SURVEY_DETAILS,
+    component: SiteSurveyDetails,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+  },
 ];
 
 const router = createRouter({

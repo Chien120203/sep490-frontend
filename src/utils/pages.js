@@ -17,6 +17,10 @@ const PAGES = {
   USER_CREATE: "/user/create",
   USER_DETAILS: "/user/:id",
   FORBIDDEN: "/forbidden",
+
+  //site_survey
+  SITE_SURVEY: "/site-survey",
+  SITE_SURVEY_DETAILS: "/site-survey/:id",
 };
 
 export default PAGES;

@@ -90,6 +90,15 @@
                   @loadMore="handleLoadMore"
               />
             </el-collapse-item>
+            <el-collapse-item name="5">
+              <template #title>
+                <h3>{{ $t("project.details.site_survey") }}</h3>
+              </template>
+              <SiteSurveyList
+                  :data="changeRequestData"
+                  @details = "getSiteSurveyList"
+              />
+            </el-collapse-item>
           </el-collapse>
         </el-col>
       </el-row>
@@ -114,10 +123,12 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
+import SiteSurveyList from "@/pages/project/item/site_survey/SiteSurveyList.vue";
 
 export default {
   name: "ProjectDetails",
   components: {
+    SiteSurveyList,
     LoadMore,
     IconSetting,
     IconCircleClose,
@@ -183,6 +194,9 @@ export default {
         ],
       },
     ]);
+    const siteSurveyDate = ref([
+
+    ]);
     const searchCRForms = ref({
       searchValue: "",
     });
@@ -198,6 +212,10 @@ export default {
 
     onUnmounted(() => {
     });
+
+    const getSiteSurveyList = () => {
+      router.push({name: PAGE_NAME.SITE_SURVEY.DETAILS, prams: {id: route.params.id}})
+    }
 
     const handleRedirectToEdit = () => {
       router.push({name: PAGE_NAME.PROJECT.EDIT, params: {id: route.params.id}});
@@ -247,6 +265,7 @@ export default {
       onSubmit,
       handleCRSearchForm,
       handleAddTenants,
+      getSiteSurveyList
     };
   },
 };
