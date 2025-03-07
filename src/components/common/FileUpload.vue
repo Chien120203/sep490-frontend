@@ -1,7 +1,7 @@
 <template>
   <div class="custom-file-upload">
     <label for="fileInput" class="upload-label">
-      {{$t('common.upload')}}
+      {{ $t('common.upload') }}
     </label>
     <input
         type="file"
@@ -11,7 +11,7 @@
         multiple
     />
 
-    <div v-if="fileList.length" class="file-list">
+    <div v-if="fileList?.length" class="file-list">
       <div
           v-for="(file, index) in fileList"
           :key="index"
@@ -50,16 +50,10 @@ const props = defineProps({
 const emit = defineEmits(["file-selected", "file-removed"]);
 const route = useRoute();
 const isUpdate = computed(() => route.params.id);
-const fileList = computed(() => props.existingFiles);
-
-onMounted(() => {
-  // if(isUpdate.value) {
-  //   fileList.value = route.params.id ? props.existingFiles : [];
-  // }
-});
+const fileList = computed(() => props.existingFiles || []);
 
 const handleFileChange = (event) => {
-  const files = Array.from(event.target.files);
+  const files = [...event.target.files];
 
   if (files.length + fileList.value.length > props.fileLimit) {
     alert(`You can only upload up to ${props.fileLimit} files.`);
@@ -67,12 +61,7 @@ const handleFileChange = (event) => {
   }
 
   files.forEach((file) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      fileList.value.push({name: file.name, content: reader.result});
-      emit("file-selected", fileList.value);
-    };
-    reader.readAsDataURL(file);
+    fileList.value.push(file);
   });
 
   event.target.value = "";
@@ -102,7 +91,6 @@ const downloadFile = (url) => {
   background-color: #3b3cac;
   color: white;
   width: 160px;
-  padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;

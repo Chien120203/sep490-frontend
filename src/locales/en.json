@@ -222,7 +222,9 @@
       "delete_customer_failed": "Delete Customer Failed",
       "get_projects_failed": "Get list projects failed",
       "save_project_success": "Save project success",
-      "save_project_failed": "Save project failed"
+      "save_project_failed": "Save project failed",
+      "save_contract_success": "Save contract success",
+      "save_contract_failed": "Save contract failed"
     }
   },
   "contract": {
@@ -251,15 +253,36 @@
     "create": {
       "title": "Create Contract",
       "contract_name": "Contract Name",
-      "duration": "Duration",
-      "deposit": "Deposit",
-      "room": "Room",
-      "type": "Type",
-      "tenants": "Tenants",
-      "landlord": "Landlord"
+      "items": "Contract Items",
+      "btn": {
+        "new_item": "Add new item"
+      },
+      "details": "Contract Information",
+      "infor": {
+        "label": {
+          "code": "Contract Code",
+          "project": "Project",
+          "start_date": "Start Date",
+          "end_date": "End Date",
+          "estimate_day": "Estimate Days",
+          "tax": "Tax",
+          "sign_date": "Sign Date",
+          "attachments": "Attachments"
+        }
+      },
+      "item_table": {
+        "no": "No",
+        "action": "Action",
+        "code": "Code",
+        "item": "Item",
+        "unit": "Unit",
+        "amount": "Amount",
+        "unit_price": "Unit Price",
+        "total_price": "Total Price"
+      }
     },
     "detail": {
-      "title": "Contract Detail"
+      "title": "Contract Details"
     },
     "table": {
       "header": {
@@ -338,12 +361,7 @@
     "modal_confirm": {
       "title": "Confirm delete customer",
       "message": "Please enter 'Delete' to confirm delete this customer"
-    },
-    "status_placeholder": "Contract status",
-    "room_placeholder": "Contract room",
-    "tenant_placeholder": "Contract tenant",
-    "type_placeholder": "Contract type",
-    "landlord_placeholder": "Contract landlord"
+    }
   },
   "project": {
     "title": "Project",
@@ -578,9 +596,7 @@
         "location": "Location",
         "role": "Role",
         "action": "Action",
-        "code": "User Code",
-        "gender": "Gender",
-        "dob": "Date of Birth"
+        "code": "User Code"
       }
     },
     "details": {
@@ -780,6 +796,19 @@
   "E-CUS-005": "Phone number is invalid",
   "E-CUS-006": "Fax number is invalid",
   "E-CUS-007": "Tax code is invalid",
+
+  "E-CTR-001": "Contract code is required",
+  "E-CTR-002": "Project is required",
+  "E-CTR-003": "Start date is required",
+  "E-CTR-004": "End date is required",
+  "E-CTR-005": "Sign date is required",
+  "E-CTR-006": "Estimation days is required",
+  "E-CTR-007": "Estimation days must be greater than {min}",
+  "E-CTR-008": "Estimation days must be less than {max}",
+  "E-CTR-009": "Tax is required",
+  "E-CTR-010": "Tax must be greater than {min}%",
+  "E-CTR-011": "Tax must be less than {max}%",
+  "E-CTR-012": "Sign date must be before start date",
 
   "E-PRJ-009": "Project code is required",
   "E-PRJ-002": "Project code is duplicated",

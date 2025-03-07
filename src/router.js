@@ -11,6 +11,7 @@ import Home from "@/pages/Home.vue";
 import Customer from  "@/pages/customer/Index.vue"
 import User from  "@/pages/user/Index.vue"
 import Project from  "@/pages/project/Index.vue"
+import Contract from "@/pages/contract/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
 import CustomerDetails from "@/pages/customer/Save.vue";
 import UserList from "@/pages/user/UserList.vue";
@@ -19,6 +20,7 @@ import Forbidden from "@/pages/Forbidden.vue";
 import ProjectList from "@/pages/project/ProjectList.vue";
 import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
+import ContractSave from "@/pages/contract/Save.vue"
 
 const routes = [
   {
@@ -119,6 +121,21 @@ const routes = [
         path: PAGES.PROJECT_DETAILS,
         name: PAGE_NAME.PROJECT.DETAILS,
         component: ProjectDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.CONTRACT,
+    path: PAGES.CONTRACT,
+    component: Contract,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.CONTRACT_CREATE,
+        name: PAGE_NAME.CONTRACT.CREATE,
+        component: ContractSave,
       }
     ]
   },

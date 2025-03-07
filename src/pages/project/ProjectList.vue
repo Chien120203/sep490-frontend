@@ -123,12 +123,6 @@
         :message="$t('project.modal_confirm.message')"
         :title="$t('project.modal_confirm.title')"
     />
-    <ProjectCreateModal
-      :show="isShowModalCreate.value"
-      :projectDetails="projectDetails.value"
-      :validate="validation.value"
-      @close="handleDisplayCreateModal"
-    />
   </div>
 </template>
 
