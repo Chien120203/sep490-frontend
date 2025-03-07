@@ -12,34 +12,7 @@
         <p v-html="$t('contract.table.header.code')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.request_code }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column min-width="120">
-      <template #header>
-        <p v-html="$t('contract.table.header.customer')"></p>
-      </template>
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.request_code }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column min-width="120">
-      <template #header>
-        <p v-html="$t('contract.table.header.project_name')"></p>
-      </template>
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.request_code }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column min-width="120">
-      <template #header>
-        <p v-html="$t('contract.table.header.budget')"></p>
-      </template>
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.request_code }}</span>
+        <span class="data-table">{{ scope.row.contractCode }}</span>
       </template>
     </el-table-column>
 
@@ -48,7 +21,7 @@
         <p v-html="$t('contract.table.header.start_date')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.request_date) }}</span>
+        <span class="data-table">{{ formatDate(scope.row.startDate) }}</span>
       </template>
     </el-table-column>
 
@@ -57,18 +30,25 @@
         <p v-html="$t('contract.table.header.finish_date')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.request_date) }}</span>
+        <span class="data-table">{{ formatDate(scope.row.endDate) }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column min-width="160">
+    <el-table-column min-width="120">
       <template #header>
-        <p v-html="$t('project.details.change_request_table.header.status')"></p>
+        <p v-html="$t('contract.table.header.estimate_days')"></p>
       </template>
       <template #default="scope">
-        <span :class="['change-request-status', statusClass(scope.row.status)]">
-          {{ scope.row.status }}
-        </span>
+        <span class="data-table">{{ scope.row.estimatedDays }}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column min-width="120">
+      <template #header>
+        <p v-html="$t('contract.table.header.sign_date')"></p>
+      </template>
+      <template #default="scope">
+        <span class="data-table">{{ formatDate(scope.row.signDate) }}</span>
       </template>
     </el-table-column>
 
@@ -108,27 +88,12 @@ export default {
     },
   },
   setup() {
-    const statusClass = (status) => {
-      switch (status.toLowerCase()) {
-        case "pending":
-          return "request-pending";
-        case "approved":
-          return "request-approved";
-        case "rejected":
-          return "request-rejected";
-        case "under review":
-          return "request-review";
-        default:
-          return "request-closed";
-      }
-    };
 
     const formatDate = (inputDate) => {
       return mixinMethods.showDateTime(inputDate, DATE_FORMAT);
     };
 
     return {
-      statusClass,
       formatDate,
     };
   },

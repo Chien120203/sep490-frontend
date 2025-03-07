@@ -19,6 +19,7 @@ const API_CODE = {
   API_PRJ_003: '/project/detail',
 
   API_CTR_001: '/contract/save-contract',
+  API_CTR_002: '/contract/list-contract',
 
   //User
   API_USER_001: '/admin/list-user',

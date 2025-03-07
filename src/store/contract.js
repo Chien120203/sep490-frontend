@@ -28,6 +28,28 @@ export const useContractStore = defineStore(
       }
     });
 
+    const getListContracts = async (params, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
+      await services.ContractAPI.list(
+        params,
+        (response) => {
+          if (currentPage.value === 1) {
+            listContracts.value = response.data;
+          } else {
+            listContracts.value = [...listContracts.value, ...response.data];
+          }
+          totalItems.value = response.meta.total;
+          currentPage.value = response.meta.index;
+
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.get_projects_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
     const saveContract = async (params) => {
       mixinMethods.startLoading();
       const formData = mixinMethods.createFormData(params);
@@ -77,7 +99,7 @@ export const useContractStore = defineStore(
       isShowModalConfirm,
       clearContractDetails,
       saveContract,
-      handleDeleteUser
+      getListContracts
     };
   }
 );

@@ -294,12 +294,13 @@
         "budget": "Budget",
         "start_date": " Start Date",
         "finish_date": " Finish Date",
+        "sign_date": " Sign Date",
         "status": "Status",
         "room": "Room Code",
         "tenant": "Tenant",
         "attachment": "Contract Attachment",
         "action": "Action",
-        "landlord": "Landlord"
+        "estimate_days": "Estimation Days"
       }
     },
     "modal_confirm": {
