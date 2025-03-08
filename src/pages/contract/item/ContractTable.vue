@@ -61,9 +61,6 @@
           <button @click="$emit('details', scope.row.id)" class="btn-edit">
             <IconEdit />
           </button>
-          <button @click="$emit('delete', scope.row.id)" class="btn-delete">
-            <IconTrash />
-          </button>
         </div>
       </template>
     </el-table-column>

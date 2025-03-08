@@ -1,6 +1,7 @@
 const PAGES = {
   HOME: "/",
   LOGIN: "/login",
+  PROFILE: "/profile",
 
   //customer
   CUSTOMER: "/customer",
@@ -16,6 +17,7 @@ const PAGES = {
   //contract
   CONTRACT: "/contract",
   CONTRACT_CREATE: "/contract/create",
+  CONTRACT_DETAILS: "/contract/details/:id",
 
   //user
   USER: "/user",

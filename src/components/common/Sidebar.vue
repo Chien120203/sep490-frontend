@@ -183,9 +183,9 @@ export default {
     return {
       isShowComponent,
       menuOpen,
+      currentPath,
       listRouter,
       listRouterUsers,
-      currentPath,
       listRouterOthers,
       navigateChangeRoute,
       classActive,

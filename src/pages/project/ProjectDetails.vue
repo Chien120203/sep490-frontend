@@ -94,6 +94,17 @@
               <template #title>
                 <h3>{{ $t("contract.title") }}</h3>
               </template>
+              <div class="contract-header">
+                <div class="project-btn-box project-import-box">
+                  <el-row
+                      class="mb-4"
+                  >
+                    <el-button class="btn btn-save" @click="handleRedirectToCreate"
+                    >{{ $t("project.add_new") }}
+                    </el-button>
+                  </el-row>
+                </div>
+              </div>
               <div class="project-body">
                 <div class="project-search">
                   <div class="project-search-box col-md-9 col-lg-9">
@@ -179,17 +190,12 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
-import ContractList from "@/pages/contract/ContractList.vue";
+import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
-import contractList from "@/pages/contract/ContractList.vue";
+import contractList from "@/pages/contract/item/ContractTable.vue";
 
 export default {
   name: "ProjectDetails",
-  computed: {
-    contractList() {
-      return contractList
-    }
-  },
   components: {
     ContractList: ContractList,
     LoadMore,
@@ -312,7 +318,7 @@ export default {
     };
 
     const handleContractSearchForm = () => {
-      isShowBoxContractSearch.value = true;
+      isShowBoxContractSearch.value = !isShowBoxContractSearch.value;
     };
 
     const handleSearchContract = (isSearch = false) => {
@@ -328,9 +334,6 @@ export default {
         signDate: ""
       }
     }
-
-    const handleConfirm = () => {
-    };
 
     return {
       financialData,
@@ -348,7 +351,6 @@ export default {
       STATUSES,
       handleBack,
       handleCloseModal,
-      handleConfirm,
       handleOpenModalConfirm,
       handleRedirectToEdit,
       onSubmit,
@@ -383,6 +385,26 @@ export default {
       margin-left: 24px !important;
     }
   }
+}
+.contract-header {
+  display: flex;
+  justify-content: end;
+}
+
+.form-search-box {
+  width: 74%;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1019607843);
+  border: 1px solid #f6f6fb;
+  padding: 14px 24px;
+}
+
+.close-form {
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  right: 27%;
+  top: 10px;
+  cursor: pointer;
 }
 
 .box-card {

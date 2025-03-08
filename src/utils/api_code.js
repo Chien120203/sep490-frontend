@@ -20,6 +20,7 @@ const API_CODE = {
 
   API_CTR_001: '/contract/save-contract',
   API_CTR_002: '/contract/list-contract',
+  API_CTR_003: '/contract/detail',
 
   //User
   API_USER_001: '/admin/list-user',

@@ -1,5 +1,9 @@
 <template>
   <div class="contract-create">
+    <div class="contract-save-title">
+      <span class="btn-back" @click="handleBack"><IconBackMain/></span>
+      <h3 class="page__ttl">{{ isUpdate ? $t("contract.detail.title") : $t("contract.create.title") }}</h3>
+    </div>
     <div class="contract-save-btn">
       <div class="item">
         <el-button class="btn btn-save" @click="submitForm()">
@@ -9,7 +13,7 @@
     </div>
     <el-row>
       <el-col :span="17">
-        <ContractItems :items="contractDetails.value.contractDetails" @update:items="updateItems"/>
+        <ContractItems :items="contractDetails.value.contractDetails" :isUpdate="isUpdate" @update:items="updateItems"/>
       </el-col>
       <el-col :span="7">
         <ContractInformation
@@ -29,40 +33,48 @@ import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
-import {useCustomerStore} from "@/store/customer.js";
 import ContractItems from "@/pages/contract/item/ContractItems.vue";
 import ContractInformation from "@/pages/contract/item/ContractInformation.vue";
 import {useContractStore} from "@/store/contract.js";
 import {getContractRules} from "@/rules/contract/index.js";
+import IconBackMain from "@/svg/IconBackMain.vue";
+import {RECEIVE_STATUS} from "@/constants/project.js";
 
 const projectStore = useProjectStore();
 const contractStore = useContractStore();
 
 const {
   listProjects,
+  projectDetails,
   getListProjects
 } = projectStore;
 const {
   validation,
   contractDetails,
+  getContractDetails,
   saveContract
 } = contractStore;
 
 const CONTRACT_RULES = getContractRules();
 
 const route = useRoute();
+const isAllowUpdate = projectDetails.value.status === RECEIVE_STATUS;
 const isUpdate = computed(() => !!route.params.id);
 const router = useRouter();
 
 onMounted(() => {
-  getListProjects();
+  if(isUpdate.value) getContractDetails(route.params.id);
+  getListProjects({
+    keyword: '',
+    pageIndex: 1,
+  }, false);
 });
 
 onUnmounted(() => {
 });
 
 const handleBack = () => {
-  router.push({name: PAGE_NAME.PROJECT.LIST});
+  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: contractDetails.value.projectId}});
 };
 
 const handleSearchProjects = (value) => {
@@ -92,4 +104,10 @@ const submitForm = () => {
 
 </script>
 <style lang="scss" scoped>
+.contract-save-title {
+  display: flex;
+  span {
+    cursor: pointer;
+  }
+}
 </style>

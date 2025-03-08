@@ -44,11 +44,28 @@ export const useContractStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          mixinMethods.notifyError(t("response.message.get_projects_failed"));
+          mixinMethods.notifyError(t("response.message.get_contracts_failed"));
           mixinMethods.endLoading();
         }
       );
     };
+
+    const getContractDetails = async (id) => {
+      mixinMethods.startLoading();
+      await services.ContractAPI.details(
+        id,
+        {},
+        (response) => {
+          contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
+
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.get_contract_dtls_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    }
 
     const saveContract = async (params) => {
       mixinMethods.startLoading();
@@ -86,7 +103,8 @@ export const useContractStore = defineStore(
         estimatedDays: "",
         tax: "",
         signDate: null,
-        attachments: []
+        attachments: [],
+        contractDetails: []
       };
     };
 
@@ -97,6 +115,7 @@ export const useContractStore = defineStore(
       currentPage,
       contractDetails,
       isShowModalConfirm,
+      getContractDetails,
       clearContractDetails,
       saveContract,
       getListContracts
