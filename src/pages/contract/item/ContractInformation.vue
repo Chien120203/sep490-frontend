@@ -18,6 +18,16 @@
           </label>
         </el-form-item>
 
+        <el-form-item prop="contractCode" class="input-container">
+          <template #label>
+            <span class="label-start">{{ $t('contract.create.infor.label.name') }}</span>
+          </template>
+          <el-input class="input-wd-96" v-model="contractInfo.contractName" />
+          <label class="error-feedback-customer" v-if="validation && validation.contractName">
+            {{ $t(validation.contractName) }}
+          </label>
+        </el-form-item>
+
         <el-form-item prop="projectId" class="input-container">
           <template #label>
             <span class="label-start">{{ $t('contract.create.infor.label.project') }}</span>

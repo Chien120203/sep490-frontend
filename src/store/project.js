@@ -64,15 +64,13 @@ export const useProjectStore = defineStore(
     const saveProject = async (params) => {
       mixinMethods.startLoading();
       const formData = mixinMethods.createFormData(params);
-      formData.set('viewerUserIds', 1);
-      formData.set('viewerUserIds', 2);
       await services.ProjectAPI.save(
         formData,
         (response) => {
           if(response.success) {
             projectDetails.value = {...response.data, customerId: response.data.customer.id};
             validation.value = [];
-            router.push({name: PAGE_NAME.PROJECT.DETAILS, params: projectDetails.value.id});
+            router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: response.data.id}});
             mixinMethods.notifySuccess(t("response.message.save_project_success"));
           }else {
             validation.value = mixinMethods.handleErrorResponse(response);

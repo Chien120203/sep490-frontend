@@ -49,24 +49,44 @@
               >{{ $t(validation.value.projectName) }}</label>
             </el-form-item>
 
-            <el-form-item
-                prop="customerId"
-                class="custom-textarea required"
-                :label="$t('project.create.customer')"
-            >
-              <SingleOptionSelect
-                  v-model="projectDetails.value.customerId"
-                  :optionKeys="{ id: 'id', value: 'customerCode' }"
-                  :listData="listCustomers.value"
-                  :isRemote="true"
-                  :disabled="false"
-                  @remoteSearch="handleSearchCustomer"
-              />
-              <label
-                  class="error-feedback-user"
-                  v-if="validation && validation.value.customerId"
-              >{{ $t(validation.value.customerId) }}</label>
-            </el-form-item>
+            <div class="item-project-members">
+              <el-form-item
+                  prop="customerId"
+                  class="input-select-member"
+                  :label="$t('project.create.customer')"
+              >
+                <SingleOptionSelect
+                    v-model="projectDetails.value.customerId"
+                    :optionKeys="{ id: 'id', value: 'customerCode' }"
+                    :listData="listCustomers.value"
+                    :isRemote="true"
+                    :disabled="false"
+                    @remoteSearch="handleSearchCustomer"
+                />
+                <label
+                    class="error-feedback-user"
+                    v-if="validation && validation.value.customerId"
+                >{{ $t(validation.value.customerId) }}</label>
+              </el-form-item>
+
+              <el-form-item prop="viewerUserIds" class="input-select-member">
+                <template #label>
+                  <span class="label-start">{{ $t('project.create.technical_manager') }}</span>
+                </template>
+                <SingleOptionSelect
+                    v-model="projectDetails.value.viewerUserIds"
+                    :optionKeys="{ id: 'id', value: 'username' }"
+                    :listData="listUsers.value"
+                    :isRemote="true"
+                    :disabled="false"
+                    class="input-wd-96"
+                    @remoteSearch="handleSearchTechnical"
+                />
+                <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
+                  {{ $t(validation.viewerUserIds) }}
+                </label>
+              </el-form-item>
+            </div>
 
             <el-form-item
                 :label="$t('project.create.construct_type')"
@@ -213,6 +233,8 @@ import {useCustomerStore} from "@/store/customer.js";
 import { mixinMethods } from "@/utils/variables";
 import {PROJECT_RULES} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
+import {useUserStore} from "@/store/user.js";
+import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 export default {
   components: {IconBackMain, SingleOptionSelect, FileUpload},
@@ -220,6 +242,11 @@ export default {
     const attachments = ref(null);
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
+    const userStore = useUserStore();
+    const {
+      listUsers,
+      getListUsers
+    } = userStore;
     const {
       listCustomers,
       getListCustomers
@@ -231,6 +258,7 @@ export default {
       getProjectDetails,
       clearProjectDetails
     } = projectStore;
+
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
@@ -238,6 +266,7 @@ export default {
     onMounted(() => {
       if(route.params.id) getProjectDetails(route.params.id);
       getListCustomers({search: "", pageIndex: 1}, false);
+      getListUsers({keyWord: "", role: TECHNICAL_MANAGER, pageIndex: 1}, false);
     });
 
     onUnmounted(() => {
@@ -267,6 +296,14 @@ export default {
       getListCustomers({search: searchValue, pageIndex: 1}, false);
     }
 
+    const handleSearchTechnical = (searchValue) => {
+      getListUsers({
+        keyWord: searchValue,
+        role: TECHNICAL_MANAGER,
+        pageIndex: 1,
+      });
+    }
+
     const formatCurrency = (number) => {
       return mixinMethods.formatInputCurrency(number);
     }
@@ -278,10 +315,12 @@ export default {
       isUpdate,
       projectDetails,
       validation,
+      listUsers,
       listCustomers,
       attachments,
       formatCurrency,
       handleFileUpload,
+      handleSearchTechnical,
       handleSearchCustomer,
       handleBack,
       submitForm,
@@ -363,6 +402,16 @@ export default {
 <style>
 .item-user-add {
   padding: 0 8px;
+}
+
+.item-project-members {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.input-select-member {
+  width: 48%;
 }
 
 .user-body .form-search-box,

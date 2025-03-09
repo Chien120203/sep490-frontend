@@ -103,7 +103,7 @@ const updateItems = () => {
     let index = 1;
 
     items
-        .filter((item) => item.parentIndex === parentIndex && (!item.deleted || !isUpdate))
+        .filter((item) => item.parentIndex === parentIndex && (!item.deleted || !props.isUpdate))
         .forEach((item) => {
           if (!item.deleted) {
             let currentIndex = prefix ? `${prefix}.${index}` : `${index}`;

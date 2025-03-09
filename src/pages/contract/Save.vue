@@ -23,6 +23,7 @@
             :contractInfo="contractDetails.value"
             :validation="validation.value"
             @searchProject="handleSearchProjects"
+            @fileUpload="updateContractAttachments"
         />
       </el-col>
     </el-row>
@@ -87,6 +88,10 @@ const handleSearchProjects = (value) => {
 const updateItems = (newItems) => {
   contractDetails.value.contractDetails = newItems;
 };
+
+const updateContractAttachments = (newContractAttachments) => {
+  contractDetails.value.attachments = newContractAttachments;
+}
 
 const childFormRef = ref(null);
 

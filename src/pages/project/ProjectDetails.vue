@@ -270,6 +270,7 @@ export default {
     const contractSearchForms = ref({
       keyWord: "",
       pageIndex: 1,
+      projectId: route.params.id,
       signDate: ""
     });
     const searchCRForms = ref({
@@ -335,6 +336,10 @@ export default {
       }
     }
 
+    const handleRedirectToCreate = () => {
+      router.push({name: PAGE_NAME.CONTRACT.CREATE});
+    }
+
     return {
       financialData,
       projectDetails,
@@ -352,6 +357,7 @@ export default {
       handleBack,
       handleCloseModal,
       handleOpenModalConfirm,
+      handleRedirectToCreate,
       handleRedirectToEdit,
       onSubmit,
       handleContractSearchForm,

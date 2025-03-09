@@ -90,7 +90,7 @@ export default {
   },
   setup() {
     const searchForms = ref({
-      search: "",
+      keyWord: "",
       pageIndex: 1,
     });
     const delete_id = ref();

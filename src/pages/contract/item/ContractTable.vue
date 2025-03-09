@@ -18,6 +18,15 @@
 
     <el-table-column min-width="120">
       <template #header>
+        <p v-html="$t('contract.table.header.name')"></p>
+      </template>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.contractName }}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column min-width="120">
+      <template #header>
         <p v-html="$t('contract.table.header.start_date')"></p>
       </template>
       <template #default="scope">

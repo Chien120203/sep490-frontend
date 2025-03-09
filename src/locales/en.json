@@ -263,6 +263,7 @@
       "infor": {
         "label": {
           "code": "Contract Code",
+          "name": "Contract Name",
           "project": "Project",
           "start_date": "Start Date",
           "end_date": "End Date",
@@ -432,6 +433,7 @@
       "budget": "Budget",
       "attachment": "Attachment",
       "description": "Description",
+      "technical_manager": "Technical Manager",
       "upload_file": "Upload File"
     },
     "edit": {

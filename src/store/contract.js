@@ -17,6 +17,7 @@ export const useContractStore = defineStore(
       value: {
         id: 0,
         contractCode: "",
+        contractName: "",
         projectId: null,
         startDate: null,
         endDate: null,
