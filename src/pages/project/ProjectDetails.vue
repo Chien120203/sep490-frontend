@@ -123,7 +123,7 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
-import SiteSurveyList from "@/pages/project/item/site_survey/SiteSurveyList.vue";
+import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
 
 export default {
   name: "ProjectDetails",
