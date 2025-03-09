@@ -22,7 +22,7 @@ import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 import ContractSave from "@/pages/contract/Save.vue"
 import ContractList from "@/pages/contract/item/ContractTable.vue";
-import SiteSurveyDetails from "@/pages/project/item/site_survey/SiteSurveyDetails.vue";
+import SiteSurveyDetails from "@/pages/site_survey/item/SiteSurveyDetails.vue";
 
 const routes = [
   {

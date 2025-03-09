@@ -5,6 +5,7 @@ import {CustomerAPI} from "@/services/CustomerAPI.js";
 import {UserAPI} from "@/services/UserAPI.js";
 import {ProjectAPI} from "@/services/ProjectAPI.js";
 import {ContractAPI} from "@/services/ContractAPI.js";
+import {SiteSurveyAPI} from "@/services/SiteSurveyAPI.js";
 
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
@@ -16,7 +17,8 @@ const services = {
   CustomerAPI,
   ContractAPI,
   ProjectAPI,
-  UserAPI
+  UserAPI,
+  SiteSurveyAPI,
 };
 
 export default services;
