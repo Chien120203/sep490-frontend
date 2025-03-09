@@ -185,19 +185,15 @@ export default {
   }
 
   &-receive-planning {
-    background: #a62967;
+    background: #1f7885;
   }
 
   &-planning {
-    background: #386498;
+    background: #1f4261;
   }
 
   &-in-progress {
     background: #28b5b5;
-  }
-
-  &-planning {
-    background: #dabc3b;
   }
 
   &-completed {
@@ -209,7 +205,7 @@ export default {
   }
 
   &-paused {
-    background: #4f1b6c;
+    background: #4c4b4b;
   }
 }
 

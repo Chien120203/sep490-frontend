@@ -4,136 +4,121 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 
+export const useContractStore = defineStore(
+  "contract",
+  () => {
+    const {t} = useI18n();
+    const validation = reactive({value: {}});
+    const isShowModalConfirm = reactive({value: false});
+    const totalItems = reactive({value: 0});
+    const currentPage = reactive({value: 0});
+    const listContracts = reactive({value: []});
+    const contractDetails = reactive({
+      value: {
+        id: 0,
+        contractCode: "",
+        projectId: null,
+        startDate: null,
+        endDate: null,
+        estimatedDays: 0,
+        tax: 0,
+        signDate: null,
+        attachments: [],
+        contractDetails: []
+      }
+    });
 
-export const contractStore = defineStore(
-    "user",
-    () => {
-        const {t} = useI18n();
-        const validation = reactive({ value: {} });
-        const isShowModalConfirm = reactive({ value: false });
-        const totalItems = reactive({ value: 0 });
-        const currentPage = reactive({ value: 0 });
-        const listContract = reactive({ value: []});
-        const contractDetails = reactive({
-            value: {
-                id: 0,
-                project:"",
-                startDate: "",
-                endDate: "",
-                estimatedDays: "",
-                status: "",
-                tax: "",
-                signDate: "",
-                attachment:""
-            }
-        });
+    const getListContracts = async (params, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
+      await services.ContractAPI.list(
+        params,
+        (response) => {
+          if (currentPage.value === 1) {
+            listContracts.value = response.data;
+          } else {
+            listContracts.value = [...listContracts.value, ...response.data];
+          }
+          totalItems.value = response.meta.total;
+          currentPage.value = response.meta.index;
 
-        const getListUsers = async (params) => {
-            mixinMethods.startLoading();
-            await services.UserAPI.list(
-                params,
-                (response) => {
-                    if (currentPage.value === 0) {
-                        listUsers.value = response.data;
-                    } else {
-                        listUsers.value = [...listUsers.value, ...response.data];
-                    }
-                    totalItems.value = response.meta.total;
-                    currentPage.value = response.meta.index;
-                    mixinMethods.endLoading();
-                },
-                (error) => {
-                    validation.value = mixinMethods.handleErrorResponse(
-                        error.responseCode
-                    );
-                    mixinMethods.notifyError(t("response.message.get_user_failed"));
-                    mixinMethods.endLoading();
-                }
-            );
-        };
-
-        const getUserDetails = async (params) => {
-            mixinMethods.startLoading();
-            await services.UserAPI.details(
-                params,
-                (response) => {
-                    userDetails.value = response.data;
-                    mixinMethods.endLoading();
-                },
-                (error) => {
-                    validation.value = mixinMethods.handleErrorResponse(
-                        error.responseCode
-                    );
-                    mixinMethods.notifyError(t("response.message.get_user_dtls_failed"));
-                    mixinMethods.endLoading();
-                }
-            );
-        };
-
-        const saveCustomer = async (params, method) => {
-            mixinMethods.startLoading();
-            await services.UserAPI[method](
-                params,
-                (response) => {
-                    userDetails.value = response.data;
-                    mixinMethods.notifySuccess(t("response.message.save_user_success"));
-                    mixinMethods.endLoading();
-                },
-                (error) => {
-                    validation.value = mixinMethods.handleErrorResponse(
-                        error.responseCode
-                    );
-                    mixinMethods.notifyError(t("response.message.save_user_failed"));
-                    mixinMethods.endLoading();
-                }
-            );
-        };
-
-        const handleDeleteUser = async (id) => {
-            mixinMethods.startLoading();
-            await services.UserAPI.deleteUser(
-                {customerId: id},
-                (response) => {
-                    userDetails.value = response.data;
-                    mixinMethods.notifySuccess(t("response.message.delete_user_success"));
-                    mixinMethods.endLoading();
-                },
-                (error) => {
-                    validation.value = mixinMethods.handleErrorResponse(
-                        error.responseCode
-                    );
-                    mixinMethods.notifyError(t("response.message.delete_user_failed"));
-                    mixinMethods.endLoading();
-                }
-            );
-            isShowModalConfirm.value = false;
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.get_contracts_failed"));
+          mixinMethods.endLoading();
         }
+      );
+    };
 
-        const clearUserDetails = () => {
-            userDetails.value = {
-                id: 0,
-                username: "",
-                email: "",
-                role: "",
-                fullName: "",
-                phone: "",
-                gender: "",
-                dob:""
-            };
-        };
+    const getContractDetails = async (id) => {
+      mixinMethods.startLoading();
+      await services.ContractAPI.details(
+        id,
+        {},
+        (response) => {
+          contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
 
-        return {
-            validation,
-            listUsers, // temporary
-            totalItems,
-            currentPage,
-            userDetails,
-            isShowModalConfirm,
-            clearUserDetails,
-            saveCustomer,
-            getUserDetails,
-            getListUsers,
-            handleDeleteUser
-        };
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.get_contract_dtls_failed"));
+          mixinMethods.endLoading();
+        }
+      );
     }
+
+    const saveContract = async (params) => {
+      mixinMethods.startLoading();
+      const formData = mixinMethods.createFormData(params);
+      var object = {};
+      formData.forEach(function(value, key){
+        object[key] = value;
+      });
+      var json = JSON.stringify(object);
+      console.log(json);
+      await services.ContractAPI.save(
+        formData,
+        (response) => {
+          contractDetails.value = response.data;
+          mixinMethods.notifySuccess(t("response.message.save_contract_success"));
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(
+            error.responseCode
+          );
+          mixinMethods.notifyError(t("response.message.save_contract_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const clearContractDetails = () => {
+      contractDetails.value = {
+        id: 0,
+        contractCode: "",
+        projectId: null,
+        startDate: null,
+        endDate: null,
+        estimatedDays: "",
+        tax: "",
+        signDate: null,
+        attachments: [],
+        contractDetails: []
+      };
+    };
+
+    return {
+      validation,
+      listContracts, // temporary
+      totalItems,
+      currentPage,
+      contractDetails,
+      isShowModalConfirm,
+      getContractDetails,
+      clearContractDetails,
+      saveContract,
+      getListContracts
+    };
+  }
 );

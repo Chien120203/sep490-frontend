@@ -20,6 +20,7 @@ const PAGE_NAME = {
     DETAILS: "project-details",
   },
   CONTRACT: {
+    CREATE: "contract-create",
     DETAILS:"contract-details",
   }
 };

@@ -1,6 +1,7 @@
 const PAGES = {
   HOME: "/",
   LOGIN: "/login",
+  PROFILE: "/profile",
 
   //customer
   CUSTOMER: "/customer",
@@ -13,15 +14,16 @@ const PAGES = {
   PROJECT_CREATE: "/project/create",
   PROJECT_EDIT: "/project/edit/:id",
 
+  //contract
+  CONTRACT: "/contract",
+  CONTRACT_CREATE: "/contract/create",
+  CONTRACT_DETAILS: "/contract/details/:id",
+
   //user
   USER: "/user",
   USER_CREATE: "/user/create",
   USER_DETAILS: "/user/:id",
   FORBIDDEN: "/forbidden",
-
-  //contract
-  CONTRACT: "/contract",
-  CONTRACT_DETAILS: "/contract/:id",
 };
 
 export default PAGES;

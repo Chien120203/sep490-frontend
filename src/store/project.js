@@ -34,12 +34,13 @@ export const useProjectStore = defineStore(
         budget: 0,
         status: 0,
         attachments: [],
-        description: ""
+        description: "",
+        viewerUserIds: null
       }
     });
 
-    const getListProjects = async (params) => {
-      mixinMethods.startLoading();
+    const getListProjects = async (params, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
       await services.ProjectAPI.list(
         params,
         (response) => {
@@ -62,13 +63,9 @@ export const useProjectStore = defineStore(
 
     const saveProject = async (params) => {
       mixinMethods.startLoading();
-      const formData = new FormData();
-      (params["Attachments"] || []).forEach((file) => {
-        formData.append("Attachments", file);
-      });
-      Object.keys(params).forEach((key) => {
-        if(key !== "Attachments") formData.append(key, params[key]);
-      });
+      const formData = mixinMethods.createFormData(params);
+      formData.set('viewerUserIds', 1);
+      formData.set('viewerUserIds', 2);
       await services.ProjectAPI.save(
         formData,
         (response) => {
@@ -132,7 +129,8 @@ export const useProjectStore = defineStore(
         budget: 0,
         status: 0,
         attachment: "",
-        description: ""
+        description: "",
+        viewerUserIds: null
       };
     };
 

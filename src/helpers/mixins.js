@@ -164,9 +164,33 @@ const handleErrorResponse = (error) => {
   }, {});
 };
 
+const createFormData = (params) => {
+  const formData = new FormData();
+
+  Object.keys(params).forEach((key) => {
+    const value = params[key];
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        formData.append(key, JSON.stringify(item)); // Append array items individually
+      });
+    } else if (value instanceof File || value instanceof Blob) {
+      formData.append(key, value);
+    } else {
+      formData.append(key, value);
+    }
+  });
+
+  return formData;
+};
+
+
+
+
 export const mixins = {
   screenLoading,
   startLoading,
+  createFormData,
   endLoading,
   checkEmptyWithOutZero,
   checkEmpty,

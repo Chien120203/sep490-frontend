@@ -5,7 +5,7 @@
         <h3 class="page__ttl">
           <span class="btn-back" @click="handleBack"><IconBackMain/></span>
           {{
-            isUpdate ? $t('project.create.title') : $t('project.edit.title')
+            isUpdate ? $t('project.edit.title') : $t('project.create.title')
           }}
         </h3>
         <div class="user-btn-detail">
@@ -211,12 +211,11 @@ import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
 import {useCustomerStore} from "@/store/customer.js";
 import { mixinMethods } from "@/utils/variables";
-import PreviewAttachmentPDF from "@/components/common/PreviewAttachmentPDF.vue";
 import {PROJECT_RULES} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 
 export default {
-  components: {IconBackMain, SingleOptionSelect, FileUpload, PreviewAttachmentPDF},
+  components: {IconBackMain, SingleOptionSelect, FileUpload},
   setup() {
     const attachments = ref(null);
     const projectStore = useProjectStore();
