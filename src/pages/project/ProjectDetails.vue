@@ -175,6 +175,15 @@
                   @details = "getSiteSurveyList"
               />
             </el-collapse-item>
+            <el-collapse-item name="5">
+              <template #title>
+                <h3>{{ $t("project.details.site_survey") }}</h3>
+              </template>
+              <SiteSurveyList
+                  :data="changeRequestData"
+                  @details = "getSiteSurveyList"
+              />
+            </el-collapse-item>
           </el-collapse>
         </el-col>
       </el-row>
@@ -199,9 +208,9 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
-import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
+import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
 
 export default {
   name: "ProjectDetails",
