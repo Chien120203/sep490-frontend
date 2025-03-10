@@ -161,7 +161,6 @@ const routes = [
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     }
-  }
   },
   {
     name: PAGE_NAME.SITE_SURVEY.DETAILS,
