@@ -1,10 +1,10 @@
 <template>
   <div class="chart-container">
-    <DoughnutChart :chart-data="chartData" :chart-options="chartOptions" />
+    <DoughnutChart :chartData="chartData" :options="chartOptions" />
     <ul class="legend">
       <li v-for="(label, index) in chartData.labels" :key="index">
         <span :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></span>
-        {{ label }} - {{ chartData.datasets[0].data[index] }}
+        {{ label }}: {{ chartData.datasets[0].data[index] }}
       </li>
     </ul>
   </div>
@@ -38,7 +38,8 @@ const chartOptions = {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 400px;
+  max-width: 450px;
+  gap: 20px;
 }
 
 .legend {

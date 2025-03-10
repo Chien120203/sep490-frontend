@@ -38,6 +38,23 @@ export const useProjectStore = defineStore(
         viewerUserIds: null
       }
     });
+    const chartData = reactive({
+      labels: [
+        t('project.statuses.receive_reqs'),
+        t('project.statuses.planning'),
+        t('project.statuses.in_progress'),
+        t('project.statuses.complete'),
+        t('project.statuses.paused'),
+        t('project.statuses.close'),
+      ],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: ["#1f7885", "#1f4261", "#28b5b5", "#3e8e22", "#4c4b4b", "#dc3545"],
+          hoverOffset: 4,
+        },
+      ],
+    });
 
     const getListProjects = async (params, isLoading = true) => {
       if(isLoading) mixinMethods.startLoading();
@@ -57,6 +74,18 @@ export const useProjectStore = defineStore(
         (error) => {
           mixinMethods.notifyError(t("response.message.get_projects_failed"));
           mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const getProjectChart = async () => {
+      await services.ProjectAPI.getChart(
+        {},
+        (response) => {
+          const { total, ...filteredData } = response.data;
+          chartData.datasets[0].data = Object.values(filteredData);
+        },
+        (error) => {
         }
       );
     };
@@ -139,8 +168,10 @@ export const useProjectStore = defineStore(
       currentPage,
       projectDetails,
       isShowModalConfirm,
+      chartData,
       isShowModalCreate,
       getProjectDetails,
+      getProjectChart,
       saveProject,
       clearProjectDetails,
       getListProjects,
