@@ -316,7 +316,7 @@
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
   },
-  "site-survey": {
+  "survey": {
     "title": "Site Survey",
     "add_new": "Add New",
     "keyword": "Keyword",
@@ -349,68 +349,28 @@
       "tenants": "Tenants",
       "landlord": "Landlord"
     },
-    "detail": {
-      "title": "Contract Detail"
-    },
-    "table": {
-      "header": {
-        "name": "Contract Name",
-        "start_date": " Start Date",
-        "finish_date": " Finish Date",
-        "room": "Room Code",
-        "tenant": "Tenant",
-        "attachment": "Contract Attachment",
-        "action": "Action",
-        "status": "Status",
-        "type": "Type",
-        "landlord": "Landlord"
-      }
-    },
-    "modal_confirm": {
-      "title": "Confirm terminate contract",
-      "message": "Please enter 'Terminate' to confirm terminate this contract"
-    },
-    "status_placeholder": "Contract status",
-    "room_placeholder": "Contract room",
-    "tenant_placeholder": "Contract tenant",
-    "type_placeholder": "Contract type",
-    "landlord_placeholder": "Contract landlord"
-  },
-  "site-survey": {
-    "title": "Site Survey",
-    "add_new": "Add New",
-    "keyword": "Keyword",
-    "search": "Search",
-    "clear": "Clear",
-    "date": "Contract Date",
-    "status": "Status",
-    "type": "Type",
-    "room": "Room",
-    "tenant": "Tenant",
-    "landlord": "Landlord",
-    "statuses": {
-      "active": "Active",
-      "terminated": "Terminated",
-      "renewed": "Renewed"
-    },
-    "types": {
-      "monthly": "Monthly",
-      "quater": "Quater",
-      "half-year": "Half Year",
-      "year": "Yearly"
-    },
-    "create": {
-      "title": "Create Contract",
-      "contract_name": "Contract Name",
-      "duration": "Duration",
-      "deposit": "Deposit",
-      "room": "Room",
-      "type": "Type",
-      "tenants": "Tenants",
-      "landlord": "Landlord"
-    },
-    "detail": {
-      "title": "Contract Detail"
+    "details": {
+      "title": "Contract Detail",
+      "survey_name": "Site Survey Name",
+      "project_code": "Project Code",
+      "constructionRequirements": "Construction Requirements",
+      "equipmentRequirements": "Equipment Requirements",
+      "humanResourceCapacity": "Human Resource Capacity",
+      "riskAssessment": "Risk Assessment",
+      "biddingDecision": "Bidding Decision",
+      "profitAssessment": "Profit Assessment",
+      "bidWinProb": "",
+      "estimatedExpenses": "Estimated Expenses",
+      "estimatedProfits": "Estimated Profits",
+      "tenderPackagePrice": "Tender Package Price",
+      "totalBidPrice": "Total Bid Price",
+      "discountRate": "Discount Rate",
+      "projectCost": "Project Cost",
+      "finalProfit": "Final Profit",
+      "status": "Status",
+      "comments": "Comments",
+      "attachments": "Attachments",
+      "surveyDetails": "Survey Details"
     },
     "table": {
       "header": {

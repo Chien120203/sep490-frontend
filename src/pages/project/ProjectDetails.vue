@@ -171,17 +171,8 @@
                 <h3>{{ $t("project.details.site_survey") }}</h3>
               </template>
               <SiteSurveyList
-                  :data="changeRequestData"
-                  @details = "getSiteSurveyList"
-              />
-            </el-collapse-item>
-            <el-collapse-item name="5">
-              <template #title>
-                <h3>{{ $t("project.details.site_survey") }}</h3>
-              </template>
-              <SiteSurveyList
-                  :data="changeRequestData"
-                  @details = "getSiteSurveyList"
+                  :data="listSurveys.value"
+                  @edit = "getSiteSurveyDetails"
               />
             </el-collapse-item>
           </el-collapse>
@@ -211,6 +202,7 @@ import {useProjectStore} from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
 import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
+import {useSiteSurveyStore} from "@/store/site-survey.js";
 
 export default {
   name: "ProjectDetails",
@@ -233,6 +225,7 @@ export default {
     const router = useRouter();
     const projectStore = useProjectStore();
     const contractStore = useContractStore();
+    const surveyStore = useSiteSurveyStore();
 
     const activeCollapseItems = ref(["3", "2", "4"]);
     const changeRequestData = ref([
@@ -304,12 +297,17 @@ export default {
       getProjectDetails,
       projectDetails
     } = projectStore;
+
     const {
       listContracts,
       totalItems,
       currentPage,
       getListContracts,
     } = contractStore;
+
+    const {
+      listSurveys,
+    } = surveyStore;
 
     onMounted(() => {
       getProjectDetails(route.params.id);
@@ -323,7 +321,7 @@ export default {
       router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
     }
 
-    const getSiteSurveyList = () => {
+    const getSiteSurveyDetails = () => {
       router.push({name: PAGE_NAME.SITE_SURVEY.DETAILS, prams: {id: route.params.id}})
     }
 
@@ -376,6 +374,7 @@ export default {
       isShowBoxContractSearch,
       contractSearchForms,
       listContracts,
+      listSurveys,
       totalItems,
       TEXT_CONFIRM_DELETE,
       DATE_FORMAT,
@@ -386,7 +385,7 @@ export default {
       handleRedirectToCreate,
       handleRedirectToEdit,
       onSubmit,
-      getSiteSurveyList,
+      getSiteSurveyDetails,
       handleContractSearchForm,
       handleClearSearchContractForm,
       handleSearchContract,
