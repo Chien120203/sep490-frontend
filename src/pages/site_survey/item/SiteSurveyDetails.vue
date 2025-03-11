@@ -10,12 +10,12 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="ID">
-              <el-input v-model="form.id" disabled></el-input>
+              <el-input v-model="form.id" disabled class="input-field"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="Site Survey Name">
-              <el-input v-model="form.siteSurveyName" placeholder="Nhập tên khảo sát"></el-input>
+            <el-form-item :label="$t('survey.details.survey_name')">
+              <el-input v-model="form.siteSurveyName" placeholder="Nhập tên khảo sát" class="input-field"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -28,8 +28,9 @@
               <el-input
                   type="textarea"
                   v-model="form.constructionRequirements"
-                  :rows="3"
+                  :rows="2"
                   placeholder="Nhập yêu cầu thi công"
+                  class="input-field"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -38,8 +39,9 @@
               <el-input
                   type="textarea"
                   v-model="form.equipmentRequirements"
-                  :rows="3"
+                  :rows="2"
                   placeholder="Nhập yêu cầu thiết bị"
+                  class="input-field"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -50,8 +52,9 @@
               <el-input
                   type="textarea"
                   v-model="form.humanResourceCapacity"
-                  :rows="3"
+                  :rows="2"
                   placeholder="Nhập năng lực nhân sự"
+                  class="input-field"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -60,8 +63,9 @@
               <el-input
                   type="textarea"
                   v-model="form.riskAssessment"
-                  :rows="3"
+                  :rows="2"
                   placeholder="Nhập đánh giá rủi ro"
+                  class="input-field"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -69,7 +73,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Bidding Decision">
-              <el-radio-group v-model="form.biddingDecision">
+              <el-radio-group v-model="form.biddingDecision" size="small">
                 <el-radio :label="true">Yes</el-radio>
                 <el-radio :label="false">No</el-radio>
               </el-radio-group>
@@ -80,8 +84,9 @@
               <el-input
                   type="textarea"
                   v-model="form.profitAssessment"
-                  :rows="3"
+                  :rows="2"
                   placeholder="Nhập đánh giá lợi nhuận"
+                  class="input-field"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -98,7 +103,9 @@
                   :max="100"
                   :step="1"
                   style="width: 100%;"
+                  size="small"
                   placeholder="0-100"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -108,7 +115,9 @@
                   v-model="form.estimatedExpenses"
                   :min="0"
                   style="width: 100%;"
+                  size="small"
                   placeholder="Nhập chi phí dự kiến"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -120,7 +129,9 @@
                   v-model="form.estimatedProfits"
                   :min="0"
                   style="width: 100%;"
+                  size="small"
                   placeholder="Nhập lợi nhuận dự kiến"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -130,7 +141,9 @@
                   v-model="form.tenderPackagePrice"
                   :min="0"
                   style="width: 100%;"
+                  size="small"
                   placeholder="Nhập giá gói thầu"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -142,7 +155,9 @@
                   v-model="form.totalBidPrice"
                   :min="0"
                   style="width: 100%;"
+                  size="small"
                   placeholder="Nhập tổng giá thầu"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -154,7 +169,9 @@
                   :max="100"
                   :step="0.1"
                   style="width: 100%;"
+                  size="small"
                   placeholder="Nhập tỷ lệ chiết khấu"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -166,7 +183,9 @@
                   v-model="form.projectCost"
                   :min="0"
                   style="width: 100%;"
+                  size="small"
                   placeholder="Nhập chi phí dự án"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -176,7 +195,9 @@
                   v-model="form.finalProfit"
                   :min="0"
                   style="width: 100%;"
+                  size="small"
                   placeholder="Nhập lợi nhuận cuối cùng"
+                  class="input-field"
               ></el-input-number>
             </el-form-item>
           </el-col>
@@ -187,7 +208,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Status">
-              <el-select v-model="form.status" placeholder="Chọn trạng thái">
+              <el-select v-model="form.status" placeholder="Chọn trạng thái" size="small" class="input-field">
                 <el-option label="Planned" :value="0"></el-option>
                 <el-option label="In Progress" :value="1"></el-option>
                 <el-option label="Completed" :value="2"></el-option>
@@ -200,8 +221,9 @@
               <el-input
                   type="textarea"
                   v-model="form.comments"
-                  :rows="3"
+                  :rows="2"
                   placeholder="Nhập ghi chú"
+                  class="input-field"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -226,8 +248,9 @@
               <el-input
                   type="textarea"
                   v-model="form.surveyDetails"
-                  :rows="3"
+                  :rows="2"
                   placeholder="Nhập chi tiết khảo sát"
+                  class="input-field"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -235,8 +258,8 @@
 
         <!-- Nút Submit & Reset -->
         <el-form-item class="form-actions">
-          <el-button type="primary" @click="submitForm">Submit</el-button>
-          <el-button @click="resetForm">Reset</el-button>
+          <el-button type="primary" size="large" @click="submitForm">Submit</el-button>
+          <el-button size="large" @click="resetForm">Reset</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -274,11 +297,9 @@ export default {
   },
   methods: {
     submitForm() {
-      // Xử lý logic gửi form tại đây
       console.log("Form submitted:", this.form);
     },
     resetForm() {
-      // Reset form về giá trị mặc định
       this.$refs.form.resetFields();
     },
     handlePreview(file) {
@@ -302,7 +323,7 @@ export default {
 }
 .survey-card {
   width: 100%;
-  max-width: 1000px;
+  max-width: 95%;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
@@ -317,7 +338,15 @@ export default {
   border-radius: 8px;
 }
 .el-form-item {
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Make space between fields */
+}
+.input-field {
+  width: 100%; /* Ensure input fields take up full width */
+  max-width: 100%; /* Remove the previous limitation */
+}
+.el-button {
+  width: 200px; /* Increase button size */
+  margin: 10px;
 }
 .form-actions {
   text-align: center;

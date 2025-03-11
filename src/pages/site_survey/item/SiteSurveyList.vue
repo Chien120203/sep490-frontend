@@ -1,91 +1,136 @@
 <template>
-  <el-card class="card-container">
-    <div slot="header" class="clearfix">
-      <!-- Thêm sự kiện @click vào tiêu đề -->
-      <span class="card-title" @click="$emit('details', survey.id)">{{ survey.siteName }}</span>
+  <div class="project-progress">
+    <div class="header">
+      <h2>{{$t('survey.details.survey_name')}}: {{ survey.siteSurveyName }}</h2>
+      <div class="status">
+        <el-button class="btn btn-save" @click="$emit('edit')">
+          {{ $t("common.edit") }}
+        </el-button>
+      </div>
     </div>
 
-    <div class="card-content">
-      <div class="card-item">
-        <strong>Mã công trình:</strong> <span>{{ survey.siteCode }}</span>
+    <div class="details-container">
+      <div class="column">
+        <p><strong>{{$t('survey.details.project_code')}}:</strong> {{ survey.siteSurveyCode }}</p>
+        <p><strong>{{$t('survey.details.biddingDecision')}}:</strong> {{ survey.biddingDecision }}</p>
+        <span><strong>{{$t('survey.details.status')}}:</strong> {{ $t(formatStatus(survey.status)) }}</span>
       </div>
-      <div class="card-item">
-        <strong>Ngày khảo sát:</strong> <span>{{ formatDate(survey.surveyDate) }}</span>
+      <div class="column">
+        <p><strong>{{$t('survey.details.estimatedProfits')}}:</strong> {{ survey.estimatedProfits }}</p>
+        <p><strong>{{$t('survey.details.tenderPackagePrice')}}:</strong> {{ survey.tenderPackagePrice }}</p>
+        <p><strong>{{$t('survey.details.totalBidPrice')}}:</strong> {{ survey.totalBidPrice }}</p>
       </div>
-      <div class="card-item">
-        <strong>Địa điểm:</strong> <span>{{ survey.location }}</span>
-      </div>
-      <div class="card-item">
-        <strong>Người khảo sát:</strong> <span>{{ survey.surveyor }}</span>
-      </div>
-      <div class="card-item">
-        <strong>Trạng thái:</strong> <span>{{ formatStatus(survey.status) }}</span>
+      <div class="column">
+        <p><strong>{{$t('survey.details.discountRate')}}:</strong> {{ survey.discountRate }}</p>
+        <p><strong>{{$t('survey.details.projectCost')}}:</strong> {{ survey.projectCost }}</p>
+        <p><strong>{{$t('survey.details.finalProfit')}}:</strong> {{ survey.finalProfit }}</p>
       </div>
     </div>
-  </el-card>
+
+    <div v-if="survey.attachments && survey.attachments.length" class="attachments">
+      <p><strong>{{$t('survey.details.attachments')}}: </strong></p>
+      <ul>
+        <li v-for="(attachment, index) in survey.attachments" :key="index">
+          <a :href="attachment.webViewLink" target="_blank">
+            {{ attachment.name }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      survey: {
-        siteCode: 'S001',
-        siteName: 'Site A',
-        location: 'Hanoi',
-        surveyDate: '2025-03-05',
-        surveyor: 'Nguyen Van A',
-        status: 1, // Trạng thái khảo sát, ví dụ: đang tiến hành
-      }
-    };
-  },
-  methods: {
-    formatDate(inputDate) {
-      return inputDate; // Định dạng ngày nếu cần
-    },
-    formatStatus(status) {
-      return status === 1 ? 'Đang tiến hành' : 'Hoàn thành'; // Định dạng trạng thái
-    }
-  }
+<script setup>
+import { defineProps } from 'vue';
+import {RECEIVE_STATUS, STATUS_LABELS} from "@/constants/survey.js";
+import {mixinMethods} from "@/utils/variables.js";
+
+const formatStatus = (status) => {
+  return STATUS_LABELS[status] || 'Unknown';
 };
+
+const formatCurrency = (inputCurrency) => {
+  return mixinMethods.formatCurrency(inputCurrency);
+}
+
+const formatDate = (date) => {
+  return mixinMethods.showDateTime(date);
+}
+
+defineProps({
+  survey: {
+    type: Object,
+    required: true,
+    default: () => ({
+      id: 0,
+      siteSurveyName: "",
+      constructionRequirements: "",
+      equipmentRequirements: "",
+      humanResourceCapacity: "",
+      riskAssessment: "",
+      biddingDecision: "",
+      profitAssessment: "",
+      bidWinProb: "",
+      estimatedExpenses: "",
+      estimatedProfits: "",
+      tenderPackagePrice: "",
+      totalBidPrice: "",
+      discountRate: "",
+      projectCost: "",
+      finalProfit: "",
+      status: "",
+      comments: "",
+      attachments: "",
+      surveyDetails: ""
+    })
+  }
+});
 </script>
 
 <style scoped>
-.card-container {
-  width: 100%;
-  max-width: 400px;
-  margin: 20px auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.project-progress {
+  padding: 20px;
   background-color: #f5f5f5;
-}
-
-.card-title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #3498db; /* Màu sắc cho tiêu đề giống một nút */
-  margin: 10px 0;
-  cursor: pointer; /* Thêm cursor pointer để thể hiện có thể click */
-  text-decoration: underline; /* Gạch dưới giống như một liên kết */
-}
-
-.card-title:hover {
-  color: #1d78b3; /* Màu khi hover qua */
-}
-
-.card-content {
-  padding: 15px;
-  background-color: white;
   border-radius: 8px;
 }
 
-.card-item {
-  margin-bottom: 10px;
-  font-size: 14px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
-.card-item strong {
-  font-weight: 600;
-  color: #34495e;
+.status {
+  color: #888;
+}
+
+.details-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+}
+
+.details p,
+.description p,
+.attachment p {
+  margin: 5px 0;
+}
+
+.btn-save {
+  margin-left: 12px;
+}
+
+.attachment a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.attachment a:hover {
+  text-decoration: underline;
 }
 </style>
