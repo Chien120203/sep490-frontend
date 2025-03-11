@@ -22,6 +22,9 @@ const PAGE_NAME = {
   CONTRACT: {
     CREATE: "contract-create",
     DETAILS:"contract-details",
+  },
+  SITE_SURVEY: {
+    DETAILS: "site-survey-details",
   }
 };
 

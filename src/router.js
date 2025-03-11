@@ -22,6 +22,7 @@ import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 import ContractSave from "@/pages/contract/Save.vue"
 import ContractList from "@/pages/contract/item/ContractTable.vue";
+import SiteSurveyDetails from "@/pages/site_survey/item/SiteSurveyDetails.vue";
 
 const routes = [
   {
@@ -160,7 +161,15 @@ const routes = [
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     }
-  }
+  },
+  {
+    name: PAGE_NAME.SITE_SURVEY.DETAILS,
+    path: PAGES.SITE_SURVEY_DETAILS,
+    component: SiteSurveyDetails,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+  },
 ];
 
 const router = createRouter({
