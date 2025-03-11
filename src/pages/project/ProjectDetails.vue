@@ -90,6 +90,100 @@
                   @loadMore="handleLoadMore"
               />
             </el-collapse-item>
+            <el-collapse-item name="4">
+              <template #title>
+                <h3>{{ $t("contract.title") }}</h3>
+              </template>
+              <div class="contract-header">
+                <div class="project-btn-box project-import-box">
+                  <el-row
+                      class="mb-4"
+                  >
+                    <el-button class="btn btn-save" @click="handleRedirectToCreate"
+                    >{{ $t("project.add_new") }}
+                    </el-button>
+                  </el-row>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="project-search">
+                  <div class="project-search-box col-md-9 col-lg-9">
+                    <p class="project-search__ttl">
+                      {{ $t("project.keyword") }}
+                    </p>
+                    <div class="mb-0 ruleform">
+                      <el-input
+                          :placeholder="$t('common.input_keyword')"
+                          @keyup.enter=""
+                          v-model="contractSearchForms.keyWord"
+                          prop="keyWord"
+                      >
+                        <template #append>
+                <span @click="handleContractSearchForm" class="btn-setting">
+                  <IconSetting/>
+                </span>
+                        </template>
+                      </el-input>
+                    </div>
+                  </div>
+                  <div class="btn-search-select col-md-3 col-lg-3 project-box-btn-all">
+                    <el-button class="btn btn-search" @click="handleSearchContract(true)">
+                      {{ $t("common.search") }}
+                    </el-button
+                    >
+                    <el-button class="btn btn-clear" @click="handleClearSearchContractForm">
+                      {{ $t("common.clear") }}
+                    </el-button
+                    >
+                  </div>
+                </div>
+                <div class="form-search" :class="{ active: isShowBoxContractSearch }">
+                  <div class="close-form">
+                    <IconCircleClose @click="isShowBoxContractSearch = false"/>
+                  </div>
+                  <div class="form-search-box">
+                    <div class="item">
+                      <el-form-item :label="$t('project.status')">
+                        <el-date-picker
+                            v-model="contractSearchForms.signDate"
+                            :value-format="DATE_FORMAT"
+                            type="date"
+                            placeholder="Select Date"
+                            class="input-wd-96"
+                        />
+                      </el-form-item>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <ContractList
+                  :data="listContracts.value"
+                  @details="getContractDetails"
+              />
+              <LoadMore
+                  :listData="listContracts.value"
+                  :totalItems="totalItems.value"
+                  @loadMore="handleSearchContract"
+              />
+            </el-collapse-item>
+            <el-collapse-item name="5">
+              <template #title>
+                <h3>{{ $t("project.details.site_survey") }}</h3>
+              </template>
+              <SiteSurveyList
+                  :data="changeRequestData"
+                  @details = "getSiteSurveyList"
+              />
+            </el-collapse-item>
+            <el-collapse-item name="5">
+              <template #title>
+                <h3>{{ $t("project.details.site_survey") }}</h3>
+              </template>
+              <SiteSurveyList
+                  :data="changeRequestData"
+                  @details = "getSiteSurveyList"
+              />
+            </el-collapse-item>
           </el-collapse>
         </el-col>
       </el-row>
@@ -105,7 +199,7 @@ import PAGE_NAME from "@/constants/route-name.js";
 import {onMounted, onUnmounted, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
-import {TEXT_CONFIRM_DELETE} from "@/constants/application.js";
+import {DATE_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
 import ProjectInfor from "./item/details/ProjectInfor.vue"
 import FinancialSummary from "./item/list/FinancialSummary.vue";
 import ProjectCR from "./item/details/ProjectCR.vue";
@@ -114,10 +208,15 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
+import ContractList from "@/pages/contract/item/ContractTable.vue";
+import {useContractStore} from "@/store/contract.js";
+import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
 
 export default {
   name: "ProjectDetails",
   components: {
+    SiteSurveyList,
+    ContractList: ContractList,
     LoadMore,
     IconSetting,
     IconCircleClose,
@@ -133,7 +232,9 @@ export default {
     const route = useRoute();
     const router = useRouter();
     const projectStore = useProjectStore();
-    const activeCollapseItems = ref(["3", "2"]);
+    const contractStore = useContractStore();
+
+    const activeCollapseItems = ref(["3", "2", "4"]);
     const changeRequestData = ref([
       {
         id: 1,
@@ -183,21 +284,48 @@ export default {
         ],
       },
     ]);
+    const siteSurveyDate = ref([
+
+    ]);
+    const isShowBoxSearch = ref(false);
+    const isShowBoxContractSearch = ref(false);
+    const contractSearchForms = ref({
+      keyWord: "",
+      pageIndex: 1,
+      projectId: route.params.id,
+      signDate: ""
+    });
     const searchCRForms = ref({
       searchValue: "",
+      pageIndex: 1,
     });
+
     const {
       getProjectDetails,
       projectDetails
     } = projectStore;
-    const isShowBoxSearch = ref(false);
+    const {
+      listContracts,
+      totalItems,
+      currentPage,
+      getListContracts,
+    } = contractStore;
 
     onMounted(() => {
       getProjectDetails(route.params.id);
+      getListContracts(contractSearchForms.value);
     });
 
     onUnmounted(() => {
     });
+
+    const getContractDetails = (id) => {
+      router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
+    }
+
+    const getSiteSurveyList = () => {
+      router.push({name: PAGE_NAME.SITE_SURVEY.DETAILS, prams: {id: route.params.id}})
+    }
 
     const handleRedirectToEdit = () => {
       router.push({name: PAGE_NAME.PROJECT.EDIT, params: {id: route.params.id}});
@@ -215,19 +343,28 @@ export default {
 
     const handleCloseModal = () => {
     };
-    const handleCRSearchForm = () => {
-      isShowBoxSearch.value = true;
+
+    const handleContractSearchForm = () => {
+      isShowBoxContractSearch.value = !isShowBoxContractSearch.value;
     };
 
-    const handleLoadMore = () => {
+    const handleSearchContract = (isSearch = false) => {
+      currentPage.value = isSearch ? 1 : currentPage + 1;
+      contractSearchForms.value.pageIndex = isSearch ? 1 : contractSearchForms.value.pageIndex + 1;
+      getListContracts(contractSearchForms.value);
+    }
 
-    };
+    const handleClearSearchContractForm = () => {
+      contractSearchForms.value = {
+        keyWord: "",
+        pageIndex: 1,
+        signDate: ""
+      }
+    }
 
-    const handleAddTenants = (listAddTenants) => {
-    };
-
-    const handleConfirm = () => {
-    };
+    const handleRedirectToCreate = () => {
+      router.push({name: PAGE_NAME.CONTRACT.CREATE});
+    }
 
     return {
       financialData,
@@ -236,17 +373,24 @@ export default {
       activeCollapseItems,
       searchCRForms,
       isShowBoxSearch,
+      isShowBoxContractSearch,
+      contractSearchForms,
+      listContracts,
+      totalItems,
       TEXT_CONFIRM_DELETE,
+      DATE_FORMAT,
       STATUSES,
       handleBack,
-      handleLoadMore,
       handleCloseModal,
-      handleConfirm,
       handleOpenModalConfirm,
+      handleRedirectToCreate,
       handleRedirectToEdit,
       onSubmit,
-      handleCRSearchForm,
-      handleAddTenants,
+      getSiteSurveyList,
+      handleContractSearchForm,
+      handleClearSearchContractForm,
+      handleSearchContract,
+      getContractDetails,
     };
   },
 };
@@ -274,6 +418,26 @@ export default {
       margin-left: 24px !important;
     }
   }
+}
+.contract-header {
+  display: flex;
+  justify-content: end;
+}
+
+.form-search-box {
+  width: 74%;
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1019607843);
+  border: 1px solid #f6f6fb;
+  padding: 14px 24px;
+}
+
+.close-form {
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  right: 27%;
+  top: 10px;
+  cursor: pointer;
 }
 
 .box-card {

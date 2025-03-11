@@ -17,6 +17,11 @@ const API_CODE = {
   API_PRJ_001: '/project/list',
   API_PRJ_002: '/project/save',
   API_PRJ_003: '/project/detail',
+  API_PRJ_004: '/project/list-project-status',
+
+  API_CTR_001: '/contract/save-contract',
+  API_CTR_002: '/contract/list-contract',
+  API_CTR_003: '/contract/detail',
 
   //User
   API_USER_001: '/admin/list-user',
@@ -24,6 +29,12 @@ const API_CODE = {
   API_USER_003: '/admin/update-user',
   API_USER_004: '/admin/create-user',
   API_USER_005: '/admin/delete-user',
+
+  //Site-survey
+  API_SURVEY_001: '/survey/search',
+  API_SURVEY_002: '/survey/detail',
+  API_SURVEY_003: '/admin/save',
+  API_SURVEY_004: '/admin/delete',
 };
 
 export default API_CODE;

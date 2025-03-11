@@ -34,12 +34,30 @@ export const useProjectStore = defineStore(
         budget: 0,
         status: 0,
         attachments: [],
-        description: ""
+        description: "",
+        viewerUserIds: null
       }
     });
+    const chartData = reactive({
+      labels: [
+        t('project.statuses.receive_reqs'),
+        t('project.statuses.planning'),
+        t('project.statuses.in_progress'),
+        t('project.statuses.complete'),
+        t('project.statuses.paused'),
+        t('project.statuses.close'),
+      ],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: ["#1f7885", "#1f4261", "#28b5b5", "#3e8e22", "#4c4b4b", "#dc3545"],
+          hoverOffset: 4,
+        },
+      ],
+    });
 
-    const getListProjects = async (params) => {
-      mixinMethods.startLoading();
+    const getListProjects = async (params, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
       await services.ProjectAPI.list(
         params,
         (response) => {
@@ -60,22 +78,28 @@ export const useProjectStore = defineStore(
       );
     };
 
+    const getProjectChart = async () => {
+      await services.ProjectAPI.getChart(
+        {},
+        (response) => {
+          const { total, ...filteredData } = response.data;
+          chartData.datasets[0].data = Object.values(filteredData);
+        },
+        (error) => {
+        }
+      );
+    };
+
     const saveProject = async (params) => {
       mixinMethods.startLoading();
-      const formData = new FormData();
-      (params["Attachments"] || []).forEach((file) => {
-        formData.append("Attachments", file);
-      });
-      Object.keys(params).forEach((key) => {
-        if(key !== "Attachments") formData.append(key, params[key]);
-      });
+      const formData = mixinMethods.createFormData(params);
       await services.ProjectAPI.save(
         formData,
         (response) => {
           if(response.success) {
             projectDetails.value = {...response.data, customerId: response.data.customer.id};
             validation.value = [];
-            router.push({name: PAGE_NAME.PROJECT.DETAILS, params: projectDetails.value.id});
+            router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: response.data.id}});
             mixinMethods.notifySuccess(t("response.message.save_project_success"));
           }else {
             validation.value = mixinMethods.handleErrorResponse(response);
@@ -132,7 +156,8 @@ export const useProjectStore = defineStore(
         budget: 0,
         status: 0,
         attachment: "",
-        description: ""
+        description: "",
+        viewerUserIds: null
       };
     };
 
@@ -143,8 +168,10 @@ export const useProjectStore = defineStore(
       currentPage,
       projectDetails,
       isShowModalConfirm,
+      chartData,
       isShowModalCreate,
       getProjectDetails,
+      getProjectChart,
       saveProject,
       clearProjectDetails,
       getListProjects,

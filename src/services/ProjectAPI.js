@@ -6,6 +6,10 @@ const list = async (params, success, error) => {
   await get(API_CODE.API_PRJ_001, success, error, params);
 };
 
+const getChart = async (params, success, error) => {
+  await get(API_CODE.API_PRJ_004, success, error, params);
+};
+
 const save = async (formData, success, error) => {
   await postFormData(API_CODE.API_PRJ_002, formData, success, error);
 };
@@ -17,5 +21,6 @@ const details =  async (id, params, success, error) => {
 export const ProjectAPI = {
   list,
   save,
+  getChart,
   details
 };

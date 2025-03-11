@@ -90,7 +90,7 @@ export default {
   },
   setup() {
     const searchForms = ref({
-      search: "",
+      keyWord: "",
       pageIndex: 1,
     });
     const delete_id = ref();
@@ -120,7 +120,7 @@ export default {
     };
 
     const submitForm = () => {
-      searchForms.value.pageIndex = 0;
+      searchForms.value.pageIndex = 1;
       currentPage.value = 0;
       getListUsers(searchForms.value);
     };

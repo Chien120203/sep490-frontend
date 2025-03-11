@@ -19,7 +19,7 @@
         <!--    charts-->
         <div class="project-body">
           <div class="project-chart">
-            <DonutChart :chart-data="chartData" :chart-options="chartOptions"/>
+            <DonutChart :chart-data="chartData"/>
           </div>
         </div>
 
@@ -123,12 +123,6 @@
         :message="$t('project.modal_confirm.message')"
         :title="$t('project.modal_confirm.title')"
     />
-    <ProjectCreateModal
-      :show="isShowModalCreate.value"
-      :projectDetails="projectDetails.value"
-      :validate="validation.value"
-      @close="handleDisplayCreateModal"
-    />
   </div>
 </template>
 
@@ -182,9 +176,10 @@ export default {
       currentPage,
       projectDetails,
       isShowModalConfirm,
+      chartData,
       isShowModalCreate,
       getListProjects,
-      handleGetProjectDtls,
+      getProjectChart,
       handleDeleteProject
     } = projectStore;
     const {
@@ -232,29 +227,11 @@ export default {
       {title: 'Phiếu thu/chi cần duyệt', expanded: false, color: 'blue'},
       {title: 'Văn bản cần xử lý', expanded: false, color: 'teal'},
     ]);
-    const chartData = reactive({
-      labels: ["Kế hoạch", "Đang làm", "Tạm dừng", "Hoàn thành"],
-      datasets: [
-        {
-          data: [1, 33, 0, 0],
-          backgroundColor: ["#1E3A8A", "#3B82F6", "#FACC15", "#22C55E"],
-          hoverOffset: 4,
-        },
-      ],
-    });
-    const chartOptions = reactive({
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: true,
-        },
-      },
-    });
 
     onMounted(() => {
       getListProjects(searchForms.value);
       getListCustomers();
+      getProjectChart();
     });
 
     onUnmounted(() => {
@@ -327,7 +304,6 @@ export default {
       isShowBoxSearch,
       tasks,
       financialData,
-      chartOptions,
       chartData,
       validation,
       isShowModalCreate,

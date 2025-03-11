@@ -75,7 +75,9 @@
                   v-if="validation.value && validation.value.dob"
               >{{ $t(validation.value.dob) }}</label>
             </el-form-item>
+          </div>
 
+          <div class="item item-bib-add item-user-add">
             <el-form-item
                 prop="gender"
                 class="custom-textarea required"
@@ -112,9 +114,6 @@
               >{{ $t(validation.value.phone) }}</label>
             </el-form-item>
 
-          </div>
-
-          <div class="item item-bib-add item-user-add">
             <el-form-item
                 prop="description"
                 class="custom-textarea"
@@ -139,20 +138,19 @@
     </div>
   </div>
 </template>
+
 <script>
 import {computed, onMounted,onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {USER_RULES} from "@/rules/user/index.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import {useI18n} from "vue-i18n";
 import {useUserStore} from "@/store/user.js";
 import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
   components: {IconBackMain, SingleOptionSelect},
   setup() {
-    const {t} = useI18n();
     const userStore = useUserStore();
     const {
       userDetails,

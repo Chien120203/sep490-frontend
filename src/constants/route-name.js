@@ -18,6 +18,13 @@ const PAGE_NAME = {
     CREATE: "project-create",
     EDIT: "project-edit",
     DETAILS: "project-details",
+  },
+  CONTRACT: {
+    CREATE: "contract-create",
+    DETAILS:"contract-details",
+  },
+  SITE_SURVEY: {
+    DETAILS: "site-survey-details",
   }
 };
 

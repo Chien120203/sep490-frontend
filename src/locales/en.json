@@ -222,11 +222,162 @@
       "delete_customer_failed": "Delete Customer Failed",
       "get_projects_failed": "Get list projects failed",
       "save_project_success": "Save project success",
-      "save_project_failed": "Save project failed"
+      "save_project_failed": "Save project failed",
+      "save_contract_success": "Save contract success",
+      "get_contracts_failed": "Get list contracts failed",
+      "save_contract_failed": "Save contract failed",
+      "get_contract_dtls_failed": "Get project details failed"
     }
   },
   "contract": {
     "title": "Contract",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "date": "Contract Date",
+    "status": "Status",
+    "type": "Type",
+    "room": "Room",
+    "tenant": "Tenant",
+    "landlord": "Landlord",
+    "statuses": {
+      "active": "Active",
+      "terminated": "Terminated",
+      "renewed": "Renewed"
+    },
+    "types": {
+      "monthly": "Monthly",
+      "quater": "Quater",
+      "half-year": "Half Year",
+      "year": "Yearly"
+    },
+    "create": {
+      "title": "Create Contract",
+      "contract_name": "Contract Name",
+      "items": "Contract Items",
+      "btn": {
+        "new_item": "Add new item"
+      },
+      "details": "Contract Information",
+      "infor": {
+        "label": {
+          "code": "Contract Code",
+          "name": "Contract Name",
+          "project": "Project",
+          "start_date": "Start Date",
+          "end_date": "End Date",
+          "estimate_day": "Estimate Days",
+          "tax": "Tax",
+          "sign_date": "Sign Date",
+          "attachments": "Attachments"
+        }
+      },
+      "item_table": {
+        "no": "No",
+        "action": "Action",
+        "code": "Code",
+        "item": "Item",
+        "unit": "Unit",
+        "amount": "Amount",
+        "unit_price": "Unit Price",
+        "total_price": "Total Price"
+      }
+    },
+    "detail": {
+      "title": "Contract Details"
+    },
+    "table": {
+      "header": {
+        "name": "Contract Name",
+        "code": "Contract Code",
+        "customer": "Customer Name",
+        "project_name": "Project Name",
+        "type": "Construct Type",
+        "budget": "Budget",
+        "start_date": " Start Date",
+        "finish_date": " Finish Date",
+        "sign_date": " Sign Date",
+        "status": "Status",
+        "room": "Room Code",
+        "tenant": "Tenant",
+        "attachment": "Contract Attachment",
+        "action": "Action",
+        "estimate_days": "Estimation Days"
+      }
+    },
+    "modal_confirm": {
+      "title": "Confirm terminate contract",
+      "message": "Please enter 'Terminate' to confirm terminate this contract"
+    },
+    "status_placeholder": "Contract status",
+    "room_placeholder": "Contract room",
+    "tenant_placeholder": "Contract tenant",
+    "type_placeholder": "Contract type",
+    "landlord_placeholder": "Contract landlord"
+  },
+  "site-survey": {
+    "title": "Site Survey",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "date": "Contract Date",
+    "status": "Status",
+    "type": "Type",
+    "room": "Room",
+    "tenant": "Tenant",
+    "landlord": "Landlord",
+    "statuses": {
+      "active": "Active",
+      "terminated": "Terminated",
+      "renewed": "Renewed"
+    },
+    "types": {
+      "monthly": "Monthly",
+      "quater": "Quater",
+      "half-year": "Half Year",
+      "year": "Yearly"
+    },
+    "create": {
+      "title": "Create Contract",
+      "contract_name": "Contract Name",
+      "duration": "Duration",
+      "deposit": "Deposit",
+      "room": "Room",
+      "type": "Type",
+      "tenants": "Tenants",
+      "landlord": "Landlord"
+    },
+    "detail": {
+      "title": "Contract Detail"
+    },
+    "table": {
+      "header": {
+        "name": "Contract Name",
+        "start_date": " Start Date",
+        "finish_date": " Finish Date",
+        "room": "Room Code",
+        "tenant": "Tenant",
+        "attachment": "Contract Attachment",
+        "action": "Action",
+        "status": "Status",
+        "type": "Type",
+        "landlord": "Landlord"
+      }
+    },
+    "modal_confirm": {
+      "title": "Confirm terminate contract",
+      "message": "Please enter 'Terminate' to confirm terminate this contract"
+    },
+    "status_placeholder": "Contract status",
+    "room_placeholder": "Contract room",
+    "tenant_placeholder": "Contract tenant",
+    "type_placeholder": "Contract type",
+    "landlord_placeholder": "Contract landlord"
+  },
+  "site-survey": {
+    "title": "Site Survey",
     "add_new": "Add New",
     "keyword": "Keyword",
     "search": "Search",
@@ -334,12 +485,7 @@
     "modal_confirm": {
       "title": "Confirm delete customer",
       "message": "Please enter 'Delete' to confirm delete this customer"
-    },
-    "status_placeholder": "Contract status",
-    "room_placeholder": "Contract room",
-    "tenant_placeholder": "Contract tenant",
-    "type_placeholder": "Contract type",
-    "landlord_placeholder": "Contract landlord"
+    }
   },
   "project": {
     "title": "Project",
@@ -365,6 +511,7 @@
       "title": "Project Details",
       "financial_summary": "Financial Summary",
       "change_request": "Change Request",
+      "site_survey": "Site Survey",
       "change_request_table": {
         "header": {
           "request_code": "Request Code",
@@ -407,6 +554,7 @@
       "budget": "Budget",
       "attachment": "Attachment",
       "description": "Description",
+      "technical_manager": "Technical Manager",
       "upload_file": "Upload File"
     },
     "edit": {
@@ -572,9 +720,7 @@
         "location": "Location",
         "role": "Role",
         "action": "Action",
-        "code": "User Code",
-        "gender": "Gender",
-        "dob": "Date of Birth"
+        "code": "User Code"
       }
     },
     "details": {
@@ -774,6 +920,19 @@
   "E-CUS-005": "Phone number is invalid",
   "E-CUS-006": "Fax number is invalid",
   "E-CUS-007": "Tax code is invalid",
+
+  "E-CTR-001": "Contract code is required",
+  "E-CTR-002": "Project is required",
+  "E-CTR-003": "Start date is required",
+  "E-CTR-004": "End date is required",
+  "E-CTR-005": "Sign date is required",
+  "E-CTR-006": "Estimation days is required",
+  "E-CTR-007": "Estimation days must be greater than {min}",
+  "E-CTR-008": "Estimation days must be less than {max}",
+  "E-CTR-009": "Tax is required",
+  "E-CTR-010": "Tax must be greater than {min}%",
+  "E-CTR-011": "Tax must be less than {max}%",
+  "E-CTR-012": "Sign date must be before start date",
 
   "E-PRJ-009": "Project code is required",
   "E-PRJ-002": "Project code is duplicated",

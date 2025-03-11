@@ -12,7 +12,7 @@ export const useUserStore = defineStore(
         const validation = reactive({ value: {} });
         const isShowModalConfirm = reactive({ value: false });
         const totalItems = reactive({ value: 0 });
-        const currentPage = reactive({ value: 0 });
+        const currentPage = reactive({ value: 1 });
         const listUsers = reactive({ value: []});
         const userDetails = reactive({
             value: {
@@ -28,12 +28,12 @@ export const useUserStore = defineStore(
         });
 
 
-        const getListUsers = async (params) => {
-            mixinMethods.startLoading();
+        const getListUsers = async (params, isLoading = true) => {
+            if(isLoading) mixinMethods.startLoading();
             await services.UserAPI.list(
                 params,
                 (response) => {
-                    if (currentPage.value === 0) {
+                    if (currentPage.value === 1) {
                         listUsers.value = response.data;
                     } else {
                         listUsers.value = [...listUsers.value, ...response.data];

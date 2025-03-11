@@ -164,9 +164,43 @@ const handleErrorResponse = (error) => {
   }, {});
 };
 
+const createFormData = (params) => {
+  const formData = new FormData();
+
+  Object.keys(params).forEach((key) => {
+    const value = params[key];
+
+    if (Array.isArray(value)) {
+      // Check if the array contains only File or Blob objects
+      const isArrayOfFiles = value.every(item => item instanceof File || item instanceof Blob);
+
+      if (isArrayOfFiles) {
+        // If it's an array of File/Blob, append them directly
+        value.forEach(item => {
+          formData.append(key, item);
+        });
+      } else {
+        // If it's a regular array, convert items to JSON
+        value.forEach(item => {
+          formData.append(key, JSON.stringify(item));
+        });
+      }
+    } else {
+      formData.append(key, value);
+    }
+
+  });
+
+  return formData;
+};
+
+
+
+
 export const mixins = {
   screenLoading,
   startLoading,
+  createFormData,
   endLoading,
   checkEmptyWithOutZero,
   checkEmpty,
