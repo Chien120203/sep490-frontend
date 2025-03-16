@@ -264,6 +264,36 @@ const routes = [
       },
     ]
   },
+  {
+    name: PAGE_NAME.RESOURCES,
+    path: PAGES.RESOURCES,
+    component: Project,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.PROJECT,
+        name: PAGE_NAME.PROJECT.LIST,
+        component: ProjectList,
+      },
+      {
+        path: PAGES.PROJECT_CREATE,
+        name: PAGE_NAME.PROJECT.CREATE,
+        component: ProjectSave,
+      },
+      {
+        path: PAGES.PROJECT_EDIT,
+        name: PAGE_NAME.PROJECT.EDIT,
+        component: ProjectSave,
+      },
+      {
+        path: PAGES.PROJECT_DETAILS,
+        name: PAGE_NAME.PROJECT.DETAILS,
+        component: ProjectDetails,
+      }
+    ]
+  },
 ];
 
 const router = createRouter({

@@ -44,6 +44,12 @@ const PAGES = {
   CONSTRUCT_LOG_DETAILS: "/construct-log/details",
 
   MOBILIZATION: "/mobilization",
+
+  //resources
+  RESOURCES: "/resources",
+  MACHINE_RESOURCES: "/resources/list-machine",
+  MATERIAL_RESOURCES: "/resources/list-material",
+  HUMAN_RESOURCES: "/resources/list-human",
 };
 
 export default PAGES;

@@ -51,6 +51,113 @@
         </el-menu-item>
       </el-menu>
     </div>
+    <div class="menu-box">
+      <ul class="nav" v-if="listRouter.length">
+        <li
+          v-for="(route, index) in listRouter"
+          :key="index"
+          class="nav-list"
+          style="border-bottom: 1px solid #d0d6da"
+        >
+          <div>
+            <a
+              v-if="route.isShow"
+              href="#"
+              @click.prevent="navigateChangeRoute(route)"
+              :class="classActive(route)"
+              class="js-sidenav-tooltip"
+              style="display: flex; align-items: center"
+            >
+              <component
+                :is="route.function_icon"
+                class="icon_sidebar"
+              ></component>
+              <span class="sidebar-text sidebar-custom siderbar_name">{{
+                route.function_name
+              }}</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+      <ul class="nav" v-if="listRouterUsers.length">
+        <li
+            v-for="(route, index) in listRouterUsers"
+            :key="index"
+            class="nav-list"
+            style="border-bottom: 1px solid #d0d6da"
+        >
+          <div>
+            <a
+                v-if="route.isShow"
+                href="#"
+                @click.prevent="navigateChangeRoute(route)"
+                :class="classActive(route)"
+                class="js-sidenav-tooltip"
+                style="display: flex; align-items: center"
+            >
+              <component
+                  :is="route.function_icon"
+                  class="icon_sidebar"
+              ></component>
+              <span class="sidebar-text sidebar-custom siderbar_name">{{
+                  route.function_name
+                }}</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+<!--      <p class="nav_others" v-if="listRouter.length">-->
+<!--        {{ $t("common.other") }}-->
+<!--      </p>-->
+      <ul class="nav">
+        <li
+          v-for="(route, index) in listRouterOthers"
+          :key="index"
+          style="border-bottom: 1px solid #d0d6da"
+        >
+          <a
+            href="#"
+            v-if="route.isShow"
+            @click.prevent="navigateChangeRoute(route)"
+            :class="classActive(route)"
+            class="js-sidenav-tooltip"
+            style="display: flex; align-items: center"
+          >
+            <component
+              :is="route.function_icon"
+              class="icon_sidebar"
+            ></component>
+            <span class="sidebar-text sidebar-custom siderbar_name">{{
+              route.function_name
+            }}</span>
+          </a>
+        </li>
+      </ul>
+      <ul class="nav">
+        <li
+            v-for="(route, index) in listRouterOthers"
+            :key="index"
+            style="border-bottom: 1px solid #d0d6da"
+        >
+          <a
+              href="#"
+              v-if="route.isShow"
+              @click.prevent="navigateChangeRoute(route)"
+              :class="classActive(route)"
+              class="js-sidenav-tooltip"
+              style="display: flex; align-items: center"
+          >
+            <component
+                :is="route.function_icon"
+                class="icon_sidebar"
+            ></component>
+            <span class="sidebar-text sidebar-custom siderbar_name">{{
+                route.function_name
+              }}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -160,6 +267,21 @@ export default {
     ]);
 
     const listRouterOthers = computed(() => [
+      {
+        function_name: t("side_bar.label.profile"),
+        function_page_name: PAGE_NAME.PROFILE,
+        function_icon: "IconUser",
+        isShow: true,
+      },
+    ]);
+
+    const listRouterResource = computed(() => [
+      {
+        function_name: t("side_bar.label.profile"),
+        function_page_name: PAGE_NAME.PROFILE,
+        function_icon: "IconUser",
+        isShow: true,
+      },
       {
         function_name: t("side_bar.label.profile"),
         function_page_name: PAGE_NAME.PROFILE,
