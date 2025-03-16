@@ -21,8 +21,10 @@ import ProjectList from "@/pages/project/ProjectList.vue";
 import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 import ContractSave from "@/pages/contract/Save.vue"
-import ContractList from "@/pages/contract/item/ContractTable.vue";
 import SiteSurveyDetails from "@/pages/site_survey/item/SiteSurveyDetails.vue";
+import PlanningDetails from "@/pages/planning/Save.vue";
+import PlanningList from "@/pages/planning/PlanningList.vue";
+import Planning from "@/pages/planning/Index.vue"
 
 const routes = [
   {
@@ -76,6 +78,31 @@ const routes = [
         path: PAGES.CUSTOMER_DETAILS,
         name: PAGE_NAME.CUSTOMER.DETAILS,
         component: CustomerDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.PLANNING,
+    path: PAGES.PLANNING,
+    component: Planning,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.PLANNING_CREATE,
+        name: PAGE_NAME.PLANNING.CREATE,
+        component: PlanningDetails,
+      },
+      {
+        path: PAGES.PLANNING,
+        name: PAGE_NAME.PLANNING.LIST,
+        component: PlanningList,
+      },
+      {
+        path: PAGES.PLANNING_DETAILS,
+        name: PAGE_NAME.PLANNING.DETAILS,
+        component: PlanningDetails,
       }
     ]
   },

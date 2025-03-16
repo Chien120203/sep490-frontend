@@ -203,6 +203,7 @@ import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
 import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 export default {
   name: "ProjectDetails",
@@ -226,6 +227,7 @@ export default {
     const projectStore = useProjectStore();
     const contractStore = useContractStore();
     const surveyStore = useSiteSurveyStore();
+    const persist = usePersistanceStore();
 
     const activeCollapseItems = ref(["3", "2", "4"]);
     const changeRequestData = ref([
@@ -309,6 +311,11 @@ export default {
       listSurveys,
     } = surveyStore;
 
+    const {
+      projectId
+    } = persist;
+
+
     onMounted(() => {
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
@@ -318,6 +325,7 @@ export default {
     });
 
     const getContractDetails = (id) => {
+      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
     }
 
@@ -361,6 +369,7 @@ export default {
     }
 
     const handleRedirectToCreate = () => {
+      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.CREATE});
     }
 

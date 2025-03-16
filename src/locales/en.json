@@ -515,6 +515,8 @@
       "attachment": "Attachment",
       "description": "Description",
       "technical_manager": "Technical Manager",
+      "resource_manager": "Resource Manager",
+      "construction_manager": "Construction Manager",
       "upload_file": "Upload File"
     },
     "edit": {
@@ -543,6 +545,28 @@
     "tenant_placeholder": "Contract tenant",
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
+  },
+  "planning": {
+    "title": "Project Planning",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "create": {
+      "title": "Create Planning"
+    },
+    "edit": {
+      "title": "Edit Planning"
+    },
+    "table": {
+      "header": {
+        "title": "Title",
+        "date": "Date",
+        "status": "Status",
+        "creator": "Creator",
+        "action": "Action"
+      }
+    }
   },
   "bill": {
     "title": "Bill",
@@ -743,13 +767,11 @@
   "side_bar": {
     "label": {
       "user": "Users",
-      "room": "Rooms",
       "profile": "Profile",
       "contract": "Contracts",
-      "bill": "Bills",
-      "utility": "Utilities",
       "customer": "Customer",
-      "project": "Project"
+      "project": "Project",
+      "planning": "Planning"
     }
   },
   "room": {

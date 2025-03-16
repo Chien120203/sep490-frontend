@@ -40,9 +40,11 @@ import {useContractStore} from "@/store/contract.js";
 import {getContractRules} from "@/rules/contract/index.js";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {RECEIVE_STATUS} from "@/constants/project.js";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 const projectStore = useProjectStore();
 const contractStore = useContractStore();
+const persist = usePersistanceStore();
 
 const {
   listProjects,
@@ -55,6 +57,9 @@ const {
   getContractDetails,
   saveContract
 } = contractStore;
+const {
+  projectId
+} = persist;
 
 const CONTRACT_RULES = getContractRules();
 
@@ -75,7 +80,7 @@ onUnmounted(() => {
 });
 
 const handleBack = () => {
-  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: contractDetails.value.projectId}});
+  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
 
 const handleSearchProjects = (value) => {

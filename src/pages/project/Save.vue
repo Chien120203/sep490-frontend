@@ -76,11 +76,52 @@
                 <SingleOptionSelect
                     v-model="projectDetails.value.viewerUserIds"
                     :optionKeys="{ id: 'id', value: 'username' }"
-                    :listData="listUsers.value"
+                    :listData="listTechnicalManagers"
+                    :role="TECHNICAL_MANAGER"
                     :isRemote="true"
                     :disabled="false"
                     class="input-wd-96"
-                    @remoteSearch="handleSearchTechnical"
+                    @remoteSearch="handleSearchManager"
+                />
+                <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
+                  {{ $t(validation.viewerUserIds) }}
+                </label>
+              </el-form-item>
+            </div>
+
+            <div class="item-project-members">
+              <el-form-item prop="viewerUserIds" class="input-select-member">
+                <template #label>
+                  <span class="label-start">{{ $t('project.create.resource_manager') }}</span>
+                </template>
+                <SingleOptionSelect
+                    v-model="projectDetails.value.viewerUserIds"
+                    :optionKeys="{ id: 'id', value: 'username' }"
+                    :listData="listResourceManagers"
+                    :role="RESOURCE_MANAGER"
+                    :isRemote="true"
+                    :disabled="false"
+                    class="input-wd-96"
+                    @remoteSearch="handleSearchManager"
+                />
+                <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
+                  {{ $t(validation.viewerUserIds) }}
+                </label>
+              </el-form-item>
+
+              <el-form-item prop="viewerUserIds" class="input-select-member">
+                <template #label>
+                  <span class="label-start">{{ $t('project.create.construction_manager') }}</span>
+                </template>
+                <SingleOptionSelect
+                    v-model="projectDetails.value.viewerUserIds"
+                    :optionKeys="{ id: 'id', value: 'username' }"
+                    :listData="listConstructionManagers"
+                    :role="CONSTRUCTION_MANAGER"
+                    :isRemote="true"
+                    :disabled="false"
+                    class="input-wd-96"
+                    @remoteSearch="handleSearchManager"
                 />
                 <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
                   {{ $t(validation.viewerUserIds) }}
@@ -186,7 +227,7 @@
                 class="custom-textarea required"
                 :label="$t('project.create.technical_reqs')"
             >
-              <el-input :rows="3" type="textarea" v-model="projectDetails.value.technicalReqs"/>
+              <el-input :rows="4" type="textarea" v-model="projectDetails.value.technicalReqs"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.technicalReqs"
@@ -194,7 +235,7 @@
             </el-form-item>
 
             <el-form-item prop="description" :label="$t('project.create.description')">
-              <el-input type="textarea" :rows="3" v-model="projectDetails.value.description"/>
+              <el-input type="textarea" :rows="5" v-model="projectDetails.value.description"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.description"
@@ -234,12 +275,15 @@ import { mixinMethods } from "@/utils/variables";
 import {PROJECT_RULES} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import {useUserStore} from "@/store/user.js";
-import {TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {CONSTRUCTION_MANAGER, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 export default {
   components: {IconBackMain, SingleOptionSelect, FileUpload},
   setup() {
     const attachments = ref(null);
+    const listConstructionManagers = ref([]);
+    const listTechnicalManagers = ref([]);
+    const listResourceManagers = ref([]);
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
     const userStore = useUserStore();
@@ -263,10 +307,13 @@ export default {
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
 
-    onMounted(() => {
+    onMounted(async () => {
       if(route.params.id) getProjectDetails(route.params.id);
-      getListCustomers({search: "", pageIndex: 1}, false);
-      getListUsers({keyWord: "", role: TECHNICAL_MANAGER, pageIndex: 1}, false);
+      await getListCustomers({search: "", pageIndex: 1}, false);
+      await getListUsers({keyWord: "", pageIndex: 1}, false);
+      listConstructionManagers.value = listUsers.value.filter((item) => item.role === CONSTRUCTION_MANAGER);
+      listResourceManagers.value = listUsers.value.filter((item) => item.role === RESOURCE_MANAGER);
+      listTechnicalManagers.value = listUsers.value.filter((item) => item.role === TECHNICAL_MANAGER);
     });
 
     onUnmounted(() => {
@@ -296,12 +343,22 @@ export default {
       getListCustomers({search: searchValue, pageIndex: 1}, false);
     }
 
-    const handleSearchTechnical = (searchValue) => {
-      getListUsers({
+    const handleSearchManager = async (searchValue, role) => {
+      await getListUsers({
         keyWord: searchValue,
-        role: TECHNICAL_MANAGER,
+        role: role,
         pageIndex: 1,
       });
+      switch (role) {
+        case CONSTRUCTION_MANAGER:
+          listConstructionManagers.value = listUsers.value.filter((item) => item.role === CONSTRUCTION_MANAGER);
+          break;
+        case RESOURCE_MANAGER:
+          listResourceManagers.value = listUsers.value.filter((item) => item.role === RESOURCE_MANAGER);
+          break;
+        case TECHNICAL_MANAGER:
+          listTechnicalManagers.value = listUsers.value.filter((item) => item.role === TECHNICAL_MANAGER);
+      }
     }
 
     const formatCurrency = (number) => {
@@ -315,12 +372,17 @@ export default {
       isUpdate,
       projectDetails,
       validation,
-      listUsers,
+      listTechnicalManagers,
+      listResourceManagers,
+      listConstructionManagers,
       listCustomers,
       attachments,
+      CONSTRUCTION_MANAGER,
+      RESOURCE_MANAGER,
+      TECHNICAL_MANAGER,
       formatCurrency,
       handleFileUpload,
-      handleSearchTechnical,
+      handleSearchManager,
       handleSearchCustomer,
       handleBack,
       submitForm,

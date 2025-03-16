@@ -1,13 +1,13 @@
 <template>
   <div class="siderbar-block" v-if="isShowComponent">
     <div class="sidebar-logo">
-      <a href="#"
+      <a :href="homePath"
         ><img
           src="@/assets/image-removebg-preview.png"
           class="logo_zoom_in"
           alt="logo"
       /></a>
-      <a href="#">
+      <a :href="homePath">
         <img
           src="@/assets/image-removebg-preview.png"
           class="logo_zoom_out"
@@ -112,9 +112,12 @@ import IconBill from "@/svg/IconBill.vue";
 import ProjectIcon from "@/svg/ProjectIcon.vue";
 import IconRoom from "@/svg/IconRoom.vue";
 import IconUtility from "@/svg/IconUtility.vue";
+import IconPlanning from "@/svg/IconPlanning.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import PAGES from "@/utils/pages.js";
+import {FRONT_END_URL} from "@/constants/application.js";
 
 export default {
   name: "Sidebar",
@@ -127,24 +130,36 @@ export default {
     IconUtility,
     IconContract,
     ProjectIcon,
+    IconPlanning,
   },
   setup() {
     const { t } = useI18n();
     const router = useRouter();
+    const route = useRoute();
+    const homePath = ref(`${FRONT_END_URL}${PAGES.HOME}`);
     const isShowComponent = ref(true);
+    const isShowProjectSideBar = computed(() => {
+      return !route.fullPath.includes(PAGES.PROJECT);
+    });
     const menuOpen = ref("");
     const listRouter = computed(() => [
       {
         function_name: t("side_bar.label.customer"),
         function_page_name: PAGE_NAME.CUSTOMER.LIST,
         function_icon: "IconUserGroup",
-        isShow: true, // set later
+        isShow: isShowProjectSideBar.value, // set later
       },
       {
         function_name: t("side_bar.label.project"),
         function_page_name: PAGE_NAME.PROJECT.LIST,
         function_icon: "ProjectIcon",
-        isShow: true, // set later
+        isShow: isShowProjectSideBar.value, // set later
+      },
+      {
+        function_name: t("side_bar.label.planning"),
+        function_page_name: PAGE_NAME.PLANNING.LIST,
+        function_icon: "IconPlanning",
+        isShow: !isShowProjectSideBar.value, // set later
       }
     ]);
 
@@ -153,7 +168,7 @@ export default {
         function_name: t("side_bar.label.user"),
         function_page_name: PAGE_NAME.USER.LIST,
         function_icon: "IconUserGroup",
-        isShow: true, // set later
+        isShow: isShowProjectSideBar.value, // set later
       }
     ]);
 
@@ -184,6 +199,7 @@ export default {
       isShowComponent,
       menuOpen,
       currentPath,
+      homePath,
       listRouter,
       listRouterUsers,
       listRouterOthers,

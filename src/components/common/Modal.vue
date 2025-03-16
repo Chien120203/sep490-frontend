@@ -14,10 +14,10 @@
                 {{ modalTitle }}
               </span>
             </div>
-            <div>
-              <IconCircleClose @click="$emit('close', true)"/>
-            </div>
           </slot>
+          <div>
+            <IconCircleClose @click="$emit('close', true)"/>
+          </div>
         </div>
         <div class="modal-body">
           <slot name="body"></slot>

@@ -59,6 +59,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    role: {
+      type: String,
+      default: '',
+    },
     optionKeys: {
       type: Object,
       default: () => ({ id: 'id', value: 'value' }),
@@ -109,7 +113,7 @@ export default {
 
     const remoteSearch = debounce((event) => {
       isSearching.value = true;
-      emit("remoteSearch", event.target.value);
+      emit("remoteSearch", event.target.value, props.role);
     }, 300);
 
     const filteredSearchData = computed(() => {
