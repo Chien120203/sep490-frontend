@@ -2,14 +2,28 @@
 import { defineProps, defineEmits, computed, ref, watch } from "vue";
 import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import MultipleOptionSelect from "@/components/common/MultipleOptionSelect.vue";
+import IconEdit from "@/svg/IconEdit.vue";
 
 const props = defineProps({
   items: Array,
-  isUpdate: Boolean,
-  isAllowUpdate: {
-    type: Boolean,
-    default: true,
+  listUsers: {
+    type: Array,
+    default: () => [
+      {
+        id: 1,
+        value: "Select 1"
+      },
+      {
+        id: 2,
+        value: "Select 2"
+      }
+    ],
   },
+  isUpdate: {
+    type: Boolean,
+    default: true
+  }
 });
 
 const listItems = ref([...props.items]);
@@ -153,53 +167,113 @@ const hierarchicalItems = computed(() => {
 
 <template>
   <div class="contract-items">
-    <h2>{{ $t('contract.create.items') }}</h2>
     <el-button class="btn btn-save new-parent-btn" @click="addItem">
       {{ $t('contract.create.btn.new_item') }}
     </el-button>
     <el-table :data="hierarchicalItems" style="width: 100%" border>
-      <el-table-column :label="$t('contract.create.item_table.no')" width="80">
+      <el-table-column :label="$t('contract.create.item_table.no')" width="70">
         <template #default="{ row }">
           <strong>{{ row.index }}</strong>
         </template>
       </el-table-column>
 
-      <el-table-column v-if="isAllowUpdate" :label="$t('contract.create.item_table.action')" width="120">
+      <el-table-column :label="$t('contract.create.item_table.action')" width="120">
         <template #default="{ row }">
           <div class="action-btn">
             <IconPlus @click="addSubItem(row)" />
+            <IconEdit @click="emit('editPlanDetails', row)" />
             <IconTrash @click="deleteItem(row)" />
           </div>
         </template>
       </el-table-column>
 
-      <el-table-column prop="name" :label="$t('contract.create.item_table.item')" min-width="250">
+      <el-table-column prop="name" :label="$t('contract.create.item_table.item')" min-width="180">
         <template #default="{ row }">
-          <el-input :disabled="!isAllowUpdate" v-model="row.workName" />
+          <el-input v-model="row.workName" />
         </template>
       </el-table-column>
 
       <el-table-column prop="unit" :label="$t('contract.create.item_table.unit')" width="100">
         <template #default="{ row }">
-          <el-input v-model="row.unit" :disabled="isParent(row) && !isAllowUpdate" />
+          <el-input v-model="row.unit" :disabled="isParent(row)" />
         </template>
       </el-table-column>
 
       <el-table-column prop="quantity" :label="$t('contract.create.item_table.amount')" width="180">
         <template #default="{ row }">
-          <el-input-number v-model="row.quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row) && !isAllowUpdate" />
+          <el-input-number v-model="row.quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row)" />
         </template>
       </el-table-column>
 
       <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" width="180">
         <template #default="{ row }">
-          <el-input-number v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) && !isAllowUpdate" />
+          <el-input-number v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row)" />
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('contract.create.item_table.total_price')" width="150">
         <template #default="{ row }">
           {{ row.total }}
+        </template>
+      </el-table-column>
+
+      <el-table-column :label="$t('contract.create.item_table.plan')" width="200">
+        <template #header>
+          <div class="planning-text-center">
+            <span>Kế hoạch</span>
+          </div>
+        </template>
+        <el-table-column :label="'Khối lượng'" width="100">
+          <template #default="{ row }">
+            <el-input v-model="row.quantity" />
+          </template>
+        </el-table-column>
+        <el-table-column :label="'Thành tiền'" width="100">
+          <template #default="{ row }">
+            <el-input v-model="row.quantity" />
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column :label="$t('contract.create.item_table.plan')" width="200">
+        <template #header>
+          <div class="planning-text-center">
+            <span>Thời gian thực hiện</span>
+          </div>
+        </template>
+        <el-table-column :label="'Bắt đầu'" width="110">
+          <template #default="{ row }">
+            <el-date-picker
+                style="width: 100%"
+                v-model="row.startDate"
+                type="date"
+                placeholder="Select Date"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column :label="'Kết thúc'" width="110">
+          <template #default="{ row }">
+            <el-date-picker
+                style="width: 100%"
+                v-model="row.endDate"
+                type="date"
+                placeholder="Select Date"
+            />
+          </template>
+        </el-table-column>
+      </el-table-column>
+
+      <el-table-column prop="unitPrice" width="180">
+        <template #header>
+          <div class="planning-text-center">
+            <span>Tổ đội thi công</span>
+          </div>
+        </template>
+        <template #default="{ row }">
+          <MultipleOptionSelect
+              :listData="listUsers"
+              :isRemote="true"
+          />
         </template>
       </el-table-column>
     </el-table>
@@ -215,9 +289,14 @@ const hierarchicalItems = computed(() => {
   margin: 12px 0;
 }
 
+.planning-text-center {
+  width: 100%;
+  text-align: center;
+}
+
 .action-btn {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
 
   svg {
     cursor: pointer;

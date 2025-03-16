@@ -13,12 +13,14 @@
     </div>
     <el-row>
       <el-col :span="17">
-        <ContractItems :items="contractDetails.value.contractDetails" :isUpdate="isUpdate" @update:items="updateItems"/>
+        <ContractItems :isAllowUpdate="isAllowUpdate" :items="contractDetails.value.contractDetails"  :isUpdate="isUpdate" @update:items="updateItems"/>
       </el-col>
       <el-col :span="7">
         <ContractInformation
             ref="childFormRef"
             :rules="CONTRACT_RULES"
+            :isAllowUpdate="isAllowUpdate"
+            :projectId="projectId.value"
             :listProjects="listProjects.value"
             :contractInfo="contractDetails.value"
             :validation="validation.value"
@@ -40,9 +42,11 @@ import {useContractStore} from "@/store/contract.js";
 import {getContractRules} from "@/rules/contract/index.js";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {RECEIVE_STATUS} from "@/constants/project.js";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 const projectStore = useProjectStore();
 const contractStore = useContractStore();
+const persist = usePersistanceStore();
 
 const {
   listProjects,
@@ -55,27 +59,32 @@ const {
   getContractDetails,
   saveContract
 } = contractStore;
+const {
+  projectId
+} = persist;
 
 const CONTRACT_RULES = getContractRules();
 
 const route = useRoute();
-const isAllowUpdate = projectDetails.value.status === RECEIVE_STATUS;
+const isAllowUpdate = ref(projectDetails.value.status === RECEIVE_STATUS);
 const isUpdate = computed(() => !!route.params.id);
 const router = useRouter();
 
-onMounted(() => {
+onMounted(async () => {
   if(isUpdate.value) getContractDetails(route.params.id);
-  getListProjects({
+  await getListProjects({
     keyword: '',
     pageIndex: 1,
   }, false);
+  listProjects.value = listProjects.value.filter((item) => {return item.id == projectId.value});
+  console.log(listProjects);
 });
 
 onUnmounted(() => {
 });
 
 const handleBack = () => {
-  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: contractDetails.value.projectId}});
+  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
 
 const handleSearchProjects = (value) => {

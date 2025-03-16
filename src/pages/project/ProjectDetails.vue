@@ -1,8 +1,14 @@
 <template>
   <div class="project-details-page">
-    <div class="project-header">
-      <span class="btn-back" @click="handleBack"><IconBackMain/></span>
-      <h3 class="page__ttl">{{ $t("project.title") }}</h3>
+    <div class="project-header-content">
+      <div class="project-header">
+        <span class="btn-back" @click="handleBack"><IconBackMain/></span>
+        <h3 class="page__ttl">{{ $t("project.title") }}</h3>
+      </div>
+      <div v-if="projectDetails.value.status === RECEIVE_STATUS">
+        <el-button class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
+        <el-button class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.reject") }}</el-button>
+      </div>
     </div>
     <div class="project-details-infor">
       <el-row class="project-detail-collapse">
@@ -99,7 +105,7 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowEdit" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>
@@ -179,6 +185,13 @@
         </el-col>
       </el-row>
     </div>
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm.value"
+        @close-modal="closeModalConfirm"
+        @confirmAction="handleConfirm"
+        :message="$t('project.modal_confirm.message', {action: actionText})"
+        :title="$t('project.modal_confirm.title')"
+    />
   </div>
 </template>
 
@@ -190,19 +203,21 @@ import PAGE_NAME from "@/constants/route-name.js";
 import {onMounted, onUnmounted, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
-import {DATE_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 import ProjectInfor from "./item/details/ProjectInfor.vue"
 import FinancialSummary from "./item/list/FinancialSummary.vue";
 import ProjectCR from "./item/details/ProjectCR.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import IconSetting from "@/svg/IconSettingMain.vue";
-import {STATUSES} from "@/constants/project.js";
+import {STATUSES, PLANNING_STATUS, CLOSED_STATUS, RECEIVE_STATUS} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
 import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
+import {usePersistanceStore} from "@/store/persistance.js";
+import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
 
 export default {
   name: "ProjectDetails",
@@ -226,6 +241,30 @@ export default {
     const projectStore = useProjectStore();
     const contractStore = useContractStore();
     const surveyStore = useSiteSurveyStore();
+    const persist = usePersistanceStore();
+
+    const {
+      isShowModalConfirm,
+      projectDetails,
+      getProjectDetails,
+      saveProject
+    } = projectStore;
+
+    const {
+      listContracts,
+      totalItems,
+      currentPage,
+      getListContracts,
+    } = contractStore;
+
+    const {
+      listSurveys,
+      getListSurveys
+    } = surveyStore;
+
+    const {
+      projectId
+    } = persist;
 
     const activeCollapseItems = ref(["3", "2", "4"]);
     const changeRequestData = ref([
@@ -277,10 +316,8 @@ export default {
         ],
       },
     ]);
-    const siteSurveyDate = ref([
-
-    ]);
     const isShowBoxSearch = ref(false);
+    const actionText = ref('');
     const isShowBoxContractSearch = ref(false);
     const contractSearchForms = ref({
       keyWord: "",
@@ -292,32 +329,22 @@ export default {
       searchValue: "",
       pageIndex: 1,
     });
-
-    const {
-      getProjectDetails,
-      projectDetails
-    } = projectStore;
-
-    const {
-      listContracts,
-      totalItems,
-      currentPage,
-      getListContracts,
-    } = contractStore;
-
-    const {
-      listSurveys,
-    } = surveyStore;
+    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listSurveys.value.length > 0);
 
     onMounted(() => {
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
+      getListSurveys({
+        siteSurveyName: "",
+        pageIndex: 1,
+      })
     });
 
     onUnmounted(() => {
     });
 
     const getContractDetails = (id) => {
+      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
     }
 
@@ -333,15 +360,6 @@ export default {
       router.push({name: PAGE_NAME.PROJECT.LIST});
     };
 
-    const onSubmit = (isUpdate) => {
-    };
-
-    const handleOpenModalConfirm = (id) => {
-    };
-
-    const handleCloseModal = () => {
-    };
-
     const handleContractSearchForm = () => {
       isShowBoxContractSearch.value = !isShowBoxContractSearch.value;
     };
@@ -350,7 +368,19 @@ export default {
       currentPage.value = isSearch ? 1 : currentPage + 1;
       contractSearchForms.value.pageIndex = isSearch ? 1 : contractSearchForms.value.pageIndex + 1;
       getListContracts(contractSearchForms.value);
+    };
+
+    const closeModalConfirm = () => {
+      isShowModalConfirm.value = false;
     }
+
+    const handleConfirm = () => {
+      if(actionText.value === t('common.approve')) {
+        projectDetails.value.status = PLANNING_STATUS;
+      } else projectDetails.value.status = CLOSED_STATUS;
+      saveProject(projectDetails.value);
+      isShowModalConfirm.value = false;
+    };
 
     const handleClearSearchContractForm = () => {
       contractSearchForms.value = {
@@ -361,13 +391,26 @@ export default {
     }
 
     const handleRedirectToCreate = () => {
+      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.CREATE});
     }
 
+    const handleChangeStatus = (status) => {
+      isShowModalConfirm.value = true;
+      if(status === PLANNING_STATUS) actionText.value = t('common.approve');
+      else actionText.value = t('common.reject');
+    }
+
     return {
+      DATE_FORMAT,
+      STATUSES,
+      CLOSED_STATUS,
+      RECEIVE_STATUS,
+      PLANNING_STATUS,
       financialData,
       projectDetails,
       changeRequestData,
+      isShowModalConfirm,
       activeCollapseItems,
       searchCRForms,
       isShowBoxSearch,
@@ -376,15 +419,14 @@ export default {
       listContracts,
       listSurveys,
       totalItems,
-      TEXT_CONFIRM_DELETE,
-      DATE_FORMAT,
-      STATUSES,
+      isAllowEdit,
+      actionText,
+      closeModalConfirm,
+      handleChangeStatus,
+      handleConfirm,
       handleBack,
-      handleCloseModal,
-      handleOpenModalConfirm,
       handleRedirectToCreate,
       handleRedirectToEdit,
-      onSubmit,
       getSiteSurveyDetails,
       handleContractSearchForm,
       handleClearSearchContractForm,
@@ -417,6 +459,10 @@ export default {
       margin-left: 24px !important;
     }
   }
+}
+.project-header-content {
+  display: flex;
+  justify-content: space-between;
 }
 .contract-header {
   display: flex;

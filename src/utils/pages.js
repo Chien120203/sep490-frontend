@@ -8,6 +8,15 @@ const PAGES = {
   CUSTOMER_CREATE: "/customer/create",
   CUSTOMER_DETAILS: "/customer/:id",
 
+  //planning
+  PLANNING: "/planning",
+  PLANNING_CREATE: "/planning/create",
+  PLANNING_DETAILS: "/planning/details/:id",
+
+  //progress
+  PROGRESS: "/progress",
+  PROGRESS_DETAILS: "/progress/details/:id",
+
   //project
   PROJECT: "/project",
   PROJECT_DETAILS: "/project/details/:id",

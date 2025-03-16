@@ -177,7 +177,7 @@ export default {
 .title {
   font-size: 18px;
   font-weight: 700;
-  margin: -15px 0 10px 0;
+  margin: -15px 14px 10px 14px;
   word-break: break-word;
   letter-spacing: 0.5px;
 }

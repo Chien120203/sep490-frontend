@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@syncfusion/ej2-base": "^28.2.9",
+    "@syncfusion/ej2-vue-gantt": "^21.1.38",
     "axios": "^0.21.1",
     "chart.js": "^3.1.0",
     "click-outside-vue3": "^4.0.1",
