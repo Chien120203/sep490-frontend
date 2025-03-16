@@ -1,7 +1,10 @@
 <template>
   <div class="planning planning-list">
     <div class="planning-header">
-      <h3 class="page__ttl">{{ $t("planning.title") }}</h3>
+      <h3 class="page__ttl">
+      <span class="btn-back" @click="handleBack"><IconBackMain/></span>
+        {{ $t("planning.title") }}
+      </h3>
       <div class="planning-btn-box planning-import-box">
         <el-row
             class="mb-4"
@@ -98,10 +101,13 @@ import {BUSINESS_EMPLOYEE} from "@/constants/roles.js"
 import {useRouter} from "vue-router";
 import PlanningTable from "@/pages/planning/item/list/PlanningTable.vue";
 import PAGE_NAME from "@/constants/route-name.js";
+import IconBackMain from "@/svg/IconBackMain.vue";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 export default {
   name: "planning-list",
   components: {
+    IconBackMain,
     PlanningTable,
     IconSetting,
     IconCircleClose,
@@ -110,6 +116,11 @@ export default {
     ModalConfirm,
   },
   setup() {
+    const persistenceStore = usePersistanceStore();
+
+    const {
+      projectId
+    } = persistenceStore;
     const searchForms = ref({
       keyWord: "",
       status: null,
@@ -213,6 +224,10 @@ export default {
       isShowModalConfirm.value = true;
     }
 
+    const handleBack = () => {
+      router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
+    }
+
     return {
       NUMBER_FORMAT,
       TEXT_CONFIRM_DELETE,
@@ -228,6 +243,7 @@ export default {
       handleSearchForm,
       handleClear,
       submitForm,
+      handleBack,
       handleLoadMore,
       handleCloseModal,
       handleRedirectToCreate,

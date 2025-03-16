@@ -66,6 +66,7 @@
     "department": "Department",
     "account_manager": "AM",
     "customer": "Customer",
+    "no_dependency": "No Dependency",
     "unit": "Unit",
     "total": "Total",
     "name": "Name",
@@ -114,7 +115,6 @@
     "comment": "Comment by",
     "outgroup": "Out group",
     "placeholder_chat": "Write a message...",
-    "text_vmo": "Copyright 2024 by VMO",
     "contract_status": {
       "new": "New",
       "in_progress": "Inprogress",
@@ -537,14 +537,30 @@
       }
     },
     "modal_confirm": {
-      "title": "Confirm delete customer",
-      "message": "Please enter 'Delete' to confirm delete this customer"
+      "title": "Confirm change project status",
+      "message": "Do you want to {action} project?"
     },
     "status_placeholder": "Contract status",
     "room_placeholder": "Contract room",
     "tenant_placeholder": "Contract tenant",
     "type_placeholder": "Contract type",
-    "landlord_placeholder": "Contract landlord"
+    "task": {
+      "relation": {
+        "ss": "Start to Start",
+        "sf": "Start to Finish",
+        "fs": "Finish to Start",
+        "ff": "Finish to Finish"
+      }
+    }
+  },
+  "progress": {
+    "add_new_cr": "Add New CR",
+    "timeline": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    }
   },
   "planning": {
     "title": "Project Planning",

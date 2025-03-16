@@ -12,7 +12,7 @@
           <template #label>
             <span class="label-start">{{ $t('contract.create.infor.label.code') }}</span>
           </template>
-          <el-input class="input-wd-96" v-model="contractInfo.contractCode" />
+          <el-input :disabled="!isAllowUpdate" class="input-wd-96" v-model="contractInfo.contractCode" />
           <label class="error-feedback-customer" v-if="validation && validation.contractCode">
             {{ $t(validation.contractCode) }}
           </label>
@@ -22,7 +22,7 @@
           <template #label>
             <span class="label-start">{{ $t('contract.create.infor.label.name') }}</span>
           </template>
-          <el-input class="input-wd-96" v-model="contractInfo.contractName" />
+          <el-input :disabled="!isAllowUpdate" class="input-wd-96" v-model="contractInfo.contractName" />
           <label class="error-feedback-customer" v-if="validation && validation.contractName">
             {{ $t(validation.contractName) }}
           </label>
@@ -37,7 +37,7 @@
               :optionKeys="{ id: 'id', value: 'projectCode' }"
               :listData="listProjects"
               :isRemote="true"
-              :disabled="false"
+              :disabled="!isAllowUpdate"
               class="input-wd-96"
               @remoteSearch="handleSearchProject"
           />
@@ -52,6 +52,7 @@
           </template>
           <el-date-picker
               style="width: 96%"
+              :disabled="!isAllowUpdate"
               :value-format="DATE_FORMAT"
               v-model="contractInfo.startDate"
               placeholder="Select Date"
@@ -68,6 +69,7 @@
           </template>
           <el-date-picker
               style="width: 96%"
+              :disabled="!isAllowUpdate"
               :value-format="DATE_FORMAT"
               v-model="contractInfo.endDate"
               placeholder="Select Date"
@@ -84,6 +86,7 @@
           </template>
           <el-date-picker
               style="width: 96%"
+              :disabled="!isAllowUpdate"
               v-model="contractInfo.signDate"
               :value-format="DATE_FORMAT"
               type="date"
@@ -99,7 +102,7 @@
           <template #label>
             <span class="label-start">{{ $t('contract.create.infor.label.estimate_day') }}</span>
           </template>
-          <el-input type="number" v-model="contractInfo.estimatedDays" class="input-wd-96" />
+          <el-input type="number" :disabled="!isAllowUpdate" v-model="contractInfo.estimatedDays" class="input-wd-96" />
           <label class="error-feedback-customer" v-if="validation && validation.estimatedDays">
             {{ $t(validation.estimatedDays) }}
           </label>
@@ -109,7 +112,7 @@
           <template #label>
             <span class="label-start">{{ $t('contract.create.infor.label.tax') }}</span>
           </template>
-          <el-input type="number" v-model="contractInfo.tax" class="input-wd-96" />
+          <el-input type="number" :disabled="!isAllowUpdate" v-model="contractInfo.tax" class="input-wd-96" />
           <label class="error-feedback-customer" v-if="validation && validation.tax">
             {{ $t(validation.tax) }}
           </label>
@@ -123,6 +126,7 @@
               :existingFiles="contractInfo.attachments"
               :allowedTypes="'.jpg,.png,.pdf,.docx'"
               :fileLimit="3"
+              :disabled="!isAllowUpdate"
               class="input-wd-96"
               @file-selected="handleFileUpload"
           />
@@ -139,9 +143,9 @@
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {DATE_FORMAT} from "@/constants/application.js";
 import FileUpload from "@/components/common/FileUpload.vue";
-import {ref} from "vue";
+import {ref, defineProps, computed} from "vue";
 
-defineProps({
+const props = defineProps({
   contractInfo: {
     type: Object,
     default: () => ({
@@ -160,6 +164,10 @@ defineProps({
     type: Array,
     default: () => []
   },
+  projectId: {
+    type: Number,
+    default: 0
+  },
   validation: {
     type: Object,
     default: () => ({
@@ -172,6 +180,10 @@ defineProps({
       signDate: "",
       attachments: []
     })
+  },
+  isAllowUpdate: {
+    type: Boolean,
+    default: true,
   },
   rules: {
     type: Object,

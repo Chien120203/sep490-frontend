@@ -24,6 +24,14 @@ html {
   -ms-overflow-style: auto;
 }
 
+div[style*="position: fixed"][style*="z-index: 999999999"] {
+  display: none !important;
+}
+
+div[style*="position: fixed"][style*="z-index: 99999"] {
+  display: none !important;
+}
+
 .pl-0px {
   padding-left: 0 !important;
 }

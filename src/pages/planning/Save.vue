@@ -37,6 +37,7 @@
   <PlanItemDetailsModal
       :show="isShowModalItemDtls"
       :materials="materials"
+      :tasks="contractDetails.value.contractDetails"
       :isUpdate="isUpdate"
       :users="listEmployees"
       :vehicles="listVehicles"

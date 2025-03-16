@@ -30,6 +30,9 @@ const PAGE_NAME = {
     LIST: 'planning-list',
     DETAILS: "planning",
     CREATE: "planning-create",
+  },
+  PROGRESS : {
+    DETAILS: "progress-details",
   }
 };
 

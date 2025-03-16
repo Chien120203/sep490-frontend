@@ -24,7 +24,9 @@ import ContractSave from "@/pages/contract/Save.vue"
 import SiteSurveyDetails from "@/pages/site_survey/item/SiteSurveyDetails.vue";
 import PlanningDetails from "@/pages/planning/Save.vue";
 import PlanningList from "@/pages/planning/PlanningList.vue";
-import Planning from "@/pages/planning/Index.vue"
+import Planning from "@/pages/planning/Index.vue";
+import Progress from "@/pages/progress/Index.vue";
+import ProgressDetails from "@/pages/progress/ProgressDetails.vue";
 
 const routes = [
   {
@@ -103,6 +105,21 @@ const routes = [
         path: PAGES.PLANNING_DETAILS,
         name: PAGE_NAME.PLANNING.DETAILS,
         component: PlanningDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.PROGRESS,
+    path: PAGES.PROGRESS,
+    component: Progress,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.PROGRESS_DETAILS,
+        name: PAGE_NAME.PROGRESS.DETAILS,
+        component: ProgressDetails,
       }
     ]
   },

@@ -11,8 +11,7 @@
     </template>
     <template #body>
       <div class="modal-body">
-        <PriceInputForm/>
-
+        <PriceInputForm :tasks="tasks"/>
         <div>
           <div>
             <h4>
@@ -24,7 +23,6 @@
               :optionKeys="materialOptions"
           />
         </div>
-
         <div>
           <div>
             <h4>
@@ -71,6 +69,7 @@ const props = defineProps({
   materials: {type: Array, default: () => []},
   users: {type: Array, default: () => []},
   vehicles: {type: Array, default: () => []},
+  tasks: {type: Array, default: () => []},
 });
 
 const materialOptions = {id: 'id', value: 'name'};

@@ -10,7 +10,7 @@
         </h3>
         <div class="user-btn-detail">
           <div class="item">
-            <el-button class="btn btn-save" @click="submitForm()">
+            <el-button v-if="isAllowEdit" class="btn btn-save" @click="submitForm()">
               {{ $t("common.save") }}
             </el-button>
           </div>
@@ -30,7 +30,7 @@
                 class="custom-textarea required"
                 :label="$t('project.create.project_code')"
             >
-              <el-input v-model="projectDetails.value.projectCode"/>
+              <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.projectCode"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.projectCode"
@@ -42,7 +42,7 @@
                 class="custom-textarea"
                 :label="$t('project.create.project_name')"
             >
-              <el-input v-model="projectDetails.value.projectName"/>
+              <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.projectName"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.projectName"
@@ -56,11 +56,11 @@
                   :label="$t('project.create.customer')"
               >
                 <SingleOptionSelect
+                    :disabled="!isAllowEdit"
                     v-model="projectDetails.value.customerId"
                     :optionKeys="{ id: 'id', value: 'customerCode' }"
                     :listData="listCustomers.value"
                     :isRemote="true"
-                    :disabled="false"
                     @remoteSearch="handleSearchCustomer"
                 />
                 <label
@@ -69,17 +69,17 @@
                 >{{ $t(validation.value.customerId) }}</label>
               </el-form-item>
 
-              <el-form-item prop="viewerUserIds" class="input-select-member">
+              <el-form-item prop="technicalManager" class="input-select-member">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.technical_manager') }}</span>
                 </template>
                 <SingleOptionSelect
-                    v-model="projectDetails.value.viewerUserIds"
+                    v-model="projectDetails.value.technicalManager"
                     :optionKeys="{ id: 'id', value: 'username' }"
                     :listData="listTechnicalManagers"
                     :role="TECHNICAL_MANAGER"
                     :isRemote="true"
-                    :disabled="false"
+                    :disabled="!isAllowEdit"
                     class="input-wd-96"
                     @remoteSearch="handleSearchManager"
                 />
@@ -90,17 +90,17 @@
             </div>
 
             <div class="item-project-members">
-              <el-form-item prop="viewerUserIds" class="input-select-member">
+              <el-form-item prop="resourceManager" class="input-select-member">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.resource_manager') }}</span>
                 </template>
                 <SingleOptionSelect
-                    v-model="projectDetails.value.viewerUserIds"
+                    v-model="projectDetails.value.resourceManager"
                     :optionKeys="{ id: 'id', value: 'username' }"
                     :listData="listResourceManagers"
                     :role="RESOURCE_MANAGER"
                     :isRemote="true"
-                    :disabled="false"
+                    :disabled="!isAllowEdit"
                     class="input-wd-96"
                     @remoteSearch="handleSearchManager"
                 />
@@ -109,17 +109,17 @@
                 </label>
               </el-form-item>
 
-              <el-form-item prop="viewerUserIds" class="input-select-member">
+              <el-form-item prop="constructionManager" class="input-select-member">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.construction_manager') }}</span>
                 </template>
                 <SingleOptionSelect
-                    v-model="projectDetails.value.viewerUserIds"
+                    v-model="projectDetails.value.constructionManager"
                     :optionKeys="{ id: 'id', value: 'username' }"
                     :listData="listConstructionManagers"
                     :role="CONSTRUCTION_MANAGER"
                     :isRemote="true"
-                    :disabled="false"
+                    :disabled="!isAllowEdit"
                     class="input-wd-96"
                     @remoteSearch="handleSearchManager"
                 />
@@ -133,7 +133,7 @@
                 :label="$t('project.create.construct_type')"
                 prop="constructType"
             >
-              <el-input v-model="projectDetails.value.constructType"/>
+              <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.constructType"/>
               <label
                   class="error-feedback-user"
                   v-if="validation.value && validation.value.constructType"
@@ -146,6 +146,7 @@
                 :label="$t('project.create.area')"
             >
               <el-input
+                  :disabled="!isAllowEdit"
                   v-model="projectDetails.value.area"
               />
               <label
@@ -162,6 +163,7 @@
               >
                 <el-date-picker
                     style="width: 90%"
+                    :disabled="!isAllowEdit"
                     :format="DATE_FORMAT"
                     :value-format="DATE_FORMAT"
                     v-model="projectDetails.value.startDate"
@@ -180,6 +182,7 @@
               >
                 <el-date-picker
                     style="width: 100%"
+                    :disabled="!isAllowEdit"
                     :format="DATE_FORMAT"
                     :value-format="DATE_FORMAT"
                     v-model="projectDetails.value.endDate"
@@ -201,6 +204,7 @@
                 :label="$t('project.create.budget')"
             >
               <el-input
+                  :disabled="!isAllowEdit"
                   :formatter="(value) => formatCurrency(value)"
                   v-model="projectDetails.value.budget"
               />
@@ -215,7 +219,7 @@
                 class="custom-textarea required"
                 :label="$t('project.create.purpose')"
             >
-              <el-input type="textarea" v-model="projectDetails.value.purpose"/>
+              <el-input :disabled="!isAllowEdit" type="textarea" v-model="projectDetails.value.purpose"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.purpose"
@@ -227,7 +231,7 @@
                 class="custom-textarea required"
                 :label="$t('project.create.technical_reqs')"
             >
-              <el-input :rows="4" type="textarea" v-model="projectDetails.value.technicalReqs"/>
+              <el-input :disabled="!isAllowEdit" :rows="4" type="textarea" v-model="projectDetails.value.technicalReqs"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.technicalReqs"
@@ -235,7 +239,7 @@
             </el-form-item>
 
             <el-form-item prop="description" :label="$t('project.create.description')">
-              <el-input type="textarea" :rows="5" v-model="projectDetails.value.description"/>
+              <el-input :disabled="!isAllowEdit" type="textarea" :rows="5" v-model="projectDetails.value.description"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.description"
@@ -244,6 +248,7 @@
 
             <el-form-item prop="attachments" :label="$t('project.create.attachment')">
               <FileUpload
+                  :disabled="!isAllowEdit"
                   :existingFiles="projectDetails.value.attachments"
                   :allowedTypes="'.jpg,.png,.pdf,.docx'"
                   :fileLimit="3"
@@ -275,21 +280,19 @@ import { mixinMethods } from "@/utils/variables";
 import {PROJECT_RULES} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import {useUserStore} from "@/store/user.js";
-import {CONSTRUCTION_MANAGER, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {BUSINESS_EMPLOYEE, CONSTRUCTION_MANAGER, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {RECEIVE_STATUS} from "@/constants/project.js";
 
 export default {
   components: {IconBackMain, SingleOptionSelect, FileUpload},
   setup() {
-    const attachments = ref(null);
-    const listConstructionManagers = ref([]);
-    const listTechnicalManagers = ref([]);
-    const listResourceManagers = ref([]);
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
     const userStore = useUserStore();
     const {
       listUsers,
-      getListUsers
+      getListUsers,
+      getUserIdByRole
     } = userStore;
     const {
       listCustomers,
@@ -303,14 +306,25 @@ export default {
       clearProjectDetails
     } = projectStore;
 
+    const attachments = ref(null);
+    const listConstructionManagers = ref([]);
+    const listTechnicalManagers = ref([]);
+    const listResourceManagers = ref([]);
+    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
 
     onMounted(async () => {
-      if(route.params.id) getProjectDetails(route.params.id);
       await getListCustomers({search: "", pageIndex: 1}, false);
       await getListUsers({keyWord: "", pageIndex: 1}, false);
+      if(route.params.id) {
+        await getProjectDetails(route.params.id);
+        projectDetails.value.technicalManager = getUserIdByRole(projectDetails.value.viewerUserIds, TECHNICAL_MANAGER)?.id;
+        projectDetails.value.constructionManager = getUserIdByRole(projectDetails.value.viewerUserIds, CONSTRUCTION_MANAGER)?.id;
+        projectDetails.value.resourceManager = getUserIdByRole(projectDetails.value.viewerUserIds, RESOURCE_MANAGER)?.id;
+      } else await clearProjectDetails();
       listConstructionManagers.value = listUsers.value.filter((item) => item.role === CONSTRUCTION_MANAGER);
       listResourceManagers.value = listUsers.value.filter((item) => item.role === RESOURCE_MANAGER);
       listTechnicalManagers.value = listUsers.value.filter((item) => item.role === TECHNICAL_MANAGER);
@@ -321,13 +335,14 @@ export default {
     });
 
     const handleBack = () => {
-      router.push({name: PAGE_NAME.PROJECT.LIST});
+      router.push(isUpdate.value ? {name: PAGE_NAME.PROJECT.DETAILS, params:{id: route.params.id}} :{name: PAGE_NAME.PROJECT.LIST});
     };
 
     const ruleFormRef = ref(null);
 
     const submitForm = () => {
       projectDetails.value.budget = mixinMethods.handleChangeNumber(projectDetails.value.budget);
+      projectDetails.value.viewerUserIds = [projectDetails.value.technicalManager, projectDetails.value.resourceManager, projectDetails.value.constructionManager];
       ruleFormRef.value.validate((valid) => {
         if (valid) {
           saveProject(projectDetails.value);
@@ -348,7 +363,7 @@ export default {
         keyWord: searchValue,
         role: role,
         pageIndex: 1,
-      });
+      }, false);
       switch (role) {
         case CONSTRUCTION_MANAGER:
           listConstructionManagers.value = listUsers.value.filter((item) => item.role === CONSTRUCTION_MANAGER);
@@ -368,6 +383,10 @@ export default {
     return {
       PROJECT_RULES,
       DATE_FORMAT,
+      CONSTRUCTION_MANAGER,
+      RESOURCE_MANAGER,
+      TECHNICAL_MANAGER,
+      isAllowEdit,
       ruleFormRef,
       isUpdate,
       projectDetails,
@@ -377,9 +396,6 @@ export default {
       listConstructionManagers,
       listCustomers,
       attachments,
-      CONSTRUCTION_MANAGER,
-      RESOURCE_MANAGER,
-      TECHNICAL_MANAGER,
       formatCurrency,
       handleFileUpload,
       handleSearchManager,

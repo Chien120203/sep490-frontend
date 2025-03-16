@@ -3,7 +3,7 @@
     <div class="header">
       <h2>{{$t('project.details.infor.project_name')}}: {{ project.projectName }}</h2>
       <div class="status">
-        <el-button v-if="project.status === RECEIVE_STATUS" class="btn btn-save" @click="$emit('edit')">
+        <el-button class="btn btn-save" @click="$emit('edit')">
           {{ $t("common.edit") }}
         </el-button>
       </div>
@@ -42,23 +42,11 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-import {RECEIVE_STATUS, STATUS_LABELS} from "@/constants/project.js";
+import {defineProps, ref} from 'vue';
+import {STATUS_LABELS} from "@/constants/project.js";
 import {mixinMethods} from "@/utils/variables.js";
 
-const formatStatus = (status) => {
-  return STATUS_LABELS[status] || 'Unknown';
-};
-
-const formatCurrency = (inputCurrency) => {
-  return mixinMethods.formatCurrency(inputCurrency);
-}
-
-const formatDate = (date) => {
-  return mixinMethods.showDateTime(date);
-}
-
-defineProps({
+const props = defineProps({
   project: {
     type: Object,
     required: true,
@@ -82,6 +70,18 @@ defineProps({
     })
   }
 });
+
+const formatStatus = (status) => {
+  return STATUS_LABELS[status] || 'Unknown';
+};
+
+const formatCurrency = (inputCurrency) => {
+  return mixinMethods.formatCurrency(inputCurrency);
+}
+
+const formatDate = (date) => {
+  return mixinMethods.showDateTime(date);
+}
 </script>
 
 <style scoped>

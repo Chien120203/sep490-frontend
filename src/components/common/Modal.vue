@@ -45,7 +45,7 @@ export default {
     },
     modalTitle: {
       type: String,
-      default: "Modal Title",
+      default: "",
     },
     width: {
       type: [Number, String],

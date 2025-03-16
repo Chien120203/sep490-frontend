@@ -139,7 +139,7 @@ export default {
     const homePath = ref(`${FRONT_END_URL}${PAGES.HOME}`);
     const isShowComponent = ref(true);
     const isShowProjectSideBar = computed(() => {
-      return !route.fullPath.includes(PAGES.PROJECT);
+      return !route.fullPath.includes('project/details');
     });
     const menuOpen = ref("");
     const listRouter = computed(() => [

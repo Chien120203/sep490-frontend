@@ -13,6 +13,10 @@ const PAGES = {
   PLANNING_CREATE: "/planning/create",
   PLANNING_DETAILS: "/planning/details/:id",
 
+  //progress
+  PROGRESS: "/progress",
+  PROGRESS_DETAILS: "/progress/details/:id",
+
   //project
   PROJECT: "/project",
   PROJECT_DETAILS: "/project/details/:id",
