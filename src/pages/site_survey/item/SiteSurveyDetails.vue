@@ -2,20 +2,26 @@
   <div class="survey-form-container">
     <el-card class="survey-card">
       <div slot="header" class="survey-card-header">
+        <div class="survey-card-actions-left">
+          <el-button type="primary" @click="goHome">Back to Home</el-button>
+        </div>
         <h2>Site Survey Details</h2>
+        <div class="survey-card-actions-right">
+          <el-button type="success" @click="goEdit">Edit</el-button>
+        </div>
       </div>
-      <el-form :model="form" ref="form" label-width="150px" class="survey-form">
+      <el-form :model="form" label-width="150px" class="survey-form">
         <!-- Phần 1: Thông tin chung -->
         <el-divider content-position="left">Thông tin chung</el-divider>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="ID">
-              <el-input v-model="form.id" disabled class="input-field"></el-input>
+              <p>{{ form.id }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="$t('survey.details.survey_name')">
-              <el-input v-model="form.siteSurveyName" placeholder="Nhập tên khảo sát" class="input-field"></el-input>
+            <el-form-item label="Site Survey Name">
+              <p>{{ form.siteSurveyName }}</p>
             </el-form-item>
           </el-col>
         </el-row>
@@ -25,69 +31,36 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Construction Requirements">
-              <el-input
-                  type="textarea"
-                  v-model="form.constructionRequirements"
-                  :rows="2"
-                  placeholder="Nhập yêu cầu thi công"
-                  class="input-field"
-              ></el-input>
+              <p>{{ form.constructionRequirements }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Equipment Requirements">
-              <el-input
-                  type="textarea"
-                  v-model="form.equipmentRequirements"
-                  :rows="2"
-                  placeholder="Nhập yêu cầu thiết bị"
-                  class="input-field"
-              ></el-input>
+              <p>{{ form.equipmentRequirements }}</p>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Human Resource Capacity">
-              <el-input
-                  type="textarea"
-                  v-model="form.humanResourceCapacity"
-                  :rows="2"
-                  placeholder="Nhập năng lực nhân sự"
-                  class="input-field"
-              ></el-input>
+              <p>{{ form.humanResourceCapacity }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Risk Assessment">
-              <el-input
-                  type="textarea"
-                  v-model="form.riskAssessment"
-                  :rows="2"
-                  placeholder="Nhập đánh giá rủi ro"
-                  class="input-field"
-              ></el-input>
+              <p>{{ form.riskAssessment }}</p>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Bidding Decision">
-              <el-radio-group v-model="form.biddingDecision" size="small">
-                <el-radio :label="true">Yes</el-radio>
-                <el-radio :label="false">No</el-radio>
-              </el-radio-group>
+              <p>{{ form.biddingDecision ? "Yes" : "No" }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Profit Assessment">
-              <el-input
-                  type="textarea"
-                  v-model="form.profitAssessment"
-                  :rows="2"
-                  placeholder="Nhập đánh giá lợi nhuận"
-                  class="input-field"
-              ></el-input>
+              <p>{{ form.profitAssessment }}</p>
             </el-form-item>
           </el-col>
         </el-row>
@@ -97,108 +70,48 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Bid Win Probability (%)">
-              <el-input-number
-                  v-model="form.bidWinProb"
-                  :min="0"
-                  :max="100"
-                  :step="1"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="0-100"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.bidWinProb }}%</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Estimated Expenses">
-              <el-input-number
-                  v-model="form.estimatedExpenses"
-                  :min="0"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="Nhập chi phí dự kiến"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.estimatedExpenses }}</p>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Estimated Profits">
-              <el-input-number
-                  v-model="form.estimatedProfits"
-                  :min="0"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="Nhập lợi nhuận dự kiến"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.estimatedProfits }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Tender Package Price">
-              <el-input-number
-                  v-model="form.tenderPackagePrice"
-                  :min="0"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="Nhập giá gói thầu"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.tenderPackagePrice }}</p>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Total Bid Price">
-              <el-input-number
-                  v-model="form.totalBidPrice"
-                  :min="0"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="Nhập tổng giá thầu"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.totalBidPrice }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Discount Rate (%)">
-              <el-input-number
-                  v-model="form.discountRate"
-                  :min="0"
-                  :max="100"
-                  :step="0.1"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="Nhập tỷ lệ chiết khấu"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.discountRate }}%</p>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Project Cost">
-              <el-input-number
-                  v-model="form.projectCost"
-                  :min="0"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="Nhập chi phí dự án"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.projectCost }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Final Profit">
-              <el-input-number
-                  v-model="form.finalProfit"
-                  :min="0"
-                  style="width: 100%;"
-                  size="small"
-                  placeholder="Nhập lợi nhuận cuối cùng"
-                  class="input-field"
-              ></el-input-number>
+              <p>{{ form.finalProfit }}</p>
             </el-form-item>
           </el-col>
         </el-row>
@@ -208,59 +121,31 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Status">
-              <el-select v-model="form.status" placeholder="Chọn trạng thái" size="small" class="input-field">
-                <el-option label="Planned" :value="0"></el-option>
-                <el-option label="In Progress" :value="1"></el-option>
-                <el-option label="Completed" :value="2"></el-option>
-                <el-option label="Paused" :value="3"></el-option>
-              </el-select>
+              <p>{{ getStatusLabel(form.status) }}</p>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Comments">
-              <el-input
-                  type="textarea"
-                  v-model="form.comments"
-                  :rows="2"
-                  placeholder="Nhập ghi chú"
-                  class="input-field"
-              ></el-input>
+              <p>{{ form.comments }}</p>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="Attachments">
-              <el-upload
-                  action="#"
-                  list-type="text"
-                  :on-preview="handlePreview"
-                  :on-remove="handleRemove"
-                  :file-list="form.attachments"
-              >
-                <el-button size="small" type="primary">Upload</el-button>
-                <div slot="tip" class="el-upload__tip">Chỉ upload file hợp lệ.</div>
-              </el-upload>
+              <ul>
+                <li v-for="file in form.attachments" :key="file.name">
+                  <a :href="file.url" target="_blank">{{ file.name }}</a>
+                </li>
+              </ul>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="Survey Details">
-              <el-input
-                  type="textarea"
-                  v-model="form.surveyDetails"
-                  :rows="2"
-                  placeholder="Nhập chi tiết khảo sát"
-                  class="input-field"
-              ></el-input>
+              <p>{{ form.surveyDetails }}</p>
             </el-form-item>
           </el-col>
         </el-row>
-
-        <!-- Nút Submit & Reset -->
-        <el-form-item class="form-actions">
-          <el-button type="primary" size="large" @click="submitForm">Submit</el-button>
-          <el-button size="large" @click="resetForm">Reset</el-button>
-        </el-form-item>
       </el-form>
     </el-card>
   </div>
@@ -268,88 +153,144 @@
 
 <script>
 export default {
-  name: "SiteSurveyForm",
+  name: "SiteSurveyDisplay",
   data() {
     return {
       form: {
-        id: 0,
-        siteSurveyName: "",
-        constructionRequirements: "",
-        equipmentRequirements: "",
-        humanResourceCapacity: "",
-        riskAssessment: "",
-        biddingDecision: null,
-        profitAssessment: "",
-        bidWinProb: null,
-        estimatedExpenses: null,
-        estimatedProfits: null,
-        tenderPackagePrice: null,
-        totalBidPrice: null,
-        discountRate: null,
-        projectCost: null,
-        finalProfit: null,
-        status: null,
-        comments: "",
-        attachments: [],
-        surveyDetails: "",
-      },
+        id: 123,
+        siteSurveyName: "Sample Survey",
+        constructionRequirements: "Require heavy machinery and skilled labor.",
+        equipmentRequirements: "Need excavators, cranes, and safety gear.",
+        humanResourceCapacity: "Team of 20 workers, 2 supervisors.",
+        riskAssessment: "High risk due to weather conditions.",
+        biddingDecision: true,
+        profitAssessment: "Expected profit margin of 15%.",
+        bidWinProb: 75,
+        estimatedExpenses: 500000,
+        estimatedProfits: 75000,
+        tenderPackagePrice: 600000,
+        totalBidPrice: 550000,
+        discountRate: 5,
+        projectCost: 480000,
+        finalProfit: 70000,
+        status: 1, // In Progress
+        comments: "Survey is on track.",
+        attachments: [
+          { name: "survey_plan.pdf", url: "#" },
+          { name: "budget.xlsx", url: "#" }
+        ],
+        surveyDetails: "Detailed survey of the construction site."
+      }
     };
   },
   methods: {
-    submitForm() {
-      console.log("Form submitted:", this.form);
+    getStatusLabel(status) {
+      const statusMap = {
+        0: "Planned",
+        1: "In Progress",
+        2: "Completed",
+        3: "Paused"
+      };
+      return statusMap[status] || "Unknown";
     },
-    resetForm() {
-      this.$refs.form.resetFields();
+    goHome() {
+      // Logic to go back to home
+      console.log("Navigating to home...");
     },
-    handlePreview(file) {
-      console.log("Preview file", file);
-    },
-    handleRemove(file, fileList) {
-      console.log("Remove file", file, fileList);
-    },
-  },
+    goEdit() {
+      // Logic to navigate to edit page
+      console.log("Navigating to edit page...");
+    }
+  }
 };
 </script>
 
 <style scoped>
+/* Container chính của form */
 .survey-form-container {
-  padding: 20px;
-  background: #f2f4f7;
+  padding: 40px;
+  background-color: #f0f4f8; /* Màu nền nhẹ nhàng */
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
+/* Card bao quanh form */
 .survey-card {
   width: 100%;
   max-width: 95%;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 12px; /* Bo tròn góc */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Đổ bóng */
+  background-color: #ffffff;
 }
+
+/* Tiêu đề của card */
 .survey-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  color: #2c3e50; /* Màu xanh đậm nhạt */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
 }
+
+/* Các button bên trái và bên phải */
+.survey-card-actions-left,
+.survey-card-actions-right {
+  width: 150px;
+}
+
+/* Tiêu đề giữa */
+.survey-card-header h2 {
+  flex-grow: 1;
+  text-align: center;
+  font-size: 24px;
+}
+
+/* Các button trên tiêu đề */
+.survey-card-actions-left el-button,
+.survey-card-actions-right el-button {
+  width: 100%;
+}
+
+/* Form bên trong */
 .survey-form {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
+  background: #fafafa; /* Nền xám nhạt */
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Đổ bóng nhẹ bên trong */
 }
+
+/* Các item trong form */
 .el-form-item {
-  margin-bottom: 20px; /* Make space between fields */
+  margin-bottom: 25px; /* Khoảng cách giữa các mục */
 }
-.input-field {
-  width: 100%; /* Ensure input fields take up full width */
-  max-width: 100%; /* Remove the previous limitation */
+
+/* Nhãn của form */
+.el-form-item__label {
+  font-weight: bold;
+  color: #34495e; /* Màu xám xanh đậm */
+  font-size: 16px;
 }
-.el-button {
-  width: 200px; /* Increase button size */
-  margin: 10px;
+
+/* Nội dung của form */
+.el-form-item p {
+  color: #555; /* Màu xám trung tính */
+  font-size: 15px;
+  line-height: 1.6; /* Độ cao dòng cho dễ đọc */
 }
-.form-actions {
-  text-align: center;
-  margin-top: 30px;
+
+/* Đường phân cách (nếu có) */
+.el-divider__text {
+  background-color: #f0f4f8;
+  padding: 0 10px;
+  color: #2980b9; /* Màu xanh dương nổi bật */
+  font-weight: bold;
+  font-size: 18px;
 }
 </style>
