@@ -43,10 +43,10 @@ const PAGE_NAME = {
   RESOURCE_MOBILIZATION: {
     LIST: "resource-mobilization-list",
   },
-  RESOURCES: {
+  RESOURCE: {
     LIST_MACHINE: "machine-list",
-    LIST_MATERIAL: "material-list",
-    LIST_HUMAN: "human-list",
+    LIST_MATERIAL: "material_management-list",
+    LIST_HUMAN: "human_management-list",
   }
 };
 

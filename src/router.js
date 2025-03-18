@@ -12,7 +12,7 @@ import Customer from  "@/pages/customer/Index.vue"
 import User from  "@/pages/user/Index.vue"
 import Project from  "@/pages/project/Index.vue"
 import Contract from "@/pages/contract/Index.vue"
-import SiteSurvey from  "@/pages/site_survey/Index.vue"
+import SiteSurvey from  "@/pages/site-survey/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
 import CustomerDetails from "@/pages/customer/Save.vue";
 import UserList from "@/pages/user/UserList.vue";
@@ -22,7 +22,7 @@ import ProjectList from "@/pages/project/ProjectList.vue";
 import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 import ContractSave from "@/pages/contract/Save.vue"
-import SiteSurveySave from "@/pages/site_survey/Save.vue"
+import SiteSurveySave from "@/pages/site-survey/Save.vue"
 import PlanningDetails from "@/pages/planning/Save.vue";
 import PlanningList from "@/pages/planning/PlanningList.vue";
 import Planning from "@/pages/planning/Index.vue";
@@ -33,8 +33,10 @@ import ConstructLogDetails from "@/pages/construction-log/ConstructionLogView.vu
 import ConstructLogSave from "@/pages/construction-log/Save.vue";
 import Mobilization from "@/pages/resource-mobilization/Index.vue";
 import MobilizationList from "@/pages/resource-mobilization/MobilizationList.vue";
+import MachineResourceList from "@/pages/resource/machine_management/MachineResourceList.vue";
+import MaterialResourceList from "@/pages/resource/material_management/MaterialResourceList.vue";
+import HumanResourceList from "@/pages/resource/human_management/HumanResourceList.vue";
 import UserProfile from "@/pages/profile/UserProfile.vue";
-import ContractList from "@/pages/contract/item/ContractTable.vue";
 // import MachineResourceList from "@/pages/resource/machine_management/MachineResourceList.vue";
 // import MaterialResourceList from "@/pages/resource/material_management/MaterialResourceList.vue";
 // import HumanResourceList from "@/pages/resource/human_management/HumanResourceList.vue";
@@ -265,34 +267,28 @@ const routes = [
     ]
   },
   {
-    name: PAGE_NAME.RESOURCES,
-    path: PAGES.RESOURCES,
-    component: Project,
+    name: PAGE_NAME.RESOURCE.LIST_MACHINE,
+    path: PAGES.MACHINE_RESOURCE,
+    component: MachineResourceList,
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     },
-    children: [
-      {
-        path: PAGES.PROJECT,
-        name: PAGE_NAME.PROJECT.LIST,
-        component: ProjectList,
-      },
-      {
-        path: PAGES.PROJECT_CREATE,
-        name: PAGE_NAME.PROJECT.CREATE,
-        component: ProjectSave,
-      },
-      {
-        path: PAGES.PROJECT_EDIT,
-        name: PAGE_NAME.PROJECT.EDIT,
-        component: ProjectSave,
-      },
-      {
-        path: PAGES.PROJECT_DETAILS,
-        name: PAGE_NAME.PROJECT.DETAILS,
-        component: ProjectDetails,
-      }
-    ]
+  },
+  {
+    path: PAGES.MATERIAL_RESOURCE,
+    name: PAGE_NAME.RESOURCE.LIST_MATERIAL,
+    component: MaterialResourceList,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+  },
+  {
+    path: PAGES.HUMAN_RESOURCE,
+    name: PAGE_NAME.RESOURCE.LIST_HUMAN,
+    component: HumanResourceList,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
   },
 ];
 

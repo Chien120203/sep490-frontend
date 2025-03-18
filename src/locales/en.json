@@ -827,6 +827,13 @@
       "construct_log": "Construction Log",
       "change_request": "Change Request",
       "resource_mobilization": "Mobilization"
+      "project": "Project",
+      "resource": {
+        "title": "Resource Management",
+        "machine": "Machine Resource ",
+        "material": "Material Resource ",
+        "human": "Human Resource "
+      }
     }
   },
   "construct_log": {

@@ -45,11 +45,11 @@ const PAGES = {
 
   MOBILIZATION: "/mobilization",
 
-  //resources
-  RESOURCES: "/resources",
-  MACHINE_RESOURCES: "/resources/list-machine",
-  MATERIAL_RESOURCES: "/resources/list-material",
-  HUMAN_RESOURCES: "/resources/list-human",
+  //resource
+  RESOURCE: "/resource",
+  MACHINE_RESOURCE: "/resource/machine-management",
+  MATERIAL_RESOURCE: "/resource/material-management",
+  HUMAN_RESOURCE: "/resource/human-management",
 };
 
 export default PAGES;

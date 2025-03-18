@@ -52,6 +52,7 @@
       </el-menu>
     </div>
     <div class="menu-box">
+      <!-- Danh sách listRouter -->
       <ul class="nav" v-if="listRouter.length">
         <li
           v-for="(route, index) in listRouter"
@@ -79,6 +80,8 @@
           </div>
         </li>
       </ul>
+
+      <!-- Danh sách listRouterUsers -->
       <ul class="nav" v-if="listRouterUsers.length">
         <li
             v-for="(route, index) in listRouterUsers"
@@ -106,9 +109,8 @@
           </div>
         </li>
       </ul>
-<!--      <p class="nav_others" v-if="listRouter.length">-->
-<!--        {{ $t("common.other") }}-->
-<!--      </p>-->
+
+      <!-- Danh sách listRouterOthers -->
       <ul class="nav">
         <li
           v-for="(route, index) in listRouterOthers"
@@ -134,35 +136,45 @@
         </li>
       </ul>
       <ul class="nav">
-        <li
-            v-for="(route, index) in listRouterOthers"
-            :key="index"
-            style="border-bottom: 1px solid #d0d6da"
-        >
+        <li class="nav-list" style="border-bottom: 1px solid #d0d6da">
           <a
               href="#"
-              v-if="route.isShow"
-              @click.prevent="navigateChangeRoute(route)"
-              :class="classActive(route)"
+              @click.prevent="toggleDropdown('resources')"
+              :class="{ 'active': isDropdownActive('resources') }"
               class="js-sidenav-tooltip"
               style="display: flex; align-items: center"
           >
-            <component
-                :is="route.function_icon"
-                class="icon_sidebar"
-            ></component>
-            <span class="sidebar-text sidebar-custom siderbar_name">{{
-                route.function_name
-              }}</span>
+            <IconUtility class="icon_sidebar"></IconUtility>
+            <span class="sidebar-text sidebar-custom siderbar_name">{{ ("Resource Management") }}</span>
           </a>
+          <ul v-if="isDropdownOpen('resources')" class="nav">
+            <li
+                v-for="(route, index) in listRouterResource"
+                :key="index"
+                class="nav-list"
+                style="border-bottom: 1px solid #d0d6da"
+            >
+              <a
+                  href="#"
+                  @click.prevent="navigateChangeRoute(route)"
+                  :class="classActive(route)"
+                  class="js-sidenav-tooltip"
+                  style="display: flex; align-items: center; padding-left: 20px"
+              >
+                <component :is="route.function_icon" class="icon_sidebar"></component>
+                <span class="sidebar-text sidebar-custom siderbar_name">{{ route.function_name }}</span>
+              </a>
+            </li>
+          </ul>
         </li>
       </ul>
+
     </div>
   </div>
 </template>
 
 <script>
-import {ref, computed} from "vue";
+import { ref, computed, watch } from "vue";
 import IconCart from "@/svg/IconCart.vue";
 import IconUser from "@/svg/IconUser.vue";
 import IconUserGroup from "@/svg/IconUserGroup.vue";
@@ -206,6 +218,9 @@ export default {
     const route = useRoute();
     const homePath = ref(`${FRONT_END_URL}${PAGES.HOME}`);
     const isShowComponent = ref(true);
+    const currentPath = ref("");
+    const openDropdowns = ref({});
+
     const isShowProjectSideBar = computed(() => {
       return PROJECT_SIDEBARS.includes(route.name);
     });
@@ -277,16 +292,28 @@ export default {
 
     const listRouterResource = computed(() => [
       {
-        function_name: t("side_bar.label.profile"),
-        function_page_name: PAGE_NAME.PROFILE,
+        function_name: t("side_bar.label.resource.machine"),
+        function_page_name: PAGE_NAME.RESOURCE.LIST_MACHINE,
         function_icon: "IconUser",
         isShow: true,
+        isChild: true,
+        parent_id: "resources",
       },
       {
-        function_name: t("side_bar.label.profile"),
-        function_page_name: PAGE_NAME.PROFILE,
+        function_name: t("side_bar.label.resource.material"),
+        function_page_name: PAGE_NAME.RESOURCE.LIST_MATERIAL,
         function_icon: "IconUser",
         isShow: true,
+        isChild: true,
+        parent_id: "resources",
+      },
+      {
+        function_name: t("side_bar.label.resource.human"),
+        function_page_name: PAGE_NAME.RESOURCE.LIST_HUMAN,
+        function_icon: "IconUser",
+        isShow: true,
+        isChild: true,
+        parent_id: "resources",
       },
     ]);
 
@@ -304,16 +331,38 @@ export default {
           : "";
     };
 
+    const toggleDropdown = (id) => {
+      openDropdowns.value[id] = !openDropdowns.value[id];
+    };
+
+    const isDropdownOpen = (id) => {
+      return openDropdowns.value[id] || false;
+    };
+
+    const isDropdownActive = (id) => {
+      return listRouterResource.value.some((route) => currentPath.value === route.function_page_name);
+    };
+
+    // Theo dõi currentPath để tự động mở dropdown nếu một mục con active
+    watch(currentPath, (newPath) => {
+      if (listRouterResource.value.some((route) => route.function_page_name === newPath)) {
+        openDropdowns.value["resources"] = true;
+      }
+    });
+
     return {
       isShowComponent,
-      menuOpen,
       currentPath,
       homePath,
       listRouter,
       listRouterUsers,
       listRouterOthers,
+      listRouterResource,
       navigateChangeRoute,
       classActive,
+      toggleDropdown,
+      isDropdownOpen,
+      isDropdownActive,
     };
   },
 };
@@ -351,6 +400,7 @@ export default {
   background-color: #dfe3fc !important;
   color: #5a6acf !important;
 }
+
 
 .nav_others {
   font-size: 12px;
