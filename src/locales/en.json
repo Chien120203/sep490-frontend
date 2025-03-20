@@ -560,6 +560,9 @@
       "week": "Week",
       "month": "Month",
       "year": "Year"
+    },
+    "details": {
+      "title": "Project Progress"
     }
   },
   "planning": {
