@@ -790,7 +790,8 @@
       "contract": "Contracts",
       "customer": "Customer",
       "project": "Project",
-      "planning": "Planning"
+      "planning": "Planning",
+      "progress": "Progress"
     }
   },
   "room": {

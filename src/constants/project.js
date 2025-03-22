@@ -1,3 +1,5 @@
+import PAGE_NAME from "@/constants/route-name.js";
+
 export const RECEIVE_STATUS = 0;
 export const PLANNING_STATUS = 1;
 export const CLOSED_STATUS = 5;
@@ -20,10 +22,19 @@ export const STATUS_LABELS = [
   'project.statuses.close',
 ];
 
+export const PROJECT_SIDEBARS = [
+  PAGE_NAME.PROJECT.DETAILS,
+  PAGE_NAME.PROJECT.EDIT,
+  PAGE_NAME.PLANNING.LIST,
+  PAGE_NAME.PLANNING.DETAILS,
+  PAGE_NAME.PLANNING.CREATE,
+  PAGE_NAME.PROGRESS.DETAILS
+]
+
 export const SS_RELATIONSHIP = "SS";
 export const SF_RELATIONSHIP = "SF";
 export const FS_RELATIONSHIP = "FS";
-export const FF_RELATIONSHIP = "FS";
+export const FF_RELATIONSHIP = "FF";
 
 export const TASK_RELATIONSHIPS = [
   {label: "project.task.relation.ss", value: SS_RELATIONSHIP},

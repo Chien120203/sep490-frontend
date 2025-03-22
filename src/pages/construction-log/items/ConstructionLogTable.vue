@@ -19,15 +19,37 @@
         </el-button>
       </el-button-group>
     </template>
+    <template #date-cell="{ data }">
+      <div class="date-container" @click="handleDateClick(data)">
+        <p :class="data.isSelected ? 'is-selected' : ''">
+          {{ data.day.split('-').slice(2).join('') }}
+        </p>
+      </div>
+    </template>
   </el-calendar>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const calendar = ref()
-const selectDate = (val) => {
+const calendar = ref();
+const emit = defineEmits(["choose-date"])
+
+const selectDate = (val: string) => {
   if (!calendar.value) return
   calendar.value.selectDate(val)
 }
+
+const handleDateClick = (date) => {
+  emit('choose-date', date);
+}
 </script>
+<style scoped>
+.is-selected {
+  color: #1989fa;
+}
+
+.date-container {
+  height: 100%;
+}
+</style>

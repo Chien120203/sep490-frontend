@@ -1,11 +1,8 @@
 <!-- GanttChart.vue -->
 <script setup>
-import {defineEmits, defineProps, ref, watch} from 'vue';
+import {defineEmits, defineProps, ref} from 'vue';
 import {provide} from "vue";
-import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Edit, Filter, Selection} from "@syncfusion/ej2-vue-gantt";
-import IconPlus from "@/svg/IconPlus.vue";
-import IconTrash from "@/svg/IconTrash.vue";
-import IconEdit from "@/svg/IconEdit.vue";
+import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Filter, Selection} from "@syncfusion/ej2-vue-gantt";
 
 // Accept dataset from the parent component
 const props = defineProps({

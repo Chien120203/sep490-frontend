@@ -2,6 +2,7 @@
   <Modal
       :show="show"
       :width="'95%'"
+      :containerHeight="'90%'"
       :isShowFooter="false"
       @close="$emit('close')"
   >
@@ -9,18 +10,11 @@
       <h4 class="modal-title">Progress Item Details</h4>
     </template>
     <template #body>
-      <div class="modal-body">
-        <div>
-          <ModalItemInformation :task="progressDetails"/>
-        </div>
-        <div style="display: flex">
-          <ModalItemEmployee style="width: 20%"/>
-          <ModalItemProgressDetails style="width: 80%"/>
-        </div>
+      <div>
+        <ModalItemInformation :task="progressDetails"/>
       </div>
-      <div class="modal-footer">
-        <el-button class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
-        <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t("common.cancel") }}</el-button>
+      <div style="display: flex">
+        <ModalItemProgressDetails style="width: 100%"/>
       </div>
     </template>
   </Modal>
@@ -37,7 +31,10 @@ import ModalItemEmployee from "@/pages/progress/items/modal/items/ModalItemEmplo
 const {t} = useI18n();
 const props = defineProps({
   show: {type: Boolean, default: false},
-  progressDetails: {type: Object, default: () => {}}
+  progressDetails: {
+    type: Object, default: () => {
+    }
+  }
 });
 
 const materialOptions = {id: 'id', value: 'name'};
@@ -53,12 +50,9 @@ const handleSubmit = () => {
 </script>
 
 <style scoped>
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .modal-title {
-  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
