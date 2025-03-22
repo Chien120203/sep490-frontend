@@ -125,8 +125,8 @@ export default {
 
 <style lang="scss">
 @import "@/assets/styles/app.scss";
-@import url("https://cdn.syncfusion.com/ej2/material.css");
-//@import "../node_modules/@syncfusion/ej2-vue-gantt/styles/material.css";
+@import "@/assets/styles/syncfusion.scss";
+//@import url("https://cdn.syncfusion.com/ej2/material.css");
 
 .main-layout {
   height: 100%;

@@ -113,11 +113,13 @@ import ProjectIcon from "@/svg/ProjectIcon.vue";
 import IconRoom from "@/svg/IconRoom.vue";
 import IconUtility from "@/svg/IconUtility.vue";
 import IconPlanning from "@/svg/IconPlanning.vue";
+import IconProgress from "@/svg/IconProgress.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { useI18n } from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import PAGES from "@/utils/pages.js";
 import {FRONT_END_URL} from "@/constants/application.js";
+import {PROJECT_SIDEBARS} from "@/constants/project.js";
 
 export default {
   name: "Sidebar",
@@ -131,6 +133,7 @@ export default {
     IconContract,
     ProjectIcon,
     IconPlanning,
+    IconProgress
   },
   setup() {
     const { t } = useI18n();
@@ -139,7 +142,7 @@ export default {
     const homePath = ref(`${FRONT_END_URL}${PAGES.HOME}`);
     const isShowComponent = ref(true);
     const isShowProjectSideBar = computed(() => {
-      return !route.fullPath.includes('project/details');
+      return PROJECT_SIDEBARS.includes(route.name);
     });
     const menuOpen = ref("");
     const listRouter = computed(() => [
@@ -147,19 +150,25 @@ export default {
         function_name: t("side_bar.label.customer"),
         function_page_name: PAGE_NAME.CUSTOMER.LIST,
         function_icon: "IconUserGroup",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: !isShowProjectSideBar.value, // set later
       },
       {
         function_name: t("side_bar.label.project"),
         function_page_name: PAGE_NAME.PROJECT.LIST,
         function_icon: "ProjectIcon",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: !isShowProjectSideBar.value, // set later
       },
       {
         function_name: t("side_bar.label.planning"),
         function_page_name: PAGE_NAME.PLANNING.LIST,
         function_icon: "IconPlanning",
-        isShow: !isShowProjectSideBar.value, // set later
+        isShow: isShowProjectSideBar.value, // set later
+      },
+      {
+        function_name: t("side_bar.label.progress"),
+        function_page_name: PAGE_NAME.PROGRESS.DETAILS,
+        function_icon: "IconProgress",
+        isShow: isShowProjectSideBar.value, // set later
       }
     ]);
 
@@ -168,7 +177,7 @@ export default {
         function_name: t("side_bar.label.user"),
         function_page_name: PAGE_NAME.USER.LIST,
         function_icon: "IconUserGroup",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: !isShowProjectSideBar.value, // set later
       }
     ]);
 

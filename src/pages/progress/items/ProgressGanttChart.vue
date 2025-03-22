@@ -1,14 +1,16 @@
 <!-- GanttChart.vue -->
 <script setup>
-import {defineProps, ref, watch} from 'vue';
+import {defineEmits, defineProps, ref} from 'vue';
 import {provide} from "vue";
-import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Edit, Filter} from "@syncfusion/ej2-vue-gantt";
-import {TIME_LINES} from "@/constants/progress.js";
+import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Filter, Selection} from "@syncfusion/ej2-vue-gantt";
 
 // Accept dataset from the parent component
 const props = defineProps({
   tasks: Array
 });
+
+const emit = defineEmits(["handleSelectRow"]);
+
 const gantt = ref(null);
 // Configure task mappings
 const taskSettings = ref({
@@ -24,11 +26,6 @@ const taskSettings = ref({
   baselineEndDate: "BaselineEndDate"
 });
 
-const editSettings = {
-  allowEditing: true,
-  mode: "Auto"
-};
-
 const labelSettings = {
   taskLabel: '${Progress}%'
 };
@@ -42,12 +39,20 @@ const toolbar = [
   'CollapseAll',
   'PrevTimeSpan',
   'NextTimeSpan',
-  'Update',
   'ZoomIn',
   'ZoomOut',
   'ZoomToFit'
 ];
 
+const selectionOptions = {
+  type: "Single"
+}
+
+const rowSelected = function(args) {
+  let ganttObj = gantt.value.ej2Instances;
+  let selectedRecords = ganttObj.selectionModule.getSelectedRecords();  // get the selected records.
+  emit("handleSelectRow", selectedRecords);
+}
 const searchValue = ref('');
 
 const searchSettings = ref({fields: ['TaskName'], operator: 'contains', key: searchValue.value, ignoreCase: true});
@@ -76,11 +81,11 @@ const change = (isOpen) => {
   isCollapse.value = !isOpen;
 }
 
-provide('gantt', [Toolbar, Edit, Filter]);
+provide('gantt', [Toolbar, Filter, Selection]);
 </script>
 
 <template>
-  <div>
+  <div class="gantt-chart-container">
     <h2 class="text-lg font-bold mb-4">Gantt Chart - Danh sách công việc</h2>
     <div class="project-search">
       <div class="col-md-9 col-lg-9">
@@ -124,12 +129,13 @@ provide('gantt', [Toolbar, Edit, Filter]);
           :height="'100%'"
           :width="'100%'"
           :timelineSettings="timelineSettings"
+          :selectionSettings="selectionOptions"
           :renderBaseline="true"
           :allowFiltering='true'
           :baselineColor="'#ffd180'"
           :toolbar="toolbar"
-          :editSettings="editSettings"
           :searchSettings="searchSettings"
+          :rowSelected="rowSelected"
       >
         <ColumnsDirective>
           <ColumnDirective field="TaskID" headerText="STT" width="60"></ColumnDirective>
@@ -157,5 +163,7 @@ h2 {
 }
 .btn-cr {
   justify-content: end;
+}
+.gantt-chart-container {
 }
 </style>

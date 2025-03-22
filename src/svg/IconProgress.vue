@@ -1,0 +1,42 @@
+<template>
+  <svg :width="width"
+       :height="height" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+    <g id="SVGRepo_iconCarrier">
+      <path
+          d="M5.63604 5.63604C4.1637 7.10837 3.24743 9.04567 3.04334 11.1178C2.83925 13.19 3.35997 15.2688 4.51677 17.0001C5.67358 18.7314 7.3949 20.008 9.38744 20.6125C11.38 21.2169 13.5204 21.1117 15.4441 20.3149C17.3678 19.5181 18.9557 18.0789 19.9373 16.2426C20.9188 14.4062 21.2333 12.2864 20.8271 10.2442C20.4209 8.202 19.3191 6.36384 17.7095 5.04291C16.1 3.72197 14.0822 3 12 3"
+          stroke="#A6ABC8" stroke-width="2" stroke-linecap="round"></path>
+      <path d="M12 12L6 6" stroke="#A6ABC8" stroke-width="2" stroke-linecap="round"></path>
+      <path d="M12 3V5" stroke="#A6ABC8" stroke-width="2" stroke-linecap="round"></path>
+      <path d="M21 12L19 12" stroke="#A6ABC8" stroke-width="2" stroke-linecap="round"></path>
+      <path d="M12 19V21" stroke="#A6ABC8" stroke-width="2" stroke-linecap="round"></path>
+      <path d="M5 12L3 12" stroke="#A6ABC8" stroke-width="2" stroke-linecap="round"></path>
+    </g>
+  </svg>
+</template>
+
+<script>
+import {COLOR_GRAY_1} from "../constants/color";
+
+export default {
+  props: {
+    iconName: {
+      type: String,
+      default: "icon-arrow-left",
+    },
+    width: {
+      type: [Number, String],
+      default: 18,
+    },
+    height: {
+      type: [Number, String],
+      default: 18,
+    },
+    fill: {
+      type: String,
+      default: COLOR_GRAY_1,
+    },
+  },
+};
+</script>

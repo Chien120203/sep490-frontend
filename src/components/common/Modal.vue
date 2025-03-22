@@ -6,7 +6,7 @@
         :id="target"
         :style="modalContainerStyle"
     >
-      <div class="modal-container" v-click-outside="handleClickOutside">
+      <div class="modal-container" :style="containerStyle" v-click-outside="handleClickOutside">
         <div class="modal-header" v-if="isShowHeader">
           <slot name="header">
             <div>
@@ -55,6 +55,10 @@ export default {
       type: [Number, String],
       default: "fit-content",
     },
+    containerHeight:{
+      type: [Number, String],
+      default: "fit-content",
+    },
     target: {
       type: String,
       default: "body",
@@ -90,6 +94,12 @@ export default {
       };
     });
 
+    const containerStyle = computed(() => {
+      return {
+        "--heightContainer": props.containerHeight,
+      };
+    });
+
     const handleClickOutside = async (event) => {
       if (
           event.target.getAttribute("id") === props.target &&
@@ -102,6 +112,7 @@ export default {
     return {
       modalContainerStyle,
       handleClickOutside,
+      containerStyle,
     };
   },
 };
@@ -123,6 +134,7 @@ export default {
 .modal-container {
   width: var(--width);
   margin: auto;
+  height: var(--heightContainer);
   max-height: 90vh;
   background-color: #fff;
   border-radius: 4px;
@@ -133,11 +145,12 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: 1fr 20fr auto;
 }
 
 .modal-header {
   border-bottom: 1px solid #ccc;
+  padding: 16px;
   width: 100%;
   top: 0;
   left: 0;
@@ -161,12 +174,13 @@ export default {
 
 .modal-body {
   overflow-y: scroll;
-  height: 100%;
   padding: 16px;
+  flex: 1;
 }
 
 .modal-footer {
   display: flex;
+  padding: 16px;
   justify-content: flex-end;
 }
 

@@ -12,7 +12,11 @@
 
       <div>
         <!-- Title Navigation -->
-        <TitleNavigation @save="saveChanges" @delete="deletePlan" @close="closePlan" @tabChange="handleTabChange"/>
+        <TitleNavigation
+            :listTabs="listTabs"
+            :selectedTab="selectedTab"
+            @tabChange="handleTabChange"
+        />
 
         <!-- Conditional Rendering Based on Selected Tab -->
         <div v-if="selectedTab === 'info'">
@@ -49,7 +53,7 @@
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
-import TitleNavigation from "@/pages/planning/item/details/TitleNavigation.vue";
+import TitleNavigation from "@/components/common/TitleNavigation.vue";
 import SelectionFilters from "@/pages/planning/item/details/SelectionFilters.vue";
 import PlanningDetails from "@/pages/planning/item/details/PlanningDetails.vue";
 import ActivityComponent from "@/pages/planning/item/details/ActivityComponent.vue";
@@ -63,7 +67,16 @@ import PlanItemDetailsModal from "@/pages/planning/item/modal/PlanItemDetailsMod
 import {useContractStore} from "@/store/contract.js";
 
 const selectedTab = ref("info"); // Default tab
-
+const listTabs =ref([
+  {
+    name: "info",
+    label: "Info",
+  },
+  {
+    name: "activity",
+    label: "Activity",
+  },
+]);
 const listConstructionManagers = ref([]);
 const listTechnicalManagers = ref([]);
 const listResourceManagers = ref([]);
