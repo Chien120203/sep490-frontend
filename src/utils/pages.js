@@ -37,6 +37,10 @@ const PAGES = {
   //site_survey
   SITE_SURVEY: "/site-survey",
   SITE_SURVEY_DETAILS: "/site-survey/:id",
+
+  //construction log
+  CONSTRUCT_LOG: "/construct-log",
+  CONSTRUCT_LOG_DETAILS: "/construct-log/details",
 };
 
 export default PAGES;

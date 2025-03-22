@@ -33,6 +33,10 @@ const PAGE_NAME = {
   },
   PROGRESS : {
     DETAILS: "progress-details",
+  },
+  CONSTRUCT_LOG: {
+    VIEW: "construct-log-view",
+    DETAILS: 'construct-log-details'
   }
 };
 

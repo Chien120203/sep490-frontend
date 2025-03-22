@@ -114,6 +114,7 @@ import IconRoom from "@/svg/IconRoom.vue";
 import IconUtility from "@/svg/IconUtility.vue";
 import IconPlanning from "@/svg/IconPlanning.vue";
 import IconProgress from "@/svg/IconProgress.vue";
+import IconLog from "@/svg/IconLog.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { useI18n } from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
@@ -133,7 +134,8 @@ export default {
     IconContract,
     ProjectIcon,
     IconPlanning,
-    IconProgress
+    IconProgress,
+    IconLog
   },
   setup() {
     const { t } = useI18n();
@@ -168,6 +170,12 @@ export default {
         function_name: t("side_bar.label.progress"),
         function_page_name: PAGE_NAME.PROGRESS.DETAILS,
         function_icon: "IconProgress",
+        isShow: isShowProjectSideBar.value, // set later
+      },
+      {
+        function_name: t("side_bar.label.construct_log"),
+        function_page_name: PAGE_NAME.CONSTRUCT_LOG.VIEW,
+        function_icon: "IconLog",
         isShow: isShowProjectSideBar.value, // set later
       }
     ]);

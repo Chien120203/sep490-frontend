@@ -791,96 +791,16 @@
       "customer": "Customer",
       "project": "Project",
       "planning": "Planning",
-      "progress": "Progress"
+      "progress": "Progress",
+      "construct_log": "Construction Log"
     }
   },
-  "room": {
-    "title": "Rooms",
-    "add_new": "Add New Room",
-    "keyword": "Keyword",
-    "status": {
-      "vacant": "Vacant",
-      "rented": "Rented",
-      "under_repair": "Under Repair"
+  "construct_log": {
+    "view": {
+      "title": "Construction Log"
     },
-    "table":{
-      "header": {
-        "room_code": "Room Code",
-        "area": "Area(&#13217;)",
-        "capacity": "Capacity",
-        "price": "Price",
-        "status": "Status",
-        "utilities": "Utilities",
-        "action": "Action",
-        "landlord": "Landlord"
-      },
-      "utilities": {
-        "header": {
-          "name": "Name",
-          "amount": "Service Index",
-          "price": "Price"
-        }
-      }
-    },
-    "form": {
-      "label_room_code": "Room Code",
-      "label_room_area": "Area",
-      "label_room_capacity": "Capacity",
-      "label_room_rent_price": "Rent Price",
-      "label_room_status": "Status",
-      "label_room_utilities": "Utilities",
-      "label_room_landlord": "LandLord",
-      "placeholder_room_rent_price": "Enter Rent Price",
-      "placeholder_room_capacity": "Enter Room Capacity",
-      "placeholder_room_area": "Enter Room Area",
-      "placeholder_room_code": "Enter Room Code",
-      "room_utilities_placeholder": "Room Utilities",
-      "room_landlord_placeholder": "Room Landlord"
-    },
-    "price_range": "Price Range",
-    "capacity": "Capacity",
-    "area": "Area",
-    "status_placeholder": "Room Status",
-    "list_tenants": "List Tenants",
-    "list_consumption": "List Consumption",
-    "room_details_title": "Room Details",
-    "room_utilities_title": "Room Utilities Consumption",
-    "room_tenants_title": "Room Tenants",
-    "room_add_tenant": "Add New Tenant",
-    "modal_confirm": {
-      "message_delete": "WARNING: You will delete user. Please type 'Delete' to continue.",
-      "title_delete": "Delete Room Tenant",
-      "message_delete_room": "WARNING: You will delete room. Please type 'Delete' to continue.",
-      "title_delete_room": "Delete Room"
-    }
-  },
-  "utility": {
-    "title": "Utility",
-    "add_new": "Add New",
-    "keyword": "Keyword",
-    "status_label": "Status",
-    "table": {
-      "header": {
-        "name": "Name",
-        "unit_price": "Unit Price",
-        "unit": "Unit",
-        "status": "Status",
-        "action": "Action"
-      }
-    },
-    "status": {
-      "active": "Active",
-      "inactive": "InActive"
-    },
-    "modal": {
-      "header": "Save Utility",
-      "name": "Name",
-      "unit_price": "Unit Price",
-      "unit": "Unit"
-    },
-    "modal_confirm": {
-      "title_delete": "Confirm Deactivate utility",
-      "message_delete": "WARNING: You will deactivate utility. Please type 'Deactivate' to continue."
+    "edit": {
+      "title": "Construction Log Details"
     }
   },
 
