@@ -1,7 +1,7 @@
 <template>
   <el-calendar ref="calendar">
     <template #header="{ date }">
-      <span>Custom header content</span>
+      <span>{{title}}</span>
       <span>{{ date }}</span>
       <el-button-group>
         <el-button size="small" @click="selectDate('prev-year')">
@@ -32,8 +32,17 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 
-const calendar = ref();
+const props = defineProps(
+    {
+      title: {
+        type: String,
+        default: ""
+      }
+    }
+);
 const emit = defineEmits(["choose-date"])
+
+const calendar = ref();
 
 const selectDate = (val: string) => {
   if (!calendar.value) return

@@ -27,6 +27,9 @@ import PlanningList from "@/pages/planning/PlanningList.vue";
 import Planning from "@/pages/planning/Index.vue";
 import Progress from "@/pages/progress/Index.vue";
 import ProgressDetails from "@/pages/progress/ProgressDetails.vue";
+import ConstructLog from "@/pages/construction-log/Index.vue";
+import ConstructLogDetails from "@/pages/construction-log/ConstructionLogView.vue";
+import ConstructLogSave from "@/pages/construction-log/Save.vue";
 
 const routes = [
   {
@@ -120,6 +123,26 @@ const routes = [
         path: PAGES.PROGRESS_DETAILS,
         name: PAGE_NAME.PROGRESS.DETAILS,
         component: ProgressDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.CONSTRUCT_LOG,
+    path: PAGES.CONSTRUCT_LOG,
+    component: ConstructLog,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.CONSTRUCT_LOG,
+        name: PAGE_NAME.CONSTRUCT_LOG.VIEW,
+        component: ConstructLogDetails,
+      },
+      {
+        path: PAGES.CONSTRUCT_LOG_DETAILS,
+        name: PAGE_NAME.CONSTRUCT_LOG.DETAILS,
+        component: ConstructLogSave,
       }
     ]
   },
