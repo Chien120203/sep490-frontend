@@ -31,13 +31,27 @@
         <span v-else>—</span>
       </template>
     </el-table-column>
+
+    <el-table-column label="Actions">
+      <template #default="{ row }">
+        <div>
+          <button @click="$emit('details', row.id)" class="btn-edit">
+            <IconEdit />
+          </button>
+          <button @click="$emit('delete', row.id)" class="btn-edit">
+            <IconTrash />
+          </button>
+        </div>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { ElMessage } from "element-plus";
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
+import IconEdit from "@/svg/IconEdit.vue";
+import IconTrash from "@/svg/IconTrash.vue";
 
 const tasks = ref([
   { name: "Task A", status: "Completed", assignedTo: "John", dueDate: "2025-03-10", dependency: "SS" },

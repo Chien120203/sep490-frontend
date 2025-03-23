@@ -9,7 +9,14 @@ const props = defineProps({
   tasks: Array
 });
 
-const emit = defineEmits(["handleSelectRow"]);
+const emit = defineEmits(["handleSelectRow", "addTask", "addAllocation"]);
+
+const handleAddNewTask = () => {
+  emit("addTask");
+}
+const handleAddNewAllocation = () => {
+  emit("addAllocation");
+}
 
 const gantt = ref(null);
 // Configure task mappings
@@ -115,9 +122,17 @@ provide('gantt', [Toolbar, Filter, Selection]);
         <el-button class="btn btn-save" @click="change(isCollapse)"
         >Ẩn Gantt Chart
         </el-button>
-        <el-button class="btn btn-save" @click="handleCreateCR"
-        >{{ $t("progress.add_new_cr") }}
-        </el-button>
+        <el-dropdown>
+          <el-button class="btn btn-save">
+            Add New CR<el-icon class="el-icon--right"><arrow-down /></el-icon>
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="handleAddNewTask">Add New Task</el-dropdown-item>
+              <el-dropdown-item @click="handleAddNewAllocation">Add New ALlocation</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
       </div>
     </div>
     <div style="padding-top: 70px">

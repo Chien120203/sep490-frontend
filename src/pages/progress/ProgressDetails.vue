@@ -221,6 +221,14 @@ const handleEditProgressItem = (item) => {
   progressItem.value = item;
 }
 
+const handleAddAllocation = () => {
+
+}
+
+const handleAddTask = () => {
+
+}
+
 const handleCloseModal = () => {
   isShowModal.value = false;
 }
@@ -241,6 +249,8 @@ const handleCloseModal = () => {
         <ProgressGanttChart
             :tasks="task2"
             @handleSelectRow="handleEditProgressItem"
+            @add-task="handleAddTask"
+            @add-allocation="handleAddAllocation"
         />
       </div>
     </div>

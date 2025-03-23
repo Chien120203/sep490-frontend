@@ -15,7 +15,7 @@ const PAGES = {
 
   //progress
   PROGRESS: "/progress",
-  PROGRESS_DETAILS: "/progress/details/:id",
+  PROGRESS_DETAILS: "/progress/details",
 
   //project
   PROJECT: "/project",

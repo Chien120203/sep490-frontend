@@ -55,6 +55,18 @@
           <span class="data-table">{{ scope.row.phone ? scope.row.phone : "-"}}</span>
         </template>
       </el-table-column>
+      <el-table-column label="Actions">
+        <template #default="{ row }">
+          <div>
+            <button @click="$emit('details', row.id)" class="btn-edit">
+              <IconEdit />
+            </button>
+            <button @click="$emit('delete', row.id)" class="btn-edit">
+              <IconTrash />
+            </button>
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <LoadMore
         :listData="listUsers.value"
@@ -66,7 +78,9 @@
 
 <script setup>
 import LoadMore from "@/components/common/LoadMore.vue";
-import {ref} from "vue";
+import { ref } from "vue";
+import IconTrash from "@/svg/IconTrash.vue";
+import IconEdit from "@/svg/IconEdit.vue";
 
 const props = defineProps({
   listUsers: Array,
@@ -77,7 +91,7 @@ const totalItems = ref(0);
 const handleLoadMore = () => {
 }
 
-const emit = defineEmits([]);
+const emit = defineEmits(["details", "delete"]);
 </script>
 
 <style scoped>
