@@ -1,8 +1,8 @@
 <template>
   <Modal
       :show="show"
-      :width="'95%'"
-      :containerHeight="'90%'"
+      :width="'100%'"
+      :containerHeight="'100%'"
       :isShowFooter="false"
       @close="$emit('close')"
   >
@@ -26,7 +26,6 @@ import {useI18n} from "vue-i18n";
 import Modal from "@/components/common/Modal.vue";
 import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemInformation.vue";
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
-import ModalItemEmployee from "@/pages/progress/items/modal/items/ModalItemEmployee.vue";
 
 const {t} = useI18n();
 const props = defineProps({

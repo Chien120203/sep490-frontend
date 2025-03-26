@@ -21,17 +21,45 @@
         </div>
 
         <div v-if="selectedTab === 'dependency'">
-          <DependencyTaskTable/>
-        </div>
-
-        <div v-if="selectedTab === 'employee'">
-          <EmployeeTable
-            :listUsers="dataUsers"
+          <div class="add-new-dependency-container">
+            <el-button class="btn btn-save" @click="handleDisplayDependencyModal">
+              {{ $t("customer.add_new") }}
+            </el-button>
+          </div>
+          <DependencyTaskTable
+            @details="handleDisplayDependencyModal"
+            @delete="handleDisplayDeleteDepModal"
           />
         </div>
 
+        <div v-if="selectedTab === 'employee'">
+          <div class="add-new-dependency-container">
+            <el-button class="btn btn-save" @click="handleDisplayDependencyModal">
+              {{ $t("customer.add_new") }}
+            </el-button>
+          </div>
+          <EmployeeTable
+            :listUsers="dataUsers"
+            @details="handleGetEmployeeDtls"
+            @delete="handleDisplayDeleteEmployeeModal"
+          />
+        </div>
       </div>
     </div>
+
+<!--    Dependency Modal-->
+    <DependencyModal
+      :show="isShowModalDependency"
+      @close="handleDisplayDependencyModal(false)"
+      @submit="handleSaveDependency"
+    />
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm"
+        @close-modal="handleDisplayDeleteDepModal(false)"
+        @confirmAction="handleConfirmDeleteDep"
+        :message="message"
+        :title="title"
+    />
   </div>
 </template>
 
@@ -39,16 +67,12 @@
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import TitleNavigation from "@/components/common/TitleNavigation.vue";
-import PAGE_NAME from "@/constants/route-name.js";
-import {useProjectStore} from "@/store/project.js";
-import {useCustomerStore} from "@/store/customer.js";
-import {useUserStore} from "@/store/user.js";
-import {mixinMethods} from "@/utils/variables.js";
-import {useContractStore} from "@/store/contract.js";
 import GanttTable from "@/pages/progress/items/modal/items/progress-details/GanttTable.vue";
 import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
 import DependencyTaskTable from "@/pages/progress/items/modal/items/progress-details/DependencyTaskTable.vue";
 import EmployeeTable from "@/pages/progress/items/modal/items/progress-details/EmployeeTable.vue";
+import DependencyModal from "@/pages/progress/items/modal/DependencyModal.vue";
+import ModalConfirm from "@/components/common/ModalConfirm.vue";
 
 const selectedTab = ref("statistic"); // Default tab
 const listTabs =ref([
@@ -255,32 +279,10 @@ const dataUsers = ref([
     phone: "0977331122"
   }
 ]);
-
-// Function to format date
-const formatDate = (date) => {
-  return new Date(date).toLocaleDateString();
-};
-
-// Function to translate gender
-const getGender = (gender) => {
-  return gender === "male" ? "common.male" : "common.female";
-};
-const isShowModalItemDtls = ref(false);
-const isUpdate = computed(() => !!route.params.id);
-
-// Store Data
-const projectStore = useProjectStore();
-const customerStore = useCustomerStore();
-const userStore = useUserStore();
-const contractStore = useContractStore();
-
-const {
-  contractDetails,
-  getContractDetails,
-} = contractStore;
-const {listUsers, getListUsers} = userStore;
-const {listCustomers, getListCustomers} = customerStore;
-const {validation, projectDetails, saveProject, getProjectDetails, clearProjectDetails} = projectStore;
+const title = ref('');
+const message = ref('');
+const isShowModalDependency = ref(false);
+const isShowModalConfirm = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -289,49 +291,55 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  clearProjectDetails();
 });
 
-const handleBack = () => {
-  router.push({name: PAGE_NAME.PLANNING.LIST});
-};
-
-const updateItems = (newItems) => {
-  contractDetails.value.contractDetails = newItems;
-};
-
-const handleEditPlanDetails = (id) => {
-  isShowModalItemDtls.value = true;
-}
-
-const handleCloseModal = () => {
-  isShowModalItemDtls.value = false;
-}
-
 const ruleFormRef = ref(null);
-
-const submitForm = () => {
-  projectDetails.value.budget = mixinMethods.handleChangeNumber(projectDetails.value.budget);
-  ruleFormRef.value.validate(valid => {
-    if (valid) {
-      saveProject(projectDetails.value);
-    }
-  });
-};
 
 const handleChooseDate = (date) => {
   const logUrl = `/construction-log?date=${date.day}`
   window.open(logUrl, '_blank')
 }
 
-// Handle Tab Change from TitleNavigation
 const handleTabChange = (tab) => {
   selectedTab.value = tab;
 };
+
+const handleDisplayDependencyModal = (isDisplay = true) => {
+  isShowModalDependency.value = isDisplay;
+}
+
+const handleDisplayDeleteDepModal = (isDisplay = true) => {
+  title.value = "Delete Dependency";
+  message.value = "Do you really want to delete Dependency?";
+  isShowModalConfirm.value = isDisplay;
+}
+
+const handleSaveDependency = (obj) => {
+  console.log(obj);
+}
+
+const handleConfirmDeleteDep = () => {
+
+}
+
+const handleDisplayDeleteEmployeeModal = (isDisplay = true) => {
+  title.value = "Delete Employee";
+  message.value = "Do you really want to delete Employee?";
+  isShowModalConfirm.value = isDisplay;
+}
+
+const handleGetEmployeeDtls = () => {
+
+}
 </script>
 
 <style scoped>
 .progress-details-nav {
   padding: 20px 0;
+}
+.add-new-dependency-container {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 20px;
 }
 </style>

@@ -160,10 +160,12 @@ export default {
   .modal-container {
     max-width: 350px;
     border-radius: 12px !important;
+    grid-template-rows: 1fr 4fr auto;
   }
 
   .modal-body {
     overflow-y: unset;
+    margin-top: 16px;
     padding: 0 25px !important;
   }
 

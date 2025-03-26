@@ -555,6 +555,7 @@
   },
   "progress": {
     "add_new_cr": "Add New CR",
+    "add_new": "Add New",
     "timeline": {
       "day": "Day",
       "week": "Week",
