@@ -804,7 +804,11 @@
       "title": "Construction Log Details"
     }
   },
-
+  "change-request": {
+    "title": "Change Request",
+    "add_new": "Add New",
+    "keyword": "Search"
+  },
   "E-CM-001": "Login Failed",
   "E-CM-002": "Required",
   "E-CM-003": "Field must be less than {max} characters",

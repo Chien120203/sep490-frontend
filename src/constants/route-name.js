@@ -37,6 +37,9 @@ const PAGE_NAME = {
   CONSTRUCT_LOG: {
     VIEW: "construct-log-view",
     DETAILS: 'construct-log-details'
+  },
+  CHANGE_REQUEST: {
+    LIST: 'change-request',
   }
 };
 

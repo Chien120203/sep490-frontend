@@ -30,6 +30,8 @@ import ProgressDetails from "@/pages/progress/ProgressDetails.vue";
 import ConstructLog from "@/pages/construction-log/Index.vue";
 import ConstructLogDetails from "@/pages/construction-log/ConstructionLogView.vue";
 import ConstructLogSave from "@/pages/construction-log/Save.vue";
+import ChangeRequest from "@/pages/change-request/Index.vue";
+import ChangeRequestList from "@/pages/change-request/ChangeRequestList.vue"
 
 const routes = [
   {
@@ -108,6 +110,21 @@ const routes = [
         path: PAGES.PLANNING_DETAILS,
         name: PAGE_NAME.PLANNING.DETAILS,
         component: PlanningDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.CHANGE_REQUEST,
+    path: PAGES.CHANGE_REQUEST,
+    component: ChangeRequest,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.CHANGE_REQUEST,
+        name: PAGE_NAME.CHANGE_REQUEST.LIST,
+        component: ChangeRequestList,
       }
     ]
   },
