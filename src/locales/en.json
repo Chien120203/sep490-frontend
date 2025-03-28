@@ -227,7 +227,8 @@
       "save_contract_success": "Save contract success",
       "get_contracts_failed": "Get list contracts failed",
       "save_contract_failed": "Save contract failed",
-      "get_contract_dtls_failed": "Get project details failed"
+      "get_contract_dtls_failed": "Get project details failed",
+      "get_planning_failed": "Get plannings failed"
     }
   },
   "contract": {

@@ -1,8 +1,7 @@
 export const ADMIN = "Administrator";
 export const USER = "User";
 export const CONSTRUCTION_EMPLOYEE = "Construction Employee";
-// export const CONSTRUCTION_MANAGER = "Construction Manager";
-export const CONSTRUCTION_MANAGER = "Project Manager";
+export const CONSTRUCTION_MANAGER = "Construction Manager";
 export const BUSINESS_EMPLOYEE = "Business Employee";
 export const TECHNICAL_MANAGER = "Technical Manager";
 export const QUALITY_ASSURANCE = "Quality Assurance";

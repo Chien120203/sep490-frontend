@@ -332,6 +332,7 @@ export default {
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
 
     onMounted(() => {
+      projectId.value = route.params.id;
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
       getSurveyDetails(route.params.id);
