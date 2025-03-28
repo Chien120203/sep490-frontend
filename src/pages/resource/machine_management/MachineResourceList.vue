@@ -174,7 +174,7 @@ export default {
     };
   },
   methods: {
-    openAddVehicleDialog() {
+    ;+openAddVehicleDialog() {
       this.dialogVisible = true;
     },
     saveVehicle() {
