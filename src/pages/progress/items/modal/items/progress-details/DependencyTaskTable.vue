@@ -1,10 +1,15 @@
 <template>
   <el-table :data="tasks" style="width: 100%" border stripe>
+    <el-table-column prop="index" label="Index">
+      <template #default="{ row }">
+        {{ row.index }}
+      </template>
+    </el-table-column>
     <!-- Task Name -->
-    <el-table-column prop="name" label="Task Name" sortable />
+    <el-table-column prop="workName" label="Task Name" sortable />
 
     <!-- Status -->
-    <el-table-column prop="status" label="Status">
+    <el-table-column v-if="!isPlanning" prop="status" label="Status">
       <template #default="{ row }">
         <el-tag :type="getStatusTag(row.status)">
           {{ row.status }}
@@ -13,32 +18,47 @@
     </el-table-column>
 
     <!-- Assigned To -->
-    <el-table-column prop="assignedTo" label="Assigned To" />
+    <el-table-column v-if="!isPlanning" prop="assignedTo" label="Assigned To" />
 
     <!-- Due Date -->
-    <el-table-column prop="dueDate" label="Due Date" sortable>
+    <el-table-column prop="startDate" label="Start Date" sortable>
       <template #default="{ row }">
-        {{ formatDate(row.dueDate) }}
+        {{ formatDate(row.startDate) }}
+      </template>
+    </el-table-column>
+    <!-- Due Date -->
+    <el-table-column prop="endDate" label="Due Date" sortable>
+      <template #default="{ row }">
+        {{ formatDate(row.endDate) }}
       </template>
     </el-table-column>
 
     <!-- Dependency -->
     <el-table-column prop="dependency" label="Depends Type">
       <template #default="{ row }">
-        <el-tag v-if="row.dependency">
+        <el-tag v-if="!isPlanning">
           {{ $t(getDependencyTask(row.dependency)) }}
         </el-tag>
-        <span v-else>—</span>
+        <el-select v-else v-model="row.dependency">
+          <el-option :label="$t('common.no_dependency')" value=""></el-option>
+          <el-option
+              v-for="(type, index) in TASK_RELATIONSHIPS"
+              :key="index"
+              :label="$t(type.label)"
+              :value="type.value"
+          >
+          </el-option>
+        </el-select>
       </template>
     </el-table-column>
 
     <el-table-column label="Actions">
       <template #default="{ row }">
         <div>
-          <button @click="$emit('details', row.id)" class="btn-edit">
+          <button v-if="!isPlanning" @click="$emit('details', row.id)" class="btn-edit">
             <IconEdit />
           </button>
-          <button @click="$emit('delete', row.id)" class="btn-edit">
+          <button @click="$emit('delete', row.index)" class="btn-edit">
             <IconTrash />
           </button>
         </div>
@@ -48,25 +68,29 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 
-const tasks = ref([
-  { name: "Task A", status: "Completed", assignedTo: "John", dueDate: "2025-03-10", dependency: "SS" },
-  { name: "Task B", status: "In Progress", assignedTo: "Alice", dueDate: "2025-03-15", dependency: "SF" },
-  { name: "Task C", status: "Pending", assignedTo: "Bob", dueDate: "2025-03-20", dependency: "FF" },
-  { name: "Task D", status: "Pending", assignedTo: "James", dueDate: "2025-03-21", dependency: "FS" },
-]);
+const props = defineProps({
+  isPlanning: {
+    type: Boolean,
+    default: false
+  },
+  tasks: {
+    type: Array,
+    default: () => []
+  }
+})
 
 // Format date
 const formatDate = (date) => {
+  if(!date) return '';
   return new Date(date).toLocaleDateString();
 };
 
 const getDependencyTask = (dependency) => {
-  return TASK_RELATIONSHIPS.find(task => task.value === dependency)?.label;
+  return TASK_RELATIONSHIPS.find(task => task.value === dependency)?.label ?? "-";
 }
 
 // Get status tag color

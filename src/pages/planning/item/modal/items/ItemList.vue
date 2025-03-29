@@ -3,7 +3,7 @@
     <SingleOptionSelect
         class="select-item"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
-        :listData="listData"
+        :listData="selectData"
         :isRemote="true"
         @handleSelectedParams="handleSelectItem"
         @remoteSearch="handleSearch"
@@ -20,18 +20,6 @@
       <el-table-column prop="unit" label="Đơn vị">
         <template #default="scope">
           <el-input v-model="scope.row.unit"/>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="rate" label="Định mức">
-        <template #default="scope">
-          <el-input v-model.number="scope.row.rate"/>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="coefficient" label="Hệ số">
-        <template #default="scope">
-          <el-input v-model.number="scope.row.coefficient"/>
         </template>
       </el-table-column>
 
@@ -61,27 +49,29 @@ import {defineEmits, defineProps, ref} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 
 const props = defineProps({
-  listData: { type: Array, default: () => [] },
-  optionKeys: { type: Object, default: () => ({ id: '', value: '' }) }
+  selectData: { type: Array, default: () => [] },
+  tableData: { type: Array, default: () => [] },
+  optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
+  resourceType: { type: String, default: '' },
 });
 
-const listAddedValues = ref([]);
-const emit = defineEmits(["search"]);
+const listAddedValues = ref(props.tableData || []);
+const emit = defineEmits(["search", "update-list"]);
 const handleSearch = (value) => {
   emit('search', value);
 }
 const handleSelectItem = (id) => {
   if (!listAddedValues.value.some(entry => entry?.[props.optionKeys.id] === id)) {
     listAddedValues.value.push({
-      id: id,
-      name: props.listData.find(item => item?.[props.optionKeys.id] === id)?.[props.optionKeys.value],
+      resourceId: id,
+      name: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.[props.optionKeys.value],
+      resourceType: props.resourceType,
       unit: "",
-      rate: 0,
-      coefficient: 1,
       quantity: 1,
       unitPrice: 0
     });
   }
+  emit('update-list', listAddedValues.value);
 };
 </script>
 

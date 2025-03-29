@@ -34,6 +34,10 @@ const API_CODE = {
   API_SURVEY_001: '/survey/detail',
   API_SURVEY_002: '/survey/save',
   API_SURVEY_003: '/survey/delete',
+
+  //Planning
+  API_PLANNING_001: '/plans/search',
+
 };
 
 export default API_CODE;

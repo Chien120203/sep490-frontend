@@ -43,6 +43,8 @@ const createNewItem = (unit = "", parentIndex = null) => ({
   unit: unit,
   quantity: 0,
   unitPrice: 0,
+  startDate: "",
+  endDate: "",
   total: 0,
   deleted: false
 });
@@ -163,6 +165,9 @@ const hierarchicalItems = computed(() => {
         return 0;
       });
 });
+const checkHasChildren = (row) => {
+  return !hasChildren(row);
+}
 </script>
 
 <template>
@@ -177,11 +182,11 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('contract.create.item_table.action')" width="120">
+      <el-table-column :label="$t('contract.create.item_table.action')" width="180">
         <template #default="{ row }">
           <div class="action-btn">
             <IconPlus @click="addSubItem(row)" />
-            <IconEdit @click="emit('editPlanDetails', row)" />
+            <IconEdit v-if="checkHasChildren(row)" @click="emit('editPlanDetails', row)" />
             <IconTrash @click="deleteItem(row)" />
           </div>
         </template>
@@ -193,13 +198,13 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column prop="unit" :label="$t('contract.create.item_table.unit')" width="100">
+      <el-table-column prop="unit" :label="$t('contract.create.item_table.unit')" width="120">
         <template #default="{ row }">
           <el-input v-model="row.unit" :disabled="isParent(row)" />
         </template>
       </el-table-column>
 
-      <el-table-column prop="quantity" :label="$t('contract.create.item_table.amount')" width="180">
+      <el-table-column prop="quantity" :label="$t('contract.create.item_table.amount')" width="200">
         <template #default="{ row }">
           <el-input-number v-model="row.quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row)" />
         </template>
@@ -211,69 +216,9 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('contract.create.item_table.total_price')" width="150">
+      <el-table-column :label="$t('contract.create.item_table.total_price')" width="180">
         <template #default="{ row }">
           {{ row.total }}
-        </template>
-      </el-table-column>
-
-      <el-table-column :label="$t('contract.create.item_table.plan')" width="200">
-        <template #header>
-          <div class="planning-text-center">
-            <span>Kế hoạch</span>
-          </div>
-        </template>
-        <el-table-column :label="'Khối lượng'" width="100">
-          <template #default="{ row }">
-            <el-input v-model="row.quantity" />
-          </template>
-        </el-table-column>
-        <el-table-column :label="'Thành tiền'" width="100">
-          <template #default="{ row }">
-            <el-input v-model="row.quantity" />
-          </template>
-        </el-table-column>
-      </el-table-column>
-
-      <el-table-column :label="$t('contract.create.item_table.plan')" width="200">
-        <template #header>
-          <div class="planning-text-center">
-            <span>Thời gian thực hiện</span>
-          </div>
-        </template>
-        <el-table-column :label="'Bắt đầu'" width="110">
-          <template #default="{ row }">
-            <el-date-picker
-                style="width: 100%"
-                v-model="row.startDate"
-                type="date"
-                placeholder="Select Date"
-            />
-          </template>
-        </el-table-column>
-        <el-table-column :label="'Kết thúc'" width="110">
-          <template #default="{ row }">
-            <el-date-picker
-                style="width: 100%"
-                v-model="row.endDate"
-                type="date"
-                placeholder="Select Date"
-            />
-          </template>
-        </el-table-column>
-      </el-table-column>
-
-      <el-table-column prop="unitPrice" width="180">
-        <template #header>
-          <div class="planning-text-center">
-            <span>Tổ đội thi công</span>
-          </div>
-        </template>
-        <template #default="{ row }">
-          <MultipleOptionSelect
-              :listData="listUsers"
-              :isRemote="true"
-          />
         </template>
       </el-table-column>
     </el-table>

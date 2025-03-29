@@ -3,11 +3,14 @@ import { reactive } from "vue";
 import { mixinMethods } from "@/utils/variables";
 import services from "@/plugins/services";
 import { useI18n } from "vue-i18n";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export const useSiteSurveyStore = defineStore(
     "siteSurvey",
     () => {
         const { t } = useI18n();
+        const persist = usePersistenceStore();
+        const {projectId} = persist;
         const validation = reactive({ value: {} });
         const isShowModalConfirm = reactive({ value: false });
         const totalItems = reactive({ value: 0 });
@@ -16,13 +19,13 @@ export const useSiteSurveyStore = defineStore(
         const siteSurveyDetails = reactive({
             value: {
                 id: 0,
-                projectId: null,
+                projectId: projectId.value,
                 siteSurveyName: "",
                 constructionRequirements: "",
                 equipmentRequirements: "",
                 humanResourceCapacity: "",
                 riskAssessment: "",
-                biddingDecision: null,
+                biddingDecision: 0,
                 profitAssessment: "",
                 bidWinProb: null,
                 estimatedExpenses: null,
@@ -32,7 +35,7 @@ export const useSiteSurveyStore = defineStore(
                 discountRate: null,
                 projectCost: null,
                 finalProfit: null,
-                status: null,
+                status: 1,
                 comments: "",
                 attachments: [],
                 surveyDetails: null

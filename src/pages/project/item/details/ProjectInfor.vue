@@ -16,8 +16,7 @@
         <span><strong>{{$t('project.details.infor.status')}}:</strong> {{ $t(formatStatus(project.status)) }}</span>
       </div>
       <div class="column">
-        <p><strong>{{$t('project.details.infor.location')}}:</strong> {{ project.location }}</p>
-        <p><strong>{{$t('project.details.infor.area')}}:</strong> {{ project.area.toLocaleString() }}</p>
+        <p><strong>{{$t('project.details.infor.area')}}:</strong> {{ project.area || "" }}</p>
         <span><strong>{{$t('project.details.infor.start_date') }} - {{$t('project.details.infor.end_date') }}:</strong> {{ formatDate(project.startDate) }} - {{ formatDate(project.endDate) }}</span>
       </div>
       <div class="column">

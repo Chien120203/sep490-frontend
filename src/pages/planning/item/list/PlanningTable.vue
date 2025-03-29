@@ -12,7 +12,16 @@
         <p v-html="$t('planning.table.header.title')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.title }}</span>
+        <span class="data-table">{{ scope.row.planName }}</span>
+      </template>
+    </el-table-column>
+
+    <el-table-column min-width="110">
+      <template #header>
+        <p v-html="$t('planning.table.header.title')"></p>
+      </template>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.projectName }}</span>
       </template>
     </el-table-column>
 
@@ -21,7 +30,7 @@
         <p v-html="$t('planning.table.header.date')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.date) }}</span>
+        <span class="data-table">{{ formatDate(scope.row.createdAt) }}</span>
       </template>
     </el-table-column>
 
@@ -30,7 +39,7 @@
         <p v-html="$t('planning.table.header.creator')"></p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.creator }}</span>
+        <span class="data-table">{{ scope.row.createdByName }}</span>
       </template>
     </el-table-column>
 

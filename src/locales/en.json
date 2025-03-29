@@ -227,7 +227,8 @@
       "save_contract_success": "Save contract success",
       "get_contracts_failed": "Get list contracts failed",
       "save_contract_failed": "Save contract failed",
-      "get_contract_dtls_failed": "Get project details failed"
+      "get_contract_dtls_failed": "Get project details failed",
+      "get_planning_failed": "Get plannings failed"
     }
   },
   "contract": {
@@ -355,7 +356,8 @@
         "generalInfo": "General Information",
         "facilityAssessment": "Facility Assessment",
         "mainInfo": "Main Information",
-        "additionalInfo": "Additional Information"
+        "additionalInfo": "Additional Information",
+        "conclusion": "Conclusion"
       },
       "title": "Site Survey Detail",
       "no_survey": "No site survey available",
@@ -903,5 +905,10 @@
   "S-ADMIN-004": "Update user successfully!",
   "E-ADMIN-001": "An error occurred while deleting a user, you cannot delete your own account, or the person you want to delete has equal or higher authority than you.",
   "E-ADMIN-002": "User already exist, username and email already exist",
-  "E-ADMIN-003": "The role does not exist or you do not have permission to set this permission."
+  "E-ADMIN-003": "The role does not exist or you do not have permission to set this permission.",
+
+  "E-SV-001": "The probability must greater than or equal {min}",
+  "E-SV-002": "The probability must less than or equal {max}",
+  "E-SV-003": "The discount rate must greater than or equal {min}",
+  "E-SV-004": "The discount rate must less than or equal {max}"
 }

@@ -5,7 +5,7 @@
         <span class="btn-back" @click="handleBack"><IconBackMain/></span>
         <h3 class="page__ttl">{{ $t("project.title") }}</h3>
       </div>
-      <div v-if="projectDetails.value.status === RECEIVE_STATUS">
+      <div v-if="isAllowApprove">
         <el-button class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
         <el-button class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.reject") }}</el-button>
       </div>
@@ -105,71 +105,15 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button v-if="isAllowEdit" class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowCreateContract" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>
                 </div>
               </div>
-              <div class="project-body">
-                <div class="project-search">
-                  <div class="project-search-box col-md-9 col-lg-9">
-                    <p class="project-search__ttl">
-                      {{ $t("project.keyword") }}
-                    </p>
-                    <div class="mb-0 ruleform">
-                      <el-input
-                          :placeholder="$t('common.input_keyword')"
-                          @keyup.enter=""
-                          v-model="contractSearchForms.keyWord"
-                          prop="keyWord"
-                      >
-                        <template #append>
-                <span @click="handleContractSearchForm" class="btn-setting">
-                  <IconSetting/>
-                </span>
-                        </template>
-                      </el-input>
-                    </div>
-                  </div>
-                  <div class="btn-search-select col-md-3 col-lg-3 project-box-btn-all">
-                    <el-button class="btn btn-search" @click="handleSearchContract(true)">
-                      {{ $t("common.search") }}
-                    </el-button
-                    >
-                    <el-button class="btn btn-clear" @click="handleClearSearchContractForm">
-                      {{ $t("common.clear") }}
-                    </el-button
-                    >
-                  </div>
-                </div>
-                <div class="form-search" :class="{ active: isShowBoxContractSearch }">
-                  <div class="close-form">
-                    <IconCircleClose @click="isShowBoxContractSearch = false"/>
-                  </div>
-                  <div class="form-search-box">
-                    <div class="item">
-                      <el-form-item :label="$t('project.status')">
-                        <el-date-picker
-                            v-model="contractSearchForms.signDate"
-                            :value-format="DATE_FORMAT"
-                            type="date"
-                            placeholder="Select Date"
-                            class="input-wd-96"
-                        />
-                      </el-form-item>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <ContractList
                   :data="listContracts.value"
                   @details="getContractDetails"
-              />
-              <LoadMore
-                  :listData="listContracts.value"
-                  :totalItems="totalItems.value"
-                  @loadMore="handleSearchContract"
               />
             </el-collapse-item>
             <el-collapse-item name="5">
@@ -179,6 +123,7 @@
               <SiteSurveyInfo
                   :data="siteSurveyDetails.value"
                   :isSurveyNull="isSiteSurveyNull.value"
+                  :allowCreate="isAllowCreateSiteSurvey"
                   @details="getSiteSurveyDetails"
                   @create="handleCreateSiteSurvey"
               />
@@ -202,7 +147,7 @@ import Modal from "@/components/common/Modal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import {DATE_FORMAT} from "@/constants/application.js";
@@ -219,7 +164,7 @@ import { useContractStore } from "@/store/contract.js";
 import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistenceStore} from "@/store/persistence.js";
-import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
+import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 export default {
   name: "ProjectDetails",
@@ -265,7 +210,7 @@ export default {
       projectId
     } = persist;
 
-    const activeCollapseItems = ref(["3", "2", "4"]);
+    const activeCollapseItems = ref(["3", "2", "4", "5"]);
     const changeRequestData = ref([
       {
         id: 1,
@@ -330,8 +275,11 @@ export default {
       pageIndex: 1,
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
-
+    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === PLANNING_STATUS && listContracts.value.length === 0));
+    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull));
+    const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull));
     onMounted(() => {
+      projectId.value = route.params.id;
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
       getSurveyDetails(route.params.id);
@@ -349,7 +297,7 @@ export default {
     };
 
     const handleCreateSiteSurvey = () => {
-      router.push({ name: PAGE_NAME.SITE_SURVEY.CREATE, params: { projectId: route.params.id } });
+      router.push({ name: PAGE_NAME.SITE_SURVEY.CREATE });
     };
 
     const handleRedirectToEdit = () => {
@@ -408,6 +356,8 @@ export default {
       RECEIVE_STATUS,
       PLANNING_STATUS,
       financialData,
+      isAllowCreateContract,
+      isAllowApprove,
       projectDetails,
       isSiteSurveyNull,
       changeRequestData,
@@ -415,6 +365,7 @@ export default {
       activeCollapseItems,
       searchCRForms,
       isShowBoxSearch,
+      isAllowCreateSiteSurvey,
       isShowBoxContractSearch,
       contractSearchForms,
       listContracts,

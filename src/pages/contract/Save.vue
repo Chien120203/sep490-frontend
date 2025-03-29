@@ -13,13 +13,13 @@
     </div>
     <el-row>
       <el-col :span="17">
-        <ContractItems :isAllowUpdate="isAllowUpdate" :items="contractDetails.value.contractDetails"  :isUpdate="isUpdate" @update:items="updateItems"/>
+        <ContractItems :isAllowUpdate="true" :items="contractDetails.value.contractDetails"  :isUpdate="isUpdate" @update:items="updateItems"/>
       </el-col>
       <el-col :span="7">
         <ContractInformation
             ref="childFormRef"
             :rules="CONTRACT_RULES"
-            :isAllowUpdate="isAllowUpdate"
+            :isAllowUpdate="true"
             :projectId="projectId.value"
             :listProjects="listProjects.value"
             :contractInfo="contractDetails.value"
@@ -66,18 +66,17 @@ const {
 const CONTRACT_RULES = getContractRules();
 
 const route = useRoute();
-const isAllowUpdate = ref(projectDetails.value.status === RECEIVE_STATUS);
+// const isAllowUpdate = computed(() => projectDetails.value.status === PLANNING_STATUS);
 const isUpdate = computed(() => !!route.params.id);
 const router = useRouter();
 
 onMounted(async () => {
-  if(isUpdate.value) getContractDetails(route.params.id);
+  if(isUpdate.value) await getContractDetails(projectId.value);
   await getListProjects({
     keyword: '',
     pageIndex: 1,
   }, false);
   listProjects.value = listProjects.value.filter((item) => {return item.id == projectId.value});
-  console.log(listProjects);
 });
 
 onUnmounted(() => {
