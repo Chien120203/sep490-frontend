@@ -176,9 +176,11 @@
               <template #title>
                 <h3>{{ $t("project.details.site_survey") }}</h3>
               </template>
-              <SiteSurveyList
-                  :data="listSurveys.value"
-                  @edit = "getSiteSurveyDetails"
+              <SiteSurveyInfo
+                  :data="siteSurveyDetails.value"
+                  :isSurveyNull="isSiteSurveyNull.value"
+                  @details="getSiteSurveyDetails"
+                  @create="handleCreateSiteSurvey"
               />
             </el-collapse-item>
           </el-collapse>
@@ -211,18 +213,18 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import IconSetting from "@/svg/IconSettingMain.vue";
 import {STATUSES, PLANNING_STATUS, CLOSED_STATUS, RECEIVE_STATUS} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
-import {useProjectStore} from "@/store/project.js";
+import { useProjectStore } from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
-import {useContractStore} from "@/store/contract.js";
-import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
+import { useContractStore } from "@/store/contract.js";
+import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
 
 export default {
   name: "ProjectDetails",
   components: {
-    SiteSurveyList,
+    SiteSurveyInfo,
     ContractList: ContractList,
     LoadMore,
     IconSetting,
@@ -235,13 +237,13 @@ export default {
     IconBackMain,
   },
   setup() {
-    const {t} = useI18n();
+    const { t } = useI18n();
     const route = useRoute();
     const router = useRouter();
     const projectStore = useProjectStore();
     const contractStore = useContractStore();
     const surveyStore = useSiteSurveyStore();
-    const persist = usePersistanceStore();
+    const persist = usePersistenceStore();
 
     const {
       isShowModalConfirm,
@@ -257,10 +259,7 @@ export default {
       getListContracts,
     } = contractStore;
 
-    const {
-      listSurveys,
-      getListSurveys
-    } = surveyStore;
+    const { siteSurveyDetails, isSiteSurveyNull, getSurveyDetails } = surveyStore;
 
     const {
       projectId
@@ -292,30 +291,31 @@ export default {
         title: "CHỦ ĐẦU TƯ (CĐT)",
         bgColor: "#DFF5E1",
         data: [
-          {label: "Hợp đồng", value: 484974055904},
-          {label: "Đã thực hiện", value: 30226660535},
-          {label: "Đã nghiệm thu", value: 29676324721},
-          {label: "CĐT còn nợ", value: -18958404654},
+          { label: "Hợp đồng", value: 484974055904 },
+          { label: "Đã thực hiện", value: 30226660535 },
+          { label: "Đã nghiệm thu", value: 29676324721 },
+          { label: "CĐT còn nợ", value: -18958404654 },
         ],
       },
       {
         title: "NHÀ THẦU (NT)",
         bgColor: "#FEE2E2",
         data: [
-          {label: "Hợp đồng", value: 36644729318},
-          {label: "Đã thực hiện", value: 11101225831},
-          {label: "Còn nợ NT", value: -2580925000},
+          { label: "Hợp đồng", value: 36644729318 },
+          { label: "Đã thực hiện", value: 11101225831 },
+          { label: "Còn nợ NT", value: -2580925000 },
         ],
       },
       {
         title: "NHÀ CUNG CẤP (NCC)",
         bgColor: "#FFF5D1",
         data: [
-          {label: "Hợp đồng", value: 31715860099},
-          {label: "Còn nợ NCC", value: 5369219239},
+          { label: "Hợp đồng", value: 31715860099 },
+          { label: "Còn nợ NCC", value: 5369219239 },
         ],
       },
     ]);
+
     const isShowBoxSearch = ref(false);
     const actionText = ref('');
     const isShowBoxContractSearch = ref(false);
@@ -323,25 +323,21 @@ export default {
       keyWord: "",
       pageIndex: 1,
       projectId: route.params.id,
-      signDate: ""
+      signDate: "",
     });
     const searchCRForms = ref({
       searchValue: "",
       pageIndex: 1,
     });
-    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listSurveys.value.length > 0);
+    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
 
     onMounted(() => {
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
-      getListSurveys({
-        siteSurveyName: "",
-        pageIndex: 1,
-      })
+      getSurveyDetails(route.params.id);
     });
 
-    onUnmounted(() => {
-    });
+    onUnmounted(() => {});
 
     const getContractDetails = (id) => {
       projectId.value = route.params.id;
@@ -349,15 +345,19 @@ export default {
     }
 
     const getSiteSurveyDetails = () => {
-      router.push({name: PAGE_NAME.SITE_SURVEY.DETAILS, prams: {id: route.params.id}})
-    }
+      router.push({ name: PAGE_NAME.SITE_SURVEY.DETAILS, params: { id: route.params.id } });
+    };
+
+    const handleCreateSiteSurvey = () => {
+      router.push({ name: PAGE_NAME.SITE_SURVEY.CREATE, params: { projectId: route.params.id } });
+    };
 
     const handleRedirectToEdit = () => {
-      router.push({name: PAGE_NAME.PROJECT.EDIT, params: {id: route.params.id}});
-    }
+      router.push({ name: PAGE_NAME.PROJECT.EDIT, params: { id: route.params.id } });
+    };
 
     const handleBack = () => {
-      router.push({name: PAGE_NAME.PROJECT.LIST});
+      router.push({ name: PAGE_NAME.PROJECT.LIST });
     };
 
     const handleContractSearchForm = () => {
@@ -365,7 +365,7 @@ export default {
     };
 
     const handleSearchContract = (isSearch = false) => {
-      currentPage.value = isSearch ? 1 : currentPage + 1;
+      currentPage.value = isSearch ? 1 : currentPage.value + 1;
       contractSearchForms.value.pageIndex = isSearch ? 1 : contractSearchForms.value.pageIndex + 1;
       getListContracts(contractSearchForms.value);
     };
@@ -386,9 +386,9 @@ export default {
       contractSearchForms.value = {
         keyWord: "",
         pageIndex: 1,
-        signDate: ""
-      }
-    }
+        signDate: "",
+      };
+    };
 
     const handleRedirectToCreate = () => {
       projectId.value = route.params.id;
@@ -409,6 +409,7 @@ export default {
       PLANNING_STATUS,
       financialData,
       projectDetails,
+      isSiteSurveyNull,
       changeRequestData,
       isShowModalConfirm,
       activeCollapseItems,
@@ -417,7 +418,7 @@ export default {
       isShowBoxContractSearch,
       contractSearchForms,
       listContracts,
-      listSurveys,
+      siteSurveyDetails,
       totalItems,
       isAllowEdit,
       actionText,
@@ -432,6 +433,7 @@ export default {
       handleClearSearchContractForm,
       handleSearchContract,
       getContractDetails,
+      handleCreateSiteSurvey,
     };
   },
 };

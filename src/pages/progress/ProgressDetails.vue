@@ -4,11 +4,11 @@ import ProgressGanttChart from "@/pages/progress/items/ProgressGanttChart.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useRouter} from "vue-router";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 import ProgressDetailsModal from "@/pages/progress/items/modal/ProgressDetailsModal.vue"
 
 const router = useRouter();
-const persistenceStore = usePersistanceStore();
+const persistenceStore = usePersistenceStore();
 
 const {
   projectId

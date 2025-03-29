@@ -25,6 +25,7 @@ const PAGE_NAME = {
   },
   SITE_SURVEY: {
     DETAILS: "site-survey-details",
+      CREATE: "site-survey-create",
   },
   PLANNING : {
     LIST: 'planning-list',
@@ -37,6 +38,7 @@ const PAGE_NAME = {
   CONSTRUCT_LOG: {
     VIEW: "construct-log-view",
     DETAILS: 'construct-log-details'
+
   }
 };
 

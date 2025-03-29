@@ -12,10 +12,11 @@ export const useSiteSurveyStore = defineStore(
         const isShowModalConfirm = reactive({ value: false });
         const totalItems = reactive({ value: 0 });
         const currentPage = reactive({ value: 0 });
-        const listSurveys = reactive({ value: [] });
+        const isSiteSurveyNull = reactive({ value: false });
         const siteSurveyDetails = reactive({
             value: {
                 id: 0,
+                projectId: null,
                 siteSurveyName: "",
                 constructionRequirements: "",
                 equipmentRequirements: "",
@@ -33,43 +34,18 @@ export const useSiteSurveyStore = defineStore(
                 finalProfit: null,
                 status: null,
                 comments: "",
-                attachments: "",
+                attachments: [],
                 surveyDetails: null
             }
         });
 
-        const getListSurveys = async (params, isLoading = true) => {
-            if (isLoading) mixinMethods.startLoading();
-            await services.SiteSurveyAPI.list(
-                params,
-                (response) => {
-                    if (currentPage.value === 1) {
-                        listSurveys.value = response.data;
-                    } else {
-                        listSurveys.value = [...listSurveys.value, ...response.data];
-                    }
-                    totalItems.value = response.meta.total;
-                    currentPage.value = response.meta.index;
-                    mixinMethods.endLoading();
-                },
-                (error) => {
-                    mixinMethods.notifyError(t("response.message.get_surveys_failed"));
-                    mixinMethods.endLoading();
-                }
-            );
-        };
-
         const getSurveyDetails = async (id) => {
             mixinMethods.startLoading();
             await services.SiteSurveyAPI.details(
-                id,
-                {},
+                {projectId: id},
                 (response) => {
-                    siteSurveyDetails.value = {
-                        ...response.data,
-                        projectId: response.data?.project.id,
-                        attachments: response.data.attachments || []
-                    };
+                    if (!response.data) isSiteSurveyNull.value = true;
+                    else siteSurveyDetails.value = response.data;
                     mixinMethods.endLoading();
                 },
                 (error) => {
@@ -124,15 +100,14 @@ export const useSiteSurveyStore = defineStore(
 
         return {
             validation,
-            listSurveys,
             totalItems,
             currentPage,
             siteSurveyDetails,
             isShowModalConfirm,
+            isSiteSurveyNull,
             getSurveyDetails,
             clearSurveyDetails,
-            saveSurvey,
-            getListSurveys
+            saveSurvey
         };
     }
 );

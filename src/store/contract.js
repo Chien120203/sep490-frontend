@@ -119,7 +119,7 @@ export const useContractStore = defineStore(
       getContractDetails,
       clearContractDetails,
       saveContract,
-      getListContracts
+      getListContracts,
     };
   }
 );

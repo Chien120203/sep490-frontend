@@ -15,6 +15,7 @@
     "export_pdf": "Export to PDF",
     "terminate": "Terminate",
     "new": "New",
+    "details": "Details",
     "extend": "Extend",
     "first_half_year": "First Half Year",
     "second_half_year": "Second Half Year",
@@ -48,7 +49,7 @@
     "active": "Active",
     "inactive": "Inactive",
     "update": "Update",
-    "create": "Create",
+    "create": "Create New",
     "edit": "Edit",
     "success": "Success",
     "error": "Error",
@@ -340,7 +341,7 @@
       "year": "Yearly"
     },
     "create": {
-      "title": "Create Contract",
+      "title": "Create New Site Survey",
       "contract_name": "Contract Name",
       "duration": "Duration",
       "deposit": "Deposit",
@@ -350,16 +351,23 @@
       "landlord": "Landlord"
     },
     "details": {
-      "title": "Contract Detail",
-      "survey_name": "Site Survey Name",
-      "project_code": "Project Code",
+      "sections": {
+        "generalInfo": "General Information",
+        "facilityAssessment": "Facility Assessment",
+        "mainInfo": "Main Information",
+        "additionalInfo": "Additional Information"
+      },
+      "title": "Site Survey Detail",
+      "no_survey": "No site survey available",
+      "siteSurveyName": "Site Survey Name",
+      "projectId": "Project Code",
       "constructionRequirements": "Construction Requirements",
       "equipmentRequirements": "Equipment Requirements",
       "humanResourceCapacity": "Human Resource Capacity",
       "riskAssessment": "Risk Assessment",
       "biddingDecision": "Bidding Decision",
       "profitAssessment": "Profit Assessment",
-      "bidWinProb": "",
+      "bidWinProb": "Bid Win Probability",
       "estimatedExpenses": "Estimated Expenses",
       "estimatedProfits": "Estimated Profits",
       "tenderPackagePrice": "Tender Package Price",

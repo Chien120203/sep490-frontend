@@ -18,9 +18,9 @@
           :key="index"
           class="file-item"
       >
-        <span class="file-name">{{ file.name }}</span>
-        <button :disabled="disabled" type="button" class="remove-btn" @click="removeFile(index, file)">✖</button>
-        <button v-if="isUpdate" class="download-btn" @click="downloadFile(file.webContentLink)">
+        <span class="file-name">{{ file.Name }}</span>
+        <button type="button" class="remove-btn" @click="removeFile(index, file)">✖</button>
+        <button v-if="isUpdate" class="download-btn" @click="downloadFile(file.WebContentLink)">
           <IconDownload/>
         </button>
       </div>

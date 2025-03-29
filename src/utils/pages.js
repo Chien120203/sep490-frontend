@@ -36,6 +36,7 @@ const PAGES = {
 
   //site_survey
   SITE_SURVEY: "/site-survey",
+  SITE_SURVEY_CREATE: "/site-survey/create",
   SITE_SURVEY_DETAILS: "/site-survey/:id",
 
   //construction log
