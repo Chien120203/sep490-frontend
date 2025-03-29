@@ -8,6 +8,15 @@ const PAGES = {
   CUSTOMER_CREATE: "/customer/create",
   CUSTOMER_DETAILS: "/customer/:id",
 
+  //planning
+  PLANNING: "/planning",
+  PLANNING_CREATE: "/planning/create",
+  PLANNING_DETAILS: "/planning/details/:id",
+
+  //progress
+  PROGRESS: "/progress",
+  PROGRESS_DETAILS: "/progress/details",
+
   //project
   PROJECT: "/project",
   PROJECT_DETAILS: "/project/details/:id",
@@ -27,7 +36,12 @@ const PAGES = {
 
   //site_survey
   SITE_SURVEY: "/site-survey",
+  SITE_SURVEY_CREATE: "/site-survey/create",
   SITE_SURVEY_DETAILS: "/site-survey/:id",
+
+  //construction log
+  CONSTRUCT_LOG: "/construct-log",
+  CONSTRUCT_LOG_DETAILS: "/construct-log/details",
 };
 
 export default PAGES;

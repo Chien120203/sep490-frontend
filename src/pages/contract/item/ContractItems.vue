@@ -5,7 +5,11 @@ import IconTrash from "@/svg/IconTrash.vue";
 
 const props = defineProps({
   items: Array,
-  isUpdate: Boolean
+  isUpdate: Boolean,
+  isAllowUpdate: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const listItems = ref([...props.items]);
@@ -160,7 +164,7 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('contract.create.item_table.action')" width="120">
+      <el-table-column v-if="isAllowUpdate" :label="$t('contract.create.item_table.action')" width="120">
         <template #default="{ row }">
           <div class="action-btn">
             <IconPlus @click="addSubItem(row)" />
@@ -171,25 +175,25 @@ const hierarchicalItems = computed(() => {
 
       <el-table-column prop="name" :label="$t('contract.create.item_table.item')" min-width="250">
         <template #default="{ row }">
-          <el-input v-model="row.workName" />
+          <el-input :disabled="!isAllowUpdate" v-model="row.workName" />
         </template>
       </el-table-column>
 
       <el-table-column prop="unit" :label="$t('contract.create.item_table.unit')" width="100">
         <template #default="{ row }">
-          <el-input v-model="row.unit" :disabled="isParent(row)" />
+          <el-input v-model="row.unit" :disabled="isParent(row) && !isAllowUpdate" />
         </template>
       </el-table-column>
 
       <el-table-column prop="quantity" :label="$t('contract.create.item_table.amount')" width="180">
         <template #default="{ row }">
-          <el-input-number v-model="row.quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row)" />
+          <el-input-number v-model="row.quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row) && !isAllowUpdate" />
         </template>
       </el-table-column>
 
       <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" width="180">
         <template #default="{ row }">
-          <el-input-number v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row)" />
+          <el-input-number v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) && !isAllowUpdate" />
         </template>
       </el-table-column>
 

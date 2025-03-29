@@ -25,6 +25,20 @@ const PAGE_NAME = {
   },
   SITE_SURVEY: {
     DETAILS: "site-survey-details",
+      CREATE: "site-survey-create",
+  },
+  PLANNING : {
+    LIST: 'planning-list',
+    DETAILS: "planning",
+    CREATE: "planning-create",
+  },
+  PROGRESS : {
+    DETAILS: "progress-details",
+  },
+  CONSTRUCT_LOG: {
+    VIEW: "construct-log-view",
+    DETAILS: 'construct-log-details'
+
   }
 };
 

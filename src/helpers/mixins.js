@@ -123,7 +123,7 @@ const formatCurrency = (money, s_delimiter = ".") => {
 const handleChangeNumber = (number) => number.toString().replaceAll(",", "");
 
 const formatInputCurrency = (value, isEmpty = false, withoutComma = false) => {
-  if (!value) return isEmpty ? "" : 0;
+  if (!value) return isEmpty ? "" : "";
   let stringValue = String(value).replace(/[^0-9.+-]/g, "");
   if (withoutComma) return Math.round(parseFloat(stringValue) * 100) / 100;
   const decimalIndex = stringValue.indexOf(".");

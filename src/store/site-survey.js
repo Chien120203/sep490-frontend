@@ -3,25 +3,29 @@ import { reactive } from "vue";
 import { mixinMethods } from "@/utils/variables";
 import services from "@/plugins/services";
 import { useI18n } from "vue-i18n";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export const useSiteSurveyStore = defineStore(
     "siteSurvey",
     () => {
         const { t } = useI18n();
+        const persist = usePersistenceStore();
+        const {projectId} = persist;
         const validation = reactive({ value: {} });
         const isShowModalConfirm = reactive({ value: false });
         const totalItems = reactive({ value: 0 });
         const currentPage = reactive({ value: 0 });
-        const listSurveys = reactive({ value: [] });
+        const isSiteSurveyNull = reactive({ value: false });
         const siteSurveyDetails = reactive({
             value: {
                 id: 0,
+                projectId: projectId.value,
                 siteSurveyName: "",
                 constructionRequirements: "",
                 equipmentRequirements: "",
                 humanResourceCapacity: "",
                 riskAssessment: "",
-                biddingDecision: null,
+                biddingDecision: 0,
                 profitAssessment: "",
                 bidWinProb: null,
                 estimatedExpenses: null,
@@ -31,45 +35,20 @@ export const useSiteSurveyStore = defineStore(
                 discountRate: null,
                 projectCost: null,
                 finalProfit: null,
-                status: null,
+                status: 1,
                 comments: "",
-                attachments: "",
+                attachments: [],
                 surveyDetails: null
             }
         });
 
-        const getListSurveys = async (params, isLoading = true) => {
-            if (isLoading) mixinMethods.startLoading();
-            await services.SiteSurveyAPI.list(
-                params,
-                (response) => {
-                    if (currentPage.value === 1) {
-                        listSurveys.value = response.data;
-                    } else {
-                        listSurveys.value = [...listSurveys.value, ...response.data];
-                    }
-                    totalItems.value = response.meta.total;
-                    currentPage.value = response.meta.index;
-                    mixinMethods.endLoading();
-                },
-                (error) => {
-                    mixinMethods.notifyError(t("response.message.get_surveys_failed"));
-                    mixinMethods.endLoading();
-                }
-            );
-        };
-
         const getSurveyDetails = async (id) => {
             mixinMethods.startLoading();
             await services.SiteSurveyAPI.details(
-                id,
-                {},
+                {projectId: id},
                 (response) => {
-                    siteSurveyDetails.value = {
-                        ...response.data,
-                        projectId: response.data?.project.id,
-                        attachments: response.data.attachments || []
-                    };
+                    if (!response.data) isSiteSurveyNull.value = true;
+                    else siteSurveyDetails.value = response.data;
                     mixinMethods.endLoading();
                 },
                 (error) => {
@@ -124,15 +103,14 @@ export const useSiteSurveyStore = defineStore(
 
         return {
             validation,
-            listSurveys,
             totalItems,
             currentPage,
             siteSurveyDetails,
             isShowModalConfirm,
+            isSiteSurveyNull,
             getSurveyDetails,
             clearSurveyDetails,
-            saveSurvey,
-            getListSurveys
+            saveSurvey
         };
     }
 );

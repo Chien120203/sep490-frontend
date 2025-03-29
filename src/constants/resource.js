@@ -1,0 +1,3 @@
+export const HUMAN_RESOURCE = "HUMAN";
+export const MACHINE_RESOURCE = "MACHINE";
+export const MATERIAL_RESOURCE = "MATERIAL";

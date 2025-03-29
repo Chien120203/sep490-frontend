@@ -1,7 +1,7 @@
 import axios from "axios";
 import {post} from "@/services/BaseService";
 import API_CODE from "@/utils/api_code";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 import {FRONT_END_URL} from "@/constants/application";
 import PAGES from "@/utils/pages.js";
 
@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const persist = usePersistanceStore();
+    const persist = usePersistenceStore();
     const {loggedIn} = persist;
 
     // Check if the error is due to an expired token (status 401)

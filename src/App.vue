@@ -62,12 +62,12 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import Navbar from "@/components/common/Navbar.vue";
 import Sidebar from "@/components/common/Sidebar.vue";
-import { usePersistanceStore } from "@/store/persistance.js";
+import { usePersistenceStore } from "@/store/persistence.js";
 
 export default {
   components: { Navbar, Sidebar },
   setup() {
-    const persist = usePersistanceStore();
+    const persist = usePersistenceStore();
     const { loggedIn } = persist;
     const isMenu = ref(false);
     const isHovered = ref(false);
@@ -125,6 +125,8 @@ export default {
 
 <style lang="scss">
 @import "@/assets/styles/app.scss";
+@import "@/assets/styles/syncfusion.scss";
+//@import url("https://cdn.syncfusion.com/ej2/material.css");
 
 .main-layout {
   height: 100%;

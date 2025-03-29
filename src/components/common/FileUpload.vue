@@ -6,6 +6,7 @@
     <input
         type="file"
         id="fileInput"
+        :disabled="disabled"
         @change="handleFileChange"
         :accept="allowedTypes"
         multiple
@@ -17,9 +18,9 @@
           :key="index"
           class="file-item"
       >
-        <span class="file-name">{{ file.name }}</span>
-        <button type="button" class="remove-btn" @click="removeFile(index, file)">✖</button>
-        <button v-if="isUpdate" class="download-btn" @click="downloadFile(file.webContentLink)">
+        <span class="file-name">{{ file.Name || file.name }}</span>
+        <button :disabled="disabled" type="button" class="remove-btn" @click="removeFile(index, file)">✖</button>
+        <button v-if="isUpdate" class="download-btn" @click="downloadFile(file.WebContentLink)">
           <IconDownload/>
         </button>
       </div>
@@ -45,6 +46,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const emit = defineEmits(["file-selected", "file-removed"]);
@@ -65,6 +70,7 @@ const handleFileChange = (event) => {
   });
 
   event.target.value = "";
+  emit("file-selected", fileList.value);
 };
 
 const removeFile = (index, file) => {

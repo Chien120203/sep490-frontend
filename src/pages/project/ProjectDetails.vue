@@ -1,8 +1,14 @@
 <template>
   <div class="project-details-page">
-    <div class="project-header">
-      <span class="btn-back" @click="handleBack"><IconBackMain/></span>
-      <h3 class="page__ttl">{{ $t("project.title") }}</h3>
+    <div class="project-header-content">
+      <div class="project-header">
+        <span class="btn-back" @click="handleBack"><IconBackMain/></span>
+        <h3 class="page__ttl">{{ $t("project.title") }}</h3>
+      </div>
+      <div v-if="isAllowApprove">
+        <el-button class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
+        <el-button class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.reject") }}</el-button>
+      </div>
     </div>
     <div class="project-details-infor">
       <el-row class="project-detail-collapse">
@@ -99,95 +105,40 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowCreateContract" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>
-                </div>
-              </div>
-              <div class="project-body">
-                <div class="project-search">
-                  <div class="project-search-box col-md-9 col-lg-9">
-                    <p class="project-search__ttl">
-                      {{ $t("project.keyword") }}
-                    </p>
-                    <div class="mb-0 ruleform">
-                      <el-input
-                          :placeholder="$t('common.input_keyword')"
-                          @keyup.enter=""
-                          v-model="contractSearchForms.keyWord"
-                          prop="keyWord"
-                      >
-                        <template #append>
-                <span @click="handleContractSearchForm" class="btn-setting">
-                  <IconSetting/>
-                </span>
-                        </template>
-                      </el-input>
-                    </div>
-                  </div>
-                  <div class="btn-search-select col-md-3 col-lg-3 project-box-btn-all">
-                    <el-button class="btn btn-search" @click="handleSearchContract(true)">
-                      {{ $t("common.search") }}
-                    </el-button
-                    >
-                    <el-button class="btn btn-clear" @click="handleClearSearchContractForm">
-                      {{ $t("common.clear") }}
-                    </el-button
-                    >
-                  </div>
-                </div>
-                <div class="form-search" :class="{ active: isShowBoxContractSearch }">
-                  <div class="close-form">
-                    <IconCircleClose @click="isShowBoxContractSearch = false"/>
-                  </div>
-                  <div class="form-search-box">
-                    <div class="item">
-                      <el-form-item :label="$t('project.status')">
-                        <el-date-picker
-                            v-model="contractSearchForms.signDate"
-                            :value-format="DATE_FORMAT"
-                            type="date"
-                            placeholder="Select Date"
-                            class="input-wd-96"
-                        />
-                      </el-form-item>
-                    </div>
-                  </div>
                 </div>
               </div>
               <ContractList
                   :data="listContracts.value"
                   @details="getContractDetails"
               />
-              <LoadMore
-                  :listData="listContracts.value"
-                  :totalItems="totalItems.value"
-                  @loadMore="handleSearchContract"
-              />
             </el-collapse-item>
             <el-collapse-item name="5">
               <template #title>
                 <h3>{{ $t("project.details.site_survey") }}</h3>
               </template>
-              <SiteSurveyList
-                  :data="changeRequestData"
-                  @details = "getSiteSurveyList"
-              />
-            </el-collapse-item>
-            <el-collapse-item name="5">
-              <template #title>
-                <h3>{{ $t("project.details.site_survey") }}</h3>
-              </template>
-              <SiteSurveyList
-                  :data="changeRequestData"
-                  @details = "getSiteSurveyList"
+              <SiteSurveyInfo
+                  :data="siteSurveyDetails.value"
+                  :isSurveyNull="isSiteSurveyNull.value"
+                  :allowCreate="isAllowCreateSiteSurvey"
+                  @details="getSiteSurveyDetails"
+                  @create="handleCreateSiteSurvey"
               />
             </el-collapse-item>
           </el-collapse>
         </el-col>
       </el-row>
     </div>
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm.value"
+        @close-modal="closeModalConfirm"
+        @confirmAction="handleConfirm"
+        :message="$t('project.modal_confirm.message', {action: actionText})"
+        :title="$t('project.modal_confirm.title')"
+    />
   </div>
 </template>
 
@@ -196,26 +147,29 @@ import Modal from "@/components/common/Modal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
-import {DATE_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 import ProjectInfor from "./item/details/ProjectInfor.vue"
 import FinancialSummary from "./item/list/FinancialSummary.vue";
 import ProjectCR from "./item/details/ProjectCR.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import IconSetting from "@/svg/IconSettingMain.vue";
-import {STATUSES} from "@/constants/project.js";
+import {STATUSES, PLANNING_STATUS, CLOSED_STATUS, RECEIVE_STATUS} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
-import {useProjectStore} from "@/store/project.js";
+import { useProjectStore } from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
-import {useContractStore} from "@/store/contract.js";
-import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
+import { useContractStore } from "@/store/contract.js";
+import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
+import {useSiteSurveyStore} from "@/store/site-survey.js";
+import {usePersistenceStore} from "@/store/persistence.js";
+import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 export default {
   name: "ProjectDetails",
   components: {
-    SiteSurveyList,
+    SiteSurveyInfo,
     ContractList: ContractList,
     LoadMore,
     IconSetting,
@@ -228,13 +182,35 @@ export default {
     IconBackMain,
   },
   setup() {
-    const {t} = useI18n();
+    const { t } = useI18n();
     const route = useRoute();
     const router = useRouter();
     const projectStore = useProjectStore();
     const contractStore = useContractStore();
+    const surveyStore = useSiteSurveyStore();
+    const persist = usePersistenceStore();
 
-    const activeCollapseItems = ref(["3", "2", "4"]);
+    const {
+      isShowModalConfirm,
+      projectDetails,
+      getProjectDetails,
+      saveProject
+    } = projectStore;
+
+    const {
+      listContracts,
+      totalItems,
+      currentPage,
+      getListContracts,
+    } = contractStore;
+
+    const { siteSurveyDetails, isSiteSurveyNull, getSurveyDetails } = surveyStore;
+
+    const {
+      projectId
+    } = persist;
+
+    const activeCollapseItems = ref(["3", "2", "4", "5"]);
     const changeRequestData = ref([
       {
         id: 1,
@@ -260,88 +236,76 @@ export default {
         title: "CHỦ ĐẦU TƯ (CĐT)",
         bgColor: "#DFF5E1",
         data: [
-          {label: "Hợp đồng", value: 484974055904},
-          {label: "Đã thực hiện", value: 30226660535},
-          {label: "Đã nghiệm thu", value: 29676324721},
-          {label: "CĐT còn nợ", value: -18958404654},
+          { label: "Hợp đồng", value: 484974055904 },
+          { label: "Đã thực hiện", value: 30226660535 },
+          { label: "Đã nghiệm thu", value: 29676324721 },
+          { label: "CĐT còn nợ", value: -18958404654 },
         ],
       },
       {
         title: "NHÀ THẦU (NT)",
         bgColor: "#FEE2E2",
         data: [
-          {label: "Hợp đồng", value: 36644729318},
-          {label: "Đã thực hiện", value: 11101225831},
-          {label: "Còn nợ NT", value: -2580925000},
+          { label: "Hợp đồng", value: 36644729318 },
+          { label: "Đã thực hiện", value: 11101225831 },
+          { label: "Còn nợ NT", value: -2580925000 },
         ],
       },
       {
         title: "NHÀ CUNG CẤP (NCC)",
         bgColor: "#FFF5D1",
         data: [
-          {label: "Hợp đồng", value: 31715860099},
-          {label: "Còn nợ NCC", value: 5369219239},
+          { label: "Hợp đồng", value: 31715860099 },
+          { label: "Còn nợ NCC", value: 5369219239 },
         ],
       },
     ]);
-    const siteSurveyDate = ref([
 
-    ]);
     const isShowBoxSearch = ref(false);
+    const actionText = ref('');
     const isShowBoxContractSearch = ref(false);
     const contractSearchForms = ref({
       keyWord: "",
       pageIndex: 1,
       projectId: route.params.id,
-      signDate: ""
+      signDate: "",
     });
     const searchCRForms = ref({
       searchValue: "",
       pageIndex: 1,
     });
-
-    const {
-      getProjectDetails,
-      projectDetails
-    } = projectStore;
-    const {
-      listContracts,
-      totalItems,
-      currentPage,
-      getListContracts,
-    } = contractStore;
-
+    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === PLANNING_STATUS && listContracts.value.length === 0));
+    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull));
+    const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull));
     onMounted(() => {
+      projectId.value = route.params.id;
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
+      getSurveyDetails(route.params.id);
     });
 
-    onUnmounted(() => {
-    });
+    onUnmounted(() => {});
 
     const getContractDetails = (id) => {
+      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
     }
 
-    const getSiteSurveyList = () => {
-      router.push({name: PAGE_NAME.SITE_SURVEY.DETAILS, prams: {id: route.params.id}})
-    }
+    const getSiteSurveyDetails = () => {
+      router.push({ name: PAGE_NAME.SITE_SURVEY.DETAILS, params: { id: route.params.id } });
+    };
+
+    const handleCreateSiteSurvey = () => {
+      router.push({ name: PAGE_NAME.SITE_SURVEY.CREATE });
+    };
 
     const handleRedirectToEdit = () => {
-      router.push({name: PAGE_NAME.PROJECT.EDIT, params: {id: route.params.id}});
-    }
+      router.push({ name: PAGE_NAME.PROJECT.EDIT, params: { id: route.params.id } });
+    };
 
     const handleBack = () => {
-      router.push({name: PAGE_NAME.PROJECT.LIST});
-    };
-
-    const onSubmit = (isUpdate) => {
-    };
-
-    const handleOpenModalConfirm = (id) => {
-    };
-
-    const handleCloseModal = () => {
+      router.push({ name: PAGE_NAME.PROJECT.LIST });
     };
 
     const handleContractSearchForm = () => {
@@ -349,48 +313,78 @@ export default {
     };
 
     const handleSearchContract = (isSearch = false) => {
-      currentPage.value = isSearch ? 1 : currentPage + 1;
+      currentPage.value = isSearch ? 1 : currentPage.value + 1;
       contractSearchForms.value.pageIndex = isSearch ? 1 : contractSearchForms.value.pageIndex + 1;
       getListContracts(contractSearchForms.value);
+    };
+
+    const closeModalConfirm = () => {
+      isShowModalConfirm.value = false;
     }
+
+    const handleConfirm = () => {
+      if(actionText.value === t('common.approve')) {
+        projectDetails.value.status = PLANNING_STATUS;
+      } else projectDetails.value.status = CLOSED_STATUS;
+      saveProject(projectDetails.value);
+      isShowModalConfirm.value = false;
+    };
 
     const handleClearSearchContractForm = () => {
       contractSearchForms.value = {
         keyWord: "",
         pageIndex: 1,
-        signDate: ""
-      }
-    }
+        signDate: "",
+      };
+    };
 
     const handleRedirectToCreate = () => {
+      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.CREATE});
     }
 
+    const handleChangeStatus = (status) => {
+      isShowModalConfirm.value = true;
+      if(status === PLANNING_STATUS) actionText.value = t('common.approve');
+      else actionText.value = t('common.reject');
+    }
+
     return {
+      DATE_FORMAT,
+      STATUSES,
+      CLOSED_STATUS,
+      RECEIVE_STATUS,
+      PLANNING_STATUS,
       financialData,
+      isAllowCreateContract,
+      isAllowApprove,
       projectDetails,
+      isSiteSurveyNull,
       changeRequestData,
+      isShowModalConfirm,
       activeCollapseItems,
       searchCRForms,
       isShowBoxSearch,
+      isAllowCreateSiteSurvey,
       isShowBoxContractSearch,
       contractSearchForms,
       listContracts,
+      siteSurveyDetails,
       totalItems,
-      TEXT_CONFIRM_DELETE,
-      DATE_FORMAT,
-      STATUSES,
+      isAllowEdit,
+      actionText,
+      closeModalConfirm,
+      handleChangeStatus,
+      handleConfirm,
       handleBack,
-      handleCloseModal,
-      handleOpenModalConfirm,
       handleRedirectToCreate,
       handleRedirectToEdit,
-      onSubmit,
-      getSiteSurveyList,
+      getSiteSurveyDetails,
       handleContractSearchForm,
       handleClearSearchContractForm,
       handleSearchContract,
       getContractDetails,
+      handleCreateSiteSurvey,
     };
   },
 };
@@ -418,6 +412,10 @@ export default {
       margin-left: 24px !important;
     }
   }
+}
+.project-header-content {
+  display: flex;
+  justify-content: space-between;
 }
 .contract-header {
   display: flex;

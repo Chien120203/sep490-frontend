@@ -15,6 +15,7 @@
     "export_pdf": "Export to PDF",
     "terminate": "Terminate",
     "new": "New",
+    "details": "Details",
     "extend": "Extend",
     "first_half_year": "First Half Year",
     "second_half_year": "Second Half Year",
@@ -48,7 +49,7 @@
     "active": "Active",
     "inactive": "Inactive",
     "update": "Update",
-    "create": "Create",
+    "create": "Create New",
     "edit": "Edit",
     "success": "Success",
     "error": "Error",
@@ -66,6 +67,7 @@
     "department": "Department",
     "account_manager": "AM",
     "customer": "Customer",
+    "no_dependency": "No Dependency",
     "unit": "Unit",
     "total": "Total",
     "name": "Name",
@@ -114,7 +116,6 @@
     "comment": "Comment by",
     "outgroup": "Out group",
     "placeholder_chat": "Write a message...",
-    "text_vmo": "Copyright 2024 by VMO",
     "contract_status": {
       "new": "New",
       "in_progress": "Inprogress",
@@ -226,7 +227,8 @@
       "save_contract_success": "Save contract success",
       "get_contracts_failed": "Get list contracts failed",
       "save_contract_failed": "Save contract failed",
-      "get_contract_dtls_failed": "Get project details failed"
+      "get_contract_dtls_failed": "Get project details failed",
+      "get_planning_failed": "Get plannings failed"
     }
   },
   "contract": {
@@ -316,7 +318,7 @@
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
   },
-  "site-survey": {
+  "survey": {
     "title": "Site Survey",
     "add_new": "Add New",
     "keyword": "Keyword",
@@ -340,7 +342,7 @@
       "year": "Yearly"
     },
     "create": {
-      "title": "Create Contract",
+      "title": "Create New Site Survey",
       "contract_name": "Contract Name",
       "duration": "Duration",
       "deposit": "Deposit",
@@ -349,68 +351,36 @@
       "tenants": "Tenants",
       "landlord": "Landlord"
     },
-    "detail": {
-      "title": "Contract Detail"
-    },
-    "table": {
-      "header": {
-        "name": "Contract Name",
-        "start_date": " Start Date",
-        "finish_date": " Finish Date",
-        "room": "Room Code",
-        "tenant": "Tenant",
-        "attachment": "Contract Attachment",
-        "action": "Action",
-        "status": "Status",
-        "type": "Type",
-        "landlord": "Landlord"
-      }
-    },
-    "modal_confirm": {
-      "title": "Confirm terminate contract",
-      "message": "Please enter 'Terminate' to confirm terminate this contract"
-    },
-    "status_placeholder": "Contract status",
-    "room_placeholder": "Contract room",
-    "tenant_placeholder": "Contract tenant",
-    "type_placeholder": "Contract type",
-    "landlord_placeholder": "Contract landlord"
-  },
-  "site-survey": {
-    "title": "Site Survey",
-    "add_new": "Add New",
-    "keyword": "Keyword",
-    "search": "Search",
-    "clear": "Clear",
-    "date": "Contract Date",
-    "status": "Status",
-    "type": "Type",
-    "room": "Room",
-    "tenant": "Tenant",
-    "landlord": "Landlord",
-    "statuses": {
-      "active": "Active",
-      "terminated": "Terminated",
-      "renewed": "Renewed"
-    },
-    "types": {
-      "monthly": "Monthly",
-      "quater": "Quater",
-      "half-year": "Half Year",
-      "year": "Yearly"
-    },
-    "create": {
-      "title": "Create Contract",
-      "contract_name": "Contract Name",
-      "duration": "Duration",
-      "deposit": "Deposit",
-      "room": "Room",
-      "type": "Type",
-      "tenants": "Tenants",
-      "landlord": "Landlord"
-    },
-    "detail": {
-      "title": "Contract Detail"
+    "details": {
+      "sections": {
+        "generalInfo": "General Information",
+        "facilityAssessment": "Facility Assessment",
+        "mainInfo": "Main Information",
+        "additionalInfo": "Additional Information",
+        "conclusion": "Conclusion"
+      },
+      "title": "Site Survey Detail",
+      "no_survey": "No site survey available",
+      "siteSurveyName": "Site Survey Name",
+      "projectId": "Project Code",
+      "constructionRequirements": "Construction Requirements",
+      "equipmentRequirements": "Equipment Requirements",
+      "humanResourceCapacity": "Human Resource Capacity",
+      "riskAssessment": "Risk Assessment",
+      "biddingDecision": "Bidding Decision",
+      "profitAssessment": "Profit Assessment",
+      "bidWinProb": "Bid Win Probability",
+      "estimatedExpenses": "Estimated Expenses",
+      "estimatedProfits": "Estimated Profits",
+      "tenderPackagePrice": "Tender Package Price",
+      "totalBidPrice": "Total Bid Price",
+      "discountRate": "Discount Rate",
+      "projectCost": "Project Cost",
+      "finalProfit": "Final Profit",
+      "status": "Status",
+      "comments": "Comments",
+      "attachments": "Attachments",
+      "surveyDetails": "Survey Details"
     },
     "table": {
       "header": {
@@ -555,6 +525,8 @@
       "attachment": "Attachment",
       "description": "Description",
       "technical_manager": "Technical Manager",
+      "resource_manager": "Resource Manager",
+      "construction_manager": "Construction Manager",
       "upload_file": "Upload File"
     },
     "edit": {
@@ -575,14 +547,56 @@
       }
     },
     "modal_confirm": {
-      "title": "Confirm delete customer",
-      "message": "Please enter 'Delete' to confirm delete this customer"
+      "title": "Confirm change project status",
+      "message": "Do you want to {action} project?"
     },
     "status_placeholder": "Contract status",
     "room_placeholder": "Contract room",
     "tenant_placeholder": "Contract tenant",
     "type_placeholder": "Contract type",
-    "landlord_placeholder": "Contract landlord"
+    "task": {
+      "relation": {
+        "ss": "Start to Start",
+        "sf": "Start to Finish",
+        "fs": "Finish to Start",
+        "ff": "Finish to Finish"
+      }
+    }
+  },
+  "progress": {
+    "add_new_cr": "Add New CR",
+    "add_new": "Add New",
+    "timeline": {
+      "day": "Day",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    },
+    "details": {
+      "title": "Project Progress"
+    }
+  },
+  "planning": {
+    "title": "Project Planning",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "clear": "Clear",
+    "create": {
+      "title": "Create Planning"
+    },
+    "edit": {
+      "title": "Edit Planning"
+    },
+    "table": {
+      "header": {
+        "title": "Title",
+        "date": "Date",
+        "status": "Status",
+        "creator": "Creator",
+        "action": "Action"
+      }
+    }
   },
   "bill": {
     "title": "Bill",
@@ -781,102 +795,21 @@
   "side_bar": {
     "label": {
       "user": "Users",
-      "room": "Rooms",
       "profile": "Profile",
       "contract": "Contracts",
-      "bill": "Bills",
-      "utility": "Utilities",
       "customer": "Customer",
-      "project": "Project"
+      "project": "Project",
+      "planning": "Planning",
+      "progress": "Progress",
+      "construct_log": "Construction Log"
     }
   },
-  "room": {
-    "title": "Rooms",
-    "add_new": "Add New Room",
-    "keyword": "Keyword",
-    "status": {
-      "vacant": "Vacant",
-      "rented": "Rented",
-      "under_repair": "Under Repair"
+  "construct_log": {
+    "view": {
+      "title": "Construction Log"
     },
-    "table":{
-      "header": {
-        "room_code": "Room Code",
-        "area": "Area(&#13217;)",
-        "capacity": "Capacity",
-        "price": "Price",
-        "status": "Status",
-        "utilities": "Utilities",
-        "action": "Action",
-        "landlord": "Landlord"
-      },
-      "utilities": {
-        "header": {
-          "name": "Name",
-          "amount": "Service Index",
-          "price": "Price"
-        }
-      }
-    },
-    "form": {
-      "label_room_code": "Room Code",
-      "label_room_area": "Area",
-      "label_room_capacity": "Capacity",
-      "label_room_rent_price": "Rent Price",
-      "label_room_status": "Status",
-      "label_room_utilities": "Utilities",
-      "label_room_landlord": "LandLord",
-      "placeholder_room_rent_price": "Enter Rent Price",
-      "placeholder_room_capacity": "Enter Room Capacity",
-      "placeholder_room_area": "Enter Room Area",
-      "placeholder_room_code": "Enter Room Code",
-      "room_utilities_placeholder": "Room Utilities",
-      "room_landlord_placeholder": "Room Landlord"
-    },
-    "price_range": "Price Range",
-    "capacity": "Capacity",
-    "area": "Area",
-    "status_placeholder": "Room Status",
-    "list_tenants": "List Tenants",
-    "list_consumption": "List Consumption",
-    "room_details_title": "Room Details",
-    "room_utilities_title": "Room Utilities Consumption",
-    "room_tenants_title": "Room Tenants",
-    "room_add_tenant": "Add New Tenant",
-    "modal_confirm": {
-      "message_delete": "WARNING: You will delete user. Please type 'Delete' to continue.",
-      "title_delete": "Delete Room Tenant",
-      "message_delete_room": "WARNING: You will delete room. Please type 'Delete' to continue.",
-      "title_delete_room": "Delete Room"
-    }
-  },
-  "utility": {
-    "title": "Utility",
-    "add_new": "Add New",
-    "keyword": "Keyword",
-    "status_label": "Status",
-    "table": {
-      "header": {
-        "name": "Name",
-        "unit_price": "Unit Price",
-        "unit": "Unit",
-        "status": "Status",
-        "action": "Action"
-      }
-    },
-    "status": {
-      "active": "Active",
-      "inactive": "InActive"
-    },
-    "modal": {
-      "header": "Save Utility",
-      "name": "Name",
-      "unit_price": "Unit Price",
-      "unit": "Unit"
-    },
-    "modal_confirm": {
-      "title_delete": "Confirm Deactivate utility",
-      "message_delete": "WARNING: You will deactivate utility. Please type 'Deactivate' to continue."
+    "edit": {
+      "title": "Construction Log Details"
     }
   },
 
@@ -970,5 +903,10 @@
   "S-ADMIN-004": "Update user successfully!",
   "E-ADMIN-001": "An error occurred while deleting a user, you cannot delete your own account, or the person you want to delete has equal or higher authority than you.",
   "E-ADMIN-002": "User already exist, username and email already exist",
-  "E-ADMIN-003": "The role does not exist or you do not have permission to set this permission."
+  "E-ADMIN-003": "The role does not exist or you do not have permission to set this permission.",
+
+  "E-SV-001": "The probability must greater than or equal {min}",
+  "E-SV-002": "The probability must less than or equal {max}",
+  "E-SV-003": "The discount rate must greater than or equal {min}",
+  "E-SV-004": "The discount rate must less than or equal {max}"
 }
