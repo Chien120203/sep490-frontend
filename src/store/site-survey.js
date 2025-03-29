@@ -12,6 +12,7 @@ export const useSiteSurveyStore = defineStore(
         const isShowModalConfirm = reactive({ value: false });
         const totalItems = reactive({ value: 0 });
         const currentPage = reactive({ value: 0 });
+        const isSiteSurveyNull = reactive({ value: false });
         const siteSurveyDetails = reactive({
             value: {
                 id: 0,
@@ -43,7 +44,8 @@ export const useSiteSurveyStore = defineStore(
             await services.SiteSurveyAPI.details(
                 {projectId: id},
                 (response) => {
-                    siteSurveyDetails.value = response.data;
+                    if (!response.data) isSiteSurveyNull.value = true;
+                    else siteSurveyDetails.value = response.data;
                     mixinMethods.endLoading();
                 },
                 (error) => {
@@ -102,6 +104,7 @@ export const useSiteSurveyStore = defineStore(
             currentPage,
             siteSurveyDetails,
             isShowModalConfirm,
+            isSiteSurveyNull,
             getSurveyDetails,
             clearSurveyDetails,
             saveSurvey

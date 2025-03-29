@@ -178,7 +178,7 @@
               </template>
               <SiteSurveyInfo
                   :data="siteSurveyDetails.value"
-                  :isSurveyNull="!siteSurveyDetails.value"
+                  :isSurveyNull="isSiteSurveyNull.value"
                   @details="getSiteSurveyDetails"
                   @create="handleCreateSiteSurvey"
               />
@@ -259,10 +259,7 @@ export default {
       getListContracts,
     } = contractStore;
 
-    const {
-      listSurveys,
-      getListSurveys
-    } = surveyStore;
+    const { siteSurveyDetails, isSiteSurveyNull, getSurveyDetails } = surveyStore;
 
     const {
       projectId
@@ -334,8 +331,6 @@ export default {
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
 
-    const { siteSurveyDetails, getSurveyDetails } = surveyStore;
-
     onMounted(() => {
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
@@ -364,12 +359,6 @@ export default {
     const handleBack = () => {
       router.push({ name: PAGE_NAME.PROJECT.LIST });
     };
-
-    const onSubmit = (isUpdate) => {};
-
-    const handleOpenModalConfirm = (id) => {};
-
-    const handleCloseModal = () => {};
 
     const handleContractSearchForm = () => {
       isShowBoxContractSearch.value = !isShowBoxContractSearch.value;
@@ -420,6 +409,7 @@ export default {
       PLANNING_STATUS,
       financialData,
       projectDetails,
+      isSiteSurveyNull,
       changeRequestData,
       isShowModalConfirm,
       activeCollapseItems,
