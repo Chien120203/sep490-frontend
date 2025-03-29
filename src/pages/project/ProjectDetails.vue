@@ -123,6 +123,7 @@
               <SiteSurveyInfo
                   :data="siteSurveyDetails.value"
                   :isSurveyNull="isSiteSurveyNull.value"
+                  :allowCreate="isAllowCreateSiteSurvey"
                   @details="getSiteSurveyDetails"
                   @create="handleCreateSiteSurvey"
               />
@@ -163,7 +164,7 @@ import { useContractStore } from "@/store/contract.js";
 import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistenceStore} from "@/store/persistence.js";
-import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
+import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 export default {
   name: "ProjectDetails",
@@ -273,11 +274,10 @@ export default {
       searchValue: "",
       pageIndex: 1,
     });
-    // const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listSurveys.value.length > 0);
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
     const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === PLANNING_STATUS && listContracts.value.length === 0));
-    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD));
-
+    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull));
+    const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull));
     onMounted(() => {
       projectId.value = route.params.id;
       getProjectDetails(route.params.id);
@@ -297,7 +297,7 @@ export default {
     };
 
     const handleCreateSiteSurvey = () => {
-      router.push({ name: PAGE_NAME.SITE_SURVEY.CREATE, params: { projectId: route.params.id } });
+      router.push({ name: PAGE_NAME.SITE_SURVEY.CREATE });
     };
 
     const handleRedirectToEdit = () => {
@@ -365,6 +365,7 @@ export default {
       activeCollapseItems,
       searchCRForms,
       isShowBoxSearch,
+      isAllowCreateSiteSurvey,
       isShowBoxContractSearch,
       contractSearchForms,
       listContracts,

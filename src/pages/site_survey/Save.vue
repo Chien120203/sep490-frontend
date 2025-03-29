@@ -3,12 +3,12 @@
     <div class="survey-update">
       <div class="survey-header">
         <h3 class="page__ttl">
-          <span class="btn-back" @click="handleBack"><IconBackMain /></span>
+          <span class="btn-back" @click="handleBack"><IconBackMain/></span>
           {{ isCreateMode ? $t('survey.create.title') : $t('survey.details.title') }}
         </h3>
         <div class="survey-btn-detail">
           <div class="item">
-            <el-button class="btn btn-save" @click="submitForm">
+            <el-button v-if="isAllowEditSurvey" class="btn btn-save" @click="submitForm">
               {{ $t('common.save') }}
             </el-button>
           </div>
@@ -19,16 +19,17 @@
         <el-form
             ref="ruleFormRef"
             :model="siteSurveyDetails.value"
+            :disabled="!isAllowEditSurvey"
             :rules="SURVEY_RULES"
             class="survey-form"
-            label-width="150px"
+            label-width="27%"
         >
           <!-- Thông tin chung -->
           <el-divider content-position="left">{{ $t('survey.details.sections.generalInfo') }}</el-divider>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item prop="siteSurveyName" :label="$t('survey.details.siteSurveyName')">
-                <el-input v-model="siteSurveyDetails.value.siteSurveyName" />
+                <el-input v-model="siteSurveyDetails.value.siteSurveyName"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -37,40 +38,37 @@
           <el-divider content-position="left">{{ $t('survey.details.sections.facilityAssessment') }}</el-divider>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="construction" :label="$t('survey.details.constructionRequirements')">
-                <el-input v-model="siteSurveyDetails.value.constructionRequirements" type="textarea" :rows="3" />
+              <el-form-item prop="constructionRequirements" :label="$t('survey.details.constructionRequirements')">
+                <el-input v-model="siteSurveyDetails.value.constructionRequirements" type="textarea" :rows="3"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="equipment" :label="$t('survey.details.equipmentRequirements')">
-                <el-input v-model="siteSurveyDetails.value.equipmentRequirements" type="textarea" :rows="3" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item prop="humanResource" :label="$t('survey.details.humanResourceCapacity')">
-                <el-input v-model="siteSurveyDetails.value.humanResourceCapacity" type="textarea" :rows="3" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item prop="capacity" :label="$t('survey.details.riskAssessment')">
-                <el-input v-model="siteSurveyDetails.value.riskAssessment" type="textarea" :rows="3" />
+              <el-form-item prop="equipmentRequirements" :label="$t('survey.details.equipmentRequirements')">
+                <el-input v-model="siteSurveyDetails.value.equipmentRequirements" type="textarea" :rows="3"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="biddingDecision" :label="$t('survey.details.biddingDecision')">
-                <el-select v-model="siteSurveyDetails.value.biddingDecision" placeholder="Choose one">
-                  <el-option label="YES" value="YES" />
-                  <el-option label="NO" value="NO" />
-                </el-select>
+              <el-form-item prop="humanResourceCapacity" :label="$t('survey.details.humanResourceCapacity')">
+                <el-input v-model="siteSurveyDetails.value.humanResourceCapacity" type="textarea" :rows="3"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item prop="riskAssessment" :label="$t('survey.details.riskAssessment')">
+                <el-input v-model="siteSurveyDetails.value.riskAssessment" type="textarea" :rows="3"/>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item prop="comments" :label="$t('survey.details.comments')">
+                <el-input v-model="siteSurveyDetails.value.comments" type="textarea" :rows="3"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="profitAssessment" :label="$t('survey.details.profitAssessment')">
-                <el-input v-model="siteSurveyDetails.value.profitAssessment" />
+                <el-input v-model="siteSurveyDetails.value.profitAssessment" type="textarea"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -79,7 +77,7 @@
           <el-divider content-position="left">{{ $t('survey.details.sections.mainInfo') }}</el-divider>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="bidWinProbability" :label="$t('survey.details.bidWinProb')">
+              <el-form-item prop="bidWinProb" :label="$t('survey.details.bidWinProb')">
                 <el-input v-model.number="siteSurveyDetails.value.bidWinProb" type="number">
                   <template #append>%</template>
                 </el-input>
@@ -87,64 +85,52 @@
             </el-col>
             <el-col :span="12">
               <el-form-item prop="estimatedExpenses" :label="$t('survey.details.estimatedExpenses')">
-                <el-input v-model.number="siteSurveyDetails.value.estimatedExpenses" type="number" />
+                <el-input :formatter="(value) => formatCurrency(value)"
+                          v-model="siteSurveyDetails.value.estimatedExpenses"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
               <el-form-item prop="estimatedProfits" :label="$t('survey.details.estimatedProfits')">
-                <el-input v-model.number="siteSurveyDetails.value.estimatedProfits" type="number" />
+                <el-input :formatter="(value) => formatCurrency(value)"
+                          v-model="siteSurveyDetails.value.estimatedProfits"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="tenderPackage" :label="$t('survey.details.tenderPackagePrice')">
-                <el-input v-model.number="siteSurveyDetails.value.tenderPackagePrice" type="number" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item prop="price" :label="$t('survey.details.totalBidPrice')">
-                <el-input v-model.number="siteSurveyDetails.value.totalBidPrice" type="number" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item prop="totalBidPrice" :label="$t('survey.details.discountRate')">
-                <el-input v-model.number="siteSurveyDetails.value.discountRate" type="number" />
+              <el-form-item prop="tenderPackagePrice" :label="$t('survey.details.tenderPackagePrice')">
+                <el-input :formatter="(value) => formatCurrency(value)"
+                          v-model="siteSurveyDetails.value.tenderPackagePrice"/>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="discountRate" :label="$t('survey.details.projectCost')">
-                <el-input v-model.number="siteSurveyDetails.value.projectCost" type="number">
+              <el-form-item prop="totalBidPrice" :label="$t('survey.details.totalBidPrice')">
+                <el-input :formatter="(value) => formatCurrency(value)"
+                          v-model="siteSurveyDetails.value.totalBidPrice"/>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item prop="discountRate" :label="$t('survey.details.discountRate')">
+                <el-input v-model.number="siteSurveyDetails.value.discountRate" type="number">
                   <template #append>%</template>
                 </el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item prop="projectCost" :label="$t('survey.details.finalProfit')">
-                <el-input v-model.number="siteSurveyDetails.value.finalProfit" type="number" />
-              </el-form-item>
-            </el-col>
           </el-row>
-
-          <!-- Thông tin phụ -->
-          <el-divider content-position="left">{{ $t('survey.details.sections.additionalInfo') }}</el-divider>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="status" :label="$t('survey.details.status')">
-                <el-select v-model="siteSurveyDetails.value.status" placeholder="Choose one">
-                  <el-option label="In Progress" value="In Progress" />
-                  <el-option label="Completed" value="Completed" />
-                  <el-option label="Pending" value="Pending" />
-                </el-select>
+              <el-form-item prop="projectCost" :label="$t('survey.details.projectCost')">
+                <el-input :formatter="(value) => formatCurrency(value)"
+                          v-model="siteSurveyDetails.value.projectCost">
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="comments" :label="$t('survey.details.comments')">
-                <el-input v-model="siteSurveyDetails.value.comments" type="textarea" :rows="3" />
+              <el-form-item prop="finalProfit" :label="$t('survey.details.finalProfit')">
+                <el-input :formatter="(value) => formatCurrency(value)"
+                          v-model="siteSurveyDetails.value.finalProfit"/>
               </el-form-item>
             </el-col>
           </el-row>
@@ -152,12 +138,26 @@
             <el-col :span="12">
               <el-form-item prop="attachments" :label="$t('survey.details.attachments')">
                 <FileUpload
+                    :disabled="!isAllowEditSurvey"
                     :existingFiles="siteSurveyDetails.value.attachments"
                     :allowedTypes="'.jpg,.png,.pdf,.docx'"
                     :fileLimit="3"
                     class="input-wd-96"
                     @file-selected="handleFileUpload"
                 />
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+<!--          Conclusion-->
+          <el-divider content-position="left">{{ $t('survey.details.sections.conclusion') }}</el-divider>
+          <el-row :gutter="20">
+            <el-col :span="12">
+              <el-form-item prop="biddingDecision" :label="$t('survey.details.biddingDecision')">
+                <el-select v-model="siteSurveyDetails.value.biddingDecision" placeholder="Choose one">
+                  <el-option :label="$t('common.approve')" :value="1"/>
+                  <el-option :label="$t('common.reject')" :value="0"/>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -168,78 +168,35 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useI18n } from 'vue-i18n';
+import {ref, onMounted, onUnmounted, computed} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
+import {useI18n} from 'vue-i18n';
 import IconBackMain from '@/svg/IconBackMain.vue';
-import { useSiteSurveyStore } from '@/store/site-survey.js';
+import {useSiteSurveyStore} from '@/store/site-survey.js';
 import PAGE_NAME from '@/constants/route-name.js';
 import FileUpload from "@/components/common/FileUpload.vue";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {getSiteSurveyRules} from "@/rules/site-survey/index.js";
+import {mixinMethods} from "@/utils/variables.js";
+import {BUSINESS_EMPLOYEE, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {RECEIVE_STATUS} from "@/constants/project.js";
+import {useProjectStore} from "@/store/project.js";
 
 export default {
-  components: {FileUpload, IconBackMain },
+  components: {FileUpload, IconBackMain},
   setup() {
-    const { t } = useI18n();
-    const SURVEY_RULES = {
-      siteSurveyName: [
-        { required: true, message: 'siteSurvey.validation.siteSurveyNameRequired', trigger: 'blur' },
-      ],
-      construction: [
-        { required: true, message: 'siteSurvey.validation.constructionRequired', trigger: 'blur' },
-      ],
-      equipment: [
-        { required: true, message: 'siteSurvey.validation.equipmentRequired', trigger: 'blur' },
-      ],
-      humanResource: [
-        { required: true, message: 'siteSurvey.validation.humanResourceRequired', trigger: 'blur' },
-      ],
-      capacity: [
-        { required: true, message: 'siteSurvey.validation.capacityRequired', trigger: 'blur' },
-      ],
-      biddingDecision: [
-        { required: true, message: 'siteSurvey.validation.biddingDecisionRequired', trigger: 'change' },
-      ],
-      profitAssessment: [
-        { required: true, message: 'siteSurvey.validation.profitAssessmentRequired', trigger: 'blur' },
-      ],
-      bidWinProbability: [
-        { required: true, message: 'siteSurvey.validation.bidWinProbabilityRequired', trigger: 'blur' },
-        { type: 'number', min: 0, max: 100, message: 'siteSurvey.validation.bidWinProbabilityRange', trigger: 'blur' },
-      ],
-      estimatedExpenses: [
-        { required: true, message: 'siteSurvey.validation.estimatedExpensesRequired', trigger: 'blur' },
-      ],
-      estimatedProfits: [
-        { required: true, message: 'siteSurvey.validation.estimatedProfitsRequired', trigger: 'blur' },
-      ],
-      tenderPackage: [
-        { required: true, message: 'siteSurvey.validation.tenderPackageRequired', trigger: 'blur' },
-      ],
-      price: [
-        { required: true, message: 'siteSurvey.validation.priceRequired', trigger: 'blur' },
-      ],
-      totalBidPrice: [
-        { required: true, message: 'siteSurvey.validation.totalBidPriceRequired', trigger: 'blur' },
-      ],
-      discountRate: [
-        { required: true, message: 'siteSurvey.validation.discountRateRequired', trigger: 'blur' },
-        { type: 'number', min: 0, max: 100, message: 'siteSurvey.validation.discountRateRange', trigger: 'blur' },
-      ],
-      projectCost: [
-        { required: true, message: 'siteSurvey.validation.projectCostRequired', trigger: 'blur' },
-      ],
-      finalProfit: [
-        { required: true, message: 'siteSurvey.validation.finalProfitRequired', trigger: 'blur' },
-      ],
-      status: [
-        { required: true, message: 'siteSurvey.validation.statusRequired', trigger: 'change' },
-      ],
-    };
+    const {t} = useI18n();
+    const SURVEY_RULES = getSiteSurveyRules();
     const siteSurveyStore = useSiteSurveyStore();
     const persistenceStore = usePersistenceStore();
-    const { siteSurveyDetails, getSurveyDetails, clearSurveyDetails, saveSurvey } = siteSurveyStore;
+    const projectStore = useProjectStore();
+    const {siteSurveyDetails, getSurveyDetails, clearSurveyDetails, saveSurvey} = siteSurveyStore;
+    const {
+      projectDetails,
+      getProjectDetails,
+    } = projectStore;
     const {projectId} = persistenceStore;
+    const isAllowEditSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && projectDetails.value.status === RECEIVE_STATUS));
 
     const route = useRoute();
     const router = useRouter();
@@ -248,10 +205,12 @@ export default {
 
     onMounted(async () => {
       if (route.params.id) {
+        getProjectDetails(projectId.value);
         await getSurveyDetails(route.params.id);
         isCreateMode.value = !siteSurveyDetails.value;
-        console.log(siteSurveyDetails.value);
+
       } else {
+        clearSurveyDetails();
         isCreateMode.value = true;
       }
     });
@@ -260,8 +219,12 @@ export default {
       clearSurveyDetails();
     });
 
+    const formatCurrency = (number) => {
+      return mixinMethods.formatInputCurrency(number);
+    }
+
     const handleBack = () => {
-      router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: projectId.value } });
+      router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
     };
 
     const handleFileUpload = (files) => {
@@ -269,10 +232,16 @@ export default {
     }
 
     const submitForm = () => {
+      siteSurveyDetails.value.estimatedExpenses = mixinMethods.handleChangeNumber(siteSurveyDetails.value.estimatedExpenses);
+      siteSurveyDetails.value.estimatedProfits = mixinMethods.handleChangeNumber(siteSurveyDetails.value.estimatedProfits);
+      siteSurveyDetails.value.tenderPackagePrice = mixinMethods.handleChangeNumber(siteSurveyDetails.value.tenderPackagePrice);
+      siteSurveyDetails.value.totalBidPrice = mixinMethods.handleChangeNumber(siteSurveyDetails.value.totalBidPrice);
+      siteSurveyDetails.value.finalProfit = mixinMethods.handleChangeNumber(siteSurveyDetails.value.finalProfit);
+      siteSurveyDetails.value.projectCost = mixinMethods.handleChangeNumber(siteSurveyDetails.value.projectCost);
       ruleFormRef.value.validate(async (valid) => {
         if (valid) {
           await saveSurvey(siteSurveyDetails.value);
-          await router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: projectId.value } });
+          await router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
         }
       });
     };
@@ -281,9 +250,11 @@ export default {
       SURVEY_RULES,
       ruleFormRef,
       siteSurveyDetails,
+      isAllowEditSurvey,
       handleBack,
       submitForm,
       handleFileUpload,
+      formatCurrency,
       route,
       isCreateMode,
     };
@@ -303,7 +274,7 @@ export default {
 
 .survey-update {
   width: 100%;
-  max-width: 95%;
+  max-width: 100%;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);

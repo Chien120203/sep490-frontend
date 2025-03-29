@@ -77,7 +77,7 @@ import {QUALITY_ASSURANCE} from "@/constants/roles.js";
 import PlanItemDetailsModal from "@/pages/planning/item/modal/PlanItemDetailsModal.vue";
 import {useContractStore} from "@/store/contract.js";
 import {usePlanningStore} from "@/store/planning.js";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
@@ -152,7 +152,7 @@ const projectStore = useProjectStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
 const planningStore = usePlanningStore();
-const persistance = usePersistanceStore();
+const persistance = usePersistenceStore();
 
 const {projectId} = persistance;
 const {

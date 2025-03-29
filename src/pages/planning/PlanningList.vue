@@ -62,7 +62,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { usePersistanceStore } from "@/store/persistance.js";
+import { usePersistenceStore } from "@/store/persistence.js";
 import { usePlanningStore } from "@/store/planning.js";
 import IconSetting from "@/svg/IconSettingMain.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
@@ -73,7 +73,7 @@ import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 
-const persistenceStore = usePersistanceStore();
+const persistenceStore = usePersistenceStore();
 const planningStore = usePlanningStore();
 
 const {

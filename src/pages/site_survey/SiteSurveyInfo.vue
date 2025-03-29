@@ -42,7 +42,7 @@
     <!-- No survey data available -->
     <div v-else class="no-survey">
       <p>{{ $t('survey.details.no_survey') }}</p>
-      <el-button class="btn btn-create" @click="$emit('create')">
+      <el-button v-if="allowCreate" class="btn btn-create" @click="$emit('create')">
         {{ $t("common.create") }}
       </el-button>
     </div>
@@ -61,6 +61,10 @@ const props = defineProps({
     required: true
   },
   isSurveyNull: {
+    type: Boolean,
+    required: true
+  },
+  allowCreate: {
     type: Boolean,
     required: true
   }
