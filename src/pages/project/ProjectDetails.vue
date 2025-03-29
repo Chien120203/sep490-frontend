@@ -201,13 +201,13 @@ import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
-import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
+import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 
 export default {
   name: "ProjectDetails",
   components: {
-    SiteSurveyList,
+    SiteSurveyList: SiteSurveyInfo,
     ContractList: ContractList,
     LoadMore,
     IconSetting,
@@ -307,11 +307,13 @@ export default {
 
     const {
       listSurveys,
+        getListSurveys
     } = surveyStore;
 
     onMounted(() => {
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
+      getListSurveys()
     });
 
     onUnmounted(() => {

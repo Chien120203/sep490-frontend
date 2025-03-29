@@ -12,6 +12,7 @@ import Customer from  "@/pages/customer/Index.vue"
 import User from  "@/pages/user/Index.vue"
 import Project from  "@/pages/project/Index.vue"
 import Contract from "@/pages/contract/Index.vue"
+import SiteSurvey from  "@/pages/site_survey/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
 import CustomerDetails from "@/pages/customer/Save.vue";
 import UserList from "@/pages/user/UserList.vue";
@@ -21,8 +22,9 @@ import ProjectList from "@/pages/project/ProjectList.vue";
 import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 import ContractSave from "@/pages/contract/Save.vue"
-import ContractList from "@/pages/contract/item/ContractTable.vue";
-import SiteSurveyDetails from "@/pages/site_survey/item/SiteSurveyDetails.vue";
+import SiteSurveySave from "@/pages/site_survey/Save.vue"
+import SiteSurveyDetails from "@/pages/site_survey/SiteSurveyDetails.vue";
+
 
 const routes = [
   {
@@ -155,20 +157,24 @@ const routes = [
     ]
   },
   {
-    name: PAGE_NAME.HOME,
-    path: PAGES.HOME,
-    component: Home,
-    meta: {
-      middleware: [AUTHENTICATION_MIDDLEWARE],
-    }
-  },
-  {
-    name: PAGE_NAME.SITE_SURVEY.DETAILS,
-    path: PAGES.SITE_SURVEY_DETAILS,
-    component: SiteSurveyDetails,
+    name: PAGE_NAME.SITE_SURVEY,
+    path: PAGES.SITE_SURVEY,
+    component: SiteSurvey,
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     },
+    children: [
+      {
+        path: PAGES.SITE_SURVEY_DETAILS,
+        name: PAGE_NAME.SITE_SURVEY.DETAILS,
+        component: SiteSurveyDetails,
+      },
+      {
+        path: PAGES.SITE_SURVEY_CREATE,
+        name: PAGE_NAME.SITE_SURVEY.CREATE,
+        component: SiteSurveySave,
+      }
+    ]
   },
 ];
 

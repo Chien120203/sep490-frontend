@@ -25,6 +25,7 @@ const PAGE_NAME = {
   },
   SITE_SURVEY: {
     DETAILS: "site-survey-details",
+    CREATE: "site-survey-create",
   }
 };
 
