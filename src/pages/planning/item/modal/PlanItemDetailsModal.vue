@@ -30,6 +30,7 @@
           <el-tab-pane label="Tài nguyên" name="materials">
             <ItemList
                 :selectData="materials"
+                :resourceType="MATERIAL_RESOURCE"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
                 @update-list="updateListMaterials"
@@ -40,6 +41,7 @@
           <el-tab-pane label="Nhân lực" name="users">
             <ItemList
                 :selectData="users"
+                :resourceType="HUMAN_RESOURCE"
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
                 @update-list="updateListUsers"
@@ -50,6 +52,7 @@
           <el-tab-pane label="Phương tiện" name="vehicles">
             <ItemList
                 :selectData="vehicles"
+                :resourceType="MACHINE_RESOURCE"
                 :tableData="listSelectedVehicles"
                 :optionKeys="vehicleOptions"
                 @update-list="updateListVehicles"
@@ -73,6 +76,7 @@ import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
 import DependencyTaskTable from "@/pages/progress/items/modal/items/progress-details/DependencyTaskTable.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
+import {HUMAN_RESOURCE, MACHINE_RESOURCE, MATERIAL_RESOURCE} from "@/constants/resource.js";
 
 const props = defineProps({
   selectedRow: { type: Object, default: {} },
@@ -87,10 +91,10 @@ const materialOptions = ref({ id: "id", value: "name" });
 const userOptions = ref({ id: "id", value: "name" });
 const vehicleOptions = ref({ id: "id", value: "name" });
 const dependencyOptions = ref({ id: "index", value: "workName" });
-const listSelectedVehicles = ref( Array.isArray(props.selectedRow?.machines) ? props.selectedRow.machines : []);
-const listSelectedMaterials = ref(Array.isArray(props.selectedRow?.materials) ? props.selectedRow.materials : []);
-const listSelectedUsers = ref(Array.isArray(props.selectedRow?.users) ? props.selectedRow.users : []);
-const listTaskDependency = ref(Array.isArray(props.selectedRow?.relations) ? props.selectedRow.relations : []);
+const listSelectedVehicles = ref( []);
+const listSelectedMaterials = ref([]);
+const listSelectedUsers = ref([]);
+const listTaskDependency = ref([]);
 const activeTab = ref("tasks"); // Default active tab
 
 const totalAllPrice = computed(() => {
@@ -106,11 +110,16 @@ const totalAllPrice = computed(() => {
   };
 });
 
+const getListResourceByType = (list, type) => {
+  if(!Array.isArray(list)) return [];
+  return list.filter(item => item.resourceType === type);
+}
+
 watchEffect(() => {
-  listSelectedVehicles.value = Array.isArray(props.selectedRow?.machines) ? props.selectedRow.machines : [];
-  listSelectedMaterials.value = Array.isArray(props.selectedRow?.materials) ? props.selectedRow.materials : [];
-  listSelectedUsers.value = Array.isArray(props.selectedRow?.users) ? props.selectedRow.users : [];
-  listTaskDependency.value = Array.isArray(props.selectedRow?.relations) ? props.selectedRow.relations : [];
+  listSelectedVehicles.value = getListResourceByType(props.selectedRow?.details, MACHINE_RESOURCE);
+  listSelectedMaterials.value = getListResourceByType(props.selectedRow?.details, MATERIAL_RESOURCE);
+  listSelectedUsers.value = getListResourceByType(props.selectedRow?.details, HUMAN_RESOURCE);
+  listTaskDependency.value = props.selectedRow?.itemRelations || [];
 });
 
 const emit = defineEmits(["close", "submit"]);
@@ -144,10 +153,12 @@ const updateListVehicles = (listData) => {
 
 const handleSubmit = () => {
   let data = {
-    users: listSelectedUsers.value,
-    machines: listSelectedVehicles.value,
-    materials: listSelectedMaterials.value,
-    relations: listTaskDependency.value,
+    details: [
+      ...listSelectedUsers.value,
+      ...listSelectedVehicles.value,
+      ...listSelectedMaterials.value,
+    ],
+    itemRelations: listTaskDependency.value,
   }
   emit("submit", data);
 };

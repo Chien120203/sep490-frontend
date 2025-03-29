@@ -142,7 +142,7 @@ const handleDeletePlanning = () => {
 };
 
 const handleBack = () => {
-  router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: persistenceStore.projectId } });
+  router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: persistenceStore.projectId.value } });
 };
 </script>
 

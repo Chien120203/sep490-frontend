@@ -23,18 +23,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="rate" label="Định mức">
-        <template #default="scope">
-          <el-input v-model.number="scope.row.rate"/>
-        </template>
-      </el-table-column>
-
-      <el-table-column prop="coefficient" label="Hệ số">
-        <template #default="scope">
-          <el-input v-model.number="scope.row.coefficient"/>
-        </template>
-      </el-table-column>
-
       <el-table-column prop="quantity" label="Số lượng">
         <template #default="scope">
           <el-input v-model.number="scope.row.quantity"/>
@@ -63,7 +51,8 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
   tableData: { type: Array, default: () => [] },
-  optionKeys: { type: Object, default: () => ({ id: '', value: '' }) }
+  optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
+  resourceType: { type: String, default: '' },
 });
 
 const listAddedValues = ref(props.tableData || []);
@@ -74,11 +63,10 @@ const handleSearch = (value) => {
 const handleSelectItem = (id) => {
   if (!listAddedValues.value.some(entry => entry?.[props.optionKeys.id] === id)) {
     listAddedValues.value.push({
-      id: id,
+      resourceId: id,
       name: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.[props.optionKeys.value],
+      resourceType: props.resourceType,
       unit: "",
-      rate: 0,
-      coefficient: 1,
       quantity: 1,
       unitPrice: 0
     });

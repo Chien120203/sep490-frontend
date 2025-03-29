@@ -165,6 +165,9 @@ const hierarchicalItems = computed(() => {
         return 0;
       });
 });
+const checkHasChildren = (row) => {
+  return !hasChildren(row);
+}
 </script>
 
 <template>
@@ -183,7 +186,7 @@ const hierarchicalItems = computed(() => {
         <template #default="{ row }">
           <div class="action-btn">
             <IconPlus @click="addSubItem(row)" />
-            <IconEdit @click="emit('editPlanDetails', row)" />
+            <IconEdit v-if="checkHasChildren(row)" @click="emit('editPlanDetails', row)" />
             <IconTrash @click="deleteItem(row)" />
           </div>
         </template>

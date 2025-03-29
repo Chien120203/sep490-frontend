@@ -17,9 +17,9 @@ export const usePlanningStore = defineStore(
       value: {
         planName: "",
         projectId: "",
-        reviewerIds: [],
         teamIds: [],
-        planItems: []
+        planItems: [],
+        qaIds: []
       }
     });
 
@@ -43,6 +43,7 @@ export const usePlanningStore = defineStore(
           mixinMethods.endLoading();
         }
       );
+      mixinMethods.endLoading();
     };
 
     return {

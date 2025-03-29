@@ -14,7 +14,7 @@
         <el-form-item label-class="custom-label">
           <template #label> Người theo dõi </template>
           <el-select v-model="selectedFollowers" multiple placeholder="Chọn người theo dõi" @change="emit('updateFollowers', selectedFollowers)">
-            <el-option v-for="user in followers" :key="user.id" :label="user.name" :value="user.id"></el-option>
+            <el-option v-for="user in followers" :key="user.id" :label="user.username" :value="user.id"></el-option>
           </el-select>
         </el-form-item>
       </div>
@@ -26,7 +26,6 @@
 import { ref, defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-  managers: Array,
   followers: Array,
   planDetails: {
     type: Object,

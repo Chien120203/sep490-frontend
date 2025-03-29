@@ -2,12 +2,21 @@
   <div class="planning-block">
     <div class="planning planning-create planning-detail">
       <div class="planning-header">
-        <h3 class="page__ttl">
-          <span class="btn-back" @click="handleBack"><IconBackMain/></span>
-          {{
-            isUpdate ? $t('planning.edit.title') : $t('planning.create.title')
-          }}
-        </h3>
+        <div class="contract-save-title">
+          <h3 class="page__ttl">
+            <span class="btn-back" @click="handleBack"><IconBackMain/></span>
+            {{
+              isUpdate ? $t('planning.edit.title') : $t('planning.create.title')
+            }}
+          </h3>
+        </div>
+        <div class="contract-save-btn">
+          <div class="item">
+            <el-button class="btn btn-save" @click="submitForm">
+              {{ $t("common.save") }}
+            </el-button>
+          </div>
+        </div>
       </div>
 
       <div>
@@ -22,11 +31,11 @@
         <div v-if="selectedTab === 'info'">
           <SelectionFilters
               :planDetails="planningDetails.value"
-              :managers="managers"
-              :followers="followers"
+              :followers="listQualityAssurances"
               @updateFollowers="updateListQAs"
           />
-          <PlanningDetails :items="planningDetails.value.planItems" :isUpdate="isUpdate" @update:items="updateItems" @editPlanDetails="handleEditPlanDetails"/>
+          <PlanningDetails :items="planningDetails.value.planItems" :isUpdate="isUpdate" @update:items="updateItems"
+                           @editPlanDetails="handleEditPlanDetails"/>
         </div>
 
         <div v-if="selectedTab === 'activity'">
@@ -63,16 +72,15 @@ import PlanningDetails from "@/pages/planning/item/details/PlanningDetails.vue";
 import ActivityComponent from "@/pages/planning/item/details/ActivityComponent.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
-import {useCustomerStore} from "@/store/customer.js";
 import {useUserStore} from "@/store/user.js";
-import {mixinMethods} from "@/utils/variables";
-import {CONSTRUCTION_MANAGER, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {QUALITY_ASSURANCE} from "@/constants/roles.js";
 import PlanItemDetailsModal from "@/pages/planning/item/modal/PlanItemDetailsModal.vue";
 import {useContractStore} from "@/store/contract.js";
 import {usePlanningStore} from "@/store/planning.js";
+import {usePersistanceStore} from "@/store/persistance.js";
 
 const selectedTab = ref("info"); // Default tab
-const listTabs =ref([
+const listTabs = ref([
   {
     name: "info",
     label: "Info",
@@ -82,9 +90,7 @@ const listTabs =ref([
     label: "Activity",
   },
 ]);
-const listConstructionManagers = ref([]);
-const listTechnicalManagers = ref([]);
-const listResourceManagers = ref([]);
+const listQualityAssurances = ref([]);
 const isShowModalItemDtls = ref(false);
 const isUpdate = computed(() => !!route.params.id);
 const selectedRow = ref({});
@@ -111,68 +117,6 @@ const listVehicles = ref([
   {id: 2, name: "Xe 2", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
 ]);
 const currentStep = ref(1);
-const managers = ref([{id: 1, name: 'Trần Văn Bằng'}]);
-const followers = ref([{id: 2, name: 'Đặng Xuân Trường'}]);
-const tasks = ref(
-    [
-      {
-        "index": "1",
-        "parentIndex": null,
-        "workName": "Excavation Work",
-        "workCode": "EXC-001",
-        "unit": "m³",
-        "quantity": 10,
-        "unitPrice": 500000,
-        "total": 5000000,
-        "deleted": false
-      },
-      {
-        "index": "2",
-        "parentIndex": "1",
-        "workName": "Concrete Pouring",
-        "workCode": "CON-002",
-        "unit": "m³",
-        "quantity": 8,
-        "unitPrice": 750000,
-        "total": 6000000,
-        "deleted": false
-      },
-      {
-        "index": "3",
-        "parentIndex": "2",
-        "workName": "Steel Reinforcement",
-        "workCode": "STE-003",
-        "unit": "Kg",
-        "quantity": 500,
-        "unitPrice": 20000,
-        "total": 10000000,
-        "deleted": false
-      },
-      {
-        "index": "4",
-        "parentIndex": null,
-        "workName": "Bricklaying",
-        "workCode": "BRI-004",
-        "unit": "m²",
-        "quantity": 50,
-        "unitPrice": 150000,
-        "total": 7500000,
-        "deleted": false
-      },
-      {
-        "index": "5",
-        "parentIndex": "4",
-        "workName": "Plastering",
-        "workCode": "PLA-005",
-        "unit": "m²",
-        "quantity": 60,
-        "unitPrice": 120000,
-        "total": 7200000,
-        "deleted": false
-      }
-    ]
-);
-const teams = ref([{id: 1, name: 'BCH - BAN CHỈ HUY'}]);
 const activities = ref([
   {
     id: 1,
@@ -205,18 +149,18 @@ const activities = ref([
 
 // Store Data
 const projectStore = useProjectStore();
-const customerStore = useCustomerStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
 const planningStore = usePlanningStore();
+const persistance = usePersistanceStore();
 
+const {projectId} = persistance;
 const {
   contractDetails,
   getContractDetails,
 } = contractStore;
 const {listUsers, getListUsers} = userStore;
-const {listCustomers, getListCustomers} = customerStore;
-const {validation, projectDetails, saveProject, getProjectDetails, clearProjectDetails} = projectStore;
+const {clearProjectDetails} = projectStore;
 const {
   planningDetails
 } = planningStore;
@@ -225,12 +169,12 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
-  await getContractDetails(34);
-  await getListCustomers({search: "", pageIndex: 1}, false);
-  await getListUsers({keyWord: "", pageIndex: 1}, false);
-  listConstructionManagers.value = listUsers.value.filter(item => item.role === CONSTRUCTION_MANAGER);
-  listResourceManagers.value = listUsers.value.filter(item => item.role === RESOURCE_MANAGER);
-  listTechnicalManagers.value = listUsers.value.filter(item => item.role === TECHNICAL_MANAGER);
+  if(!route.params.id) {
+    await getContractDetails(projectId.value);
+    planningDetails.value.planItems = contractDetails.value.contractDetails;
+  };
+  await getListUsers({keyWord: "", pageIndex: 1, role: QUALITY_ASSURANCE}, false);
+  listQualityAssurances.value = listUsers.value;
 });
 
 onUnmounted(() => {
@@ -256,14 +200,21 @@ const handleCloseModal = () => {
 
 const handleSaveItemDetails = (data) => {
   planningDetails.value.planItems = planningDetails.value.planItems.map(item =>
-      item.index === selectedRow.value.index ? { ...item, ...data } : item
+      item.index === selectedRow.value.index ? {...item, ...data} : item
   );
   handleCloseModal();
   console.log(planningDetails.value);
 };
 
-// Handle Tab Change from TitleNavigation
 const handleTabChange = (tab) => {
   selectedTab.value = tab;
 };
+
+const updateListQAs = (list) => {
+  planningDetails.value.qaIds = list;
+}
+
+const submitForm = () => {
+  console.log(planningDetails.value);
+}
 </script>

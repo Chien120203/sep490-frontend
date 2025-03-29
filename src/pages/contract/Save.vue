@@ -71,7 +71,7 @@ const isUpdate = computed(() => !!route.params.id);
 const router = useRouter();
 
 onMounted(async () => {
-  if(isUpdate.value) getContractDetails(route.params.id);
+  if(isUpdate.value) await getContractDetails(projectId.value);
   await getListProjects({
     keyword: '',
     pageIndex: 1,
