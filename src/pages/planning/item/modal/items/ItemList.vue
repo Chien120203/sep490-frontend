@@ -3,7 +3,7 @@
     <SingleOptionSelect
         class="select-item"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
-        :listData="listData"
+        :listData="selectData"
         :isRemote="true"
         @handleSelectedParams="handleSelectItem"
         @remoteSearch="handleSearch"
@@ -61,12 +61,13 @@ import {defineEmits, defineProps, ref} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 
 const props = defineProps({
-  listData: { type: Array, default: () => [] },
+  selectData: { type: Array, default: () => [] },
+  tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) }
 });
 
-const listAddedValues = ref([]);
-const emit = defineEmits(["search"]);
+const listAddedValues = ref(props.tableData || []);
+const emit = defineEmits(["search", "update-list"]);
 const handleSearch = (value) => {
   emit('search', value);
 }
@@ -74,7 +75,7 @@ const handleSelectItem = (id) => {
   if (!listAddedValues.value.some(entry => entry?.[props.optionKeys.id] === id)) {
     listAddedValues.value.push({
       id: id,
-      name: props.listData.find(item => item?.[props.optionKeys.id] === id)?.[props.optionKeys.value],
+      name: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.[props.optionKeys.value],
       unit: "",
       rate: 0,
       coefficient: 1,
@@ -82,6 +83,7 @@ const handleSelectItem = (id) => {
       unitPrice: 0
     });
   }
+  emit('update-list', listAddedValues.value);
 };
 </script>
 

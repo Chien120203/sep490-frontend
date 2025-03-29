@@ -7,10 +7,10 @@ import {ProjectAPI} from "@/services/ProjectAPI.js";
 import {ContractAPI} from "@/services/ContractAPI.js";
 import {SiteSurveyAPI} from "@/services/SiteSurveyAPI.js";
 import {PlanningAPI} from "@/services/PlanningAPI.js";
-
+import router from "@/router";
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
-  initializeService(axios, "/sep490");
+  initializeService(axios, "/sep490", router);
 })();
 
 const services = {

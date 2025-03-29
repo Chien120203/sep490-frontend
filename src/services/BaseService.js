@@ -1,18 +1,26 @@
-import Cookies from 'js-cookie';
+import {FRONT_END_URL, HTTP_FORBIDDEN} from "@/constants/application.js";
+import {ref} from "vue";
+import PAGES from "@/utils/pages.js";
+import PAGE_NAME from "@/constants/route-name.js";
 
 let api = null;
 let prefix = '';
-
+let router = null;
+const homePath = ref(`${FRONT_END_URL}${PAGES.FORBIDDEN}`);
 // Initializes the service with an axios instance and prefix
-const initializeService = (axiosInstance, prefixValue) => {
+const initializeService = (axiosInstance, prefixValue, routerValue) => {
   api = axiosInstance.axiosInstance;
   prefix = prefixValue;
+  router = routerValue;
 };
 
 // Processes the response, returning the 'data' property if it exists
 const processResponse = (response) => {
-  const data = response.data;
-  return data;
+  // if (response?.data.code === HTTP_FORBIDDEN) {
+  //   router.push({name: PAGE_NAME.FORBIDDEN});
+  //   return;
+  // }
+  return response.data;
 };
 
 // Logs and handles errors, specifically handling 401 unauthorized status

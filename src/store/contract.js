@@ -71,12 +71,12 @@ export const useContractStore = defineStore(
     const saveContract = async (params) => {
       mixinMethods.startLoading();
       const formData = mixinMethods.createFormData(params);
-      var object = {};
-      formData.forEach(function(value, key){
-        object[key] = value;
-      });
-      var json = JSON.stringify(object);
-      console.log(json);
+      // var object = {};
+      // formData.forEach(function(value, key){
+      //   object[key] = value;
+      // });
+      // var json = JSON.stringify(object);
+      // console.log(json);
       await services.ContractAPI.save(
         formData,
         (response) => {

@@ -105,7 +105,7 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button v-if="isAllowEdit" class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowCreateContract" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>
@@ -202,7 +202,7 @@ import Modal from "@/components/common/Modal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import {DATE_FORMAT} from "@/constants/application.js";
@@ -329,7 +329,9 @@ export default {
       searchValue: "",
       pageIndex: 1,
     });
+    // const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listSurveys.value.length > 0);
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === PLANNING_STATUS ));
 
     onMounted(() => {
       projectId.value = route.params.id;
@@ -409,6 +411,7 @@ export default {
       RECEIVE_STATUS,
       PLANNING_STATUS,
       financialData,
+      isAllowCreateContract,
       projectDetails,
       isSiteSurveyNull,
       changeRequestData,

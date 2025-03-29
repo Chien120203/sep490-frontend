@@ -1,49 +1,55 @@
 <template>
   <div class="price-input-form">
-    <el-form label-width="120px">
+    <el-form label-width="30%">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="Đơn giá">
-            <el-input v-model="price.material" placeholder="Vật liệu" class="custom-input" />
-            <el-input v-model="price.labor" placeholder="Nhân công" class="custom-input" />
-            <el-input v-model="price.machine" placeholder="Máy thi công" class="custom-input" />
+          <el-form-item label="Tên công việc">
+            <el-input readonly v-model="selectedRow.workName" class="custom-input" />
+          </el-form-item>
+          <el-form-item label="Ngày bắt đầu">
+            <el-date-picker
+                style="width: 80%"
+                class="custom-input"
+                v-model="selectedRow.startDate"
+                type="date"
+                placeholder="Select Date"
+            />
+          </el-form-item>
+
+          <el-form-item label="Ngày kết thúc">
+            <el-date-picker
+                style="width: 80%"
+                class="custom-input"
+                v-model="selectedRow.endDate"
+                type="date"
+                placeholder="Select Date"
+            />
+          </el-form-item>
+
+          <el-form-item label="Ngân sách dự kiến">
+            <el-input
+                class="custom-input"
+                v-model="selectedRow.price"
+                placeholder="Ngân sách dự kiến"
+            />
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="Thành tiền">
-            <el-input v-model="total.material" placeholder="Vật liệu" class="custom-input" />
-            <el-input v-model="total.labor" placeholder="Nhân công" class="custom-input" />
-            <el-input v-model="total.machine" placeholder="Máy thi công" class="custom-input" />
+          <el-form-item label="Tiền Vật liệu">
+            <el-input readonly v-model="total.material" placeholder="Vật liệu" class="custom-input" />
           </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row label="Phụ thuộc" :gutter="20">
-        <el-col :span="12">
-          <el-form-item label="Công việc">
-            <el-select v-model="dependency.item">
-              <el-option
-                  v-for="(task, index) in tasks"
-                  :key="index"
-                  :label="task.workName"
-                  :value="task.index"
-              >
-              </el-option>
-            </el-select>
+
+          <el-form-item label="Tiền Nhân công">
+            <el-input readonly v-model="total.labor" placeholder="Nhân công" class="custom-input" />
           </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="Loại phụ thuộc">
-            <el-select v-model="dependency.type">
-              <el-option :label="$t('common.no_dependency')" value=""></el-option>
-              <el-option
-                  v-for="(type, index) in TASK_RELATIONSHIPS"
-                  :key="index"
-                  :label="$t(type.label)"
-                  :value="type.value"
-              >
-              </el-option>
-            </el-select>
+
+          <el-form-item label="Tiền phương tiện">
+            <el-input readonly v-model="total.machine" placeholder="Máy thi công" class="custom-input" />
+          </el-form-item>
+
+          <el-form-item label="Tổng số tiền">
+            <el-input readonly v-model="total.totalPrice" placeholder="Tổng số tiền" class="custom-input" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -52,40 +58,26 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
-import {TASK_RELATIONSHIPS} from "@/constants/project.js";
+import { defineProps } from "vue";
+
 const props = defineProps({
-  tasks: {type: Array, default: () => []},
+  selectedRow: { type: Object, default: () => ({}) },
+  total: { type: Object, default: () => ({}) },
 });
-const price = ref({
-  material: "",
-  labor: "",
-  machine: "",
-});
-
-const total = ref({
-  material: "",
-  labor: "",
-  machine: "",
-});
-
-const dependency = ref({
-  item: "",
-  type: ""
-})
-
-const submitData = () => {
-  console.log("Data submitted", price.value, total.value);
-};
 </script>
 
 <style scoped>
-.custom-input {
-  margin-bottom: 10px; /* Adjust margin as needed */
-}
 .price-input-form {
   padding: 10px;
   background: #fff;
   border-radius: 5px;
+}
+
+.custom-input {
+  width: 80%; /* Input takes 70% width */
+}
+
+:deep(.el-form-item__label) {
+  width: 20% !important; /* Label takes 30% width */
 }
 </style>

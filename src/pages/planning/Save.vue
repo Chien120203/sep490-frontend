@@ -21,10 +21,12 @@
         <!-- Conditional Rendering Based on Selected Tab -->
         <div v-if="selectedTab === 'info'">
           <SelectionFilters
+              :planDetails="planningDetails.value"
               :managers="managers"
               :followers="followers"
+              @updateFollowers="updateListQAs"
           />
-          <PlanningDetails :items="contractDetails.value.contractDetails" :isUpdate="isUpdate" @update:items="updateItems" @editPlanDetails="handleEditPlanDetails"/>
+          <PlanningDetails :items="planningDetails.value.planItems" :isUpdate="isUpdate" @update:items="updateItems" @editPlanDetails="handleEditPlanDetails"/>
         </div>
 
         <div v-if="selectedTab === 'activity'">
@@ -41,11 +43,13 @@
   <PlanItemDetailsModal
       :show="isShowModalItemDtls"
       :materials="materials"
-      :tasks="contractDetails.value.contractDetails"
+      :selectedRow="selectedRow"
+      :tasks="planningDetails.value.planItems"
       :isUpdate="isUpdate"
       :users="listEmployees"
       :vehicles="listVehicles"
       @close="handleCloseModal"
+      @submit="handleSaveItemDetails"
   />
 </template>
 
@@ -65,6 +69,7 @@ import {mixinMethods} from "@/utils/variables";
 import {CONSTRUCTION_MANAGER, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import PlanItemDetailsModal from "@/pages/planning/item/modal/PlanItemDetailsModal.vue";
 import {useContractStore} from "@/store/contract.js";
+import {usePlanningStore} from "@/store/planning.js";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs =ref([
@@ -82,7 +87,7 @@ const listTechnicalManagers = ref([]);
 const listResourceManagers = ref([]);
 const isShowModalItemDtls = ref(false);
 const isUpdate = computed(() => !!route.params.id);
-
+const selectedRow = ref({});
 // Mock Data
 const statuses = ref([
   {title: "Khởi tạo", description: "", status: "success"},
@@ -198,16 +203,12 @@ const activities = ref([
   },
 ]); // Placeholder for activity data
 
-const saveChanges = () => alert('Changes Saved!');
-const deletePlan = () => alert('Plan Deleted!');
-const closePlan = () => alert('Closed!');
-const handleUpdateTask = (task) => console.log('Updated Task:', task);
-
 // Store Data
 const projectStore = useProjectStore();
 const customerStore = useCustomerStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
+const planningStore = usePlanningStore();
 
 const {
   contractDetails,
@@ -216,6 +217,9 @@ const {
 const {listUsers, getListUsers} = userStore;
 const {listCustomers, getListCustomers} = customerStore;
 const {validation, projectDetails, saveProject, getProjectDetails, clearProjectDetails} = projectStore;
+const {
+  planningDetails
+} = planningStore;
 
 const route = useRoute();
 const router = useRouter();
@@ -238,10 +242,11 @@ const handleBack = () => {
 };
 
 const updateItems = (newItems) => {
-  contractDetails.value.contractDetails = newItems;
+  planningDetails.value.planItems = newItems;
 };
 
-const handleEditPlanDetails = (id) => {
+const handleEditPlanDetails = (row) => {
+  selectedRow.value = row;
   isShowModalItemDtls.value = true;
 }
 
@@ -249,15 +254,12 @@ const handleCloseModal = () => {
   isShowModalItemDtls.value = false;
 }
 
-const ruleFormRef = ref(null);
-
-const submitForm = () => {
-  projectDetails.value.budget = mixinMethods.handleChangeNumber(projectDetails.value.budget);
-  ruleFormRef.value.validate(valid => {
-    if (valid) {
-      saveProject(projectDetails.value);
-    }
-  });
+const handleSaveItemDetails = (data) => {
+  planningDetails.value.planItems = planningDetails.value.planItems.map(item =>
+      item.index === selectedRow.value.index ? { ...item, ...data } : item
+  );
+  handleCloseModal();
+  console.log(planningDetails.value);
 };
 
 // Handle Tab Change from TitleNavigation
