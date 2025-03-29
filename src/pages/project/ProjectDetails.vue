@@ -214,7 +214,7 @@ import LoadMore from "@/components/common/LoadMore.vue";
 import {useProjectStore} from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import {useContractStore} from "@/store/contract.js";
-import SiteSurveyList from "@/pages/site_survey/item/SiteSurveyList.vue";
+import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistanceStore} from "@/store/persistance.js";
 import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
@@ -222,7 +222,7 @@ import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
 export default {
   name: "ProjectDetails",
   components: {
-    SiteSurveyList,
+    SiteSurveyList: SiteSurveyInfo,
     ContractList: ContractList,
     LoadMore,
     IconSetting,
@@ -331,13 +331,27 @@ export default {
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listSurveys.value.length > 0);
 
+    const {
+      getProjectDetails,
+      projectDetails
+    } = projectStore;
+
+    const {
+      listContracts,
+      totalItems,
+      currentPage,
+      getListContracts,
+    } = contractStore;
+
+    const {
+      listSurveys,
+        getListSurveys
+    } = surveyStore;
+
     onMounted(() => {
       getProjectDetails(route.params.id);
       getListContracts(contractSearchForms.value);
-      getListSurveys({
-        siteSurveyName: "",
-        pageIndex: 1,
-      })
+      getListSurveys()
     });
 
     onUnmounted(() => {

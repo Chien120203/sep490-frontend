@@ -37,6 +37,7 @@ const PAGE_NAME = {
   CONSTRUCT_LOG: {
     VIEW: "construct-log-view",
     DETAILS: 'construct-log-details'
+    CREATE: "site-survey-create",
   }
 };
 

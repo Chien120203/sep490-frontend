@@ -16,6 +16,7 @@ export const useSiteSurveyStore = defineStore(
         const siteSurveyDetails = reactive({
             value: {
                 id: 0,
+                projectId: null,
                 siteSurveyName: "",
                 constructionRequirements: "",
                 equipmentRequirements: "",
