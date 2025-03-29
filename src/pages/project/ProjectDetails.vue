@@ -207,11 +207,6 @@ import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import {DATE_FORMAT} from "@/constants/application.js";
 import ProjectInfor from "./item/details/ProjectInfor.vue"
-import { onMounted, onUnmounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import { DATE_FORMAT, TEXT_CONFIRM_DELETE } from "@/constants/application.js";
-import ProjectInfor from "./item/details/ProjectInfor.vue";
 import FinancialSummary from "./item/list/FinancialSummary.vue";
 import ProjectCR from "./item/details/ProjectCR.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
@@ -223,7 +218,7 @@ import ContractList from "@/pages/contract/item/ContractTable.vue";
 import { useContractStore } from "@/store/contract.js";
 import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
 
 export default {
@@ -248,7 +243,7 @@ export default {
     const projectStore = useProjectStore();
     const contractStore = useContractStore();
     const surveyStore = useSiteSurveyStore();
-    const persist = usePersistanceStore();
+    const persist = usePersistenceStore();
 
     const {
       isShowModalConfirm,
@@ -323,7 +318,6 @@ export default {
         ],
       },
     ]);
-    const siteSurveyDate = ref([]);
 
     const isShowBoxSearch = ref(false);
     const actionText = ref('');
@@ -338,11 +332,7 @@ export default {
       searchValue: "",
       pageIndex: 1,
     });
-    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listSurveys.value.length > 0);
-
-    const { getProjectDetails, projectDetails } = projectStore;
-
-    const { listContracts, totalItems, currentPage, getListContracts } = contractStore;
+    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
 
     const { siteSurveyDetails, getSurveyDetails } = surveyStore;
 

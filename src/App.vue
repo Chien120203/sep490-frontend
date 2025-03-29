@@ -62,7 +62,7 @@
 import { ref, onMounted, onBeforeUnmount } from "vue";
 import Navbar from "@/components/common/Navbar.vue";
 import Sidebar from "@/components/common/Sidebar.vue";
-import { usePersistenceStore } from "@/store/persistance.js";
+import { usePersistenceStore } from "@/store/persistence.js";
 
 export default {
   components: { Navbar, Sidebar },

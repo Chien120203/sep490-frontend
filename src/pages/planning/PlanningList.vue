@@ -102,7 +102,7 @@ import {useRouter} from "vue-router";
 import PlanningTable from "@/pages/planning/item/list/PlanningTable.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import IconBackMain from "@/svg/IconBackMain.vue";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "planning-list",
@@ -116,7 +116,7 @@ export default {
     ModalConfirm,
   },
   setup() {
-    const persistenceStore = usePersistanceStore();
+    const persistenceStore = usePersistenceStore();
 
     const {
       projectId

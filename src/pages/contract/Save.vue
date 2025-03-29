@@ -42,11 +42,11 @@ import {useContractStore} from "@/store/contract.js";
 import {getContractRules} from "@/rules/contract/index.js";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {RECEIVE_STATUS} from "@/constants/project.js";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 const projectStore = useProjectStore();
 const contractStore = useContractStore();
-const persist = usePersistanceStore();
+const persist = usePersistenceStore();
 
 const {
   listProjects,

@@ -5,7 +5,7 @@ import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
 import services from "@/plugins/services";
 import PAGE_NAME from "@/constants/route-name.js";
-import {usePersistenceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export const useAuthStore = defineStore(
   "auth",

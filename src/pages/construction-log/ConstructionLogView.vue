@@ -30,7 +30,7 @@ import {useUserStore} from "@/store/user.js";
 import {mixinMethods} from "@/utils/variables";
 import {useContractStore} from "@/store/contract.js";
 import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 const isShowModalItemDtls = ref(false);
 const title = ref("Dự Án ABC");
@@ -40,7 +40,7 @@ const projectStore = useProjectStore();
 const customerStore = useCustomerStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
-const persistenceStore = usePersistanceStore();
+const persistenceStore = usePersistenceStore();
 
 const {
   contractDetails,

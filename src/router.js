@@ -3,7 +3,7 @@ import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
 import {ADMIN, BUSINESS_EMPLOYEE} from "@/constants/roles.js";
 import {ADMIN_MIDDLEWARE, AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE} from "@/constants/middleware.js";
-import {usePersistenceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 // import pages
 import Login from "@/pages/Login.vue";
@@ -23,8 +23,6 @@ import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 import ContractSave from "@/pages/contract/Save.vue"
 import SiteSurveySave from "@/pages/site_survey/Save.vue"
-
-import SiteSurveyDetails from "@/pages/site_survey/item/SiteSurveyDetails.vue";
 import PlanningDetails from "@/pages/planning/Save.vue";
 import PlanningList from "@/pages/planning/PlanningList.vue";
 import Planning from "@/pages/planning/Index.vue";
