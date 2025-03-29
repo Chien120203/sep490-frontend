@@ -120,7 +120,6 @@ export const useContractStore = defineStore(
       clearContractDetails,
       saveContract,
       getListContracts,
-        getListSurveys
     };
   }
 );

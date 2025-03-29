@@ -1,50 +1,74 @@
 <template>
   <div class="project-progress">
-    <div class="header">
-      <h2>{{$t('survey.details.survey_name')}}: {{ survey.siteSurveyName }}</h2>
-      <div class="status">
-        <el-button class="btn btn-save" @click="$emit('edit')">
-          {{ $t("common.edit") }}
-        </el-button>
+    <div v-if="data && !isSurveyNull">
+      <div class="header">
+        <h2>{{ $t('survey.details.survey_name') }}: {{ data.siteSurveyName }}</h2>
+        <div class="status">
+          <el-button class="btn btn-save" @click="$emit('details')">
+            {{ $t("common.edit") }}
+          </el-button>
+        </div>
+      </div>
+
+      <div class="details-container">
+        <div class="column">
+          <p><strong>{{ $t('survey.details.project_code') }}:</strong> {{ data.siteSurveyCode }}</p>
+          <p><strong>{{ $t('survey.details.biddingDecision') }}:</strong> {{ data.biddingDecision }}</p>
+          <span><strong>{{ $t('survey.details.status') }}:</strong> {{ $t(formatStatus(data.status)) }}</span>
+        </div>
+        <div class="column">
+          <p><strong>{{ $t('survey.details.estimatedProfits') }}:</strong> {{ formatCurrency(data.estimatedProfits) }}</p>
+          <p><strong>{{ $t('survey.details.tenderPackagePrice') }}:</strong> {{ formatCurrency(data.tenderPackagePrice) }}</p>
+          <p><strong>{{ $t('survey.details.totalBidPrice') }}:</strong> {{ formatCurrency(data.totalBidPrice) }}</p>
+        </div>
+        <div class="column">
+          <p><strong>{{ $t('survey.details.discountRate') }}:</strong> {{ data.discountRate }}</p>
+          <p><strong>{{ $t('survey.details.projectCost') }}:</strong> {{ formatCurrency(data.projectCost) }}</p>
+          <p><strong>{{ $t('survey.details.finalProfit') }}:</strong> {{ formatCurrency(data.finalProfit) }}</p>
+        </div>
+      </div>
+
+      <div v-if="data.attachments && data.attachments.length" class="attachments">
+        <p><strong>{{ $t('survey.details.attachments') }}: </strong></p>
+        <ul>
+          <li v-for="(attachment, index) in data.attachments" :key="index">
+            <a :href="attachment.webViewLink" target="_blank">
+              {{ attachment.name }}
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-
-    <div class="details-container">
-      <div class="column">
-        <p><strong>{{$t('survey.details.project_code')}}:</strong> {{ survey.siteSurveyCode }}</p>
-        <p><strong>{{$t('survey.details.biddingDecision')}}:</strong> {{ survey.biddingDecision }}</p>
-        <span><strong>{{$t('survey.details.status')}}:</strong> {{ $t(formatStatus(survey.status)) }}</span>
-      </div>
-      <div class="column">
-        <p><strong>{{$t('survey.details.estimatedProfits')}}:</strong> {{ survey.estimatedProfits }}</p>
-        <p><strong>{{$t('survey.details.tenderPackagePrice')}}:</strong> {{ survey.tenderPackagePrice }}</p>
-        <p><strong>{{$t('survey.details.totalBidPrice')}}:</strong> {{ survey.totalBidPrice }}</p>
-      </div>
-      <div class="column">
-        <p><strong>{{$t('survey.details.discountRate')}}:</strong> {{ survey.discountRate }}</p>
-        <p><strong>{{$t('survey.details.projectCost')}}:</strong> {{ survey.projectCost }}</p>
-        <p><strong>{{$t('survey.details.finalProfit')}}:</strong> {{ survey.finalProfit }}</p>
-      </div>
+    <!-- No survey data available -->
+    <div v-else class="no-survey">
+      <p>{{ $t('survey.details.no_survey') }}</p>
+      <el-button class="btn btn-create" @click="$emit('create')">
+        {{ $t("common.create") }}
+      </el-button>
     </div>
-
-    <div v-if="survey.attachments && survey.attachments.length" class="attachments">
-      <p><strong>{{$t('survey.details.attachments')}}: </strong></p>
-      <ul>
-        <li v-for="(attachment, index) in survey.attachments" :key="index">
-          <a :href="attachment.webViewLink" target="_blank">
-            {{ attachment.name }}
-          </a>
-        </li>
-      </ul>
-    </div>
-
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-import {RECEIVE_STATUS, STATUS_LABELS} from "@/constants/survey.js";
-import {mixinMethods} from "@/utils/variables.js";
+import { RECEIVE_STATUS, STATUS_LABELS } from "@/constants/survey.js";
+import { mixinMethods } from "@/utils/variables.js";
+import { toRefs } from 'vue';
+
+// Nhận dữ liệu từ component cha
+const props = defineProps({
+  data: {
+    type: Object,
+    required: true
+  },
+  isSurveyNull: {
+    type: Boolean,
+    required: true
+  }
+});
+
+const emit = defineEmits(['details', 'create']);
+
+const { data, isSurveyNull } = toRefs(props);
 
 const formatStatus = (status) => {
   return STATUS_LABELS[status] || 'Unknown';
@@ -52,40 +76,7 @@ const formatStatus = (status) => {
 
 const formatCurrency = (inputCurrency) => {
   return mixinMethods.formatCurrency(inputCurrency);
-}
-
-const formatDate = (date) => {
-  return mixinMethods.showDateTime(date);
-}
-
-defineProps({
-  survey: {
-    type: Object,
-    required: true,
-    default: () => ({
-      id: 0,
-      siteSurveyName: "",
-      constructionRequirements: "",
-      equipmentRequirements: "",
-      humanResourceCapacity: "",
-      riskAssessment: "",
-      biddingDecision: "",
-      profitAssessment: "",
-      bidWinProb: "",
-      estimatedExpenses: "",
-      estimatedProfits: "",
-      tenderPackagePrice: "",
-      totalBidPrice: "",
-      discountRate: "",
-      projectCost: "",
-      finalProfit: "",
-      status: "",
-      comments: "",
-      attachments: "",
-      surveyDetails: ""
-    })
-  }
-});
+};
 </script>
 
 <style scoped>
@@ -93,6 +84,7 @@ defineProps({
   padding: 20px;
   background-color: #f5f5f5;
   border-radius: 8px;
+  position: relative;
 }
 
 .header {
@@ -122,7 +114,16 @@ defineProps({
 }
 
 .btn-save {
-  margin-left: 12px;
+  background-color: #4CAF50;
+  color: white;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.btn-create {
+  background-color: #4CAF50;
+  color: white;
 }
 
 .attachment a {
@@ -132,5 +133,16 @@ defineProps({
 
 .attachment a:hover {
   text-decoration: underline;
+}
+
+.no-survey {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: #ff0000;
+  font-size: 18px;
 }
 </style>

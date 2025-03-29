@@ -4,7 +4,7 @@
       <div class="survey-header">
         <h3 class="page__ttl">
           <span class="btn-back" @click="handleBack"><IconBackMain /></span>
-          {{ route.params.id ? $t('siteSurvey.update.title') : $t('siteSurvey.create.title') }}
+          {{ isCreateMode ? $t('survey.create.title') : $t('survey.details.title') }}
         </h3>
         <div class="survey-btn-detail">
           <div class="item">
@@ -24,130 +24,118 @@
             label-width="150px"
         >
           <!-- Thông tin chung -->
-          <el-divider content-position="left">{{ $t('siteSurvey.sections.generalInfo') }}</el-divider>
+          <el-divider content-position="left">{{ $t('survey.details.sections.generalInfo') }}</el-divider>
           <el-row :gutter="20">
-            <el-col :span="12" v-if="route.params.id">
-              <el-form-item prop="id" :label="$t('siteSurvey.details.id')">
-                <el-input v-model="siteSurveyDetails.value.id" disabled />
-              </el-form-item>
-            </el-col>
             <el-col :span="12">
-              <el-form-item prop="siteSurveyName" :label="$t('siteSurvey.details.siteSurveyName')">
+              <el-form-item prop="siteSurveyName" :label="$t('survey.details.siteSurveyName')">
                 <el-input v-model="siteSurveyDetails.value.siteSurveyName" />
               </el-form-item>
             </el-col>
           </el-row>
 
           <!-- Về cơ sở & Đánh giá -->
-          <el-divider content-position="left">{{ $t('siteSurvey.sections.facilityAssessment') }}</el-divider>
+          <el-divider content-position="left">{{ $t('survey.details.sections.facilityAssessment') }}</el-divider>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="construction" :label="$t('siteSurvey.details.construction')">
-                <el-input v-model="siteSurveyDetails.value.construction" type="textarea" :rows="3" />
+              <el-form-item prop="construction" :label="$t('survey.details.constructionRequirements')">
+                <el-input v-model="siteSurveyDetails.value.constructionRequirements" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="equipment" :label="$t('siteSurvey.details.equipment')">
-                <el-input v-model="siteSurveyDetails.value.equipment" type="textarea" :rows="3" />
+              <el-form-item prop="equipment" :label="$t('survey.details.equipmentRequirements')">
+                <el-input v-model="siteSurveyDetails.value.equipmentRequirements" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="humanResource" :label="$t('siteSurvey.details.humanResource')">
-                <el-input v-model="siteSurveyDetails.value.humanResource" type="textarea" :rows="3" />
+              <el-form-item prop="humanResource" :label="$t('survey.details.humanResourceCapacity')">
+                <el-input v-model="siteSurveyDetails.value.humanResourceCapacity" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="capacity" :label="$t('siteSurvey.details.capacity')">
-                <el-input v-model="siteSurveyDetails.value.capacity" type="textarea" :rows="3" />
+              <el-form-item prop="capacity" :label="$t('survey.details.riskAssessment')">
+                <el-input v-model="siteSurveyDetails.value.riskAssessment" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="biddingDecision" :label="$t('siteSurvey.details.biddingDecision')">
-                <el-select v-model="siteSurveyDetails.value.biddingDecision" placeholder="Chọn">
+              <el-form-item prop="biddingDecision" :label="$t('survey.details.biddingDecision')">
+                <el-select v-model="siteSurveyDetails.value.biddingDecision" placeholder="Choose one">
                   <el-option label="YES" value="YES" />
                   <el-option label="NO" value="NO" />
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="profitAssessment" :label="$t('siteSurvey.details.profitAssessment')">
+              <el-form-item prop="profitAssessment" :label="$t('survey.details.profitAssessment')">
                 <el-input v-model="siteSurveyDetails.value.profitAssessment" />
               </el-form-item>
             </el-col>
           </el-row>
 
           <!-- Thông tin chính -->
-          <el-divider content-position="left">{{ $t('siteSurvey.sections.mainInfo') }}</el-divider>
+          <el-divider content-position="left">{{ $t('survey.details.sections.mainInfo') }}</el-divider>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="bidWinProbability" :label="$t('siteSurvey.details.bidWinProbability')">
-                <el-input v-model.number="siteSurveyDetails.value.bidWinProbability" type="number">
+              <el-form-item prop="bidWinProbability" :label="$t('survey.details.bidWinProb')">
+                <el-input v-model.number="siteSurveyDetails.value.bidWinProb" type="number">
                   <template #append>%</template>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="estimatedExpenses" :label="$t('siteSurvey.details.estimatedExpenses')">
+              <el-form-item prop="estimatedExpenses" :label="$t('survey.details.estimatedExpenses')">
                 <el-input v-model.number="siteSurveyDetails.value.estimatedExpenses" type="number" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="estimatedProfits" :label="$t('siteSurvey.details.estimatedProfits')">
+              <el-form-item prop="estimatedProfits" :label="$t('survey.details.estimatedProfits')">
                 <el-input v-model.number="siteSurveyDetails.value.estimatedProfits" type="number" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="tenderPackage" :label="$t('siteSurvey.details.tenderPackage')">
-                <el-input v-model.number="siteSurveyDetails.value.tenderPackage" type="number" />
+              <el-form-item prop="tenderPackage" :label="$t('survey.details.tenderPackagePrice')">
+                <el-input v-model.number="siteSurveyDetails.value.tenderPackagePrice" type="number" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="price" :label="$t('siteSurvey.details.price')">
-                <el-input v-model.number="siteSurveyDetails.value.price" type="number" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item prop="totalBidPrice" :label="$t('siteSurvey.details.totalBidPrice')">
+              <el-form-item prop="price" :label="$t('survey.details.totalBidPrice')">
                 <el-input v-model.number="siteSurveyDetails.value.totalBidPrice" type="number" />
               </el-form-item>
             </el-col>
+            <el-col :span="12">
+              <el-form-item prop="totalBidPrice" :label="$t('survey.details.discountRate')">
+                <el-input v-model.number="siteSurveyDetails.value.discountRate" type="number" />
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="discountRate" :label="$t('siteSurvey.details.discountRate')">
-                <el-input v-model.number="siteSurveyDetails.value.discountRate" type="number">
+              <el-form-item prop="discountRate" :label="$t('survey.details.projectCost')">
+                <el-input v-model.number="siteSurveyDetails.value.projectCost" type="number">
                   <template #append>%</template>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="projectCost" :label="$t('siteSurvey.details.projectCost')">
-                <el-input v-model.number="siteSurveyDetails.value.projectCost" type="number" />
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row :gutter="20">
-            <el-col :span="12">
-              <el-form-item prop="finalProfit" :label="$t('siteSurvey.details.finalProfit')">
+              <el-form-item prop="projectCost" :label="$t('survey.details.finalProfit')">
                 <el-input v-model.number="siteSurveyDetails.value.finalProfit" type="number" />
               </el-form-item>
             </el-col>
           </el-row>
 
           <!-- Thông tin phụ -->
-          <el-divider content-position="left">{{ $t('siteSurvey.sections.additionalInfo') }}</el-divider>
+          <el-divider content-position="left">{{ $t('survey.details.sections.additionalInfo') }}</el-divider>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="status" :label="$t('siteSurvey.details.status')">
-                <el-select v-model="siteSurveyDetails.value.status" placeholder="Chọn">
+              <el-form-item prop="status" :label="$t('survey.details.status')">
+                <el-select v-model="siteSurveyDetails.value.status" placeholder="Choose one">
                   <el-option label="In Progress" value="In Progress" />
                   <el-option label="Completed" value="Completed" />
                   <el-option label="Pending" value="Pending" />
@@ -155,27 +143,21 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item prop="comments" :label="$t('siteSurvey.details.comments')">
+              <el-form-item prop="comments" :label="$t('survey.details.comments')">
                 <el-input v-model="siteSurveyDetails.value.comments" type="textarea" :rows="3" />
               </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="20">
             <el-col :span="12">
-              <el-form-item prop="attachments" :label="$t('siteSurvey.details.attachments')">
-                <el-upload
-                    v-model="siteSurveyDetails.value.attachments"
-                    action="#"
-                    :auto-upload="false"
-                    multiple
-                >
-                  <el-button type="primary">{{ $t('common.upload') }}</el-button>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item prop="surveyDetails" :label="$t('siteSurvey.details.surveyDetails')">
-                <el-input v-model="siteSurveyDetails.value.surveyDetails" type="textarea" :rows="3" />
+              <el-form-item prop="attachments" :label="$t('survey.details.attachments')">
+                <FileUpload
+                    :existingFiles="siteSurveyDetails.value.attachments"
+                    :allowedTypes="'.jpg,.png,.pdf,.docx'"
+                    :fileLimit="3"
+                    class="input-wd-96"
+                    @file-selected="handleFileUpload"
+                />
               </el-form-item>
             </el-col>
           </el-row>
@@ -192,6 +174,8 @@ import { useI18n } from 'vue-i18n';
 import IconBackMain from '@/svg/IconBackMain.vue';
 import { useSiteSurveyStore } from '@/store/site-survey.js';
 import PAGE_NAME from '@/constants/route-name.js';
+import FileUpload from "@/components/common/FileUpload.vue";
+import {usePersistenceStore} from "@/store/persistance.js";
 
 const SURVEY_RULES = {
   siteSurveyName: [
@@ -250,18 +234,24 @@ const SURVEY_RULES = {
 };
 
 export default {
-  components: { IconBackMain },
+  components: {FileUpload, IconBackMain },
   setup() {
     const { t } = useI18n();
     const siteSurveyStore = useSiteSurveyStore();
-    const { siteSurveyDetails, getSurveyDetails, clearSurveyDetails, updateSurvey, createSurvey } = siteSurveyStore;
+    const { siteSurveyDetails, getSurveyDetails, clearSurveyDetails, saveSurvey } = siteSurveyStore;
+    const persistenceStore = usePersistenceStore();
     const route = useRoute();
     const router = useRouter();
     const ruleFormRef = ref(null);
 
-    onMounted(() => {
+    const isCreateMode = ref(false);
+
+    onMounted(async () => {
       if (route.params.id) {
-        getSurveyDetails({ surveyId: route.params.id });
+        await getSurveyDetails(route.params.id);
+        isCreateMode.value = !siteSurveyDetails.value;
+      } else {
+        isCreateMode.value = true;
       }
     });
 
@@ -270,18 +260,19 @@ export default {
     });
 
     const handleBack = () => {
-      router.push({ name: PAGE_NAME.SITE_SURVEY.LIST });
+
+      router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: siteSurveyDetails.value?.projectId || route.params.id } });
     };
 
+    const handleFileUpload = (files) => {
+      siteSurveyDetails.value.attachments = files;
+    }
+
     const submitForm = () => {
-      ruleFormRef.value.validate((valid) => {
+      ruleFormRef.value.validate(async (valid) => {
         if (valid) {
-          if (route.params.id) {
-            updateSurvey({ surveyId: route.params.id, data: siteSurveyDetails.value });
-          } else {
-            createSurvey(siteSurveyDetails.value);
-          }
-          router.push({ name: PAGE_NAME.SITE_SURVEY.LIST });
+          await saveSurvey(siteSurveyDetails.value);
+          router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: siteSurveyDetails.value?.projectId || route.params.id } });
         }
       });
     };
@@ -292,7 +283,9 @@ export default {
       siteSurveyDetails,
       handleBack,
       submitForm,
+      handleFileUpload,
       route,
+      isCreateMode,
     };
   },
 };

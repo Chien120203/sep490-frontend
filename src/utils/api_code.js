@@ -31,10 +31,9 @@ const API_CODE = {
   API_USER_005: '/admin/delete-user',
 
   //Site-survey
-  API_SURVEY_001: '/survey/search',
-  API_SURVEY_002: '/survey/detail',
-  API_SURVEY_003: '/admin/save',
-  API_SURVEY_004: '/admin/delete',
+  API_SURVEY_001: '/survey/detail',
+  API_SURVEY_002: '/survey/save',
+  API_SURVEY_003: '/survey/delete',
 };
 
 export default API_CODE;

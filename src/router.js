@@ -3,7 +3,7 @@ import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
 import {ADMIN, BUSINESS_EMPLOYEE} from "@/constants/roles.js";
 import {ADMIN_MIDDLEWARE, AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE} from "@/constants/middleware.js";
-import {usePersistanceStore} from "@/store/persistance.js";
+import {usePersistenceStore} from "@/store/persistance.js";
 
 // import pages
 import Login from "@/pages/Login.vue";
@@ -23,7 +23,6 @@ import ProjectDetails from "@/pages/project/ProjectDetails.vue";
 import ProjectSave from "@/pages/project/Save.vue";
 import ContractSave from "@/pages/contract/Save.vue"
 import SiteSurveySave from "@/pages/site_survey/Save.vue"
-import SiteSurveyDetails from "@/pages/site_survey/SiteSurveyDetails.vue";
 
 import SiteSurveyDetails from "@/pages/site_survey/item/SiteSurveyDetails.vue";
 import PlanningDetails from "@/pages/planning/Save.vue";
@@ -236,13 +235,13 @@ const routes = [
       {
         path: PAGES.SITE_SURVEY_DETAILS,
         name: PAGE_NAME.SITE_SURVEY.DETAILS,
-        component: SiteSurveyDetails,
+        component: SiteSurveySave,
       },
       {
         path: PAGES.SITE_SURVEY_CREATE,
         name: PAGE_NAME.SITE_SURVEY.CREATE,
         component: SiteSurveySave,
-      }
+      },
     ]
   },
 ];
@@ -258,7 +257,7 @@ router.beforeEach((to, from, next) => {
   const { middleware } = to.meta || {}; // Safely access meta.middleware
   const token = localStorage.getItem("accessToken");
   const role = localStorage.getItem("role");
-  const persist = usePersistanceStore();
+  const persist = usePersistenceStore();
   const {loggedIn} = persist;
 
   // Check if middleware exists and includes 'authentication'
