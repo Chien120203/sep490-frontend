@@ -146,6 +146,14 @@
     "reload": "Reload",
     "get_otp": "Get OTP"
   },
+  "profile": {
+    "title": "User Profile",
+    "details": {
+      "title": "Profile Details",
+      "change_password": "Change Password",
+      "logout": "Logout"
+    }
+  },
   "permission": {
     "menu": "Menus",
     "no": "No",

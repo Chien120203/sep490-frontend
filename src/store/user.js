@@ -23,7 +23,8 @@ export const useUserStore = defineStore(
         fullName: "",
         phone: "",
         gender: "",
-        dob: ""
+        dob: "",
+          profileImage: []
       }
     });
 
@@ -70,7 +71,7 @@ export const useUserStore = defineStore(
       );
     };
 
-    const saveCustomer = async (params, method) => {
+    const saveUser = async (params, method) => {
       mixinMethods.startLoading();
       await services.UserAPI[method](
         params,
@@ -138,7 +139,7 @@ export const useUserStore = defineStore(
       isShowModalConfirm,
       getUserIdByRole,
       clearUserDetails,
-      saveCustomer,
+      saveUser,
       getUserDetails,
       getListUsers,
       handleDeleteUser

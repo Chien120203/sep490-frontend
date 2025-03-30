@@ -18,9 +18,14 @@ const changePassword = async (params, success, error) => {
   await post(API_CODE.API_AUTH_004, params, success, error);
 };
 
+const updateUserProfile = async (params, success, error) => {
+  await post(API_CODE.API_AUTH_007, params, success, error);
+};
+
 export const AuthenticationAPI = {
   login,
   resetPassword,
   getOTP,
-  changePassword
+  changePassword,
+  updateUserProfile
 };

@@ -31,6 +31,7 @@ import ProgressDetails from "@/pages/progress/ProgressDetails.vue";
 import ConstructLog from "@/pages/construction-log/Index.vue";
 import ConstructLogDetails from "@/pages/construction-log/ConstructionLogView.vue";
 import ConstructLogSave from "@/pages/construction-log/Save.vue";
+import UserProfile from "@/pages/profile/UserProfile.vue";
 
 const routes = [
   {
@@ -49,7 +50,7 @@ const routes = [
   {
     name: PAGE_NAME.PROFILE,
     path: PAGES.PROFILE,
-    component: Home, // need to add later
+    component: UserProfile,
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     },

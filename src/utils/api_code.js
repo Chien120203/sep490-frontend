@@ -5,6 +5,8 @@ const API_CODE = {
   API_AUTH_003: '/authen/reset-password',
   API_AUTH_004: '/authen/change-password',
   API_AUTH_005: '/authen/refresh',
+  API_AUTH_006: '/authen/user-profile-detail',
+  API_AUTH_007: '/authen/update-profile',
 
   //Customer
   API_CUS_001: '/customer/list-customer',
@@ -25,7 +27,7 @@ const API_CODE = {
 
   //User
   API_USER_001: '/admin/list-user',
-  API_USER_002: '/authen/user-profile-detail',
+  // API_USER_002: '/authen/user-profile-detail',
   API_USER_003: '/admin/update-user',
   API_USER_004: '/admin/create-user',
   API_USER_005: '/admin/delete-user',
