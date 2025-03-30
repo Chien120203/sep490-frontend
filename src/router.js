@@ -33,6 +33,7 @@ import ConstructLogDetails from "@/pages/construction-log/ConstructionLogView.vu
 import ConstructLogSave from "@/pages/construction-log/Save.vue";
 import Mobilization from "@/pages/resource-mobilization/Index.vue";
 import MobilizationList from "@/pages/resource-mobilization/MobilizationList.vue";
+import UserProfile from "@/pages/profile/UserProfile.vue";
 
 const routes = [
   {
@@ -51,7 +52,7 @@ const routes = [
   {
     name: PAGE_NAME.PROFILE,
     path: PAGES.PROFILE,
-    component: Home, // need to add later
+    component: UserProfile,
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     },

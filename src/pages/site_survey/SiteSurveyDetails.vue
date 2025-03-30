@@ -174,7 +174,6 @@ export default defineComponent({
     const projectStore = useProjectStore();
     const siteSurveyStore = useSiteSurveyStore();
 
-    const { listProjects, projectDetails, getListProjects } = projectStore;
     const { siteSurveyDetails, getSurveyDetails } = siteSurveyStore;
 
     const surveyId = route.params.id;
@@ -212,5 +211,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Giữ nguyên phần style của bạn */
+
+
 </style>

@@ -7,7 +7,7 @@ const list = async (params, success, error) => {
 };
 
 const details = async (params, success, error) => {
-    await get(API_CODE.API_USER_002, success, error, params);
+    await get(API_CODE.API_AUTH_006, success, error, params);
 };
 
 const update = async (params, success, error) => {
