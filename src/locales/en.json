@@ -228,7 +228,8 @@
       "get_contracts_failed": "Get list contracts failed",
       "save_contract_failed": "Save contract failed",
       "get_contract_dtls_failed": "Get project details failed",
-      "get_planning_failed": "Get plannings failed"
+      "get_planning_failed": "Get plannings failed",
+      "get_mobilization_failed": "Get mobilizations requests failed"
     }
   },
   "contract": {
@@ -803,7 +804,9 @@
       "project": "Project",
       "planning": "Planning",
       "progress": "Progress",
-      "construct_log": "Construction Log"
+      "construct_log": "Construction Log",
+      "change_request": "Change Request",
+      "resource_mobilization": "Mobilization"
     }
   },
   "construct_log": {
@@ -812,6 +815,21 @@
     },
     "edit": {
       "title": "Construction Log Details"
+    }
+  },
+  "mobilization": {
+    "title": "Resource Mobilization",
+    "add_new": "Add New",
+    "keyword": "Key word",
+    "table": {
+      "header": {
+        "code": "Request Code",
+        "name": " Request Name",
+        "priority": "Priority Level",
+        "status": "Status",
+        "date": "Request Date",
+        "action": "Action"
+      }
     }
   },
 

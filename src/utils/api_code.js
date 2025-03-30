@@ -38,6 +38,8 @@ const API_CODE = {
   //Planning
   API_PLANNING_001: '/plans/search',
 
+  API_MOBILIZE_001: '/resourcereq/mobilization/list',
+
 };
 
 export default API_CODE;
