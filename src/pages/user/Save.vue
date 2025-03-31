@@ -66,9 +66,10 @@
                 prop="dob"
             >
               <el-date-picker
+                  style="width: 90%"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
                   v-model="userDetails.value.dob"
-                  type="date"
-                  placeholder="Select Date"
               />
               <label
                   class="error-feedback-user"
@@ -147,6 +148,7 @@ import {USER_RULES} from "@/rules/user/index.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useUserStore} from "@/store/user.js";
 import PAGE_NAME from "@/constants/route-name.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 export default {
   components: {IconBackMain, SingleOptionSelect},
@@ -206,6 +208,7 @@ export default {
       handleBack,
       submitForm,
       genderDisplay,
+      DATE_FORMAT
     };
   },
 };

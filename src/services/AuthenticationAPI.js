@@ -1,4 +1,4 @@
-import {post, get} from '@/services/BaseService';
+import {post, put} from '@/services/BaseService';
 import API_CODE from '@/utils/api_code';
 
 // Function to handle login
@@ -19,7 +19,7 @@ const changePassword = async (params, success, error) => {
 };
 
 const updateUserProfile = async (params, success, error) => {
-  await post(API_CODE.API_AUTH_007, params, success, error);
+  await put(API_CODE.API_AUTH_007, params, success, error);
 };
 
 export const AuthenticationAPI = {

@@ -1,6 +1,6 @@
 import { i18n } from '@/utils/i18n.js';
 import {
-  MAX_CHARACTER, MAX_DESCRIPTION, MAX_MONTH, MIN_MONTH, PHONE_NUMBER, RULES_VALIDATION
+  MAX_CHARACTER, RULES_VALIDATION, DATE_FORMAT
 } from "@/constants/application.js";
 
 export const USER_RULES = {
@@ -29,7 +29,7 @@ export const USER_RULES = {
   ],
   phone: [
     {
-      pattern: PHONE_NUMBER,
+      pattern: RULES_VALIDATION.PHONE_FORMAT,
       message: i18n.global.t("E-USER-003"),
       trigger: "change",
     },
@@ -39,14 +39,6 @@ export const USER_RULES = {
   ],
   gender: [
     { required: true, message: i18n.global.t("E-USER-008"), trigger: "change" },
-  ],
-  dob: [
-    { required: true, message: i18n.global.t("E-USER-009"), trigger: "change" },
-    {
-      max: MAX_MONTH,
-      min: MIN_MONTH,
-      trigger: "change",
-    },
   ],
 };
 

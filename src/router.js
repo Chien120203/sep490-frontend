@@ -34,6 +34,10 @@ import ConstructLogSave from "@/pages/construction-log/Save.vue";
 import Mobilization from "@/pages/resource-mobilization/Index.vue";
 import MobilizationList from "@/pages/resource-mobilization/MobilizationList.vue";
 import UserProfile from "@/pages/profile/UserProfile.vue";
+import ContractList from "@/pages/contract/item/ContractTable.vue";
+// import MachineResourceList from "@/pages/resource/machine_management/MachineResourceList.vue";
+// import MaterialResourceList from "@/pages/resource/material_management/MaterialResourceList.vue";
+// import HumanResourceList from "@/pages/resource/human_management/HumanResourceList.vue";
 
 const routes = [
   {
