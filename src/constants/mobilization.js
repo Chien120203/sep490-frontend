@@ -1,8 +1,22 @@
+export const DRAFT_STATUS = 0;
 export const STATUSES = [
-  'Receive Request',
-  'Planning',
-  'InProgress',
-  'Completed',
-  'Paused',
-  'Closed'
+  'Draft',
+  'Wait Manager Approval',
+  'Manager Approved',
+  'BOD Approved',
+  'Reject'
 ];
+
+export const PRIORITIES = [
+  "Low",
+  "Medium",
+  "High",
+]
+
+export const STATUS_LABELS = [
+  'mobilization.statuses.draft',
+  'mobilization.statuses.wait_manager',
+  'mobilization.statuses.manager_approved',
+  'mobilization.statuses.bod_approved',
+  'mobilization.statuses.rejected',
+]

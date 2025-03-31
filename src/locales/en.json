@@ -229,7 +229,11 @@
       "save_contract_failed": "Save contract failed",
       "get_contract_dtls_failed": "Get project details failed",
       "get_planning_failed": "Get plannings failed",
-      "get_mobilization_failed": "Get mobilizations requests failed"
+      "get_mobilization_failed": "Get mobilizations requests failed",
+      "save_mobilize_success": "Save mobilization request success",
+      "save_mobilize_failed": "Save mobilization request failed",
+      "delete_mobilize_success": "Delete mobilization request success",
+      "delete_mobilize_failed": "Delete mobilization request failed"
     }
   },
   "contract": {
@@ -821,6 +825,10 @@
     "title": "Resource Mobilization",
     "add_new": "Add New",
     "keyword": "Key word",
+    "modal_confirm": {
+      "message": "Do you want to delete this request?",
+      "title": "Delete mobilization request"
+    },
     "table": {
       "header": {
         "code": "Request Code",
@@ -830,6 +838,16 @@
         "date": "Request Date",
         "action": "Action"
       }
+    },
+    "modal": {
+      "title": "Save Mobilization Request"
+    },
+    "statuses": {
+      "draft": "Drafted",
+      "wait_manager": "Wait Manager Approval",
+      "manager_approved": "Manager Approved",
+      "bod_approved": "BOD Approved",
+      "rejected": "Rejected"
     }
   },
 

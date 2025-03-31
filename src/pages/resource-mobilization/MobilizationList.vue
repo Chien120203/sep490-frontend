@@ -4,10 +4,10 @@
       <h3 class="page__ttl">{{ $t("mobilization.title") }}</h3>
       <div class="mobilization-btn-box mobilization-import-box">
         <el-row
-          class="mb-4"
+            class="mb-4"
         >
-          <el-button class="btn btn-save" @click="handleRedirectToCreate"
-            >{{ $t("mobilization.add_new") }}
+          <el-button class="btn btn-save" @click="handleDisplayModalSave(true)"
+          >{{ $t("mobilization.add_new") }}
           </el-button>
         </el-row>
       </div>
@@ -20,10 +20,10 @@
           </p>
           <div class="mb-0 ruleform">
             <el-input
-              :placeholder="$t('common.input_keyword')"
-              @keyup.enter="submitForm"
-              v-model="searchForms.search"
-              prop="search"
+                :placeholder="$t('common.input_keyword')"
+                @keyup.enter="submitForm"
+                v-model="searchForms.search"
+                prop="search"
             >
               <template #append>
                 <span @click="handleSearchForm" class="btn-setting">
@@ -35,10 +35,12 @@
         </div>
         <div class="btn-search-select col-md-3 col-lg-3 mobilization-box-btn-all">
           <el-button class="btn btn-search" @click="submitForm()">
-            {{ $t("common.search") }}</el-button
+            {{ $t("common.search") }}
+          </el-button
           >
           <el-button class="btn btn-clear" @click="handleClear()">
-            {{ $t("common.clear") }}</el-button
+            {{ $t("common.clear") }}
+          </el-button
           >
         </div>
       </div>
@@ -67,34 +69,37 @@
 
     <div class="mobilization-body-table" style="">
       <MobilizationTable
-        :data="listMobilizations.value"
-        @details="handleGetMobilizationDtls"
-        @delete="handleDisplayModal"
+          :data="listMobilizations.value"
+          @details="handleGetMobilizationDtls"
+          @delete="handleDisplayModal"
       />
       <LoadMore
-        :listData="listMobilizations.value"
-        :totalItems="totalItems.value"
-        @loadMore="handleLoadMore"
+          :listData="listMobilizations.value"
+          :totalItems="totalItems.value"
+          @loadMore="handleLoadMore"
       />
     </div>
     <ModalConfirm
-      :isShowModal="isShowModalConfirm.value"
-      @close-modal="closeModalConfirm"
-      :isConfirmByText="true"
-      :confirmText="TEXT_CONFIRM_DELETE"
-      @confirmAction="handleConfirm"
-      :message="$t('mobilization.modal_confirm.message')"
-      :title="$t('mobilization.modal_confirm.title')"
+        :isShowModal="isShowModalConfirm"
+        @close-modal="closeModalConfirm"
+        @confirmAction="handleConfirm"
+        :message="$t('mobilization.modal_confirm.message')"
+        :title="$t('mobilization.modal_confirm.title')"
+    />
+    <SaveMobilizationModal
+        :show="isShowModalSave"
+        :data="mobilizationDetails.value"
+        @close="handleDisplayModalSave"
+        @submit="handleSaveRequest"
     />
   </div>
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import {ref, onMounted, onUnmounted} from "vue";
+import {useRouter} from "vue-router";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
-import PAGE_NAME from "@/constants/route-name.js";
+import {TEXT_CONFIRM_DELETE} from "@/constants/application.js";
 import MobilizationTable from "@/pages/resource-mobilization/items/MobilizationTable.vue";
 import {useMobilizationStore} from "@/store/mobilization";
 import {usePersistenceStore} from "@/store/persistence.js";
@@ -102,8 +107,9 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import {STATUSES} from "@/constants/mobilization";
 import IconSetting from "@/svg/IconSettingMain.vue";
-
-const router = useRouter();
+import SaveMobilizationModal from "@/pages/resource-mobilization/items/SaveMobilizationModal.vue";
+import {mixinMethods} from "@/utils/variables.js";
+import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
 
 const mobilizationStore = useMobilizationStore();
 const persist = usePersistenceStore();
@@ -113,16 +119,18 @@ const {
 const {
   totalItems,
   currentPage,
-  isShowModalConfirm,
   listMobilizations,
+  mobilizationDetails,
   getListMobilizations,
+  handleDeleteMobilization,
+  saveRequest
 } = mobilizationStore;
 
 const delete_id = ref(null);
-const validation = ref([]);
+const isShowModalConfirm = ref(false);
+const isShowModalSave = ref(false);
 const isShowBoxSearch = ref(false);
-const searchForms = ref({ projectId: projectId.value, pageIndex: 1, status: "" });
-
+const searchForms = ref({projectId: projectId.value, pageIndex: 1});
 const handleClear = () => {
   searchForms.value.search = "";
 };
@@ -130,6 +138,10 @@ const handleClear = () => {
 const handleSearchForm = () => {
   isShowBoxSearch.value = !isShowBoxSearch.value;
 };
+
+const handleDisplayModalSave = (show = false) => {
+  isShowModalSave.value = show;
+}
 
 const submitForm = () => {
   searchForms.value.pageIndex = 1;
@@ -143,17 +155,12 @@ const handleLoadMore = () => {
   getListMobilizations(searchForms.value);
 };
 
-const handleRedirectToCreate = () => {
-  // router.push({ name: PAGE_NAME..CREATE });
-};
-
-const handleGetMobilizationDtls = (id) => {
-  // router.push({ name: PAGE_NAME.mobilization.DETAILS, params: { id } });
-};
-
-const handleCloseModal = () => {
-  validation.value = [];
-};
+const handleSaveRequest = (data) => {
+  mobilizationDetails.value.resourceMobilizationDetails = data;
+  mobilizationDetails.value.projectId = projectId.value;
+  isShowModalSave.value = false;
+  saveRequest(mobilizationDetails.value);
+}
 
 const handleDisplayModal = (mobilization_id) => {
   isShowModalConfirm.value = !!mobilization_id;
@@ -165,11 +172,13 @@ const closeModalConfirm = () => {
 };
 
 const handleConfirm = () => {
+  closeModalConfirm();
   handleDeleteMobilization(delete_id.value);
 };
 
-const handleDeleteMobilization = (id) => {
-};
+const handleGetMobilizationDtls = () => {
+  isShowModalSave.value = true;
+}
 
 onMounted(() => {
   getListMobilizations(searchForms.value);
@@ -188,6 +197,7 @@ onUnmounted(() => {
   right: 16px;
   top: 10px;
   cursor: pointer;
+
   svg {
     height: 30px;
   }

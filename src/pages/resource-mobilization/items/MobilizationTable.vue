@@ -10,13 +10,13 @@
         :label="$t('common.no')"
         align="right"
     ></el-table-column>
-    <el-table-column min-width="80">
+    <el-table-column min-width="140">
       <template #header>
         <p v-html="$t('mobilization.table.header.code')"></p>
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.requestCode ?? "-"}} </span>
+        <span class="data-table">{{ scope.row.requestCode ?? "-" }} </span>
       </template>
     </el-table-column>
     <el-table-column min-width="130">
@@ -26,18 +26,7 @@
 
       <template #default="scope">
         <span class="data-table"
-        >{{ scope.row.requestName ? scope.row.requestName : "-"}}
-        </span>
-      </template>
-    </el-table-column>
-    <el-table-column min-width="100">
-      <template #header>
-        <p v-html="$t('mobilization.table.header.priority')"></p>
-      </template>
-
-      <template #default="scope">
-        <span class="data-table"
-        >{{ scope.row.priorityLevel ? scope.row.priorityLevel : "-"}}
+        >{{ scope.row.requestName ? scope.row.requestName : "-" }}
         </span>
       </template>
     </el-table-column>
@@ -48,13 +37,24 @@
 
       <template #default="scope">
         <span class="data-table"
-        >{{ formatDate(scope.row.requestDate) ?? "-"}}
+        >{{ formatDate(scope.row.requestDate) ?? "-" }}
         </span>
       </template>
     </el-table-column>
     <el-table-column min-width="100">
       <template #header>
-        <p v-html="$t('mobilization.table.header.status')"></p>
+        <p class="label-center" v-html="$t('mobilization.table.header.priority')"></p>
+      </template>
+
+      <template #default="scope">
+        <span class="data-table mobilization-priority" :class="priorityClass(scope.row.status)"
+        >{{ formatPriority(scope.row.priorityLevel) }}
+        </span>
+      </template>
+    </el-table-column>
+    <el-table-column min-width="100">
+      <template #header>
+        <p class="label-center" v-html="$t('mobilization.table.header.status')"></p>
       </template>
 
       <template #default="scope">
@@ -70,10 +70,10 @@
       <template #default="scope">
         <div>
           <button @click="$emit('details', scope.row.id)" class="btn-edit">
-            <IconEdit />
+            <IconEdit/>
           </button>
-          <button @click="$emit('delete', scope.row.id)" class="btn-edit">
-            <IconTrash />
+          <button v-if="scope.row.status === DRAFT_STATUS" @click="$emit('delete', scope.row.id)" class="btn-edit">
+            <IconTrash/>
           </button>
         </div>
       </template>
@@ -85,7 +85,8 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
-import {STATUS_LABELS} from "@/constants/survey.js";
+import {PRIORITIES, STATUS_LABELS} from "@/constants/mobilization.js";
+import {DRAFT_STATUS} from "@/constants/mobilization.js";
 
 export default {
   components: {
@@ -98,26 +99,37 @@ export default {
       default: [],
     },
   },
-  setup(props, { emit }) {
+  setup(props, {emit}) {
     const statusClass = (status) => {
       if (status == null) return ""; // Ensure status is not null or undefined
       switch (status) {
         case 0:
-          return "planning-receive-planning";
+          return "mobilization-draft";
         case 1:
-          return "planning";
+          return "mobilization-wait-manager-approve";
         case 2:
-          return "planning-in-progress";
+          return "mobilization-manager-approved";
         case 3:
-          return "planning-completed";
+          return "mobilization-bod-approved";
         case 4:
-          return "planning-paused";
-        case 5:
-          return "planning-closed";
+          return "mobilization-rejected";
         default:
           return ""; // Handle unexpected values
       }
     };
+    const priorityClass = (priority) => {
+      switch (priority) {
+        case 0:
+          return "mobilization-low";
+        case 1:
+          return "mobilization-medium";
+        case 2:
+          return "mobilization-high";
+      }
+    }
+    const formatPriority = (level) => {
+      return PRIORITIES[level];
+    }
     const formatDate = (inputDate) => {
       return mixinMethods.showDateTime(inputDate, DATE_FORMAT);
     }
@@ -134,8 +146,11 @@ export default {
       formatStatus,
       formatDate,
       formatCurrency,
+      formatPriority,
+      priorityClass,
+      DRAFT_STATUS
     };
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -144,8 +159,10 @@ export default {
     width: 90%;
     text-align: start;
   }
+
   div {
     align-items: center;
+
     svg {
       cursor: pointer;
     }
@@ -163,38 +180,57 @@ export default {
     line-height: 1.2;
     font-weight: 700;
     text-align: center;
+    width: 80%;
+    justify-self: center;
+  }
+  &-priority {
+    background: #ccc;
+    color: #fff !important;
+    font-size: 12px;
+    border-radius: 100px;
+    display: block;
+    padding: 2px 16px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
+    width: 80%;
+    justify-self: center;
   }
 
   &-file {
     margin-left: 12px;
   }
 
-  &-renewed {
-    background: #d4a816;
+  &-draft {
+    background: #aeacac;
   }
 
-  &-active {
-    background: #15a726;
+  &-wait-manager-approve {
+    background: #a62967;
   }
 
-  &-terminated {
-    background: #d03333;
+  &-manager-approved {
+    background: #1f7885;
   }
 
-  &-monthly {
-    background: #4e1b7b;
+  &-bod-approved {
+    background: #2b4b7c;
   }
 
-  &-quater {
-    background: #136e87;
+  &-rejected {
+    background: #8a1515;
   }
 
-  &-half-year {
-    background: #4616d4;
+  &-low {
+    background: #48225e;
   }
 
-  &-year {
-    background: #772044;
+  &-medium {
+    background: #2b4b7c;
+  }
+
+  &-high {
+    background: #da6b34;
   }
 
   &-type-cate {
@@ -209,5 +245,8 @@ export default {
   &-number {
     font-weight: 700;
   }
+}
+.label-center {
+  text-align: center  ;
 }
 </style>

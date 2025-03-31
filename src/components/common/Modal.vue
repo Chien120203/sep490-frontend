@@ -16,7 +16,7 @@
             </div>
           </slot>
           <div>
-            <IconCircleClose @click="$emit('close', true)"/>
+            <IconCircleClose @click="$emit('close', false)"/>
           </div>
         </div>
         <div class="modal-body">
@@ -105,7 +105,7 @@ export default {
           event.target.getAttribute("id") === props.target &&
           props.canClickOutside
       ) {
-        emit("close", true);
+        emit("close", false);
       }
     };
 

@@ -9,11 +9,21 @@ export const useMobilizationStore = defineStore(
   () => {
     const {t} = useI18n();
     const validation = reactive({ value: {} });
-    const isShowModalConfirm = reactive({ value: false });
     const totalItems = reactive({ value: 0 });
     const currentPage = reactive({ value: 0 });
     const listMobilizations = reactive({ value: [] });
-    const customerDetails = reactive({value: {}});
+    const mobilizationDetails = reactive({value: {
+        id: null,
+        requestCode: "",
+        projectId: 0,
+        requestName: "",
+        resourceMobilizationDetails: [],
+        description: "",
+        priorityLevel: 0,
+        status: 0,
+        attachments: "",
+        requestDate: ""
+      }});
 
     const getListMobilizations = async (params, isLoading = true) => {
       if(isLoading) mixinMethods.startLoading();
@@ -34,16 +44,83 @@ export const useMobilizationStore = defineStore(
           mixinMethods.endLoading();
         }
       );
+      await mixinMethods.endLoading();
+    };
+
+    const getMobilizationDetails = async (id, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
+      await services.MobilizationAPI.details(
+        params,
+        (response) => {
+          if (currentPage.value === 1) {
+            listMobilizations.value = response.data;
+          } else {
+            listMobilizations.value = [...listMobilizations.value, ...response.data];
+          }
+          totalItems.value = response.meta.total;
+          currentPage.value = response.meta.index;
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.get_mobilization_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+      await mixinMethods.endLoading();
+    };
+
+    const saveRequest = async (params) => {
+      mixinMethods.startLoading();
+      await services.MobilizationAPI.save(
+        params,
+        (response) => {
+          if(response.success) {
+            mobilizationDetails.value = response.data;
+            mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
+          }else {
+            validation.value = mixinMethods.handleErrorResponse(response);
+            mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+      await mixinMethods.endLoading();
+    };
+
+    const handleDeleteMobilization = async (id) => {
+      mixinMethods.startLoading();
+      await services.MobilizationAPI.deleteMobilization(
+        id,
+        (response) => {
+          if(response.success) {
+            listMobilizations.value = listMobilizations.value.filter(mobilize => mobilize.id !== id);
+            mixinMethods.notifySuccess(t("response.message.delete_mobilize_success"));
+          } else {
+            mixinMethods.notifyError(t("response.message.delete_mobilize_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.delete_mobilize_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+      await mixinMethods.endLoading();
     };
 
     return {
       validation,
       totalItems,
       currentPage,
-      customerDetails,
-      isShowModalConfirm,
+      mobilizationDetails,
       listMobilizations,
+      handleDeleteMobilization,
       getListMobilizations,
+      saveRequest
     };
   }
 );

@@ -39,6 +39,9 @@ const API_CODE = {
   API_PLANNING_001: '/plans/search',
 
   API_MOBILIZE_001: '/resourcereq/mobilization/list',
+  API_MOBILIZE_002: '/resourcereq/mobilization/save',
+  API_MOBILIZE_003: '/resourcereq/mobilization/delete',
+  API_MOBILIZE_004: '/resourcereq/mobilization/delete',
 
 };
 
