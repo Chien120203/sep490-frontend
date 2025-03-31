@@ -11,15 +11,15 @@ const details = async (params, success, error) => {
 };
 
 const update = async (params, success, error) => {
-    await put(API_CODE.API_USER_003, params, success, error);
+    await put(API_CODE.API_USER_002, params, success, error);
 };
 
 const create = async (params, success, error) => {
-    await post(API_CODE.API_USER_004, params, success, error);
+    await post(API_CODE.API_USER_003, params, success, error);
 };
 
 const deleteUser = async (id, success, error) => {
-    await del(API_CODE.API_USER_005 + "?userId=" + id, {}, success, error);
+    await del(API_CODE.API_USER_004 + "?userId=" + id, {}, success, error);
 };
 
 export const UserAPI = {
