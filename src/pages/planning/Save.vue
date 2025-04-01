@@ -171,7 +171,9 @@ const router = useRouter();
 onMounted(async () => {
   if(!route.params.id) {
     await getContractDetails(projectId.value);
-    planningDetails.value.planItems = contractDetails.value.contractDetails;
+    planningDetails.value.planItems = contractDetails.value.contractDetails.map(
+        ({ contractId, deleted, ...rest }) => rest
+    );
   };
   await getListUsers({keyWord: "", pageIndex: 1, role: QUALITY_ASSURANCE}, false);
   listQualityAssurances.value = listUsers.value;
@@ -211,7 +213,7 @@ const handleTabChange = (tab) => {
 };
 
 const updateListQAs = (list) => {
-  planningDetails.value.qaIds = list;
+  planningDetails.value.reviewerIds = list;
 }
 
 const submitForm = () => {

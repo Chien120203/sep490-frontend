@@ -12,7 +12,7 @@
 
     <template #body>
       <div class="modal-body-container">
-        <PriceInputForm :total="totalAllPrice" :selectedRow="selectedRow" />
+        <PriceInputForm :total="totalAllPrice" :selectedRow="selectedRow"/>
         <el-tabs v-model="activeTab">
           <!-- Công việc phụ thuộc -->
           <el-tab-pane label="Công việc phụ thuộc" name="tasks">
@@ -23,7 +23,12 @@
                 :listData="tasks.filter(item => item.index !== selectedRow.index)"
                 @handleSelectedParams="handleSelectTask"
             />
-            <DependencyTaskTable :tasks="listTaskDependency" :isPlanning="true" @delete="handleRemoveDependency"/>
+            <DependencyTaskTable
+                :tasks="tasks"
+                :taskDependency="listTaskDependency.value"
+                @delete="handleRemoveDependency"
+                @update-dependency="handleUpdateDependency"
+            />
           </el-tab-pane>
 
           <!-- Tài nguyên -->
@@ -74,27 +79,27 @@ import {ref, defineProps, defineEmits, computed, onMounted, onUnmounted, watch, 
 import Modal from "@/components/common/Modal.vue";
 import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
-import DependencyTaskTable from "@/pages/progress/items/modal/items/progress-details/DependencyTaskTable.vue";
+import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {HUMAN_RESOURCE, MACHINE_RESOURCE, MATERIAL_RESOURCE} from "@/constants/resource.js";
 
 const props = defineProps({
-  selectedRow: { type: Object, default: {} },
-  show: { type: Boolean, default: false },
-  materials: { type: Array, default: () => [] },
-  users: { type: Array, default: () => [] },
-  vehicles: { type: Array, default: () => [] },
-  tasks: { type: Array, default: () => [] },
+  selectedRow: {type: Object, default: {}},
+  show: {type: Boolean, default: false},
+  materials: {type: Array, default: () => []},
+  users: {type: Array, default: () => []},
+  vehicles: {type: Array, default: () => []},
+  tasks: {type: Array, default: () => []},
 });
 
-const materialOptions = ref({ id: "id", value: "name" });
-const userOptions = ref({ id: "id", value: "name" });
-const vehicleOptions = ref({ id: "id", value: "name" });
-const dependencyOptions = ref({ id: "index", value: "workName" });
-const listSelectedVehicles = ref( []);
+const materialOptions = ref({id: "id", value: "name"});
+const userOptions = ref({id: "id", value: "name"});
+const vehicleOptions = ref({id: "id", value: "name"});
+const dependencyOptions = ref({id: "index", value: "workName"});
+const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
-const listTaskDependency = ref([]);
+const listTaskDependency = ref({});
 const activeTab = ref("tasks"); // Default active tab
 
 const totalAllPrice = computed(() => {
@@ -111,7 +116,7 @@ const totalAllPrice = computed(() => {
 });
 
 const getListResourceByType = (list, type) => {
-  if(!Array.isArray(list)) return [];
+  if (!Array.isArray(list)) return [];
   return list.filter(item => item.resourceType === type);
 }
 
@@ -119,7 +124,7 @@ watchEffect(() => {
   listSelectedVehicles.value = getListResourceByType(props.selectedRow?.details, MACHINE_RESOURCE);
   listSelectedMaterials.value = getListResourceByType(props.selectedRow?.details, MATERIAL_RESOURCE);
   listSelectedUsers.value = getListResourceByType(props.selectedRow?.details, HUMAN_RESOURCE);
-  listTaskDependency.value = props.selectedRow?.itemRelations || [];
+  listTaskDependency.value = props.selectedRow?.itemRelations || {};
 });
 
 const emit = defineEmits(["close", "submit"]);
@@ -128,17 +133,20 @@ const handleSelectTask = (taskId) => {
   let task = props.tasks.find((task) => task.index === taskId && task.index !== props.selectedRow.index);
   if (!task) return;
 
-  listTaskDependency.value.push({
-    index: task.index,
-    workName: task.workName,
-    endDate: task.endDate,
-    startDate: task.startDate,
-    dependency: "",
-  });
+  listTaskDependency.value[taskId] = "";
 };
 
+const handleUpdateDependency = (dependency) => {
+  listTaskDependency.value = dependency;
+}
+
 const handleRemoveDependency = (index) => {
-  listTaskDependency.value = listTaskDependency.value.filter((task) => task.index !== index);
+  listTaskDependency.value = Object.keys(listTaskDependency.value)
+      .filter(key => key !== index)
+      .reduce((obj, key) => {
+        obj[key] = listTaskDependency.value[key];
+        return obj;
+      }, {});
 };
 
 const updateListMaterials = (listData) => {
@@ -173,6 +181,7 @@ const handleSubmit = () => {
 .modal-title {
   margin: 0;
 }
+
 .modal-body-container {
   min-height: 550px;
 }

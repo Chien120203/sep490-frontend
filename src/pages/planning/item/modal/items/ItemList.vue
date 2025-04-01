@@ -71,7 +71,9 @@ const handleSelectItem = (id) => {
       unitPrice: 0
     });
   }
-  emit('update-list', listAddedValues.value);
+  emit('update-list', listAddedValues.value.map(
+      ({ name, ...rest }) => rest
+  ));
 };
 </script>
 

@@ -19,7 +19,7 @@ export const usePlanningStore = defineStore(
         projectId: "",
         teamIds: [],
         planItems: [],
-        qaIds: []
+        reviewerIds: []
       }
     });
 

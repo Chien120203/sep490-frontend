@@ -3,7 +3,6 @@ import { defineProps, defineEmits, computed, ref, watch } from "vue";
 import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import IconEdit from "@/svg/IconEdit.vue";
-import MultipleOptionSelect from "@/components/common/MultipleOptionSelect.vue";
 
 const props = defineProps({
   items: Array,

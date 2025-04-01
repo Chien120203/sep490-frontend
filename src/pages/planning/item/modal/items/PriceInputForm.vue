@@ -28,9 +28,8 @@
 
           <el-form-item label="Ngân sách dự kiến">
             <el-input
-                class="custom-input"
+                :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 v-model="selectedRow.price"
-                placeholder="Ngân sách dự kiến"
             />
           </el-form-item>
         </el-col>
@@ -59,6 +58,7 @@
 
 <script setup>
 import { defineProps } from "vue";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   selectedRow: { type: Object, default: () => ({}) },
