@@ -16,18 +16,10 @@
         <el-tabs v-model="activeTab">
           <!-- Công việc phụ thuộc -->
           <el-tab-pane label="Công việc phụ thuộc" name="tasks">
-            <SingleOptionSelect
-                style="width: 30%"
-                class="select-item"
-                :optionKeys="dependencyOptions"
-                :listData="tasks.filter(item => item.index !== selectedRow.index)"
-                @handleSelectedParams="handleSelectTask"
-            />
             <DependencyTaskTable
                 :tasks="tasks"
-                :taskDependency="listTaskDependency.value"
-                @delete="handleRemoveDependency"
-                @update-dependency="handleUpdateDependency"
+                :selectedRow="selectedRow"
+                @update-dependency="updateTaskDependencies"
             />
           </el-tab-pane>
 
@@ -75,12 +67,11 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits, computed, onMounted, onUnmounted, watch, watchEffect} from "vue";
+import {ref, defineProps, defineEmits, computed, watchEffect} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
 import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
-import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {HUMAN_RESOURCE, MACHINE_RESOURCE, MATERIAL_RESOURCE} from "@/constants/resource.js";
 
 const props = defineProps({
@@ -95,7 +86,6 @@ const props = defineProps({
 const materialOptions = ref({id: "id", value: "name"});
 const userOptions = ref({id: "id", value: "name"});
 const vehicleOptions = ref({id: "id", value: "name"});
-const dependencyOptions = ref({id: "index", value: "workName"});
 const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
@@ -129,26 +119,6 @@ watchEffect(() => {
 
 const emit = defineEmits(["close", "submit"]);
 
-const handleSelectTask = (taskId) => {
-  let task = props.tasks.find((task) => task.index === taskId && task.index !== props.selectedRow.index);
-  if (!task) return;
-
-  listTaskDependency.value[taskId] = "";
-};
-
-const handleUpdateDependency = (dependency) => {
-  listTaskDependency.value = dependency;
-}
-
-const handleRemoveDependency = (index) => {
-  listTaskDependency.value = Object.keys(listTaskDependency.value)
-      .filter(key => key !== index)
-      .reduce((obj, key) => {
-        obj[key] = listTaskDependency.value[key];
-        return obj;
-      }, {});
-};
-
 const updateListMaterials = (listData) => {
   listSelectedMaterials.value = listData;
 };
@@ -157,6 +127,9 @@ const updateListUsers = (listData) => {
 };
 const updateListVehicles = (listData) => {
   listSelectedVehicles.value = listData;
+};
+const updateTaskDependencies = (dependencies) => {
+  listTaskDependency.value = dependencies.itemRelations;
 };
 
 const handleSubmit = () => {

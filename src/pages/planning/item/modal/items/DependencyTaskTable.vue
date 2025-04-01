@@ -1,5 +1,12 @@
 <template>
-  <el-table :data="listTasks" style="width: 100%" border stripe>
+  <SingleOptionSelect
+      style="width: 30%"
+      class="select-item"
+      :optionKeys="dependencyOptions"
+      :listData="tasks.filter(item => item.index !== selectedRow.index && item.index !== selectedRow.parentIndex)"
+      @handleSelectedParams="handleSelectTask"
+  />
+  <el-table :data="listSelectedTasks" style="width: 100%" border stripe>
     <el-table-column prop="index" label="Index">
       <template #default="{ row }">
         {{ row.index }}
@@ -24,7 +31,7 @@
     <!-- Dependency -->
     <el-table-column prop="dependency" label="Depends Type">
       <template #default="{ row }">
-        <el-select v-model="row.dependency" @change="handleDependencyChange(row)">
+        <el-select v-model="selectRow.itemRelations[row.index]" @change="handleChangeDependency">
           <el-option :label="$t('common.no_dependency')" value=""></el-option>
           <el-option
               v-for="(type, index) in TASK_RELATIONSHIPS"
@@ -37,10 +44,11 @@
       </template>
     </el-table-column>
 
+
     <el-table-column label="Actions">
       <template #default="{ row }">
         <div>
-          <button @click="$emit('delete', row.index)" class="btn-edit">
+          <button @click="handleRemoveTask(row.index)" class="btn-edit">
             <IconTrash />
           </button>
         </div>
@@ -51,12 +59,12 @@
 
 <script setup>
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
-import IconEdit from "@/svg/IconEdit.vue";
+import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
-import {computed} from "vue";
+import {ref} from "vue";
 
 const props = defineProps({
-  taskDependency: {
+  selectedRow: {
     type: Object,
     default: () => {}
   },
@@ -66,58 +74,42 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits("update-dependency");
-
+const emit = defineEmits(["update-dependency"]);
+const dependencyOptions = ref({id: "index", value: "workName"});
+const selectRow = ref({...props.selectedRow, itemRelations: props.selectedRow.itemRelations || {}} || {});
+  const listSelectedTasks = ref( props.tasks.filter(task =>
+    Object.keys(props.selectedRow.itemRelations || {}).includes(String(task.index))
+) || []);
 // Format date
 const formatDate = (date) => {
   if(!date) return '';
   return new Date(date).toLocaleDateString();
 };
 
-const getDependencyTask = (dependency) => {
-  return TASK_RELATIONSHIPS.find(task => task.value === dependency)?.label ?? "-";
-};
+const handleSelectTask = (selectedIndex) => {
+  let task = props.tasks.find(task => task.index === selectedIndex);
 
-const listTasks = computed(() => {
-  let taskKeys = Object.keys(props.taskDependency ?? {}); // Get keys from taskDependency
+  if (task) {
+    // Ensure itemRelations exists
+    selectRow.value.itemRelations = selectRow.value.itemRelations || {};
 
-  return props.tasks
-      .filter((task) => taskKeys.includes(String(task.index))) // Keep tasks with matching index
-      .map((task) => ({
-        ...task,
-        dependency: props.taskDependency[task.index] // Assign dependency from taskDependency
-      }));
-});
+    // Insert new relation without overwriting existing ones
+    selectRow.value.itemRelations[task.index] = "";
 
-const handleDependencyChange = (row) => {
-  let listUpdatedTasks = props.tasks;
-  let result = listUpdatedTasks.map((task) => {
-    if (task.index === row.index) {
-      return {
-        ...task,
-        dependency: row.dependency
-      };
-    }
-    if (task.index === props.taskDependency[row.index]) {
-      return {
-        ...task,
-        dependency: "AA"
-      };
-    }
-
-    return task;
-  });
-  console.log(result);
-};
-// Get status tag color
-const getStatusTag = (status) => {
-  switch (status) {
-    case "Completed": return "success";
-    case "In Progress": return "warning";
-    case "Pending": return "danger";
-    default: return "";
+    listSelectedTasks.value.push(task);
   }
 };
+
+const handleRemoveTask = (removeIndex) => {
+  delete selectRow.value.itemRelations[removeIndex];
+  listSelectedTasks.value = listSelectedTasks.value.filter(task => task.index !== removeIndex);
+  emit("update-dependency", selectRow.value);
+};
+
+const handleChangeDependency = () => {
+  emit("update-dependency", selectRow.value);
+}
+
 </script>
 
 <style scoped>
