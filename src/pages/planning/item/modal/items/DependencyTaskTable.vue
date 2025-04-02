@@ -18,13 +18,13 @@
     <!-- Due Date -->
     <el-table-column prop="startDate" label="Start Date" sortable>
       <template #default="{ row }">
-        {{ formatDate(row.startDate) }}
+        {{ row.startDate }}
       </template>
     </el-table-column>
     <!-- Due Date -->
     <el-table-column prop="endDate" label="Due Date" sortable>
       <template #default="{ row }">
-        {{ formatDate(row.endDate) }}
+        {{ row.endDate }}
       </template>
     </el-table-column>
 
@@ -61,7 +61,8 @@
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
-import {ref} from "vue";
+import {reactive, ref} from "vue";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   selectedRow: {
@@ -76,38 +77,38 @@ const props = defineProps({
 
 const emit = defineEmits(["update-dependency"]);
 const dependencyOptions = ref({id: "index", value: "workName"});
-const selectRow = ref({...props.selectedRow, itemRelations: props.selectedRow.itemRelations || {}} || {});
-  const listSelectedTasks = ref( props.tasks.filter(task =>
+const selectRow = reactive({
+  ...props.selectedRow,
+  itemRelations: props.selectedRow.itemRelations ? { ...props.selectedRow.itemRelations } : {}
+});
+const listSelectedTasks = ref( props.tasks.filter(task =>
     Object.keys(props.selectedRow.itemRelations || {}).includes(String(task.index))
 ) || []);
-// Format date
-const formatDate = (date) => {
-  if(!date) return '';
-  return new Date(date).toLocaleDateString();
-};
 
 const handleSelectTask = (selectedIndex) => {
   let task = props.tasks.find(task => task.index === selectedIndex);
 
   if (task) {
-    // Ensure itemRelations exists
-    selectRow.value.itemRelations = selectRow.value.itemRelations || {};
+    // Ensure selectRow and itemRelations exist
+    if (!selectRow.itemRelations) {
+      selectRow.itemRelations = {};
+    }
 
-    // Insert new relation without overwriting existing ones
-    selectRow.value.itemRelations[task.index] = "";
+    // Insert new relation
+    selectRow.itemRelations[task.index] = "";
 
     listSelectedTasks.value.push(task);
   }
 };
 
 const handleRemoveTask = (removeIndex) => {
-  delete selectRow.value.itemRelations[removeIndex];
+  delete selectRow.itemRelations[removeIndex];
   listSelectedTasks.value = listSelectedTasks.value.filter(task => task.index !== removeIndex);
-  emit("update-dependency", selectRow.value);
+  emit("update-dependency", selectRow);
 };
 
 const handleChangeDependency = () => {
-  emit("update-dependency", selectRow.value);
+  emit("update-dependency", selectRow);
 }
 
 </script>

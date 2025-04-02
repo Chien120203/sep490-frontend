@@ -36,8 +36,9 @@ const API_CODE = {
     API_SURVEY_002: '/survey/save',
     API_SURVEY_003: '/survey/delete',
 
-    //Planning
-    API_PLANNING_001: '/plans/search',
+  //Planning
+  API_PLANNING_001: '/plans/search',
+  API_PLANNING_002: '/plans/create',
 
     //Mobilization
     API_MOBILIZE_001: '/resourcereq/mobilization/list',

@@ -162,7 +162,8 @@ const {
 const {listUsers, getListUsers} = userStore;
 const {clearProjectDetails} = projectStore;
 const {
-  planningDetails
+  planningDetails,
+  savePlanning,
 } = planningStore;
 
 const route = useRoute();
@@ -217,6 +218,7 @@ const updateListQAs = (list) => {
 }
 
 const submitForm = () => {
-  console.log(planningDetails.value);
+  planningDetails.value.projectId = projectId.value;
+  savePlanning(planningDetails.value);
 }
 </script>

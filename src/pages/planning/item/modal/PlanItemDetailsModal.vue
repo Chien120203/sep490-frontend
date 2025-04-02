@@ -28,7 +28,7 @@
             <ItemList
                 :selectData="materials"
                 :resourceType="MATERIAL_RESOURCE"
-                :tableData="listSelectedMaterials"
+                :tableData="getListResourceByType(selectedRow?.details, MATERIAL_RESOURCE)"
                 :optionKeys="materialOptions"
                 @update-list="updateListMaterials"
             />
@@ -39,7 +39,7 @@
             <ItemList
                 :selectData="users"
                 :resourceType="HUMAN_RESOURCE"
-                :tableData="listSelectedUsers"
+                :tableData="getListResourceByType(selectedRow?.details, HUMAN_RESOURCE)"
                 :optionKeys="userOptions"
                 @update-list="updateListUsers"
             />
@@ -50,7 +50,7 @@
             <ItemList
                 :selectData="vehicles"
                 :resourceType="MACHINE_RESOURCE"
-                :tableData="listSelectedVehicles"
+                :tableData="getListResourceByType(selectedRow?.details, MACHINE_RESOURCE)"
                 :optionKeys="vehicleOptions"
                 @update-list="updateListVehicles"
             />
@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits, computed, watchEffect} from "vue";
+import {ref, defineProps, defineEmits, computed, watchEffect, reactive} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
@@ -110,17 +110,11 @@ const getListResourceByType = (list, type) => {
   return list.filter(item => item.resourceType === type);
 }
 
-watchEffect(() => {
-  listSelectedVehicles.value = getListResourceByType(props.selectedRow?.details, MACHINE_RESOURCE);
-  listSelectedMaterials.value = getListResourceByType(props.selectedRow?.details, MATERIAL_RESOURCE);
-  listSelectedUsers.value = getListResourceByType(props.selectedRow?.details, HUMAN_RESOURCE);
-  listTaskDependency.value = props.selectedRow?.itemRelations || {};
-});
-
 const emit = defineEmits(["close", "submit"]);
 
 const updateListMaterials = (listData) => {
   listSelectedMaterials.value = listData;
+  console.log(props.selectedRow);
 };
 const updateListUsers = (listData) => {
   listSelectedUsers.value = listData;

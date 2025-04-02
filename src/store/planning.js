@@ -3,6 +3,7 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import PAGE_NAME from "@/constants/route-name.js";
 
 export const usePlanningStore = defineStore(
   "planning",
@@ -43,8 +44,30 @@ export const usePlanningStore = defineStore(
           mixinMethods.endLoading();
         }
       );
-      mixinMethods.endLoading();
+      await mixinMethods.endLoading();
     };
+
+      const savePlanning = async (params) => {
+          mixinMethods.startLoading();
+          await services.PlanningAPI.create(
+              params,
+              (response) => {
+                  if(response.success) {
+                      planningDetails.value = response.data;
+                      validation.value = [];
+                      mixinMethods.notifySuccess(t("response.message.save_project_success"));
+                  }else {
+                      validation.value = mixinMethods.handleErrorResponse(response);
+                      mixinMethods.notifyError(t("response.message.save_project_failed"));
+                  }
+                  mixinMethods.endLoading();
+              },
+              () => {
+                  mixinMethods.notifyError(t("response.message.save_project_failed"));
+                  mixinMethods.endLoading();
+              }
+          );
+      };
 
     return {
       validation,
@@ -53,7 +76,8 @@ export const usePlanningStore = defineStore(
       currentPage,
       planningDetails,
       isShowModalConfirm,
-      getListPlannings
+      getListPlannings,
+      savePlanning
     };
   }
 );
