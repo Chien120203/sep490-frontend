@@ -16,7 +16,7 @@
     <!-- Left panel - Profile summary -->
     <div class="profile-card">
       <div class="profile-image-container">
-        <img :src="userDetails.value.profileImage" alt="Profile picture" class="profile-image" />
+        <img :src="userDetails.value.picProfile" alt="Profile picture" class="profile-image" />
       </div>
       <h2 class="profile-name">{{ userDetails.value.fullName }}</h2>
 
@@ -31,59 +31,100 @@
     <div class="profile-form">
       <!-- Navigation tabs -->
       <div class="nav-tabs">
-        <div class="nav-tab active">Hồ sơ của tôi</div>
-        <div class="nav-tab">Thiết lập chữ ký</div>
-        <div class="nav-tab">Thiết lập kết nối Email</div>
-        <div class="nav-tab">Thiết lập thông báo</div>
-        <div class="nav-tab">Thiết lập tiêu điểm</div>
+        <div class="nav-tab active">{{ $t('profile.title') }}</div>
       </div>
 
       <!-- Active tab content -->
       <div class="tab-content">
         <h3 class="section-title"></h3>
 
-        <el-form ref="ruleFormRef" :model="userDetails.value" label-width="120px">
+        <el-form
+            ref="ruleFormRef"
+            :model="userDetails.value"
+            :rules="USER_RULES"
+            label-width="120px">
           <div class="form-grid">
-            <el-form-item label="UserName" required>
+            <el-form-item :label="$t('profile.details.username')" required>
               <el-input v-model="userDetails.value.username"></el-input>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.username"
+              >{{ $t(validation.value.username) }}</label>
             </el-form-item>
 
-            <el-form-item label="Role" required>
+            <el-form-item :label="$t('profile.details.role')" required>
               <el-input v-model="userDetails.value.role"></el-input>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.role"
+              >{{ $t(validation.value.role) }}</label>
             </el-form-item>
 
-            <el-form-item label="Họ tên" required>
+            <el-form-item :label="$t('profile.details.fullName')" required>
               <el-input v-model="userDetails.value.fullName"></el-input>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.fullName"
+              >{{ $t(validation.value.fullName) }}</label>
             </el-form-item>
 
-            <el-form-item label="Email">
+            <el-form-item :label="$t('profile.details.email')">
               <el-input v-model="userDetails.value.email" type="email"></el-input>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.email"
+              >{{ $t(validation.value.email) }}</label>
             </el-form-item>
 
-            <el-form-item label="Số điện thoại">
+            <el-form-item :label="$t('profile.details.phone')">
               <el-input v-model="userDetails.value.phone"></el-input>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.phone"
+              >{{ $t(validation.value.phone) }}</label>
             </el-form-item>
 
-            <el-form-item label="Giới tính">
-              <el-select v-model="userDetails.value.gender">
-                <el-option label="Nam" value="Nam"></el-option>
-                <el-option label="Nữ" value="Nữ"></el-option>
-                <el-option label="Khác" value="Khác"></el-option>
+            <el-form-item :label="$t('profile.details.gender')">
+              <el-select v-model="genderValue">
+                <el-option label="Male" :value="true"></el-option>
+                <el-option label="Female" :value="false"></el-option>
               </el-select>
             </el-form-item>
-          </div>
 
-<!--          <el-form-item label="Ảnh đại diện">-->
-<!--            <div class="profile-image-upload">-->
-<!--              <img :src="userDetails.value.profileImage" alt="Profile picture" class="profile-image-preview" />-->
-<!--              <div class="edit-icon">-->
-<!--                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">-->
-<!--                  <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>-->
-<!--                  <path d="m15 5 4 4"/>-->
-<!--                </svg>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </el-form-item>-->
+            <el-form-item
+                :label="$t('user.details.dob')"
+                prop="dob"
+            >
+              <el-date-picker
+                  style="width: 90%"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
+                  v-model="userDetails.value.dob"
+              />
+              <label
+                  class="error-feedback-user"
+                  v-if="validation.value && validation.value.dob"
+              >{{ $t(validation.value.dob) }}</label>
+            </el-form-item>
+
+            <el-form-item :label="$t('profile.details.address')">
+              <el-input v-model="userDetails.value.address"></el-input>
+              <label
+                  class="error-feedback-user"
+                  v-if="validation && validation.value.address"
+              >{{ $t(validation.value.address) }}</label>
+            </el-form-item>
+
+            <el-form-item prop="attachments" :label="$t('profile.details.image')">
+                <ImageUpload
+                    :existingFiles="userDetails.value.picProfile"
+                    :allowedTypes="'.jpg,.png,.pdf,.docx'"
+                    :fileLimit="3"
+                    class="input-wd-96"
+                    @file-selected="handleImageUpload"
+                />
+            </el-form-item>
+          </div>
         </el-form>
       </div>
     </div>
@@ -91,7 +132,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { ElForm, ElFormItem, ElInput, ElSelect, ElOption } from 'element-plus';
 import 'element-plus/dist/index.css';
 import IconBackMain from "@/svg/IconBackMain.vue";
@@ -100,6 +141,8 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import { useUserStore } from "@/store/user.js";
+import {USER_RULES} from "@/rules/user/index.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 export default {
   components: { ImageUpload, IconBackMain },
@@ -108,8 +151,10 @@ export default {
 
     const {
       userDetails,
+      validation,
       getUserDetails,
-      updateUserProfile
+      updateUserProfile,
+      uploadImage
     } = userStore;
 
     const { t } = useI18n();
@@ -121,10 +166,6 @@ export default {
     onMounted(async () => {
       await getUserDetails({userId: localStorage.getItem("userId")});
     });
-
-    const getGender = (gender) => {
-      return gender ? "user.gender.male" : "user.gender.female";
-    }
 
     const handleBack = () => {
       router.push({ name: PAGE_NAME.HOME });
@@ -138,7 +179,22 @@ export default {
       });
     };
 
+    const genderValue = computed({
+      get() {
+        return userDetails.value.gender;
+      },
+      set(value) {
+        userDetails.value.gender = value;
+      }
+    });
+
+    const handleImageUpload = (files) => {
+      userDetails.value.picProfile = files;
+    }
+
     return {
+      USER_RULES,
+      DATE_FORMAT,
       ruleFormRef,
       handleBack,
       submitForm,
@@ -146,7 +202,10 @@ export default {
       isCreateMode,
       getUserDetails,
       userDetails,
-      getGender
+      genderValue,
+      uploadImage,
+      handleImageUpload,
+      validation
     };
   },
 };

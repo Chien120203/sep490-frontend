@@ -151,7 +151,15 @@
     "details": {
       "title": "Profile Details",
       "change_password": "Change Password",
-      "logout": "Logout"
+      "logout": "Logout",
+      "username": "Username",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "role": "Role",
+      "gender": "Gender",
+      "image": "Image",
+      "address": "Address"
     }
   },
   "permission": {
