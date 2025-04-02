@@ -194,8 +194,28 @@ const createFormData = (params) => {
   return formData;
 };
 
+const validateField = (index, field, rules, item, validationErrors) => {
+  const fieldRules = rules[field];
+  const fieldValue = item[field];
 
-
+  fieldRules.forEach((rule) => {
+    if (rule.required && !fieldValue) {
+      validationErrors[`${
+        field}-${index
+      }`] = rule.message;
+    }
+    
+    if (rule.validator) {
+      rule.validator(rule, fieldValue, (error) => {
+        if (error) {
+          validationErrors[`${
+            field}-${index
+          }`] = error.message;
+        }
+      });
+    }
+  });
+};
 
 export const mixins = {
   screenLoading,
@@ -215,4 +235,5 @@ export const mixins = {
   validateInvalidEmail,
   showDateTime,
   base64ToFile,
+  validateField
 };

@@ -946,5 +946,8 @@
   "E-SV-001": "The probability must greater than or equal {min}",
   "E-SV-002": "The probability must less than or equal {max}",
   "E-SV-003": "The discount rate must greater than or equal {min}",
-  "E-SV-004": "The discount rate must less than or equal {max}"
+  "E-SV-004": "The discount rate must less than or equal {max}",
+
+  "E-RR-FE-001" : "Request date is required",
+  "E-RR-010": "At least one resource must be specified!"
 }

@@ -1,6 +1,11 @@
 <template>
   <div class="price-input-form">
-    <el-form label-width="30%">
+    <el-form
+      ref="ruleFormRef"
+      label-width="30%"
+      :model="data"
+      :rules="rules"
+    >
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="Request Code">
@@ -9,14 +14,17 @@
           <el-form-item label="Request Name">
             <el-input v-model="data.requestName" class="custom-input" />
           </el-form-item>
-          <el-form-item label="Request Date">
+          <el-form-item prop="requestDate" label="Request Date">
             <el-date-picker
-                style="width: 96%"
+                style="width: 96%;"
                 :value-format="DATE_FORMAT"
                 v-model="data.requestDate"
                 placeholder="Select Date"
                 class="input-wd-96"
             />
+            <label class="error-feedback-customer" v-if="validation && validation.requestDate">
+              {{ $t(validation.requestDate) }}
+            </label>
           </el-form-item>
         </el-col>
 
@@ -43,13 +51,30 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref, computed } from "vue";
 import {PRIORITIES, STATUSES} from "@/constants/mobilization.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
   data: { type: Object, default: () => ({}) },
+  rules: {
+    type: Object,
+    default: () => {}
+  },
+  validation: {
+    type: Object,
+    default: () => ({
+      requestDate: ""
+    })
+  },
 });
+
+const ruleFormRef = ref(null);
+
+defineExpose({
+  ruleFormRef,
+});
+
 </script>
 
 <style scoped>

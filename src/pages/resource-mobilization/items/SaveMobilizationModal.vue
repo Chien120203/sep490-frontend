@@ -12,7 +12,10 @@
 
     <template #body>
       <div class="modal-body-container">
-        <MobilizeFormInfo :data="data" />
+        <MobilizeFormInfo 
+          :data="data"
+          :rules="MOBILIZEFORMINFO_RULES"
+        />
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
           <el-tab-pane label="Tài nguyên" name="materials">
@@ -61,6 +64,7 @@ import {defineProps, ref} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import MobilizeFormInfo from "@/pages/resource-mobilization/items/modal/MobilizeFormInfo.vue";
 import ItemList from "@/pages/resource-mobilization/items/modal/ItemList.vue";
+import { getMobilizationInfoRules } from "@/rules/mobilization/index.js";
 import {
   HUMAN_TYPE,
   MACHINE_TYPE,
@@ -91,6 +95,8 @@ const listVehicles = ref([
   {id: 1, name: "Xe 1", unit: "kg", rate: 1, coefficient: 1, quantity: 100, unitPrice: 50000},
   {id: 2, name: "Xe 2", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
 ]);
+
+const MOBILIZEFORMINFO_RULES = getMobilizationInfoRules();
 
 const updateListMaterials = (listData) => {
   listSelectedMaterials.value = listData;
