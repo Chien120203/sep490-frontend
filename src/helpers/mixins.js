@@ -166,7 +166,7 @@ const base64ToFile = (base64String, fileName) => {
 
 
 const handleErrorResponse = (error) => {
-  return error.errors.reduce((acc, { field, message }) => {
+  return error.errors?.reduce((acc, { field, message }) => {
     field.split(",").map(f => f.trim()).forEach(f => {
       acc[f] = message;
     });

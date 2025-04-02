@@ -25,7 +25,7 @@ export const useUserStore = defineStore(
                 phone: "",
                 gender: "",
                 dob: "",
-                picProfile: ""
+                picProfile: []
             }
         });
 
@@ -127,13 +127,17 @@ export const useUserStore = defineStore(
                 fullName: "",
                 phone: "",
                 gender: "",
+                address: "",
                 dob: ""
             };
         };
 
         const updateUserProfile = async (params) => {
             mixinMethods.startLoading();
-            const formData = mixinMethods.createFormData(params);
+            const formData = mixinMethods.createFormData({
+                ...params,
+                picProfile: params.picProfile?.[0]?.raw ? [params.picProfile[0].raw] : []
+            });
             await services.AuthenticationAPI.updateUserProfile(
                 formData,
                 (response) => {

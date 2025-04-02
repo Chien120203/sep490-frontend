@@ -1,4 +1,4 @@
-import {post, put, putFormData} from '@/services/BaseService';
+import {post, putFormData} from '@/services/BaseService';
 import API_CODE from '@/utils/api_code';
 
 // Function to handle login

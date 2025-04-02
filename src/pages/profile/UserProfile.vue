@@ -16,7 +16,11 @@
     <!-- Left panel - Profile summary -->
     <div class="profile-card">
       <div class="profile-image-container">
-        <img :src="userDetails.value.picProfile" alt="Profile picture" class="profile-image" />
+        <ImageUpload
+          :fileLimit="1"
+          @file-selected="handleSelectFiles"
+          @file-removed="handleRemoveFile"
+        />
       </div>
       <h2 class="profile-name">{{ userDetails.value.fullName }}</h2>
 
@@ -52,14 +56,6 @@
               >{{ $t(validation.value.username) }}</label>
             </el-form-item>
 
-            <el-form-item :label="$t('profile.details.role')" required>
-              <el-input v-model="userDetails.value.role"></el-input>
-              <label
-                  class="error-feedback-user"
-                  v-if="validation && validation.value.role"
-              >{{ $t(validation.value.role) }}</label>
-            </el-form-item>
-
             <el-form-item :label="$t('profile.details.fullName')" required>
               <el-input v-model="userDetails.value.fullName"></el-input>
               <label
@@ -85,7 +81,7 @@
             </el-form-item>
 
             <el-form-item :label="$t('profile.details.gender')">
-              <el-select v-model="genderValue">
+              <el-select v-model="userDetails.value.gender">
                 <el-option label="Male" :value="true"></el-option>
                 <el-option label="Female" :value="false"></el-option>
               </el-select>
@@ -114,16 +110,6 @@
                   v-if="validation && validation.value.address"
               >{{ $t(validation.value.address) }}</label>
             </el-form-item>
-
-            <el-form-item prop="attachments" :label="$t('profile.details.image')">
-                <ImageUpload
-                    :existingFiles="userDetails.value.picProfile"
-                    :allowedTypes="'.jpg,.png,.pdf,.docx'"
-                    :fileLimit="3"
-                    class="input-wd-96"
-                    @file-selected="handleImageUpload"
-                />
-            </el-form-item>
           </div>
         </el-form>
       </div>
@@ -143,9 +129,10 @@ import PAGE_NAME from "@/constants/route-name.js";
 import { useUserStore } from "@/store/user.js";
 import {USER_RULES} from "@/rules/user/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
+import FileUpload from "@/components/common/FileUpload.vue";
 
 export default {
-  components: { ImageUpload, IconBackMain },
+  components: {FileUpload, ImageUpload, IconBackMain },
   setup() {
     const userStore = useUserStore();
 
@@ -154,7 +141,6 @@ export default {
       validation,
       getUserDetails,
       updateUserProfile,
-      uploadImage
     } = userStore;
 
     const { t } = useI18n();
@@ -171,6 +157,14 @@ export default {
       router.push({ name: PAGE_NAME.HOME });
     };
 
+    const handleSelectFiles = (listFiles) => {
+      userDetails.value.picProfile = listFiles;
+    }
+
+    const handleRemoveFile = (file) => {
+      userDetails.value.picProfile = userDetails.value.filter((f) => f.uid !== file.uid);
+    }
+
     const submitForm = () => {
       ruleFormRef.value.validate((valid) => {
         if (valid) {
@@ -178,19 +172,6 @@ export default {
         }
       });
     };
-
-    const genderValue = computed({
-      get() {
-        return userDetails.value.gender;
-      },
-      set(value) {
-        userDetails.value.gender = value;
-      }
-    });
-
-    const handleImageUpload = (files) => {
-      userDetails.value.picProfile = files;
-    }
 
     return {
       USER_RULES,
@@ -201,10 +182,9 @@ export default {
       route,
       isCreateMode,
       getUserDetails,
+      handleSelectFiles,
+      handleRemoveFile,
       userDetails,
-      genderValue,
-      uploadImage,
-      handleImageUpload,
       validation
     };
   },
@@ -241,11 +221,6 @@ export default {
 }
 
 .profile-image-container {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-bottom: 15px;
 }
 
 .profile-image {
