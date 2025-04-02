@@ -72,6 +72,15 @@ const postFormData = async (endpoint, formData, success, error, config = {}) => 
     .catch((e) => logError(e, error));
 };
 
+// Performs a PUT request
+const put = async (endpoint, params = {}, success, error) => {
+  await api
+    .put(prefix + endpoint, params)
+    .then(processResponse)
+    .then(success)
+    .catch((e) => logError(e, error));
+};
+
 const putFormData = async (endpoint, formData, success, error, config = {}) => {
   await api
       .put(prefix + endpoint, formData, {
@@ -83,15 +92,6 @@ const putFormData = async (endpoint, formData, success, error, config = {}) => {
       .then(processResponse)
       .then(success)
       .catch((e) => logError(e, error));
-};
-
-// Performs a PUT request
-const put = async (endpoint, params = {}, success, error) => {
-  await api
-    .put(prefix + endpoint, params)
-    .then(processResponse)
-    .then(success)
-    .catch((e) => logError(e, error));
 };
 
 // Performs a DELETE request
@@ -130,9 +130,9 @@ export {
   get,
   post,
   put,
+  putFormData,
   postFormData,
   del,
   patch,
-  urlParse,
-  putFormData
+  urlParse
 };
