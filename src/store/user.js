@@ -25,7 +25,7 @@ export const useUserStore = defineStore(
                 phone: "",
                 gender: "",
                 dob: "",
-                profileImage: []
+                picProfile: ""
             }
         });
 
@@ -133,18 +133,19 @@ export const useUserStore = defineStore(
 
         const updateUserProfile = async (params) => {
             mixinMethods.startLoading();
+            const formData = mixinMethods.createFormData(params);
             await services.AuthenticationAPI.updateUserProfile(
-                params,
+                formData,
                 (response) => {
                     userDetails.value = response.data;
-                    mixinMethods.notifySuccess(t("response.message.update_profile_success"));
+                    mixinMethods.notifySuccess(t("response.message.update_success"));
                     mixinMethods.endLoading();
                 },
                 (error) => {
                     validation.value = mixinMethods.handleErrorResponse(
                         error.responseCode
                     );
-                    mixinMethods.notifyError(t("response.message.update_profile_failed"));
+                    mixinMethods.notifyError(t("response.message.update_failed"));
                     mixinMethods.endLoading();
                 }
             );
