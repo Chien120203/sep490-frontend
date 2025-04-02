@@ -267,7 +267,8 @@
       "get_human_dtls_failed": "Get Human details failed",
       "save_human_success": "Save Human Success",
       "save_human_failed": "Save Human Failed",
-      "get_planning_dtls_failed": "Get planning details failed"
+      "get_planning_dtls_failed": "Get planning details failed",
+      "get_allocation_failed": "Get allocation requests failed"
     }
   },
   "contract": {
@@ -1087,6 +1088,28 @@
       "rejected": "Rejected"
     }
   },
+  "allocation": {
+    "title": "Resource Allocation",
+    "add_new": "Add New",
+    "keyword": "Key word",
+    "modal_confirm": {
+      "message": "Do you want to delete this request?",
+      "title": "Delete allocation request"
+    },
+    "table": {
+      "header": {
+        "code": "Request Code",
+        "name": " Request Name",
+        "priority": "Priority Level",
+        "status": "Status",
+        "date": "Request Date",
+        "from": "From Project",
+        "to": "To Project",
+        "action": "Action"
+      }
+    }
+  },
+
   "E-CM-001": "Login Failed",
   "E-CM-002": "Required",
   "E-CM-003": "Field must be less than {max} characters",

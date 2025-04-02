@@ -60,6 +60,9 @@ const PAGE_NAME = {
       DETAILS:"human-resources-details",
       CREATE:"human-resources-create",
     },
+  },
+  RESOURCE_ALLOCATION: {
+    LIST: "resource-allocation-list",
   }
 };
 

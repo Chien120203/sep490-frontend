@@ -43,34 +43,39 @@ const API_CODE = {
   API_PLANNING_004: '/plans/update',
   API_PLANNING_005: '/plans',
 
-    //Mobilization
-    API_MOBILIZE_001: '/resourcereq/mobilization/list',
-    API_MOBILIZE_002: '/resourcereq/mobilization/save',
-    API_MOBILIZE_003: '/resourcereq/mobilization/delete',
-    API_MOBILIZE_004: '/resourcereq/mobilization',
-    API_MOBILIZE_005: '/resourcereq/mobilization/send',
-    API_MOBILIZE_006: '/resourcereq/mobilization/approve',
-    API_MOBILIZE_007: '/resourcereq/mobilization/reject',
+  //Mobilization
+  API_MOBILIZE_001: '/resourcereq/mobilization/list',
+  API_MOBILIZE_002: '/resourcereq/mobilization/save',
+  API_MOBILIZE_003: '/resourcereq/mobilization/delete',
+  API_MOBILIZE_004: '/resourcereq/mobilization',
+  API_MOBILIZE_005: '/resourcereq/mobilization/send',
+  API_MOBILIZE_006: '/resourcereq/mobilization/approve',
+  API_MOBILIZE_007: '/resourcereq/mobilization/reject',
 
-    //Machine Resource
-    API_MACHINE_001: '/vehicle/',
-    API_MACHINE_002: '/vehicle/search',
-    API_MACHINE_003: '/vehicle/create',
-    API_MACHINE_004: '/vehicle/update',
-    API_MACHINE_005: '/vehicle/delete',
+  //Machine Resource
+  API_MACHINE_001: '/vehicle/',
+  API_MACHINE_002: '/vehicle/search',
+  API_MACHINE_003: '/vehicle/create',
+  API_MACHINE_004: '/vehicle/update',
+  API_MACHINE_005: '/vehicle/delete',
 
-    //Material Resource
-    API_MATERIAL_001: '/material/',
-    API_MATERIAL_002: '/material/search',
-    API_MATERIAL_003: '/material/save',
-    API_MATERIAL_004: '/material/delete',
+  //Material Resource
+  API_MATERIAL_001: '/material/',
+  API_MATERIAL_002: '/material/search',
+  API_MATERIAL_003: '/material/save',
+  API_MATERIAL_004: '/material/delete',
 
-    //Human Resource
-    API_HUMAN_001: '/teams/',
-    API_HUMAN_002: '/teams/search',
-    API_HUMAN_003: '/teams/create',
-    API_HUMAN_004: '/teams/update',
-    API_HUMAN_005: '/teams/delete',
+  //Human Resource
+  API_HUMAN_001: '/teams/',
+  API_HUMAN_002: '/teams/search',
+  API_HUMAN_003: '/teams/create',
+  API_HUMAN_004: '/teams/update',
+  API_HUMAN_005: '/teams/delete',
+
+  //Allocation
+  API_ALLOCATION_001: '/resourcereq/allocation/list',
+  API_ALLOCATION_002: '/resourcereq/allocation/save',
+
 };
 
 export default API_CODE;

@@ -43,6 +43,8 @@ import HumanResources from "@/pages/resource/human-management/Index.vue";
 import HumanResourcesSave from "@/pages/resource/human-management/Save.vue";
 import HumanResourceList from "@/pages/resource/human-management/HumanResourceList.vue";
 import UserProfile from "@/pages/profile/UserProfile.vue";
+import Allocation from "@/pages/resource-allocation/Index.vue";
+import AllocationList from "@/pages/resource-allocation/AllocationList.vue";
 
 const routes = [
   {
@@ -151,6 +153,21 @@ const routes = [
         path: PAGES.MOBILIZATION,
         name: PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
         component: MobilizationList,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.RESOURCE_ALLOCATION,
+    path: PAGES.ALLOCATION,
+    component: Allocation,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.ALLOCATION,
+        name: PAGE_NAME.RESOURCE_ALLOCATION.LIST,
+        component: AllocationList,
       }
     ]
   },

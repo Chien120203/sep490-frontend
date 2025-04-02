@@ -44,28 +44,31 @@ const PAGES = {
   CONSTRUCT_LOG_DETAILS: "/construct-log/details/:id",
   CONSTRUCT_LOG_CREATE: "/construct-log/create",
 
+  // mobilization
   MOBILIZATION: "/mobilization",
 
-    //resource
-    RESOURCE: "/resource",
+  //resource
+  RESOURCE: "/resource",
 
-    //resource machine
-    MACHINE_RESOURCE: "/resource/machine-management",
-    MACHINE_RESOURCE_LIST: "/resource/machine-management/list",
-    MACHINE_RESOURCE_CREATE: "/resource/machine-management/create",
-    MACHINE_RESOURCE_DETAILS: "/resource/machine-management/:id",
+  //resource machine
+  MACHINE_RESOURCE: "/resource/machine-management",
+  MACHINE_RESOURCE_LIST: "/resource/machine-management/list",
+  MACHINE_RESOURCE_CREATE: "/resource/machine-management/create",
+  MACHINE_RESOURCE_DETAILS: "/resource/machine-management/:id",
 
-    //resource material
-    MATERIAL_RESOURCE: "/resource/material-management",
-    MATERIAL_RESOURCE_LIST: "/resource/material-management/list",
-    MATERIAL_RESOURCE_CREATE: "/resource/material-management/create",
-    MATERIAL_RESOURCE_DETAILS: "/resource/material-management/:id",
+  //resource material
+  MATERIAL_RESOURCE: "/resource/material-management",
+  MATERIAL_RESOURCE_LIST: "/resource/material-management/list",
+  MATERIAL_RESOURCE_CREATE: "/resource/material-management/create",
+  MATERIAL_RESOURCE_DETAILS: "/resource/material-management/:id",
 
-    //resource human
-    HUMAN_RESOURCE: "/resource/human-management",
-    HUMAN_RESOURCE_LIST: "/resource/human-management/list",
-    HUMAN_RESOURCE_CREATE: "/resource/human-management/create",
-    HUMAN_RESOURCE_DETAILS: "/resource/human-management/:id",
+  //resource human
+  HUMAN_RESOURCE: "/resource/human-management",
+  HUMAN_RESOURCE_LIST: "/resource/human-management/list",
+  HUMAN_RESOURCE_CREATE: "/resource/human-management/create",
+  HUMAN_RESOURCE_DETAILS: "/resource/human-management/:id",
+  //allocation
+  ALLOCATION: "/allocation",
 };
 
 export default PAGES;
