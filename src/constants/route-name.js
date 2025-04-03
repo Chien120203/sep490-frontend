@@ -39,6 +39,9 @@ const PAGE_NAME = {
     VIEW: "construct-log-view",
     DETAILS: 'construct-log-details'
 
+  },
+  RESOURCE_MOBILIZATION: {
+    LIST: "resource-mobilization-list",
   }
 };
 

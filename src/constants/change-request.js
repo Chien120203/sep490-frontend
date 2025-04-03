@@ -1,0 +1,2 @@
+export const REQUEST_MOBILIZATION = 0;
+export const REQUEST_ALLOCATION = 1;

@@ -296,7 +296,7 @@ onUnmounted(() => {
 const ruleFormRef = ref(null);
 
 const handleChooseDate = (date) => {
-  const logUrl = `/construction-log?date=${date.day}`
+  const logUrl = `/construct-log/details?date=${date.day}`
   window.open(logUrl, '_blank')
 }
 

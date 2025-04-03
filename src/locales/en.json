@@ -228,7 +228,12 @@
       "get_contracts_failed": "Get list contracts failed",
       "save_contract_failed": "Save contract failed",
       "get_contract_dtls_failed": "Get project details failed",
-      "get_planning_failed": "Get plannings failed"
+      "get_planning_failed": "Get plannings failed",
+      "get_mobilization_failed": "Get mobilizations requests failed",
+      "save_mobilize_success": "Save mobilization request success",
+      "save_mobilize_failed": "Save mobilization request failed",
+      "delete_mobilize_success": "Delete mobilization request success",
+      "delete_mobilize_failed": "Delete mobilization request failed"
     }
   },
   "contract": {
@@ -803,7 +808,9 @@
       "project": "Project",
       "planning": "Planning",
       "progress": "Progress",
-      "construct_log": "Construction Log"
+      "construct_log": "Construction Log",
+      "change_request": "Change Request",
+      "resource_mobilization": "Mobilization"
     }
   },
   "construct_log": {
@@ -812,6 +819,36 @@
     },
     "edit": {
       "title": "Construction Log Details"
+    }
+  },
+  "mobilization": {
+    "title": "Resource Mobilization",
+    "add_new": "Add New",
+    "keyword": "Key word",
+    "modal_confirm": {
+      "message_delete": "Do you want to delete this request?",
+      "message_change_status": "Do you want to change status this request?",
+      "title": "Confirmation"
+    },
+    "table": {
+      "header": {
+        "code": "Request Code",
+        "name": " Request Name",
+        "priority": "Priority Level",
+        "status": "Status",
+        "date": "Request Date",
+        "action": "Action"
+      }
+    },
+    "modal": {
+      "title": "Save Mobilization Request"
+    },
+    "statuses": {
+      "draft": "Drafted",
+      "wait_manager": "Wait Manager Approval",
+      "manager_approved": "Manager Approved",
+      "bod_approved": "BOD Approved",
+      "rejected": "Rejected"
     }
   },
 
@@ -910,5 +947,12 @@
   "E-SV-001": "The probability must greater than or equal {min}",
   "E-SV-002": "The probability must less than or equal {max}",
   "E-SV-003": "The discount rate must greater than or equal {min}",
-  "E-SV-004": "The discount rate must less than or equal {max}"
+  "E-SV-004": "The discount rate must less than or equal {max}",
+
+  "E-RR-FE-001" : "Request date is required",
+  "E-RR-FE-002": "Selected at least once users or materials or vehicles",
+  "E-RR-FE-003": "Unit is required",
+  "E-RR-FE-004": "Quantity is required",
+  "E-RR-FE-005": "Quantity must greater than or equal {min}",
+  "E-RR-010": "At least one resource must be specified!"
 }

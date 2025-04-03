@@ -42,6 +42,8 @@ const PAGES = {
   //construction log
   CONSTRUCT_LOG: "/construct-log",
   CONSTRUCT_LOG_DETAILS: "/construct-log/details",
+
+  MOBILIZATION: "/mobilization",
 };
 
 export default PAGES;

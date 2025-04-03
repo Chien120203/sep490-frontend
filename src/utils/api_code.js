@@ -38,6 +38,14 @@ const API_CODE = {
   //Planning
   API_PLANNING_001: '/plans/search',
 
+  API_MOBILIZE_001: '/resourcereq/mobilization/list',
+  API_MOBILIZE_002: '/resourcereq/mobilization/save',
+  API_MOBILIZE_003: '/resourcereq/mobilization/delete',
+  API_MOBILIZE_004: '/resourcereq/mobilization',
+  API_MOBILIZE_005: '/resourcereq/mobilization/send',
+  API_MOBILIZE_006: '/resourcereq/mobilization/approve',
+  API_MOBILIZE_007: '/resourcereq/mobilization/reject'
+
 };
 
 export default API_CODE;

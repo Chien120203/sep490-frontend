@@ -31,6 +31,8 @@ import ProgressDetails from "@/pages/progress/ProgressDetails.vue";
 import ConstructLog from "@/pages/construction-log/Index.vue";
 import ConstructLogDetails from "@/pages/construction-log/ConstructionLogView.vue";
 import ConstructLogSave from "@/pages/construction-log/Save.vue";
+import Mobilization from "@/pages/resource-mobilization/Index.vue";
+import MobilizationList from "@/pages/resource-mobilization/MobilizationList.vue";
 
 const routes = [
   {
@@ -124,6 +126,21 @@ const routes = [
         path: PAGES.PROGRESS_DETAILS,
         name: PAGE_NAME.PROGRESS.DETAILS,
         component: ProgressDetails,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.RESOURCE_MOBILIZATION,
+    path: PAGES.MOBILIZATION,
+    component: Mobilization,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.MOBILIZATION,
+        name: PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
+        component: MobilizationList,
       }
     ]
   },

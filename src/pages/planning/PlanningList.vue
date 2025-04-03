@@ -7,7 +7,7 @@
       </h3>
       <div class="planning-btn-box planning-import-box">
         <el-row class="mb-4">
-          <el-button class="btn btn-save" @click="handleRedirectToCreate">
+          <el-button v-if="isAllowCreate" class="btn btn-save" @click="handleRedirectToCreate">
             {{ $t("planning.add_new") }}
           </el-button>
         </el-row>
@@ -72,6 +72,7 @@ import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
+import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
 
 const persistenceStore = usePersistenceStore();
 const planningStore = usePlanningStore();
@@ -89,6 +90,7 @@ const {
 
 const router = useRouter();
 const isShowBoxSearch = ref(false);
+const isAllowCreate = ref(localStorage.getItem('role') === CONSTRUCTION_MANAGER);
 
 const searchForms = ref({
   planName: "",
