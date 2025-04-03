@@ -268,7 +268,8 @@
       "save_human_success": "Save Human Success",
       "save_human_failed": "Save Human Failed",
       "get_planning_dtls_failed": "Get planning details failed",
-      "get_allocation_failed": "Get allocation requests failed"
+      "get_allocation_failed": "Get allocation requests failed",
+      "get_allocation_dtls_failed": "Get allocation request details failed"
     }
   },
   "contract": {

@@ -56,6 +56,23 @@ export const useAllocationStore = defineStore(
       await mixinMethods.endLoading();
     };
 
+    const getAllocationDtls = async (id) => {
+      mixinMethods.startLoading();
+      await services.AllocationAPI.details(
+        id,
+        {},
+        (response) => {
+          allocationDetails.value = response.data;
+
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.get_allocation_dtls_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    }
+
     const saveRequest = async (params) => {
       mixinMethods.startLoading();
       await services.AllocationAPI.save(
@@ -86,6 +103,7 @@ export const useAllocationStore = defineStore(
       listAllocations,
       saveRequest,
       getListAllocations,
+      getAllocationDtls,
     };
   }
 );

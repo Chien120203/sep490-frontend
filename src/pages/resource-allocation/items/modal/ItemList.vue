@@ -35,7 +35,7 @@
 <script setup>
 import {defineEmits, defineProps, ref} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import {REQUEST_MOBILIZATION} from "@/constants/change-request.js";
+import {REQUEST_ALLOCATION, REQUEST_MOBILIZATION} from "@/constants/change-request.js";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
@@ -57,7 +57,7 @@ const handleSelectItem = (id) => {
       resourceType: props.resourceType,
       unit: "",
       quantity: 1,
-      type: REQUEST_MOBILIZATION
+      type: REQUEST_ALLOCATION
     });
   }
   emit('update-list', listAddedValues.value);

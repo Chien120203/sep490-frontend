@@ -139,6 +139,7 @@ const {
   allocationDetails,
   listAllocations,
   getListAllocations,
+  getAllocationDtls,
   saveRequest
 } = allocationStore;
 const {
@@ -197,8 +198,9 @@ const handleConfirm = () => {
   // handleDeleteMobilization(delete_id.value);
 };
 
-const handleGetAllocationDtls = () => {
+const handleGetAllocationDtls = (id) => {
   isShowModalSave.value = true;
+  getAllocationDtls(id);
 }
 
 const handleSearchProjects = (value) => {

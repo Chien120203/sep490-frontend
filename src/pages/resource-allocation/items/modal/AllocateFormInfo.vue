@@ -16,6 +16,7 @@
                 <el-radio-button label="To Current Project" value="to" />
               </el-radio-group>
               <SingleOptionSelect
+                  v-model="projectSelected"
                   :optionKeys="{ id: 'id', value: 'projectCode' }"
                   :listData="listProjects"
                   :isRemote="true"
@@ -59,7 +60,7 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
+import {computed, defineProps, ref} from "vue";
 import {PRIORITIES, STATUSES} from "@/constants/mobilization.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
@@ -79,7 +80,7 @@ const {
 } = persist;
 
 const requestType = ref("from");
-
+const projectSelected = computed(() => requestType.value === "from" ? props.data.fromProjectId : props.data.toProjectId);
 const handleSearchProject = (value) => {
   emit("searchProject", value);
 };

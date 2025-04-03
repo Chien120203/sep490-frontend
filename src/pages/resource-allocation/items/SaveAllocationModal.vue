@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
+import {defineProps, ref, watch, watchEffect} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import ItemList from "@/pages/resource-mobilization/items/modal/ItemList.vue";
 import {
@@ -72,10 +72,20 @@ const props = defineProps({
   data: { type: Object, default: () => ({}) },
   listProjects: { type: Array, default: () => [] },
 });
+const getListResourcesByType = (data, type) => {
+  if(!data) return [];
+  return data.filter(item => item?.resourceType === type);
+}
 const emit = defineEmits(["close", "submit", "searchProjects"]);
-const listSelectedVehicles = ref( []);
+const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
+
+watch(props.data.resourceAllocationDetails, () => {
+  listSelectedVehicles.value = getListResourcesByType(props.data?.resourceAllocationDetails, MACHINE_TYPE);
+  listSelectedMaterials.value = getListResourcesByType(props.data?.resourceAllocationDetails, MATERIAL_TYPE);
+  listSelectedUsers.value = getListResourcesByType(props.data?.resourceAllocationDetails, HUMAN_TYPE);
+});
 const materialOptions = ref({ id: "id", value: "name" });
 const userOptions = ref({ id: "id", value: "name" });
 const vehicleOptions = ref({ id: "id", value: "name" });
