@@ -121,7 +121,9 @@ const {
   currentPage,
   listMobilizations,
   mobilizationDetails,
+  setMobilizationDefault,
   getListMobilizations,
+  getMobilizationDetails,
   handleDeleteMobilization,
   saveRequest
 } = mobilizationStore;
@@ -140,6 +142,7 @@ const handleSearchForm = () => {
 };
 
 const handleDisplayModalSave = (show = false) => {
+  setMobilizationDefault();
   isShowModalSave.value = show;
 }
 
@@ -160,23 +163,29 @@ const handleSaveRequest = (data) => {
   mobilizationDetails.value.projectId = projectId.value;
   isShowModalSave.value = false;
   saveRequest(mobilizationDetails.value);
+  getListMobilizations(searchForms.value);
 }
 
 const handleDisplayModal = (mobilization_id) => {
+  setMobilizationDefault();
   isShowModalConfirm.value = !!mobilization_id;
   delete_id.value = mobilization_id;
 };
 
 const closeModalConfirm = () => {
+  setMobilizationDefault();
   isShowModalConfirm.value = false;
 };
 
 const handleConfirm = () => {
   closeModalConfirm();
   handleDeleteMobilization(delete_id.value);
+  getListMobilizations(searchForms.value);
 };
 
-const handleGetMobilizationDtls = () => {
+const handleGetMobilizationDtls = (mobilization_id) => {
+  setMobilizationDefault();
+  getMobilizationDetails(mobilization_id);
   isShowModalSave.value = true;
 }
 

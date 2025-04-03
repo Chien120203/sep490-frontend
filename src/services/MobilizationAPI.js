@@ -6,7 +6,7 @@ const list = async (params, success, error) => {
 };
 
 const details = async (id, params, success, error) => {
-  await get(API_CODE.API_CTR_003 + '/' + id, success, error, params);
+  await get(API_CODE.API_MOBILIZE_004 + '/' + id, success, error, params);
 };
 
 const save = async (data, success, error) => {

@@ -134,6 +134,16 @@ const formatInputCurrency = (value, isEmpty = false, withoutComma = false) => {
   return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+const formatInputMoney = (value) => {
+  if (value === null || value === undefined) return "";
+
+  const numericValue = Number(value); // Convert to number for validation
+  if (isNaN(numericValue) || numericValue < 0) return ""; // Return "0" for negative values
+
+  const stringValue = String(numericValue); // Convert back to string for formatting
+  return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
 const formatNumberVietnam = (number) => {
   if (number === null || number === undefined) return "";
   return new Intl.NumberFormat("vi-VN").format(number);
@@ -235,6 +245,7 @@ export const mixins = {
   formatCurrency,
   formatNumberVietnam,
   formatInputCurrency,
+  formatInputMoney,
   handleErrorResponse,
   arrayChunk,
   notifyError,

@@ -20,3 +20,7 @@ export const STATUS_LABELS = [
   'mobilization.statuses.bod_approved',
   'mobilization.statuses.rejected',
 ]
+
+export const RESOURCE_TYPE_MATERIALS = 3;
+export const RESOURCE_TYPE_VEHICLES = 2;
+export const RESOURCE_TYPE_USERS = 1;

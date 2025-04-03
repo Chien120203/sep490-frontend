@@ -16,7 +16,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="name" label="Tên tài nguyên"/>
+        <el-table-column prop="name" label="Tên tài nguyên">
+          <template #default="scope">
+            {{getResourceName(scope.row.resourceId)}}
+          </template>
+        </el-table-column>
 
         <el-table-column prop="unit" label="Đơn vị">
           <template #default="scope">
@@ -39,17 +43,27 @@
             </el-form-item>
           </template>
         </el-table-column>
+        <el-table-column label="Actions">
+          <template #default="{ row }">
+            <div>
+              <button @click="handleRemoveResource(row.resourceId)" class="btn-edit">
+                <IconTrash />
+              </button>
+            </div>
+          </template>
+        </el-table-column>
       </el-table>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import {defineEmits, defineProps, ref, reactive} from "vue";
+import {defineEmits, defineProps, ref, reactive, watch} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {REQUEST_MOBILIZATION} from "@/constants/change-request.js";
 import { getMobilizationResourceItemRules } from "@/rules/mobilization/index.js";
 import {mixinMethods} from "@/utils/variables";
+import IconTrash from "@/svg/IconTrash.vue";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
@@ -65,6 +79,9 @@ const ruleFormRef = ref(null);
 defineExpose({
   ruleFormRef,
 });
+const getResourceName = (resourceId) => {
+  return props.selectData.find(item => item?.[props.optionKeys.id] === resourceId)?.[props.optionKeys.value]
+}
 const listAddedValues = ref(props.tableData || []);
 const emit = defineEmits(["search", "update-list"]);
 const handleSearch = (value) => {
@@ -100,6 +117,15 @@ const handleSelectItem = (id) => {
   }
   emit('update-list', listAddedValues.value);
 };
+
+const handleRemoveResource = (id) => {
+  listAddedValues.value = listAddedValues.value.filter(resource => resource.resourceId !== id);
+  emit('update-list', listAddedValues.value);
+}
+
+watch(() => props.tableData, (data) => {
+  listAddedValues.value = data
+}, { deep: true });
 </script>
 
 <style scoped>

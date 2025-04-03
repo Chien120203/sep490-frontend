@@ -9,14 +9,14 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="Request Code">
-            <el-input v-model="data.requestCode" class="custom-input" />
+            <el-input disabled v-model="data.requestCode" class="custom-input" />
           </el-form-item>
           <el-form-item label="Request Name">
             <el-input v-model="data.requestName" class="custom-input" />
           </el-form-item>
           <el-form-item prop="requestDate" label="Request Date">
             <el-date-picker
-                style="width: 96%;"
+                style="width: 80%;"
                 :value-format="DATE_FORMAT"
                 v-model="data.requestDate"
                 placeholder="Select Date"

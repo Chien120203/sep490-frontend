@@ -24,7 +24,7 @@
           <el-tab-pane label="Tài nguyên" name="materials">
             <ItemList
                 :selectData="materials"
-                :resourceType="MATERIAL_TYPE"
+                :resourceType="RESOURCE_TYPE_MATERIALS"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
                 @update-list="updateListMaterials"
@@ -35,7 +35,7 @@
           <el-tab-pane label="Nhân lực" name="users">
             <ItemList
                 :selectData="listEmployees"
-                :resourceType="HUMAN_TYPE"
+                :resourceType="RESOURCE_TYPE_USERS"
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
                 @update-list="updateListUsers"
@@ -46,7 +46,7 @@
           <el-tab-pane label="Phương tiện" name="vehicles">
             <ItemList
                 :selectData="listVehicles"
-                :resourceType="MACHINE_TYPE"
+                :resourceType="RESOURCE_TYPE_VEHICLES"
                 :tableData="listSelectedVehicles"
                 :optionKeys="vehicleOptions"
                 @update-list="updateListVehicles"
@@ -63,16 +63,12 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
+import {defineProps, ref, watch} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import MobilizeFormInfo from "@/pages/resource-mobilization/items/modal/MobilizeFormInfo.vue";
 import ItemList from "@/pages/resource-mobilization/items/modal/ItemList.vue";
 import { getMobilizationInfoRules } from "@/rules/mobilization/index.js";
-import {
-  HUMAN_TYPE,
-  MACHINE_TYPE,
-  MATERIAL_TYPE
-} from "@/constants/resource.js";
+import { RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_VEHICLES, RESOURCE_TYPE_USERS } from "@/constants/mobilization";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -110,6 +106,34 @@ const updateListUsers = (listData) => {
 const updateListVehicles = (listData) => {
   listSelectedVehicles.value = listData;
 };
+
+watch(() => props.data, (data) => {
+  if (data) {
+    let listUsers = [];
+    let listVehicles = [];
+    let listMaterials = [];
+
+    const resourceMobilizationDetails = data.resourceMobilizationDetails;
+
+    resourceMobilizationDetails.forEach(item => {
+      switch(item.resourceType) {
+        case RESOURCE_TYPE_MATERIALS:
+          listMaterials.push(item);
+          break;
+        case RESOURCE_TYPE_VEHICLES:
+          listVehicles.push(item);
+          break;
+        case RESOURCE_TYPE_USERS:
+          listUsers.push(item);
+          break;
+      }
+    })
+
+    updateListMaterials(listMaterials);
+    updateListUsers(listUsers);
+    updateListVehicles(listVehicles);
+  }
+}, { deep: true });
 
 const handleSubmit = () => {
   let listRequests = [

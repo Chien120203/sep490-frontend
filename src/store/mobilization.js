@@ -25,6 +25,21 @@ export const useMobilizationStore = defineStore(
         requestDate: ""
       }});
 
+    const setMobilizationDefault = () => {
+      mobilizationDetails.value = {
+        id: null,
+        requestCode: "",
+        projectId: 0,
+        requestName: "",
+        resourceMobilizationDetails: [],
+        description: "",
+        priorityLevel: 0,
+        status: 0,
+        attachments: "",
+        requestDate: ""
+      }
+    }
+
     const getListMobilizations = async (params, isLoading = true) => {
       if(isLoading) mixinMethods.startLoading();
       await services.MobilizationAPI.list(
@@ -50,15 +65,10 @@ export const useMobilizationStore = defineStore(
     const getMobilizationDetails = async (id, isLoading = true) => {
       if(isLoading) mixinMethods.startLoading();
       await services.MobilizationAPI.details(
-        params,
+        id,
+        {},
         (response) => {
-          if (currentPage.value === 1) {
-            listMobilizations.value = response.data;
-          } else {
-            listMobilizations.value = [...listMobilizations.value, ...response.data];
-          }
-          totalItems.value = response.meta.total;
-          currentPage.value = response.meta.index;
+          mobilizationDetails.value = response.data;
           mixinMethods.endLoading();
         },
         (error) => {
@@ -120,6 +130,8 @@ export const useMobilizationStore = defineStore(
       listMobilizations,
       handleDeleteMobilization,
       getListMobilizations,
+      getMobilizationDetails,
+      setMobilizationDefault,
       saveRequest
     };
   }
