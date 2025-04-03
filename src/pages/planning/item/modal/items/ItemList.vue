@@ -82,6 +82,7 @@ const handleSelectItem = (id) => {
   const exists = listAddedValues.value.some(entry => entry.resourceId === id);
   if (!exists) {
     listAddedValues.value.push({
+      workCode: null,
       resourceId: id,
       resourceType: props.resourceType,
       unit: "",

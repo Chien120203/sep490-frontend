@@ -25,7 +25,7 @@ export const usePlanningStore = defineStore(
     });
 
     const getListPlannings = async (params, isLoading = true) => {
-      if(isLoading) mixinMethods.startLoading();
+      if (isLoading) mixinMethods.startLoading();
       await services.PlanningAPI.list(
         params,
         (response) => {
@@ -47,27 +47,27 @@ export const usePlanningStore = defineStore(
       await mixinMethods.endLoading();
     };
 
-      const savePlanning = async (params) => {
-          mixinMethods.startLoading();
-          await services.PlanningAPI.create(
-              params,
-              (response) => {
-                  if(response.success) {
-                      planningDetails.value = response.data;
-                      validation.value = [];
-                      mixinMethods.notifySuccess(t("response.message.save_project_success"));
-                  }else {
-                      validation.value = mixinMethods.handleErrorResponse(response);
-                      mixinMethods.notifyError(t("response.message.save_project_failed"));
-                  }
-                  mixinMethods.endLoading();
-              },
-              () => {
-                  mixinMethods.notifyError(t("response.message.save_project_failed"));
-                  mixinMethods.endLoading();
-              }
-          );
-      };
+    const savePlanning = async (params) => {
+      mixinMethods.startLoading();
+      await services.PlanningAPI.create(
+        params,
+        (response) => {
+          if (response.success) {
+            planningDetails.value = response.data;
+            validation.value = [];
+            mixinMethods.notifySuccess(t("response.message.save_project_success"));
+          } else {
+            validation.value = mixinMethods.handleErrorResponse(response);
+            mixinMethods.notifyError(t("response.message.save_project_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.save_project_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
 
     return {
       validation,

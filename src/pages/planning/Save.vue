@@ -173,7 +173,7 @@ onMounted(async () => {
   if(!route.params.id) {
     await getContractDetails(projectId.value);
     planningDetails.value.planItems = contractDetails.value.contractDetails.map(
-        ({ contractId, deleted, ...rest }) => rest
+        ({ contractId, deleted, ...rest }) => ({ ...rest, workCode: null })
     );
   };
   await getListUsers({keyWord: "", pageIndex: 1, role: QUALITY_ASSURANCE}, false);
