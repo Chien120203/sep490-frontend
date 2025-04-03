@@ -17,10 +17,15 @@ export const getMobilizationResourceItemRules = () => {
   const {t} = useI18n();
   return {
     unit: [
-      { required: true, message: t("E-RR-010"), trigger: "blur" }
+      { required: true, message: t("E-RR-FE-003"), trigger: "blur" }
     ],
     quantity: [
-      { required: true, message: t("E-RR-010"), trigger: "blur" }
+      { required: true, message: t("E-RR-FE-004"), trigger: "blur" },
+      {
+        min: 1,
+        message: t("E-RR-FE-005", {min: 1}),
+        trigger: "blur"
+      },
     ]
   };
 }

@@ -204,6 +204,14 @@ const validateField = (index, field, rules, item, validationErrors) => {
         field}-${index
       }`] = rule.message;
     }
+
+    if (rule.min !== undefined && fieldValue < rule.min) {
+      validationErrors[`${field}-${index}`] = rule.message
+    }
+
+    if (rule.max !== undefined && fieldValue > rule.max) {
+      validationErrors[`${field}-${index}`] = rule.message;
+    }
     
     if (rule.validator) {
       rule.validator(rule, fieldValue, (error) => {

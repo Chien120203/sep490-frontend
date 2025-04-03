@@ -22,7 +22,7 @@
           <template #default="scope">
             <el-form-item :prop="`listAddedValues[${scope.$index}].unit`">
               <el-input v-model="scope.row.unit" @blur="validateForm"/>
-              <label class="error-feedback-customer" v-if="validationErrors[`unit-${scope.$index}`]">
+              <label class="error-feedback" v-if="validationErrors[`unit-${scope.$index}`]">
                 {{ validationErrors[`unit-${scope.$index}`] }}
               </label>
             </el-form-item>
@@ -33,7 +33,7 @@
           <template #default="scope">
             <el-form-item :prop="`listAddedValues[${scope.$index}].quantity`">
               <el-input v-model.number="scope.row.quantity" @blur="validateForm"/>
-              <label class="error-feedback-customer" v-if="validationErrors[`quantity-${scope.$index}`]">
+              <label class="error-feedback" v-if="validationErrors[`quantity-${scope.$index}`]">
                 {{ validationErrors[`quantity-${scope.$index}`] }}
               </label>
             </el-form-item>

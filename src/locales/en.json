@@ -949,5 +949,9 @@
   "E-SV-004": "The discount rate must less than or equal {max}",
 
   "E-RR-FE-001" : "Request date is required",
+  "E-RR-FE-002": "Selected at least once users or materials or vehicles",
+  "E-RR-FE-003": "Unit is required",
+  "E-RR-FE-004": "Quantity is required",
+  "E-RR-FE-005": "Quantity must greater than or equal {min}",
   "E-RR-010": "At least one resource must be specified!"
 }
