@@ -122,6 +122,28 @@ export const useMobilizationStore = defineStore(
       await mixinMethods.endLoading();
     };
 
+    const handleChangeRequestStatus = async (id, method) => {
+      mixinMethods.startLoading();
+      await services.MobilizationAPI[method](
+        id,
+        (response) => {
+          if(response.success) {
+            // mobilizationDetails.value = response.data;
+            mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
+          }else {
+            validation.value = mixinMethods.handleErrorResponse(response);
+            mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+      await mixinMethods.endLoading();
+    };
+
     return {
       validation,
       totalItems,
@@ -132,6 +154,7 @@ export const useMobilizationStore = defineStore(
       getListMobilizations,
       getMobilizationDetails,
       setMobilizationDefault,
+      handleChangeRequestStatus,
       saveRequest
     };
   }

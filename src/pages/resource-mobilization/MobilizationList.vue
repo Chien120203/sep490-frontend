@@ -72,6 +72,7 @@
           :data="listMobilizations.value"
           @details="handleGetMobilizationDtls"
           @delete="handleDisplayModal"
+          @changeStatus="handleChangeStatus"
       />
       <LoadMore
           :listData="listMobilizations.value"
@@ -83,7 +84,7 @@
         :isShowModal="isShowModalConfirm"
         @close-modal="closeModalConfirm"
         @confirmAction="handleConfirm"
-        :message="$t('mobilization.modal_confirm.message')"
+        :message="title"
         :title="$t('mobilization.modal_confirm.title')"
     />
     <SaveMobilizationModal
@@ -96,20 +97,16 @@
 </template>
 <script setup>
 import {ref, onMounted, onUnmounted} from "vue";
-import {useRouter} from "vue-router";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-import {TEXT_CONFIRM_DELETE} from "@/constants/application.js";
 import MobilizationTable from "@/pages/resource-mobilization/items/MobilizationTable.vue";
 import {useMobilizationStore} from "@/store/mobilization";
 import {usePersistenceStore} from "@/store/persistence.js";
-import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import {STATUSES} from "@/constants/mobilization";
 import IconSetting from "@/svg/IconSettingMain.vue";
 import SaveMobilizationModal from "@/pages/resource-mobilization/items/SaveMobilizationModal.vue";
-import {mixinMethods} from "@/utils/variables.js";
-import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
+import {useI18n} from "vue-i18n";
 
 const mobilizationStore = useMobilizationStore();
 const persist = usePersistenceStore();
@@ -125,13 +122,17 @@ const {
   getListMobilizations,
   getMobilizationDetails,
   handleDeleteMobilization,
+  handleChangeRequestStatus,
   saveRequest
 } = mobilizationStore;
 
+const {t} = useI18n();
 const delete_id = ref(null);
 const isShowModalConfirm = ref(false);
 const isShowModalSave = ref(false);
 const isShowBoxSearch = ref(false);
+const title = ref("");
+const changeObject = ref({});
 const searchForms = ref({projectId: projectId.value, pageIndex: 1});
 const handleClear = () => {
   searchForms.value.search = "";
@@ -144,6 +145,12 @@ const handleSearchForm = () => {
 const handleDisplayModalSave = (show = false) => {
   setMobilizationDefault();
   isShowModalSave.value = show;
+}
+
+const handleChangeStatus = (data) => {
+  changeObject.value = data;
+  title.value = t('mobilization.modal_confirm.message_change_status');
+  isShowModalConfirm.value = true;
 }
 
 const submitForm = () => {
@@ -168,6 +175,7 @@ const handleSaveRequest = (data) => {
 
 const handleDisplayModal = (mobilization_id) => {
   setMobilizationDefault();
+  title.value = t('mobilization.modal_confirm.message_delete')
   isShowModalConfirm.value = !!mobilization_id;
   delete_id.value = mobilization_id;
 };
@@ -177,10 +185,15 @@ const closeModalConfirm = () => {
   isShowModalConfirm.value = false;
 };
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   closeModalConfirm();
-  handleDeleteMobilization(delete_id.value);
-  getListMobilizations(searchForms.value);
+  if(delete_id.value) {
+    await handleDeleteMobilization(delete_id.value);
+    delete_id.value = null;
+  } else {
+    await handleChangeRequestStatus(changeObject.value.id, changeObject.value.type);
+  }
+  await getListMobilizations(searchForms.value);
 };
 
 const handleGetMobilizationDtls = (mobilization_id) => {

@@ -47,7 +47,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table mobilization-priority" :class="priorityClass(scope.row.status)"
+        <span class="data-table mobilization-priority" :class="priorityClass(scope.row.priorityLevel)"
         >{{ formatPriority(scope.row.priorityLevel) }}
         </span>
       </template>
@@ -72,8 +72,17 @@
           <button @click="$emit('details', scope.row.id)" class="btn-edit">
             <IconEdit/>
           </button>
-          <button v-if="scope.row.status === DRAFT_STATUS" @click="$emit('delete', scope.row.id)" class="btn-edit">
+          <button v-if="scope.row.status === DRAFT_STATUS && currentRole === RESOURCE_MANAGER" @click="$emit('delete', scope.row.id)" class="btn-edit">
             <IconTrash/>
+          </button>
+          <button v-if="scope.row.status === DRAFT_STATUS && currentRole === RESOURCE_MANAGER" @click="$emit('changeStatus', {id: scope.row.id, type: 'send'})" class="btn-edit">
+            <IconChatSend/>
+          </button>
+          <button v-if="allowApprove(scope.row)" @click="$emit('changeStatus', {id: scope.row.id, type: 'approve'})" class="btn-edit">
+            <IconApprove/>
+          </button>
+          <button v-if="allowReject(scope.row.status)" @click="$emit('changeStatus', {id: scope.row.id, type: 'reject'})" class="btn-edit">
+            <IconBan/>
           </button>
         </div>
       </template>
@@ -85,11 +94,21 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
-import {PRIORITIES, STATUS_LABELS} from "@/constants/mobilization.js";
+import {MANAGER_APPROVED, PRIORITIES, STATUS_LABELS, WAIT_MANAGER_APPROVE} from "@/constants/mobilization.js";
 import {DRAFT_STATUS} from "@/constants/mobilization.js";
+import IconApprove from "@/svg/IconApprove.vue";
+import IconRefuse from "@/svg/IconRefuse.vue";
+import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import IconChatSend from "@/svg/IconChatSend.vue";
+import {ref} from "vue";
+import IconBan from "@/svg/IconBan.vue";
 
 export default {
   components: {
+    IconBan,
+    IconChatSend,
+    IconRefuse,
+    IconApprove,
     IconEdit,
     IconTrash,
   },
@@ -100,6 +119,7 @@ export default {
     },
   },
   setup(props, {emit}) {
+    const currentRole = ref(localStorage.getItem("role"));
     const statusClass = (status) => {
       if (status == null) return ""; // Ensure status is not null or undefined
       switch (status) {
@@ -141,6 +161,15 @@ export default {
     const formatStatus = (status) => {
       return STATUS_LABELS[status] || 'Unknown';
     };
+
+    const allowApprove = (row) => {
+      if(row.status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
+      return row.status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD;
+    }
+
+    const allowReject = (status) => {
+      return (status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) || (status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD);
+    }
     return {
       statusClass,
       formatStatus,
@@ -148,7 +177,11 @@ export default {
       formatCurrency,
       formatPriority,
       priorityClass,
-      DRAFT_STATUS
+      allowApprove,
+      allowReject,
+      currentRole,
+      DRAFT_STATUS,
+      RESOURCE_MANAGER
     };
   }
 };
