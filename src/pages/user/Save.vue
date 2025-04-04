@@ -66,9 +66,10 @@
                 prop="dob"
             >
               <el-date-picker
+                  style="width: 90%"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
                   v-model="userDetails.value.dob"
-                  type="date"
-                  placeholder="Select Date"
               />
               <label
                   class="error-feedback-user"
@@ -83,7 +84,7 @@
                 class="custom-textarea required"
                 :label="$t('user.details.gender')"
             >
-              <el-input v-model="userDetails.value.gender"/>
+              <el-input v-model="genderDisplay"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.gender"
@@ -147,6 +148,7 @@ import {USER_RULES} from "@/rules/user/index.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useUserStore} from "@/store/user.js";
 import PAGE_NAME from "@/constants/route-name.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 export default {
   components: {IconBackMain, SingleOptionSelect},
@@ -188,6 +190,15 @@ export default {
       });
     };
 
+    const genderDisplay = computed({
+      get() {
+        return userDetails.value.gender ? 'male' : 'female';
+      },
+      set(value) {
+        userDetails.value.gender = value === 'male';
+      }
+    });
+
     return {
       USER_RULES,
       ruleFormRef,
@@ -196,6 +207,8 @@ export default {
       validation,
       handleBack,
       submitForm,
+      genderDisplay,
+      DATE_FORMAT
     };
   },
 };

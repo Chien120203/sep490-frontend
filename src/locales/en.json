@@ -146,6 +146,22 @@
     "reload": "Reload",
     "get_otp": "Get OTP"
   },
+  "profile": {
+    "title": "User Profile",
+    "details": {
+      "title": "Profile Details",
+      "change_password": "Change Password",
+      "logout": "Logout",
+      "username": "Username",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "role": "Role",
+      "gender": "Gender",
+      "image": "Image",
+      "address": "Address"
+    }
+  },
   "permission": {
     "menu": "Menus",
     "no": "No",
