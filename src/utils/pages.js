@@ -55,11 +55,13 @@ const PAGES = {
     MACHINE_RESOURCE_DETAILS: "/resource/machine-management/:id",
 
     //resource material
+    MATERIAL_RESOURCE: "/resource/material-management",
     MATERIAL_RESOURCE_LIST: "/resource/material-management",
     MATERIAL_RESOURCE_CREATE: "/resource/material-management/create",
     MATERIAL_RESOURCE_DETAILS: "/resource/material-management/:id",
 
     //resource human
+    HUMAN_RESOURCE: "/resource/human-management",
     HUMAN_RESOURCE_LIST: "/resource/human-management",
     HUMAN_RESOURCE_CREATE: "/resource/human-management/create",
     HUMAN_RESOURCE_DETAILS: "/resource/human-management/:id",

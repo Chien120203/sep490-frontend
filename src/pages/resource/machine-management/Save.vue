@@ -22,6 +22,7 @@
         <el-form
             ref="ruleFormRef"
             :model="machineResourcesDetails.value"
+            :rules="MACHINE_RULES"
             class="form-search-box"
         >
           <div class="item item-bib-add">
@@ -161,6 +162,7 @@ import IconBackMain from "@/svg/IconBackMain.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import FileUpload from "@/components/common/FileUpload.vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
+import {MACHINE_RULES} from "@/rules/machine-resources/index.js";
 import {useI18n} from "vue-i18n";
 import {userMachineResourcesStore} from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
@@ -225,6 +227,7 @@ export default {
       machineResourcesDetails,
       isUpdate,
       validation,
+      MACHINE_RULES,
       handleBack,
       submitForm,
       handleFileUpload,
