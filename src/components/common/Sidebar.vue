@@ -50,125 +50,25 @@
           <span class="sidebar-text">{{ route.function_name }}</span>
         </el-menu-item>
       </el-menu>
-    </div>
-    <div class="menu-box">
-      <!-- Danh sách listRouter -->
-      <ul class="nav" v-if="listRouter.length">
-        <li
-          v-for="(route, index) in listRouter"
-          :key="index"
-          class="nav-list"
-          style="border-bottom: 1px solid #d0d6da"
-        >
-          <div>
-            <a
-              v-if="route.isShow"
-              href="#"
-              @click.prevent="navigateChangeRoute(route)"
-              :class="classActive(route)"
-              class="js-sidenav-tooltip"
-              style="display: flex; align-items: center"
-            >
-              <component
-                :is="route.function_icon"
-                class="icon_sidebar"
-              ></component>
-              <span class="sidebar-text sidebar-custom siderbar_name">{{
-                route.function_name
-              }}</span>
-            </a>
-          </div>
-        </li>
-      </ul>
 
-      <!-- Danh sách listRouterUsers -->
-      <ul class="nav" v-if="listRouterUsers.length">
-        <li
-            v-for="(route, index) in listRouterUsers"
-            :key="index"
-            class="nav-list"
-            style="border-bottom: 1px solid #d0d6da"
-        >
-          <div>
-            <a
-                v-if="route.isShow"
-                href="#"
-                @click.prevent="navigateChangeRoute(route)"
-                :class="classActive(route)"
-                class="js-sidenav-tooltip"
-                style="display: flex; align-items: center"
-            >
-              <component
-                  :is="route.function_icon"
-                  class="icon_sidebar"
-              ></component>
-              <span class="sidebar-text sidebar-custom siderbar_name">{{
-                  route.function_name
-                }}</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-
-      <!-- Danh sách listRouterOthers -->
-      <ul class="nav">
-        <li
-          v-for="(route, index) in listRouterOthers"
-          :key="index"
-          style="border-bottom: 1px solid #d0d6da"
-        >
-          <a
-            href="#"
-            v-if="route.isShow"
-            @click.prevent="navigateChangeRoute(route)"
-            :class="classActive(route)"
-            class="js-sidenav-tooltip"
-            style="display: flex; align-items: center"
-          >
-            <component
-              :is="route.function_icon"
-              class="icon_sidebar"
-            ></component>
-            <span class="sidebar-text sidebar-custom siderbar_name">{{
-              route.function_name
-            }}</span>
-          </a>
-        </li>
-      </ul>
-      <ul class="nav">
-        <li class="nav-list" style="border-bottom: 1px solid #d0d6da">
-          <a
-              href="#"
-              @click.prevent="toggleDropdown('resources')"
-              :class="{ 'active': isDropdownActive('resources') }"
-              class="js-sidenav-tooltip"
-              style="display: flex; align-items: center"
-          >
+      <el-menu>
+        <el-sub-menu index="resources" v-if="listRouterResource.length">
+          <template #title>
             <IconUtility class="icon_sidebar"></IconUtility>
-            <span class="sidebar-text sidebar-custom siderbar_name">{{ ("Resource Management") }}</span>
-          </a>
-          <ul v-if="isDropdownOpen('resources')" class="nav">
-            <li
-                v-for="(route, index) in listRouterResource"
-                :key="index"
-                class="nav-list"
-                style="border-bottom: 1px solid #d0d6da"
+            <span class="sidebar-text">{{ ("Resource Management") }}</span>
+          </template>
+          <template v-for="(route, index) in listRouterResource" :key="index">
+            <el-menu-item
+                :class="classActive(route)"
+                :index="route.function_page_name"
+                @click="navigateChangeRoute(route)"
             >
-              <a
-                  href="#"
-                  @click.prevent="navigateChangeRoute(route)"
-                  :class="classActive(route)"
-                  class="js-sidenav-tooltip"
-                  style="display: flex; align-items: center; padding-left: 20px"
-              >
-                <component :is="route.function_icon" class="icon_sidebar"></component>
-                <span class="sidebar-text sidebar-custom siderbar_name">{{ route.function_name }}</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-
+              <component :is="route.function_icon" class="icon_sidebar"></component>
+              <span class="sidebar-text">{{ route.function_name }}</span>
+            </el-menu-item>
+          </template>
+        </el-sub-menu>
+      </el-menu>
     </div>
   </div>
 </template>
@@ -270,6 +170,32 @@ export default {
           }
         ],
       },
+      {
+        function_name: t("side_bar.label.resource"),
+        function_page_name: "",
+        function_icon: "IconChangeRequest",
+        isShow: isShowProjectSideBar.value,
+        children: [
+          {
+            function_name: t("side_bar.label.resource.machine"),
+            function_page_name: PAGE_NAME.RESOURCE.MACHINE.LIST,
+            function_icon: "IconUser",
+            isShow: true,
+          },
+          {
+            function_name: t("side_bar.label.resource.material"),
+            function_page_name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
+            function_icon: "IconUser",
+            isShow: true,
+          },
+          {
+            function_name: t("side_bar.label.resource.human"),
+            function_page_name: PAGE_NAME.RESOURCE.HUMAN.LIST,
+            function_icon: "IconUser",
+            isShow: true,
+          },
+        ],
+      },
     ]);
 
     const listRouterUsers = computed(() => [
@@ -293,7 +219,7 @@ export default {
     const listRouterResource = computed(() => [
       {
         function_name: t("side_bar.label.resource.machine"),
-        function_page_name: PAGE_NAME.RESOURCE.LIST_MACHINE,
+        function_page_name: PAGE_NAME.RESOURCE.MACHINE.LIST,
         function_icon: "IconUser",
         isShow: true,
         isChild: true,
@@ -301,7 +227,7 @@ export default {
       },
       {
         function_name: t("side_bar.label.resource.material"),
-        function_page_name: PAGE_NAME.RESOURCE.LIST_MATERIAL,
+        function_page_name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
         function_icon: "IconUser",
         isShow: true,
         isChild: true,
@@ -309,16 +235,13 @@ export default {
       },
       {
         function_name: t("side_bar.label.resource.human"),
-        function_page_name: PAGE_NAME.RESOURCE.LIST_HUMAN,
+        function_page_name: PAGE_NAME.RESOURCE.HUMAN.LIST,
         function_icon: "IconUser",
         isShow: true,
         isChild: true,
         parent_id: "resources",
       },
     ]);
-
-
-    const currentPath = ref("");
 
     const navigateChangeRoute = async (route) => {
       currentPath.value = route.function_page_name;

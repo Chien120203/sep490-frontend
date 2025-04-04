@@ -9,6 +9,7 @@ import {SiteSurveyAPI} from "@/services/SiteSurveyAPI.js";
 import {PlanningAPI} from "@/services/PlanningAPI.js";
 import {MobilizationAPI} from "@/services/MobilizationAPI.js";
 import router from "@/router";
+import {MachineResourcesAPI} from "@/services/MachineResourcesAPI.js";
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
   initializeService(axios, "/sep490", router);
@@ -23,6 +24,7 @@ const services = {
   MobilizationAPI,
   UserAPI,
   SiteSurveyAPI,
+  MachineResourcesAPI
 };
 
 export default services;

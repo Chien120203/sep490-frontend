@@ -249,7 +249,11 @@
       "save_mobilize_success": "Save mobilization request success",
       "save_mobilize_failed": "Save mobilization request failed",
       "delete_mobilize_success": "Delete mobilization request success",
-      "delete_mobilize_failed": "Delete mobilization request failed"
+      "delete_mobilize_failed": "Delete mobilization request failed",
+      "get_machine_failed": "Get Machine failed",
+      "get_machine_dtls_failed": "Get Machine details failed",
+      "save_machine_success": "Save Machine Success",
+      "save_machine_failed": "Save Machine Failed"
     }
   },
   "contract": {
@@ -426,6 +430,60 @@
     "tenant_placeholder": "Contract tenant",
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
+  },
+  "resources": {
+    "title": "Resource Management ",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "machine": {
+      "title": "Machine Resource Management",
+      "add_new": "Add New",
+      "keyword": "Keyword",
+      "search": "Search",
+      "clear": "Clear",
+      "status": "Status",
+      "type": "Type",
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "details": {
+        "title": "Machine Details",
+        "licensePlate": "License Plate",
+        "brand": "Brand",
+        "yearOfManufacture": "Year of Manufacture",
+        "countryOfManufacture": "Country of Manufacture",
+        "vehicleType": "Vehicle Type",
+        "chassisNumber": "Chassis Number",
+        "engineNumber": "Engine Number",
+        "images": "Images",
+        "status": "Status",
+        "driver": "Driver",
+        "color": "Color",
+        "fuelType": "Fuel Type",
+        "description": "Description",
+        "fuelTankVolume": "Fuel Tank Volume",
+        "fuelUnit": "Fuel Unit",
+        "attachments": "Attachments"
+      },
+      "create": {
+        "title": "Create Machine"
+      },
+      "table": {
+        "header": {
+          "code": "Machine Code",
+          "name": "Machine Name",
+          "licensePlate": "License Plate",
+          "brand": "Brand",
+          "vehicleType": "Vehicle Type",
+          "driver": "Driver",
+          "type": "Type",
+          "status": "Status",
+          "action": "Action"
+        }
+      }
+    }
   },
   "customer": {
     "title": "Customer",
@@ -874,7 +932,6 @@
       "rejected": "Rejected"
     }
   },
-
   "E-CM-001": "Login Failed",
   "E-CM-002": "Required",
   "E-CM-003": "Field must be less than {max} characters",
@@ -908,14 +965,12 @@
   "E-CM-500": "An error occurred, please contact the admin or try again later!",
   "E-CM-200": "Action successfully completed.",
   "E-PW-001": "Password must be between {min} and {max} characters",
-
   "E-CUS-001": "Customer code is required",
   "E-CUS-002": "Duplicate Customer Code",
   "E-CUS-004": "Tax code is required",
   "E-CUS-005": "Phone number is invalid",
   "E-CUS-006": "Fax number is invalid",
   "E-CUS-007": "Tax code is invalid",
-
   "E-CTR-001": "Contract code is required",
   "E-CTR-002": "Project is required",
   "E-CTR-003": "Start date is required",
@@ -928,7 +983,6 @@
   "E-CTR-010": "Tax must be greater than {min}%",
   "E-CTR-011": "Tax must be less than {max}%",
   "E-CTR-012": "Sign date must be before start date",
-
   "E-PRJ-009": "Project code is required",
   "E-PRJ-002": "Project code is duplicated",
   "E-PRJ-003": "Area is required",
@@ -939,7 +993,6 @@
   "E-PRJ-008": "Technical requirements is required",
   "E-PRJ-001": "Start date must be before end date",
   "E-PRJ-010": "Customer is required",
-
   "E-AUTHEN-001": "Your email already exists.",
   "E-AUTHEN-002": "Your username already exists.",
   "E-AUTHEN-003": "The email you just entered is not in the correct format.",
@@ -958,7 +1011,6 @@
   "S-AUTHEN-004": "Password changed successfully!",
   "S-AUTHEN-005": "Log in successfully.",
   "S-AUTHEN-006": "Refresh token successfully.",
-
   "S-ADMIN-001": "Search list user successfully!",
   "S-ADMIN-002": "Delete user successfully!",
   "S-ADMIN-003": "Create user successfully!",
@@ -966,13 +1018,11 @@
   "E-ADMIN-001": "An error occurred while deleting a user, you cannot delete your own account, or the person you want to delete has equal or higher authority than you.",
   "E-ADMIN-002": "User already exist, username and email already exist",
   "E-ADMIN-003": "The role does not exist or you do not have permission to set this permission.",
-
   "E-SV-001": "The probability must greater than or equal {min}",
   "E-SV-002": "The probability must less than or equal {max}",
   "E-SV-003": "The discount rate must greater than or equal {min}",
   "E-SV-004": "The discount rate must less than or equal {max}",
-
-  "E-RR-FE-001" : "Request date is required",
+  "E-RR-FE-001": "Request date is required",
   "E-RR-FE-002": "Selected at least once users or materials or vehicles",
   "E-RR-FE-003": "Unit is required",
   "E-RR-FE-004": "Quantity is required",

@@ -118,7 +118,7 @@
             </el-collapse-item>
             <el-collapse-item name="5">
               <template #title>
-                <h3>{{ $t("project.details.site_survey") }}</h3>
+                <h3>{{ $t("project.details.site-survey") }}</h3>
               </template>
               <SiteSurveyInfo
                   :data="siteSurveyDetails.value"
@@ -161,7 +161,7 @@ import LoadMore from "@/components/common/LoadMore.vue";
 import { useProjectStore } from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import { useContractStore } from "@/store/contract.js";
-import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
+import SiteSurveyInfo from "@/pages/site-survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";

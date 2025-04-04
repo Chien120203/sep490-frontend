@@ -39,13 +39,21 @@ const API_CODE = {
   //Planning
   API_PLANNING_001: '/plans/search',
 
+  //Mobilization
   API_MOBILIZE_001: '/resourcereq/mobilization/list',
   API_MOBILIZE_002: '/resourcereq/mobilization/save',
   API_MOBILIZE_003: '/resourcereq/mobilization/delete',
   API_MOBILIZE_004: '/resourcereq/mobilization',
   API_MOBILIZE_005: '/resourcereq/mobilization/send',
   API_MOBILIZE_006: '/resourcereq/mobilization/approve',
-  API_MOBILIZE_007: '/resourcereq/mobilization/reject'
+  API_MOBILIZE_007: '/resourcereq/mobilization/reject',
+
+  //Machine Resource
+  API_MACHINE_001: '/vehicle/',
+  API_MACHINE_002: '/vehicle/search',
+  API_MACHINE_003: '/vehicle/create',
+  API_MACHINE_004: '/vehicle/update',
+  API_MACHINE_005: '/vehicle/delete',
 
 };
 

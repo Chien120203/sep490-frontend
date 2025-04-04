@@ -1,308 +1,278 @@
 <template>
-  <div class="dashboard">
-    <!-- Phần Thống kê phương tiện -->
-    <div class="vehicle-stats">
-      <h2>Thống kê phương tiện</h2>
-      <ul>
-        <li v-for="stat in vehicleStats" :key="stat.type">
-          <i class="el-icon-truck"></i>
-          {{ stat.type }}: {{ stat.count }}
-        </li>
-      </ul>
-    </div>
-
-    <!-- Phần Truy cập nhanh -->
-    <div class="quick-access">
-      <h2>Truy cập nhanh</h2>
-      <div class="grid">
-        <div class="item" @click="openAddVehicleDialog">
-          <i class="el-icon-document-add"></i>
-          Thêm phương tiện
-          <i class="el-icon-arrow-right"></i>
-        </div>
-        <div class="item">
-          <i class="el-icon-document-add"></i>
-          Thêm nhật ký bảo trì
-          <i class="el-icon-arrow-right"></i>
-        </div>
-        <div class="item">
-          <i class="el-icon-document-add"></i>
-          Thêm nhật ký điều chuyển
-          <i class="el-icon-arrow-right"></i>
-        </div>
-        <div class="item">
-          <i class="el-icon-document-add"></i>
-          Thêm lái xe
-          <i class="el-icon-arrow-right"></i>
-        </div>
-        <div class="item">
-          <i class="el-icon-document-add"></i>
-          Thêm chuyến chuyển
-          <i class="el-icon-arrow-right"></i>
-        </div>
-        <div class="item">
-          <i class="el-icon-document-add"></i>
-          Thêm chấm ca
-          <i class="el-icon-arrow-right"></i>
-        </div>
+  <div class="machine machine-list">
+    <div class="machine-header">
+      <h3 class="page__ttl">{{ $t("resources.machine.title") }}</h3>
+      <div class="machine-btn-box machine-import-box">
+        <el-row class="mb-4">
+          <el-button class="btn btn-save" @click="handleRedirectToCreate"
+          >{{ $t("resources.add_new") }}
+          </el-button>
+        </el-row>
       </div>
     </div>
-
-    <!-- Phần Báo cáo -->
-    <div class="reports">
-      <h2>Báo cáo</h2>
-      <ul>
-        <li @click="goToReport('fuel')">
-          <i class="el-icon-document"></i>
-          Báo cáo nhiên liệu
-        </li>
-        <li @click="goToReport('shift-check')">
-          <i class="el-icon-document"></i>
-          Báo cáo chấm ca
-        </li>
-        <li @click="goToReport('shift-check-by-project')">
-          <i class="el-icon-document"></i>
-          Báo cáo chấm ca theo dự án
-        </li>
-        <li @click="goToReport('transport-cost')">
-          <i class="el-icon-document"></i>
-          Báo cáo chi phí vận chuyển
-        </li>
-        <li @click="goToReport('fuel-by-project')">
-          <i class="el-icon-document"></i>
-          Báo cáo nhiên liệu theo dự án
-        </li>
-        <li @click="goToReport('vehicle-usage-by-project')">
-          <i class="el-icon-document"></i>
-          Báo cáo sử dụng phương tiện theo dự án
-        </li>
-        <li @click="goToReport('maintenance')">
-          <i class="el-icon-document"></i>
-          Báo cáo bảo trì
-        </li>
-      </ul>
-    </div>
-
-    <!-- Pop-up Thêm phương tiện mới -->
-    <el-dialog title="Thêm phương tiện mới" :visible.sync="dialogVisible" width="50%">
-      <el-form :model="form" label-position="left" label-width="120px">
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Biển số xe *">
-              <el-input v-model="form.licensePlate" placeholder="Biển số xe"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Động phương tiện">
-              <el-input v-model="form.vehicleType" placeholder="Động phương tiện"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Nhãn hiệu">
-              <el-input v-model="form.brand" placeholder="Nhãn hiệu"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Năm sản xuất">
-              <el-input v-model="form.manufactureYear" placeholder="Năm sản xuất"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Nước sản xuất">
-              <el-input v-model="form.manufactureCountry" placeholder="Nước sản xuất"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Số khung">
-              <el-input v-model="form.chassisNumber" placeholder="Số khung"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Số máy">
-              <el-input v-model="form.engineNumber" placeholder="Số máy"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="Hình ảnh">
-          <el-upload
-              action="#"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
+    <div class="machine-body">
+      <div class="machine-search">
+        <div class="machine-search-box col-md-9 col-lg-9">
+          <p class="machine-search__ttl">
+            {{ $t("resources.keyword") }}
+          </p>
+          <div class="mb-0 ruleform">
+            <el-input
+                :placeholder="$t('common.input_keyword')"
+                @keyup.enter="submitForm"
+                v-model="searchForms.search"
+                prop="search"
+            >
+            </el-input>
+          </div>
+        </div>
+        <div class="btn-search-select col-md-3 col-lg-3 machine-box-btn-all">
+          <el-button class="btn btn-search" @click="submitForm()">
+            {{ $t("common.search") }}</el-button
           >
-            <i class="el-icon-plus"></i>
-            <span>Tải ảnh</span>
-          </el-upload>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false" class="cancel-btn">Hủy bỏ</el-button>
-        <el-button type="primary" @click="saveVehicle">
-          <i class="el-icon-folder-checked"></i> Lưu
-        </el-button>
+          <el-button class="btn btn-clear" @click="handleClear()">
+            {{ $t("common.clear") }}</el-button
+          >
+        </div>
       </div>
-    </el-dialog>
+    </div>
+
+    <div class="machine-body-table" style="">
+      <MachineTable
+          :data="listMachineResources.value"
+          @details="handleGetMachineResourcesDtls"
+          @delete="handleDisplayModal"
+      />
+            <LoadMore
+                :listData="listMachineResources.value"
+                :totalItems="totalItems.value"
+                @loadMore="handleLoadMore"
+            />
+    </div>
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm.value"
+        @close-modal="closeModalConfirm"
+        :isConfirmByText="true"
+        :confirmText="TEXT_CONFIRM_DELETE"
+        @confirmAction="handleConfirm"
+        :message="$t('machine.modal_confirm.message')"
+        :title="$t('machine.modal_confirm.title')"
+    />
   </div>
 </template>
 
 <script>
+import IconSetting from "@/svg/IconSettingMain.vue";
+import IconCircleClose from "@/svg/IconCircleClose.vue";
+import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
+import LoadMore from "@/components/common/LoadMore.vue";
+import ModalConfirm from "@/components/common/ModalConfirm.vue";
+import MachineTable from "./item/MachineTable.vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import { NUMBER_FORMAT } from "@/constants/application.js";
+import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
+import { ADMIN } from "@/constants/roles.js";
+import { userMachineResourcesStore } from "@/store/machine-resources.js";
+import { useRouter } from "vue-router";
+import PAGE_NAME from "@/constants/route-name.js";
+
 export default {
-  data() {
-    return {
-      dialogVisible: false,
-      form: {
-        licensePlate: '',
-        vehicleType: '',
-        brand: '',
-        manufactureYear: '',
-        manufactureCountry: '',
-        chassisNumber: '',
-        engineNumber: '',
-      },
-      vehicleStats: [
-        { type: 'Xe tải', count: 10 },
-        { type: 'Xe cẩu', count: 5 },
-        { type: 'Xe ủi', count: 3 },
-        { type: 'Xe lu', count: 7 },
-      ],
-    };
+  name: "machineList",
+  components: {
+    IconSetting,
+    IconCircleClose,
+    SingleOptionSelect,
+    LoadMore,
+    MachineTable,
+    ModalConfirm,
   },
-  methods: {
-    openAddVehicleDialog() {
-      this.dialogVisible = true;
-    },
-    saveVehicle() {
-      console.log('Vehicle data:', this.form);
-      this.dialogVisible = false;
-      this.form = {
-        licensePlate: '',
-        vehicleType: '',
-        brand: '',
-        manufactureYear: '',
-        manufactureCountry: '',
-        chassisNumber: '',
-        engineNumber: '',
-      };
-    },
-    goToReport(reportType) {
-      this.$router.push(`/reports/${reportType}`);
-    },
-    handlePictureCardPreview(file) {
-      console.log('Preview image:', file);
-    },
-    handleRemove(file, fileList) {
-      console.log('Remove image:', file, fileList);
-    },
+  setup() {
+    const searchForms = ref({
+      search: "",
+      pageIndex: 1,
+    });
+    const delete_id = ref();
+    const router = useRouter();
+    const machineStore = userMachineResourcesStore();
+    const {
+      validation,
+      listMachineResources,
+      totalItems,
+      currentPage,
+      isShowModalConfirm,
+      getListMachineResources,
+      handleDeleteMachineResources
+    } = machineStore;
+    const isDisabled = ref(false);
+
+    onMounted(() => {
+      getListMachineResources(searchForms.value);
+    });
+
+    onUnmounted(() => {
+      listMachineResources.value = [];
+    });
+
+    const handleClear = () => {
+      searchForms.value.search = "";
+    };
+
+    const submitForm = () => {
+      searchForms.value.pageIndex = 1;
+      currentPage.value = 1;
+      getListMachineResources(searchForms.value);
+    };
+
+    const handleLoadMore = () => {
+      currentPage.value++;
+      searchForms.value.pageIndex++;
+      getListMachineResources(searchForms.value);
+    };
+
+    const handleRedirectToCreate = () => {
+      router.push({ name: PAGE_NAME.RESOURCE.MACHINE.CREATE });
+    };
+
+    const handleGetMachineResourcesDtls = (id) => {
+      router.push({ name: PAGE_NAME.RESOURCE.MACHINE.DETAILS, params: { id } });
+    };
+
+    const handleCloseModal = () => {
+      validation.value = [];
+    };
+
+    const handleDisplayModal = (machine_id) => {
+      isShowModalConfirm.value = !!machine_id;
+      delete_id.value = machine_id;
+    };
+
+    const closeModalConfirm = () => {
+      isShowModalConfirm.value = false;
+    };
+
+    const handleConfirm = () => {
+      handleDeleteMachineResources(delete_id.value);
+    };
+
+    return {
+      searchForms,
+      NUMBER_FORMAT,
+      ADMIN,
+      isDisabled,
+      TEXT_CONFIRM_DELETE,
+      validation,
+      totalItems,
+      listMachineResources,
+      isShowModalConfirm,
+      closeModalConfirm,
+      handleClear,
+      submitForm,
+      handleLoadMore,
+      handleDisplayModal,
+      handleGetMachineResourcesDtls,
+      handleCloseModal,
+      handleConfirm,
+      handleRedirectToCreate,
+    };
   },
 };
 </script>
 
-<style scoped>
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
+<style lang="scss" scoped>
+.machine-list {
+  .machine-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .page__ttl {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .machine-btn-box {
+      .btn-save {
+        background-color: #409EFF;
+        color: #fff;
+        &:hover {
+          background-color: #66b1ff;
+        }
+      }
+    }
+  }
+
+  .machine-body {
+    .machine-search {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+
+      .machine-search-box {
+        display: flex;
+        align-items: center;
+
+        .machine-search__ttl {
+          font-size: 1rem;
+          font-weight: 500;
+          margin-right: 10px;
+        }
+
+        .ruleform {
+          width: 100%;
+
+          .el-input__inner {
+            border-radius: 4px;
+          }
+        }
+      }
+
+      .btn-search-select {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+
+        .btn-search,
+        .btn-clear {
+          margin-left: 10px;
+        }
+
+        .btn-search {
+          background-color: #409EFF;
+          color: #fff;
+          &:hover {
+            background-color: #66b1ff;
+          }
+        }
+
+        .btn-clear {
+          background-color: #f56c6c;
+          color: #fff;
+          &:hover {
+            background-color: #f78989;
+          }
+        }
+      }
+    }
+
+    .machine-body-table {
+      margin-top: 20px;
+    }
+  }
 }
 
-.vehicle-stats {
-  background: white;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.vehicle-stats h2 {
-  color: #1f2d3d;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.vehicle-stats ul {
-  list-style: none;
-  padding: 0;
-}
-
-.vehicle-stats li {
-  display: flex;
-  align-items: center;
-  color: #606266;
-  padding: 8px 0;
-}
-
-.vehicle-stats li i {
-  margin-right: 8px;
-  color: #909399;
-}
-
-.quick-access,
-.reports {
-  background: white;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.quick-access h2,
-.reports h2 {
-  color: #1f2d3d;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
-
-.item {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  color: #606266;
-  padding: 10px;
-}
-
-.item i {
-  margin-right: 8px;
-  color: #909399;
-}
-
-.item .el-icon-arrow-right {
-  margin-left: auto;
-  color: #c0c4cc;
-}
-
-.reports ul {
-  list-style: none;
-  padding: 0;
-}
-
-.reports li {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  color: #606266;
-  padding: 8px 0;
-}
-
-.reports li i {
-  margin-right: 8px;
-  color: #909399;
-}
-
-.dialog-footer {
+.close-form {
+  position: absolute;
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-}
+  right: 16px;
+  top: 10px;
+  cursor: pointer;
 
-.cancel-btn {
-  color: #f56c6c;
+  svg {
+    height: 30px;
+    width: 30px;
+  }
 }
 </style>

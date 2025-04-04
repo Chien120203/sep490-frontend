@@ -44,9 +44,21 @@ const PAGE_NAME = {
     LIST: "resource-mobilization-list",
   },
   RESOURCE: {
-    LIST_MACHINE: "machine-list",
-    LIST_MATERIAL: "material_management-list",
-    LIST_HUMAN: "human_management-list",
+    MACHINE:{
+      LIST: "machine-resources-list",
+      DETAILS:"machine-resources-details",
+      CREATE:"machine-resources-create",
+    },
+    MATERIAL:{
+      LIST: "material-resources-list",
+      DETAILS:"material-resources-details",
+      CREATE:"material-resources-create",
+    },
+    HUMAN:{
+      LIST: "human-resources-list",
+      DETAILS:"human-resources-details",
+      CREATE:"human-resources-create",
+    },
   }
 };
 

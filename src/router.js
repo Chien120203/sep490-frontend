@@ -12,7 +12,7 @@ import Customer from  "@/pages/customer/Index.vue"
 import User from  "@/pages/user/Index.vue"
 import Project from  "@/pages/project/Index.vue"
 import Contract from "@/pages/contract/Index.vue"
-import SiteSurvey from  "@/pages/site-survey/Index.vue"
+import SiteSurvey from "@/pages/site-survey/Index.vue"
 import CustomerList from "@/pages/customer/CustomerList.vue";
 import CustomerDetails from "@/pages/customer/Save.vue";
 import UserList from "@/pages/user/UserList.vue";
@@ -33,6 +33,8 @@ import ConstructLogDetails from "@/pages/construction-log/ConstructionLogView.vu
 import ConstructLogSave from "@/pages/construction-log/Save.vue";
 import Mobilization from "@/pages/resource-mobilization/Index.vue";
 import MobilizationList from "@/pages/resource-mobilization/MobilizationList.vue";
+import MachineResources from "@/pages/resource/machine_management/Index.vue";
+import MachineResourcesSave from "@/pages/resource/machine_management/Save.vue";
 import MachineResourceList from "@/pages/resource/machine_management/MachineResourceList.vue";
 import MaterialResourceList from "@/pages/resource/material_management/MaterialResourceList.vue";
 import HumanResourceList from "@/pages/resource/human_management/HumanResourceList.vue";
@@ -40,6 +42,8 @@ import UserProfile from "@/pages/profile/UserProfile.vue";
 // import MachineResourceList from "@/pages/resource/machine_management/MachineResourceList.vue";
 // import MaterialResourceList from "@/pages/resource/material_management/MaterialResourceList.vue";
 // import HumanResourceList from "@/pages/resource/human_management/HumanResourceList.vue";
+import MaterialResourceList from "@/pages/resource/material-management/MaterialResourceList.vue";
+import HumanResourceList from "@/pages/resource/human-management/HumanResourceList.vue";
 
 const routes = [
   {
@@ -267,29 +271,46 @@ const routes = [
     ]
   },
   {
-    name: PAGE_NAME.RESOURCE.LIST_MACHINE,
+    name: PAGE_NAME.RESOURCE.MACHINE,
     path: PAGES.MACHINE_RESOURCE,
-    component: MachineResourceList,
+    component: MachineResources,
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     },
+    children: [
+      {
+        name: PAGE_NAME.RESOURCE.MACHINE.LIST,
+        path: PAGES.MACHINE_RESOURCE_LIST,
+        component: MachineResourceList,
+      },
+      {
+        name: PAGE_NAME.RESOURCE.MACHINE.DETAILS,
+        path: PAGES.MACHINE_RESOURCE_DETAILS,
+        component: MachineResourcesSave,
+      },
+      {
+        name: PAGE_NAME.RESOURCE.MACHINE.CREATE,
+        path: PAGES.MACHINE_RESOURCE_CREATE,
+        component: MachineResourcesSave,
+      },
+    ]
   },
-  {
-    path: PAGES.MATERIAL_RESOURCE,
-    name: PAGE_NAME.RESOURCE.LIST_MATERIAL,
-    component: MaterialResourceList,
-    meta: {
-      middleware: [AUTHENTICATION_MIDDLEWARE],
-    },
-  },
-  {
-    path: PAGES.HUMAN_RESOURCE,
-    name: PAGE_NAME.RESOURCE.LIST_HUMAN,
-    component: HumanResourceList,
-    meta: {
-      middleware: [AUTHENTICATION_MIDDLEWARE],
-    },
-  },
+  // {
+  //   path: PAGES.MATERIAL_RESOURCE,
+  //   name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
+  //   component: MaterialResourceList,
+  //   meta: {
+  //     middleware: [AUTHENTICATION_MIDDLEWARE],
+  //   },
+  // },
+  // {
+  //   path: PAGES.HUMAN_RESOURCE,
+  //   name: PAGE_NAME.RESOURCE.HUMAN.LIST,
+  //   component: HumanResourceList,
+  //   meta: {
+  //     middleware: [AUTHENTICATION_MIDDLEWARE],
+  //   },
+  // },
 ];
 
 const router = createRouter({
