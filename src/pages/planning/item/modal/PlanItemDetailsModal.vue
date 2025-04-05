@@ -4,7 +4,7 @@
       :width="'85%'"
       :containerHeight="'70%'"
       :isShowFooter="false"
-      @close="$emit('close')"
+      @close="closeModal"
   >
     <template #header>
       <h4 class="modal-title">Construct Item Details</h4>
@@ -12,11 +12,18 @@
 
     <template #body>
       <div class="modal-body-container">
-        <PriceInputForm :total="totalAllPrice" :selectedRow="selectedRow"/>
+        <PriceInputForm
+            ref="childFormRef"
+            :rules="rules"
+            :total="totalAllPrice"
+            :selectedRow="selectedRow"
+        />
         <el-tabs v-model="activeTab">
           <!-- Công việc phụ thuộc -->
-          <el-tab-pane label="Công việc phụ thuộc" name="tasks">
+          <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="tasks">
             <DependencyTaskTable
+                ref="depenFormRef"
+                :rules="rules"
                 :tasks="tasks"
                 :selectedRow="selectedRow"
                 @update-dependency="updateTaskDependencies"
@@ -24,8 +31,10 @@
           </el-tab-pane>
 
           <!-- Tài nguyên -->
-          <el-tab-pane label="Tài nguyên" name="materials">
+          <el-tab-pane :label="$t('planning.modal.el_pane.material')" name="materials">
             <ItemList
+                ref="tableMaterialFormRef"
+                :rules="rules"
                 :selectData="materials"
                 :resourceType="MATERIAL_RESOURCE"
                 :tableData="getListResourceByType(selectedRow?.details, MATERIAL_RESOURCE)"
@@ -35,8 +44,11 @@
           </el-tab-pane>
 
           <!-- Nhân lực -->
-          <el-tab-pane label="Nhân lực" name="users">
+          <el-tab-pane :label="$t('planning.modal.el_pane.human')" name="users">
             <ItemList
+                ref="tableHumanFormRef"
+                :rules="rules"
+                :is-human="true"
                 :selectData="users"
                 :resourceType="HUMAN_RESOURCE"
                 :tableData="getListResourceByType(selectedRow?.details, HUMAN_RESOURCE)"
@@ -46,8 +58,10 @@
           </el-tab-pane>
 
           <!-- Phương tiện -->
-          <el-tab-pane label="Phương tiện" name="vehicles">
+          <el-tab-pane :label="$t('planning.modal.el_pane.machine')" name="vehicles">
             <ItemList
+                ref="tableMachineFormRef"
+                :rules="rules"
                 :selectData="vehicles"
                 :resourceType="MACHINE_RESOURCE"
                 :tableData="getListResourceByType(selectedRow?.details, MACHINE_RESOURCE)"
@@ -72,7 +86,9 @@ import Modal from "@/components/common/Modal.vue";
 import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
 import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
+import DependencyTaskTable2 from "@/pages/planning/item/modal/items/DependencyTaskTable2.vue";
 import {HUMAN_RESOURCE, MACHINE_RESOURCE, MATERIAL_RESOURCE} from "@/constants/resource.js";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   selectedRow: {type: Object, default: {}},
@@ -81,6 +97,11 @@ const props = defineProps({
   users: {type: Array, default: () => []},
   vehicles: {type: Array, default: () => []},
   tasks: {type: Array, default: () => []},
+  rules: {
+    type: Object,
+    default: () => {
+    }
+  }
 });
 
 const materialOptions = ref({id: "id", value: "name"});
@@ -105,6 +126,10 @@ const totalAllPrice = computed(() => {
   };
 });
 
+const closeModal = () => {
+  emit("close");
+}
+
 const getListResourceByType = (list, type) => {
   if (!Array.isArray(list)) return [];
   return list.filter(item => item.resourceType === type);
@@ -114,7 +139,6 @@ const emit = defineEmits(["close", "submit"]);
 
 const updateListMaterials = (listData) => {
   listSelectedMaterials.value = listData;
-  console.log(props.selectedRow);
 };
 const updateListUsers = (listData) => {
   listSelectedUsers.value = listData;
@@ -126,17 +150,58 @@ const updateTaskDependencies = (dependencies) => {
   listTaskDependency.value = dependencies.itemRelations;
 };
 
-const handleSubmit = () => {
-  let data = {
-    details: [
-      ...listSelectedUsers.value,
-      ...listSelectedVehicles.value,
-      ...listSelectedMaterials.value,
-    ],
-    itemRelations: listTaskDependency.value,
+const tableMachineFormRef = ref(null);
+const tableHumanFormRef = ref(null);
+const tableMaterialFormRef = ref(null);
+const depenFormRef = ref(null);
+const childFormRef = ref(null);
+
+const handleSubmit = async () => {
+  let invalidForm = null; // To store the name of the invalid form
+  let allValid = true; // Flag to track if all forms are valid
+
+  // Validate each form and check for validity
+  const formRefs = [
+    { ref: childFormRef.value?.ruleFormRef, name: "Plan Information" },
+    { ref: tableMaterialFormRef.value?.ruleFormRef, name: "Material Form" },
+    { ref: tableMachineFormRef.value?.ruleFormRef, name: "Machine Form" },
+    { ref: tableHumanFormRef.value?.ruleFormRef, name: "Human Form" }
+  ];
+
+  // Loop through each form and validate it
+  for (const { ref, name } of formRefs) {
+    const isValid = await mixinMethods.validateForm(ref);
+    if (!isValid) {
+      allValid = false;
+      invalidForm = name;
+      break; // Stop checking further forms once we find an invalid one
+    }
   }
-  emit("submit", data);
+
+  if (allValid) {
+    let data = {
+      details: [
+        ...listSelectedUsers.value,
+        ...listSelectedVehicles.value,
+        ...listSelectedMaterials.value,
+      ],
+      itemRelations: listTaskDependency.value,
+      startDate: props.selectedRow.startDate,
+      endDate: props.selectedRow.endDate,
+    }
+    emit("submit", data);
+    listSelectedVehicles.value = [];
+    listSelectedUsers.value = [];
+    listSelectedVehicles.value = [];
+    listSelectedMaterials.value = [];
+    listTaskDependency.value = {};
+  } else {
+    // If any form is invalid, show a notification with the invalid form name
+    mixinMethods.notifyError(`Validation failed in ${invalidForm}`);
+  }
 };
+
+
 </script>
 
 <style scoped>

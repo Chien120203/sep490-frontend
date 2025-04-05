@@ -28,13 +28,23 @@ export const getContractRules = () => {
         validator: (rule, value, callback) =>
           validateStartBeforeEnd(rule, value, callback, value, contractDetails.value.endDate, "E-CM-020"),
         trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
+        trigger: "blur",
       }
     ],
     endDate: [
       { required: true, message: t("E-CTR-004"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, contractDetails.value.startDate, value, "E-CM-020"),
+          validateStartBeforeEnd(rule, value, callback, contractDetails.value.startDate, value, "E-CM-028"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
         trigger: "blur",
       }
     ],

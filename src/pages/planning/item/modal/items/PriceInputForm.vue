@@ -1,12 +1,12 @@
 <template>
   <div class="price-input-form">
-    <el-form label-width="30%">
+    <el-form label-width="30%" :model="selectedRow" ref="ruleFormRef" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="Tên công việc">
+          <el-form-item :label="$t('planning.modal.work_name')">
             <el-input readonly v-model="selectedRow.workName" class="custom-input" />
           </el-form-item>
-          <el-form-item label="Ngày bắt đầu">
+          <el-form-item prop="startDate" :label="$t('planning.modal.start_date')">
             <el-date-picker
                 style="width: 80%"
                 class="custom-input"
@@ -16,7 +16,7 @@
             />
           </el-form-item>
 
-          <el-form-item label="Ngày kết thúc">
+          <el-form-item prop="endDate" :label="$t('planning.modal.end_date')">
             <el-date-picker
                 style="width: 80%"
                 class="custom-input"
@@ -26,12 +26,13 @@
             />
           </el-form-item>
 
-          <el-form-item label="Ngân sách dự kiến">
+          <el-form-item :label="$t('planning.modal.price')">
             <el-input
+                disabled
                 style="width: 80%"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                v-model="selectedRow.price"
+                :value=" mixinMethods.formatInputCurrency(selectedRow.quantity * selectedRow.unitPrice)"
             />
           </el-form-item>
         </el-col>
@@ -59,13 +60,22 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import {defineProps, reactive, ref} from "vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
-  selectedRow: { type: Object, default: () => ({}) },
+  selectedRow: { type: Object, default: () => {} },
   total: { type: Object, default: () => ({}) },
+  rules: {
+    type: Object,
+    default: () => {}
+  }
+});
+
+const ruleFormRef = ref(null);
+defineExpose({
+  ruleFormRef,
 });
 </script>
 

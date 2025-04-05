@@ -23,11 +23,6 @@
               @keyup.enter="submitForm"
               v-model="searchForms.planName"
           >
-            <template #append>
-              <span @click="handleSearchForm" class="btn-setting">
-                <IconSetting/>
-              </span>
-            </template>
           </el-input>
         </div>
         <div class="btn-search-select col-md-3 col-lg-3 planning-box-btn-all">

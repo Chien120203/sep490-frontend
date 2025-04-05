@@ -6,55 +6,64 @@
       :listData="tasks.filter(item => item.index !== selectedRow.index && item.index !== selectedRow.parentIndex)"
       @handleSelectedParams="handleSelectTask"
   />
-  <el-table :data="listSelectedTasks" style="width: 100%" border stripe>
-    <el-table-column prop="index" label="Index">
-      <template #default="{ row }">
-        {{ row.index }}
-      </template>
-    </el-table-column>
-    <!-- Task Name -->
-    <el-table-column prop="workName" label="Task Name" sortable />
+  <el-form
+      ref="ruleFormRef"
+      :model="selectRow"
+      :rules="rules"
+      class="form-search-box"
+  >
+    <el-table :data="listSelectedTasks" style="width: 100%" border stripe>
+      <el-table-column label="Index">
+        <template #default="{ row }">
+          {{ row.index }}
+        </template>
+      </el-table-column>
+      <!-- Task Name -->
+      <el-table-column prop="workName" label="Task Name" sortable />
 
-    <!-- Due Date -->
-    <el-table-column prop="startDate" label="Start Date" sortable>
-      <template #default="{ row }">
-        {{ row.startDate }}
-      </template>
-    </el-table-column>
-    <!-- Due Date -->
-    <el-table-column prop="endDate" label="Due Date" sortable>
-      <template #default="{ row }">
-        {{ row.endDate }}
-      </template>
-    </el-table-column>
+      <!-- Due Date -->
+      <el-table-column label="Start Date" sortable>
+        <template #default="{ row }">
+          {{ mixinMethods.showDateTime(row.startDate) }}
+        </template>
+      </el-table-column>
+      <!-- Due Date -->
+      <el-table-column label="Due Date" sortable>
+        <template #default="{ row }">
+          {{ mixinMethods.showDateTime(row.endDate) }}
+        </template>
+      </el-table-column>
 
-    <!-- Dependency -->
-    <el-table-column prop="dependency" label="Depends Type">
-      <template #default="{ row }">
-        <el-select v-model="selectRow.itemRelations[row.index]" @change="handleChangeDependency">
-          <el-option :label="$t('common.no_dependency')" value=""></el-option>
-          <el-option
-              v-for="(type, index) in TASK_RELATIONSHIPS"
-              :key="index"
-              :label="$t(type.label)"
-              :value="type.value"
-          >
-          </el-option>
-        </el-select>
-      </template>
-    </el-table-column>
+      <!-- Dependency -->
+      <el-table-column label="Depends Type" width="390">
+        <template #default="{ row }">
+          <el-form-item :prop="`itemRelations.${row.index}`" :rules="rules.dependency">
+            <el-select v-model="selectRow.itemRelations[row.index]" @change="handleChangeDependency">
+              <el-option :label="$t('common.no_dependency')" value=""></el-option>
+              <el-option
+                  v-for="(type, index) in TASK_RELATIONSHIPS"
+                  :key="index"
+                  :label="$t(type.label)"
+                  :value="type.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </template>
+      </el-table-column>
 
 
-    <el-table-column label="Actions">
-      <template #default="{ row }">
-        <div>
-          <button @click="handleRemoveTask(row.index)" class="btn-edit">
-            <IconTrash />
-          </button>
-        </div>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column label="Actions" width="100">
+        <template #default="{ row }">
+          <div>
+            <button @click="handleRemoveTask(row.index)" class="btn-edit">
+              <IconTrash />
+            </button>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-form>
 </template>
 
 <script setup>
@@ -72,7 +81,17 @@ const props = defineProps({
   tasks: {
     type: Array,
     default: () => []
+  },
+  rules: {
+    type: Object,
+    default: () => {
+    }
   }
+});
+
+const ruleFormRef = ref(null);
+defineExpose({
+  ruleFormRef,
 });
 
 const emit = defineEmits(["update-dependency"]);
@@ -108,7 +127,12 @@ const handleRemoveTask = (removeIndex) => {
 };
 
 const handleChangeDependency = () => {
-  emit("update-dependency", selectRow);
+  ruleFormRef.value.validate((valid) => {
+    if (valid) {
+      emit("update-dependency", selectRow);
+    }
+    console.log(valid)
+  });
 }
 
 </script>

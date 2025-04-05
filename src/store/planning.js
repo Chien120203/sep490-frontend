@@ -3,7 +3,6 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
-import PAGE_NAME from "@/constants/route-name.js";
 
 export const usePlanningStore = defineStore(
   "planning",
@@ -14,6 +13,23 @@ export const usePlanningStore = defineStore(
     const totalItems = reactive({value: 0});
     const currentPage = reactive({value: 0});
     const listPlannings = reactive({value: []});
+    const planSelectedRow = reactive({value: {
+        createdAt: "",
+        updatedAt: "",
+        creator: "",
+        updater: "",
+        workName: "",
+        index: "",
+        parentIndex: "",
+        itemRelations: [],
+        details: [],
+        quantity: "",
+        startDate: "",
+        endDate: "",
+        total: 0,
+        unit: "",
+        unitPrice: 0,
+      }});
     const planningDetails = reactive({
       value: {
         planName: "",
@@ -47,9 +63,26 @@ export const usePlanningStore = defineStore(
       await mixinMethods.endLoading();
     };
 
-    const savePlanning = async (params) => {
+    const getPlanningDetails = async (id) => {
       mixinMethods.startLoading();
-      await services.PlanningAPI.create(
+      await services.PlanningAPI.details(
+        id,
+        {},
+        (response) => {
+          planningDetails.value = response.data;
+
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.get_planning_dtls_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const savePlanning = async (params, method = "create") => {
+      mixinMethods.startLoading();
+      await services.PlanningAPI[method](
         params,
         (response) => {
           if (response.success) {
@@ -69,14 +102,27 @@ export const usePlanningStore = defineStore(
       );
     };
 
+    const clearPlanningDetails = () => {
+      planningDetails.value = {
+        planName: "",
+        projectId: "",
+        teamIds: [],
+        planItems: [],
+        reviewerIds: []
+      };
+    }
+
     return {
       validation,
       listPlannings, // temporary
       totalItems,
       currentPage,
+      planSelectedRow,
       planningDetails,
       isShowModalConfirm,
+      clearPlanningDetails,
       getListPlannings,
+      getPlanningDetails,
       savePlanning
     };
   }

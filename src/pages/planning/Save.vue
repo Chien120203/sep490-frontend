@@ -30,12 +30,19 @@
         <!-- Conditional Rendering Based on Selected Tab -->
         <div v-if="selectedTab === 'info'">
           <SelectionFilters
+              ref="selectionFormRef"
+              :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
               :followers="listQualityAssurances"
               @updateFollowers="updateListQAs"
           />
-          <PlanningDetails :items="planningDetails.value.planItems" :isUpdate="isUpdate" @update:items="updateItems"
-                           @editPlanDetails="handleEditPlanDetails"/>
+          <PlanningDetails
+              ref="detailsFormRef"
+              :rules="PLANNING_RULES"
+              :items="planningDetails.value.planItems"
+              :isUpdate="isUpdate" @update:items="updateItems"
+              @editPlanDetails="handleEditPlanDetails"
+          />
         </div>
 
         <div v-if="selectedTab === 'activity'">
@@ -50,6 +57,7 @@
     </div>
   </div>
   <PlanItemDetailsModal
+      :rules="PLANNING_RULES"
       :show="isShowModalItemDtls"
       :materials="materials"
       :selectedRow="selectedRow"
@@ -78,6 +86,8 @@ import PlanItemDetailsModal from "@/pages/planning/item/modal/PlanItemDetailsMod
 import {useContractStore} from "@/store/contract.js";
 import {usePlanningStore} from "@/store/planning.js";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {mixinMethods} from "@/utils/variables.js";
+import {getPlanningRules} from "@/rules/planning/index.js";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
@@ -94,6 +104,7 @@ const listQualityAssurances = ref([]);
 const isShowModalItemDtls = ref(false);
 const isUpdate = computed(() => !!route.params.id);
 const selectedRow = ref({});
+const PLANNING_RULES = getPlanningRules();
 // Mock Data
 const statuses = ref([
   {title: "Khởi tạo", description: "", status: "success"},
@@ -163,6 +174,9 @@ const {listUsers, getListUsers} = userStore;
 const {clearProjectDetails} = projectStore;
 const {
   planningDetails,
+  planSelectedRow,
+  clearPlanningDetails,
+  getPlanningDetails,
   savePlanning,
 } = planningStore;
 
@@ -173,15 +187,17 @@ onMounted(async () => {
   if(!route.params.id) {
     await getContractDetails(projectId.value);
     planningDetails.value.planItems = contractDetails.value.contractDetails.map(
-        ({ contractId, deleted, ...rest }) => ({ ...rest, workCode: null })
+        ({ contractId, deleted, workCode, ...rest }) => ({ ...rest })
     );
-  };
+  } else {
+    await getPlanningDetails(route.params.id);
+  }
   await getListUsers({keyWord: "", pageIndex: 1, role: QUALITY_ASSURANCE}, false);
   listQualityAssurances.value = listUsers.value;
 });
 
 onUnmounted(() => {
-  clearProjectDetails();
+  clearPlanningDetails();
 });
 
 const handleBack = () => {
@@ -193,12 +209,16 @@ const updateItems = (newItems) => {
 };
 
 const handleEditPlanDetails = (row) => {
-  selectedRow.value = row;
+  selectedRow.value = JSON.parse(JSON.stringify(row));
+  planSelectedRow.value = selectedRow.value;
   isShowModalItemDtls.value = true;
 }
 
 const handleCloseModal = () => {
+  selectedRow.value = {};
   isShowModalItemDtls.value = false;
+  console.log(planSelectedRow.value);
+  console.log(planningDetails.value);
 }
 
 const handleSaveItemDetails = (data) => {
@@ -217,8 +237,24 @@ const updateListQAs = (list) => {
   planningDetails.value.reviewerIds = list;
 }
 
+const selectionFormRef = ref(null);
+const detailsFormRef = ref(null);
+const modalFormRef = ref(null);
 const submitForm = () => {
-  planningDetails.value.projectId = projectId.value;
-  savePlanning(planningDetails.value);
+  if (selectionFormRef.value?.ruleFormRef) {
+    selectionFormRef.value?.validate((selValid) => {
+      detailsFormRef.value?.validate((detValid) => {
+        modalFormRef.value?.validate((modalValid) => {
+          if (selValid && detValid && modalValid) {
+            planningDetails.value.projectId = projectId.value;
+            let method  = !!route.params.id ? "update" : "create";
+            savePlanning(planningDetails.value, method);
+          }
+        });
+      });
+    });
+  } else {
+    mixinMethods.notifyError("Form reference is not available.");
+  }
 }
 </script>

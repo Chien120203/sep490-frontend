@@ -209,6 +209,15 @@ const createFormData = (params) => {
   return formData;
 };
 
+const validateForm = async (formRef) => {
+  try {
+    // Wait for the validation to complete
+    await formRef.validate();
+    return true; // Validation succeeded
+  } catch (error) {
+    return false; // Validation failed
+  }
+};
 const validateField = (index, field, rules, item, validationErrors) => {
   const fieldRules = rules[field];
   const fieldValue = item[field];
@@ -243,6 +252,7 @@ const validateField = (index, field, rules, item, validationErrors) => {
 export const mixins = {
   screenLoading,
   startLoading,
+  validateForm,
   createFormData,
   endLoading,
   checkEmptyWithOutZero,
@@ -250,6 +260,7 @@ export const mixins = {
   formatCurrency,
   formatNumberVietnam,
   formatInputCurrency,
+  parseInputCurrency,
   formatInputMoney,
   handleErrorResponse,
   arrayChunk,
@@ -260,5 +271,4 @@ export const mixins = {
   showDateTime,
   base64ToFile,
   validateField,
-  parseInputCurrency
 };

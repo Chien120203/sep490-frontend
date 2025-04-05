@@ -261,7 +261,8 @@
       "get_human_failed": "Get Human failed",
       "get_human_dtls_failed": "Get Human details failed",
       "save_human_success": "Save Human Success",
-      "save_human_failed": "Save Human Failed"
+      "save_human_failed": "Save Human Failed",
+      "get_planning_dtls_failed": "Get planning details failed"
     }
   },
   "contract": {
@@ -775,6 +776,22 @@
         "creator": "Creator",
         "action": "Action"
       }
+    },
+    "form": {
+      "name": "Plan Name",
+      "inspector": "Inspectors"
+    },
+    "modal": {
+      "work_name": "Work Name",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "price": "Expected Price",
+      "el_pane": {
+        "depen_work": "Dependency Work",
+        "material": "Material Resource",
+        "human": "Human Resource",
+        "machine": "Machine Resource"
+      }
     }
   },
   "bill": {
@@ -1053,12 +1070,13 @@
   "E-CM-019": "Number of tenants exceed the room's capacity",
   "E-CM-020": "Start date must be before end date",
   "E-CM-021": "Contract name existed",
-  "E-CM-022": "Start date must greater or equal current date",
+  "E-CM-022": "Selected Date must greater or equal current date",
   "E-CM-023": "Contract date is duplicated with another contract",
   "E-CM-024": "Bill code is existed",
   "E-CM-025": "Utility name has been existed",
   "E-CM-026": "Utility name is duplicated",
   "E-CM-027": "Email is invalid",
+  "E-CM-028": "End date must be greater start date",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",
