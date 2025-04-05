@@ -214,7 +214,7 @@ export default {
     }
 
     const handleSelectFiles = (listFiles) => {
-      machineResourcesDetails.value.image = listFiles;
+      machineResourcesDetails.value.image = [listFiles[0].raw];
     }
 
     const handleRemoveFile = (file) => {
