@@ -144,6 +144,11 @@ const formatInputMoney = (value) => {
   return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+const parseInputCurrency = (value) => {
+  if(!value) return;
+  return value.replace(/\$\s?|(,*)/g, '');
+}
+
 const formatNumberVietnam = (number) => {
   if (number === null || number === undefined) return "";
   return new Intl.NumberFormat("vi-VN").format(number);
@@ -222,7 +227,7 @@ const validateField = (index, field, rules, item, validationErrors) => {
     if (rule.max !== undefined && fieldValue > rule.max) {
       validationErrors[`${field}-${index}`] = rule.message;
     }
-    
+
     if (rule.validator) {
       rule.validator(rule, fieldValue, (error) => {
         if (error) {
@@ -254,5 +259,6 @@ export const mixins = {
   validateInvalidEmail,
   showDateTime,
   base64ToFile,
-  validateField
+  validateField,
+  parseInputCurrency
 };
