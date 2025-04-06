@@ -21,7 +21,7 @@ const deleteMachine = async (id, success, error) => {
     await del(API_CODE.API_MACHINE_005 + "/" + id, {}, success, error);
 };
 
-export const MachineResourcesAPI = {
+export const MachineResourceAPI = {
     list,
     details,
     update,

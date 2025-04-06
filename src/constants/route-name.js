@@ -45,14 +45,14 @@ const PAGE_NAME = {
   },
   RESOURCE: {
     MACHINE:{
-      LIST: "machine-resources-list",
-      DETAILS:"machine-resources-details",
-      CREATE:"machine-resources-create",
+      LIST: "machine-resource-list",
+      DETAILS:"machine-resource-details",
+      CREATE:"machine-resource-create",
     },
     MATERIAL:{
-      LIST: "material-resources-list",
-      DETAILS:"material-resources-details",
-      CREATE:"material-resources-create",
+      LIST: "material-resource-list",
+      DETAILS:"material-resource-details",
+      CREATE:"material-resource-create",
     },
     HUMAN:{
       LIST: "human-resources-list",
