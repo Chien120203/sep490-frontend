@@ -4,6 +4,7 @@ import {
 } from "@/constants/application.js";
 import {validateChooseDateRelation, validateMinMax, validateStartBeforeEnd, validateChooseTypeRelation} from "@/rules/validation/validation.js";
 import {usePlanningStore} from "@/store/planning.js";
+import {MAX_TAX, MIN_TAX} from "@/constants/contract.js";
 
 export const getPlanningRules = () => {
   const planningStore = usePlanningStore();
@@ -100,6 +101,20 @@ export const getPlanningRules = () => {
       {
         validator: (rule, value, callback) =>
           validateChooseTypeRelation(rule, value, callback, planSelectedRow.value, planningDetails.value),
+        trigger: "change",
+      }
+    ],
+    totalPrice: [
+      {
+        validator: (rule, value, callback) =>
+          validateMinMax(rule,
+            value,
+            callback,
+            MIN_NUMBER,
+            (planSelectedRow.value.quantity * planSelectedRow.value.unitPrice),
+            "",
+            t("E-PLAN-001"),
+          ),
         trigger: "change",
       }
     ],

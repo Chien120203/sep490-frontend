@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import {ref, defineProps, defineEmits, computed} from "vue";
 
 const props = defineProps({
   followers: Array,
@@ -48,8 +48,9 @@ defineExpose({
   ruleFormRef,
 });
 
-const selectedFollowers = ref([]);
-
+const selectedFollowers = computed(
+    () => props.planDetails.reviewers?.map((r) => r.id) || []
+);
 const emit = defineEmits([ "updateFollowers", "search"]);
 </script>
 

@@ -211,7 +211,10 @@ const createFormData = (params) => {
 
 const validateForm = async (formRef) => {
   try {
-    // Wait for the validation to complete
+    if (!formRef || typeof formRef.validate !== 'function') {
+      console.warn("Invalid formRef:", formRef);
+      return false;
+    }
     await formRef.validate();
     return true; // Validation succeeded
   } catch (error) {

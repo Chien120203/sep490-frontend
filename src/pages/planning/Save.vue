@@ -59,10 +59,10 @@
   <PlanItemDetailsModal
       :rules="PLANNING_RULES"
       :show="isShowModalItemDtls"
-      :materials="materials"
       :selectedRow="selectedRow"
       :tasks="planningDetails.value.planItems"
       :isUpdate="isUpdate"
+      :materials="materials"
       :users="listEmployees"
       :vehicles="listVehicles"
       @close="handleCloseModal"
@@ -217,8 +217,6 @@ const handleEditPlanDetails = (row) => {
 const handleCloseModal = () => {
   selectedRow.value = {};
   isShowModalItemDtls.value = false;
-  console.log(planSelectedRow.value);
-  console.log(planningDetails.value);
 }
 
 const handleSaveItemDetails = (data) => {
@@ -234,27 +232,29 @@ const handleTabChange = (tab) => {
 };
 
 const updateListQAs = (list) => {
-  planningDetails.value.reviewerIds = list;
+  planningDetails.value.reviewers = list;
 }
 
 const selectionFormRef = ref(null);
 const detailsFormRef = ref(null);
 const modalFormRef = ref(null);
 const submitForm = () => {
-  if (selectionFormRef.value?.ruleFormRef) {
-    selectionFormRef.value?.validate((selValid) => {
-      detailsFormRef.value?.validate((detValid) => {
-        modalFormRef.value?.validate((modalValid) => {
-          if (selValid && detValid && modalValid) {
-            planningDetails.value.projectId = projectId.value;
-            let method  = !!route.params.id ? "update" : "create";
-            savePlanning(planningDetails.value, method);
-          }
-        });
-      });
-    });
-  } else {
-    mixinMethods.notifyError("Form reference is not available.");
-  }
+  const method = !!route.params.id ? "update" : "create";
+  savePlanning(planningDetails.value, method);
+  // if (selectionFormRef.value?.ruleFormRef) {
+  //   selectionFormRef.value?.validate((selValid) => {
+  //     detailsFormRef.value?.validate((detValid) => {
+  //       modalFormRef.value?.validate((modalValid) => {
+  //         if (selValid && detValid && modalValid) {
+  //           planningDetails.value.projectId = projectId.value;
+  //           let method  = !!route.params.id ? "update" : "create";
+  //
+  //         }
+  //       });
+  //     });
+  //   });
+  // } else {
+  //   mixinMethods.notifyError("Form reference is not available.");
+  // }
 }
 </script>

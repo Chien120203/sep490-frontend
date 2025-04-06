@@ -2,6 +2,7 @@
 import { defineProps, defineEmits, computed, ref, watch } from "vue";
 import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   items: Array,
@@ -154,7 +155,7 @@ const hierarchicalItems = computed(() => {
 <template>
   <div class="contract-items">
     <h2>{{ $t('contract.create.items') }}</h2>
-    <el-button class="btn btn-save new-parent-btn" @click="addItem">
+    <el-button class="btn btn-save new-parent-btn" v-if="isAllowUpdate" @click="addItem">
       {{ $t('contract.create.btn.new_item') }}
     </el-button>
     <el-table :data="hierarchicalItems" style="width: 100%" border>
@@ -181,25 +182,25 @@ const hierarchicalItems = computed(() => {
 
       <el-table-column prop="unit" :label="$t('contract.create.item_table.unit')" width="100">
         <template #default="{ row }">
-          <el-input v-model="row.unit" :disabled="isParent(row) && !isAllowUpdate" />
+          <el-input v-model="row.unit" :disabled="isParent(row) || !isAllowUpdate" />
         </template>
       </el-table-column>
 
       <el-table-column prop="quantity" :label="$t('contract.create.item_table.amount')" width="180">
         <template #default="{ row }">
-          <el-input-number v-model="row.quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row) && !isAllowUpdate" />
+          <el-input-number v-model="row.quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row) || !isAllowUpdate" />
         </template>
       </el-table-column>
 
       <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" width="180">
         <template #default="{ row }">
-          <el-input-number v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) && !isAllowUpdate" />
+          <el-input-number v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) || !isAllowUpdate" />
         </template>
       </el-table-column>
 
       <el-table-column :label="$t('contract.create.item_table.total_price')" width="150">
         <template #default="{ row }">
-          {{ row.total }}
+          {{ mixinMethods.formatInputMoney(row.total) }}
         </template>
       </el-table-column>
     </el-table>

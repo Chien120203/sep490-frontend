@@ -1,14 +1,15 @@
 <template>
   <SingleOptionSelect
+      :defaultList="selectedValue"
       style="width: 30%"
       class="select-item"
       :optionKeys="dependencyOptions"
-      :listData="tasks.filter(item => item.index !== selectedRow.index && item.index !== selectedRow.parentIndex)"
+      :listData="listSelectTasks"
       @handleSelectedParams="handleSelectTask"
   />
   <el-form
       ref="ruleFormRef"
-      :model="selectRow"
+      :model="selectedRow"
       :rules="rules"
       class="form-search-box"
   >
@@ -19,18 +20,18 @@
         </template>
       </el-table-column>
       <!-- Task Name -->
-      <el-table-column prop="workName" label="Task Name" sortable />
+      <el-table-column prop="workName" label="Task Name" sortable/>
 
       <!-- Due Date -->
       <el-table-column label="Start Date" sortable>
         <template #default="{ row }">
-          {{ mixinMethods.showDateTime(row.startDate) }}
+          {{ mixinMethods.showDateTime(row.startDate) ?? "-" }}
         </template>
       </el-table-column>
       <!-- Due Date -->
       <el-table-column label="Due Date" sortable>
         <template #default="{ row }">
-          {{ mixinMethods.showDateTime(row.endDate) }}
+          {{ mixinMethods.showDateTime(row.endDate) ?? "-" }}
         </template>
       </el-table-column>
 
@@ -38,8 +39,7 @@
       <el-table-column label="Depends Type" width="390">
         <template #default="{ row }">
           <el-form-item :prop="`itemRelations.${row.index}`" :rules="rules.dependency">
-            <el-select v-model="selectRow.itemRelations[row.index]" @change="handleChangeDependency">
-              <el-option :label="$t('common.no_dependency')" value=""></el-option>
+            <el-select v-model="selectedRow.itemRelations[row.index]">
               <el-option
                   v-for="(type, index) in TASK_RELATIONSHIPS"
                   :key="index"
@@ -56,8 +56,8 @@
       <el-table-column label="Actions" width="100">
         <template #default="{ row }">
           <div>
-            <button @click="handleRemoveTask(row.index)" class="btn-edit">
-              <IconTrash />
+            <button @click="handleRemoveTask(row.index); $event.preventDefault()" class="btn-edit">
+              <IconTrash/>
             </button>
           </div>
         </template>
@@ -70,13 +70,14 @@
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
-import {reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   selectedRow: {
     type: Object,
-    default: () => {}
+    default: () => {
+    }
   },
   tasks: {
     type: Array,
@@ -96,44 +97,41 @@ defineExpose({
 
 const emit = defineEmits(["update-dependency"]);
 const dependencyOptions = ref({id: "index", value: "workName"});
-const selectRow = reactive({
-  ...props.selectedRow,
-  itemRelations: props.selectedRow.itemRelations ? { ...props.selectedRow.itemRelations } : {}
-});
-const listSelectedTasks = ref( props.tasks.filter(task =>
+const listSelectedTasks = ref(props.tasks.filter(task =>
     Object.keys(props.selectedRow.itemRelations || {}).includes(String(task.index))
 ) || []);
+const selectedValue = ref(null);
+const listSelectTasks = computed(() => {
+  const selectedRelationKeys = Object.keys(props.selectedRow?.itemRelations || {});
+  return props.tasks.filter(item => {
+    let itemRelationKeys = Object.keys(item?.itemRelations || {});
+    return item.index !== props.selectedRow.index &&
+        item.index !== props.selectedRow.parentIndex &&
+        !selectedRelationKeys.includes(item.index) &&
+        !itemRelationKeys.includes(props.selectedRow.index)
+  });
+});
 
 const handleSelectTask = (selectedIndex) => {
   let task = props.tasks.find(task => task.index === selectedIndex);
-
+  selectedValue.value = selectedIndex;
   if (task) {
     // Ensure selectRow and itemRelations exist
-    if (!selectRow.itemRelations) {
-      selectRow.itemRelations = {};
+    if (!props.selectedRow.itemRelations) {
+      props.selectedRow.itemRelations = {};
     }
 
-    // Insert new relation
-    selectRow.itemRelations[task.index] = "";
+    props.selectedRow.itemRelations[task.index] = "";
 
     listSelectedTasks.value.push(task);
   }
 };
 
 const handleRemoveTask = (removeIndex) => {
-  delete selectRow.itemRelations[removeIndex];
+  selectedValue.value = null;
+  delete props.selectedRow.itemRelations[removeIndex];
   listSelectedTasks.value = listSelectedTasks.value.filter(task => task.index !== removeIndex);
-  emit("update-dependency", selectRow);
 };
-
-const handleChangeDependency = () => {
-  ruleFormRef.value.validate((valid) => {
-    if (valid) {
-      emit("update-dependency", selectRow);
-    }
-    console.log(valid)
-  });
-}
 
 </script>
 

@@ -36,7 +36,7 @@ export const usePlanningStore = defineStore(
         projectId: "",
         teamIds: [],
         planItems: [],
-        reviewerIds: []
+        reviewers: []
       }
     });
 
@@ -102,13 +102,32 @@ export const usePlanningStore = defineStore(
       );
     };
 
+    const handleDeletePlan = async (id) => {
+      mixinMethods.startLoading();
+      await services.PlanningAPI.deletePlan(
+        id,
+        (response) => {
+          if(response.success) {
+            listPlannings.value = listPlannings.value.filter(customer => customer.id !== id);
+            mixinMethods.notifySuccess(t("response.message.delete_plan_success"));
+          } else {
+            mixinMethods.notifyError(t("response.message.delete_plan_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.endLoading();
+        }
+      );
+    }
+
     const clearPlanningDetails = () => {
       planningDetails.value = {
         planName: "",
         projectId: "",
         teamIds: [],
         planItems: [],
-        reviewerIds: []
+        reviewers: []
       };
     }
 
@@ -121,6 +140,7 @@ export const usePlanningStore = defineStore(
       planningDetails,
       isShowModalConfirm,
       clearPlanningDetails,
+      handleDeletePlan,
       getListPlannings,
       getPlanningDetails,
       savePlanning

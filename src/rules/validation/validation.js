@@ -41,7 +41,6 @@ export function validateChooseDateRelation(rule, value, callback, selectedRow, p
 }
 
 export function validateChooseTypeRelation(rule, value, callback, selectedRow, planList) {
-  // if(!value) callback(new Error(i18n.global.t('E-CM-002')));
   const depIndex = rule.field.split('itemRelations.')[1];
   const result = validateRelationTypeChange(depIndex, value, selectedRow, planList);
   if (!result.valid) {
@@ -52,19 +51,17 @@ export function validateChooseTypeRelation(rule, value, callback, selectedRow, p
 }
 
 const validateRelationTypeChange = (depIndex, newRelation, selectedRow, planningList) => {
-  const {index: selectedIndex, startDate: selectedStart, endDate: selectedEnd, itemRelations} = selectedRow;
-
-  // Check if the itemRelations object exists and the selectedIndex exists within it
-  if (!itemRelations || !(itemRelations.hasOwnProperty(String(depIndex)))) {
-    return {
-      valid: true,
-    };
-  }
-
-  // Get the new relation type (it could have changed)
+  const {index: selectedIndex, startDate: selectedStart, endDate: selectedEnd} = selectedRow;
 
   // Get the related task's index and find the related task
   const relatedTask = planningList.planItems.find(item => item.index === depIndex);
+  let relatedTaskIndex = relatedTask.index;
+  if(!relatedTask || !relatedTask.startDate || !relatedTask.endDate) {
+    return {
+      valid: false,
+      message: i18n.global.t("planning.errors.select_date", { relatedTaskIndex })
+    };
+  }
 
   if (relatedTask) {
     const {startDate: relatedStart, endDate: relatedEnd} = relatedTask;
@@ -87,13 +84,13 @@ const validateRelationTypeChange = (depIndex, newRelation, selectedRow, planning
 const generateErrorMessage = (relatedTaskIndex, relationType, currentTaskIndex) => {
   switch (relationType) {
     case 'SS': // Start-to-Start
-      return `Task ${relatedTaskIndex} must start **on or after** Task ${currentTaskIndex} starts (SS relation).`;
+      return i18n.global.t("planning.errors.SS", { currentTaskIndex, relatedTaskIndex });
     case 'FF': // Finish-to-Finish
-      return `Task ${relatedTaskIndex} must finish **on or before** Task ${currentTaskIndex} finishes (FF relation).`;
+      return i18n.global.t("planning.errors.FF", { currentTaskIndex, relatedTaskIndex });
     case 'SF': // Start-to-Finish
-      return `Task ${relatedTaskIndex} must start **on or before** Task ${currentTaskIndex} finishes (SF relation).`;
+      return i18n.global.t("planning.errors.SF", { currentTaskIndex, relatedTaskIndex });
     case 'FS': // Finish-to-Start
-      return `Task ${relatedTaskIndex} must finish **before** Task ${currentTaskIndex} starts (FS relation).`;
+      return i18n.global.t("planning.errors.FS", { currentTaskIndex, relatedTaskIndex });
     default:
       return `Invalid relation type "${relationType}" between Task ${relatedTaskIndex} and Task ${currentTaskIndex}.`;
   }

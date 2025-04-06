@@ -4,8 +4,9 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="$t('planning.modal.work_name')">
-            <el-input readonly v-model="selectedRow.workName" class="custom-input" />
+            <el-input disabled v-model="selectedRow.workName" class="custom-input" />
           </el-form-item>
+
           <el-form-item prop="startDate" :label="$t('planning.modal.start_date')">
             <el-date-picker
                 style="width: 80%"
@@ -32,26 +33,47 @@
                 style="width: 80%"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                :value=" mixinMethods.formatInputCurrency(selectedRow.quantity * selectedRow.unitPrice)"
+                :value="mixinMethods.formatInputCurrency(selectedRow.quantity * selectedRow.unitPrice)"
             />
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="Tiền Vật liệu">
-            <el-input readonly v-model="total.material" :formatter="(value) => mixinMethods.formatInputCurrency(value)" placeholder="Vật liệu" class="custom-input" />
+          <el-form-item :label="$t('planning.planned.material')">
+            <el-input
+                disabled
+                v-model="total.material"
+                :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                class="custom-input"
+            />
           </el-form-item>
 
-          <el-form-item label="Tiền Nhân công">
-            <el-input readonly v-model="total.labor" :formatter="(value) => mixinMethods.formatInputCurrency(value)" placeholder="Nhân công" class="custom-input" />
+          <el-form-item :label="$t('planning.planned.human')">
+            <el-input
+                disabled
+                v-model="total.labor"
+                :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                class="custom-input"
+            />
           </el-form-item>
 
-          <el-form-item label="Tiền phương tiện">
-            <el-input readonly v-model="total.machine" :formatter="(value) => mixinMethods.formatInputCurrency(value)" placeholder="Máy thi công" class="custom-input" />
+          <el-form-item :label="$t('planning.planned.machine')">
+            <el-input
+                disabled
+                v-model="total.machine"
+                :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                class="custom-input"
+            />
           </el-form-item>
 
-          <el-form-item label="Tổng số tiền">
-            <el-input readonly v-model="total.totalPrice" :formatter="(value) => mixinMethods.formatInputCurrency(value)" placeholder="Tổng số tiền" class="custom-input" />
+          <!-- Validation moved to selectedRow.totalPrice -->
+          <el-form-item prop="totalPrice" :label="$t('planning.planned.total')">
+            <el-input
+                disabled
+                v-model="selectedRow.totalPrice"
+                :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                class="custom-input"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -60,20 +82,43 @@
 </template>
 
 <script setup>
-import {defineProps, reactive, ref} from "vue";
-import {mixinMethods} from "@/utils/variables.js";
-import {DATE_FORMAT} from "@/constants/application.js";
+import { defineProps, reactive, ref, watch } from "vue";
+import { mixinMethods } from "@/utils/variables.js";
 
 const props = defineProps({
-  selectedRow: { type: Object, default: () => {} },
+  selectedRow: { type: Object, default: () => ({}) },
   total: { type: Object, default: () => ({}) },
   rules: {
     type: Object,
-    default: () => {}
+    default: () => ({
+      totalPrice: [
+        { required: true, message: "Tổng số tiền không được để trống", trigger: "blur" },
+        {
+          validator: (rule, value, callback) => {
+            if (value <= 0) {
+              callback(new Error("Tổng số tiền phải lớn hơn 0"));
+            } else {
+              callback();
+            }
+          },
+          trigger: "blur"
+        }
+      ]
+    })
   }
 });
 
 const ruleFormRef = ref(null);
+
+// Sync total.totalPrice into selectedRow.totalPrice for validation
+watch(
+    () => props.total.totalPrice,
+    (newVal) => {
+      props.selectedRow.totalPrice = newVal;
+    },
+    { immediate: true }
+);
+
 defineExpose({
   ruleFormRef,
 });
@@ -87,10 +132,10 @@ defineExpose({
 }
 
 .custom-input {
-  width: 80%; /* Input takes 70% width */
+  width: 80%;
 }
 
 :deep(.el-form-item__label) {
-  width: 20% !important; /* Label takes 30% width */
+  width: 20% !important;
 }
 </style>

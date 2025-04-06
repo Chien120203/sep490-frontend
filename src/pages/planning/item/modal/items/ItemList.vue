@@ -2,6 +2,7 @@
   <div class="item-list">
     <SingleOptionSelect
         class="select-item"
+        :defaultList="selectedValue"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
         :listData="selectData"
         :isRemote="true"
@@ -14,55 +15,55 @@
         :rules="rules"
         class="form-search-box"
     >
-      <el-table :data="listAddedValues.value" border style="width: 100%">
-        <el-table-column prop="index" label="STT" width="60">
+      <el-table :data="listAddedValues" border style="width: 100%">
+        <el-table-column prop="index" :label="$t('common.no')" width="60">
           <template #default="scope">
             {{ scope.$index + 1 }}
           </template>
         </el-table-column>
 
-        <el-table-column prop="name" label="Vật liệu">
-          <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.value.${$index}.resourceId`">
-              <el-input v-model="listAddedValues.value[$index].resourceId" :disabled="true"/>
+        <el-table-column prop="name" :label="$t('planning.items.name')">
+          <template #default="{ row }">
+            <el-form-item>
+              {{getResourceName(row.resourceId)}}
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column prop="unit" label="Đơn vị">
+        <el-table-column prop="unit" :label="$t('planning.items.unit')">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.value.${$index}.unit`" :rules="rules.unit">
-              <el-input v-model="listAddedValues.value[$index].unit" />
+            <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
+              <el-input v-model="listAddedValues[$index].unit" />
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column prop="quantity" label="Số lượng">
+        <el-table-column prop="quantity" :label="$t('planning.items.quantity')">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.value.${$index}.quantity`" :rules="rules.quantity">
-              <el-input :disabled="isHuman" v-model.number="listAddedValues.value[$index].quantity" @input="handleChangeData()"/>
+            <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
+              <el-input :disabled="isHuman" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue"/>
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column prop="unitPrice" label="Đơn giá">
+        <el-table-column prop="unitPrice" :label="$t('planning.items.price')">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.value.${$index}.unitPrice`" :rules="rules.unitPrice">
+            <el-form-item :prop="`listAddedValues.${$index}.unitPrice`" :rules="rules.unitPrice">
               <el-input
-                  v-model.number="listAddedValues.value[$index].unitPrice"
-                  @input="handleChangeData()"
+                  v-model.number="listAddedValues[$index].unitPrice"
                   :formatter="(value) => mixinMethods.formatInputMoney(value)"
                   :parser="(value) => mixinMethods.parseInputCurrency(value)"
+                  @change="handleChangeValue"
               />
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column label="Thành tiền">
+        <el-table-column :label="$t('planning.items.total')">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.value.${$index}.total`">
+            <el-form-item :prop="`listAddedValues.${$index}.total`">
               <el-input
-                  v-model="listAddedValues.value[$index].total"
+                  v-model="listAddedValues[$index].total"
                   :disabled="true"
                   :value="mixinMethods.formatInputMoney(row.quantity * row.unitPrice)"
               />
@@ -70,10 +71,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="Actions">
+        <el-table-column :label="$t('planning.items.action')">
           <template #default="{ row, $index }">
             <div>
-              <button @click="handleRemoveResource(row.resourceId)" class="btn-edit">
+              <button @click="handleRemoveResource(row.resourceId); $event.preventDefault()" class="btn-edit">
                 <IconTrash />
               </button>
             </div>
@@ -88,11 +89,15 @@
 import {defineEmits, defineProps, reactive, ref, watch} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
-import {debounce} from "lodash";
 import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
+  selectedRow: {
+    type: Object,
+    default: () => {
+    }
+  },
   isHuman: { type: Boolean, default:false },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
@@ -103,17 +108,19 @@ const props = defineProps({
   }
 });
 
-const listAddedValues = reactive({ value: JSON.parse(JSON.stringify(props.tableData)) });
+const listAddedValues = ref(props.tableData);
 const ruleFormRef = ref(null);
+const selectedValue = ref(null);
 defineExpose({
   ruleFormRef,
 });
-const emit = defineEmits(["search", "update-list"]);
+const emit = defineEmits(["search", "update-value"]);
 const handleSearch = (value) => {
   emit('search', value);
 }
 const handleSelectItem = (id) => {
   const exists = listAddedValues.value.some(entry => entry.resourceId === id);
+  selectedValue.value = id;
   if (!exists) {
     listAddedValues.value.push({
       resourceId: id,
@@ -125,14 +132,24 @@ const handleSelectItem = (id) => {
   }
 };
 
-const handleRemoveResource = (id) => {
-  listAddedValues.value = listAddedValues.value.filter(resource => resource.resourceId !== id);
-  handleChangeData();
+const getResourceName = (id) => {
+  return props.selectData.find(item => item.id === id)?.name || "-";
 }
 
-const handleChangeData = debounce(() => {
-  emit('update-list', listAddedValues.value);
-}, 300);
+const handleChangeValue = () => {
+  emit("update-value");
+}
+
+const handleRemoveResource = async (id) => {
+  // Remove from the form list
+  listAddedValues.value = listAddedValues.value.filter(resource => resource.resourceId !== id);
+
+  // Also remove from selectedRow.details if it exists
+  if (props.selectedRow && Array.isArray(props.selectedRow.details)) {
+    props.selectedRow.details = props.selectedRow.details.filter(detail => detail.resourceId !== id);
+  }
+  emit("update-value");
+}
 </script>
 
 <style scoped>

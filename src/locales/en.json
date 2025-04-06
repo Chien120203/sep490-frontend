@@ -237,6 +237,8 @@
       "save_customer_failed": "Save Customer Failed",
       "delete_customer_success": "Delete Customer Success",
       "delete_customer_failed": "Delete Customer Failed",
+      "delete_plan_success": "Delete Plan Success",
+      "delete_plan_failed": "Delete Plan Failed",
       "get_projects_failed": "Get list projects failed",
       "save_project_success": "Save project success",
       "save_project_failed": "Save project failed",
@@ -661,7 +663,7 @@
       "title": "Project Details",
       "financial_summary": "Financial Summary",
       "change_request": "Change Request",
-      "site_survey": "Site Survey",
+      "site-survey": "Site Survey",
       "change_request_table": {
         "header": {
           "request_code": "Request Code",
@@ -762,6 +764,7 @@
     "keyword": "Keyword",
     "search": "Search",
     "clear": "Clear",
+    "modal_title": "Construct Item Details",
     "create": {
       "title": "Create Planning"
     },
@@ -792,6 +795,39 @@
         "human": "Human Resource",
         "machine": "Machine Resource"
       }
+    },
+    "errors": {
+      "select_date": "Please select date for task {relatedTaskIndex} before select relation",
+      "SS": "Cannot start task {currentTaskIndex} until the task {relatedTaskIndex} also starts.",
+      "FF": "Cannot finish task {currentTaskIndex} until the task {relatedTaskIndex} is completed.",
+      "SF": "Cannot finish task {currentTaskIndex} until the task {relatedTaskIndex} is started.",
+      "FS": "Cannot start task {currentTaskIndex} until the task {relatedTaskIndex} is completed.",
+      "invalid_form": "Validation failed in {form}"
+    },
+    "form_ref": {
+      "planning_info": "Plan Information",
+      "material": "Material Form",
+      "machine": "Machine Form",
+      "human": "Human Form"
+    },
+    "items": {
+      "name": "Name",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "price": "Price",
+      "total": "Total Price",
+      "action": "Action"
+    },
+    "planned": {
+      "material": "Planned Material Price",
+      "human": "Planned Human Price",
+      "machine": "Planned Machine Price",
+      "total": "Planned Total Price"
+    },
+    "status": {
+      "wait_approved": "Wait for approval",
+      "rejected": "Rejected",
+      "approved": "Approved"
     }
   },
   "bill": {
@@ -996,7 +1032,6 @@
       "profile": "Profile",
       "contract": "Contracts",
       "customer": "Customer",
-      "project": "Project",
       "planning": "Planning",
       "progress": "Progress",
       "construct_log": "Construction Log",
@@ -1083,12 +1118,14 @@
   "E-CM-500": "An error occurred, please contact the admin or try again later!",
   "E-CM-200": "Action successfully completed.",
   "E-PW-001": "Password must be between {min} and {max} characters",
+
   "E-CUS-001": "Customer code is required",
   "E-CUS-002": "Duplicate Customer Code",
   "E-CUS-004": "Tax code is required",
   "E-CUS-005": "Phone number is invalid",
   "E-CUS-006": "Fax number is invalid",
   "E-CUS-007": "Tax code is invalid",
+
   "E-CTR-001": "Contract code is required",
   "E-CTR-002": "Project is required",
   "E-CTR-003": "Start date is required",
@@ -1101,6 +1138,7 @@
   "E-CTR-010": "Tax must be greater than {min}%",
   "E-CTR-011": "Tax must be less than {max}%",
   "E-CTR-012": "Sign date must be before start date",
+
   "E-PRJ-009": "Project code is required",
   "E-PRJ-002": "Project code is duplicated",
   "E-PRJ-003": "Area is required",
@@ -1111,6 +1149,7 @@
   "E-PRJ-008": "Technical requirements is required",
   "E-PRJ-001": "Start date must be before end date",
   "E-PRJ-010": "Customer is required",
+
   "E-AUTHEN-001": "Your email already exists.",
   "E-AUTHEN-002": "Your username already exists.",
   "E-AUTHEN-003": "The email you just entered is not in the correct format.",
@@ -1129,6 +1168,7 @@
   "S-AUTHEN-004": "Password changed successfully!",
   "S-AUTHEN-005": "Log in successfully.",
   "S-AUTHEN-006": "Refresh token successfully.",
+
   "S-ADMIN-001": "Search list user successfully!",
   "S-ADMIN-002": "Delete user successfully!",
   "S-ADMIN-003": "Create user successfully!",
@@ -1136,14 +1176,17 @@
   "E-ADMIN-001": "An error occurred while deleting a user, you cannot delete your own account, or the person you want to delete has equal or higher authority than you.",
   "E-ADMIN-002": "User already exist, username and email already exist",
   "E-ADMIN-003": "The role does not exist or you do not have permission to set this permission.",
+
   "E-SV-001": "The probability must greater than or equal {min}",
   "E-SV-002": "The probability must less than or equal {max}",
   "E-SV-003": "The discount rate must greater than or equal {min}",
-  "E-SV-004": "The discount rate must less than or equal {max}",
   "E-RR-FE-001": "Request date is required",
   "E-RR-FE-002": "Selected at least once users or materials or vehicles",
   "E-RR-FE-003": "Unit is required",
   "E-RR-FE-004": "Quantity is required",
   "E-RR-FE-005": "Quantity must greater than or equal {min}",
-  "E-RR-010": "At least one resource must be specified!"
+  "E-RR-010": "At least one resource must be specified!",
+  "E-SV-004": "The discount rate must less than or equal {max}",
+
+  "E-PLAN-001": "Actual total price exceed the expected price"
 }
