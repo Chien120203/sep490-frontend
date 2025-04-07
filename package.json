@@ -16,6 +16,7 @@
     "chart.js": "^3.1.0",
     "click-outside-vue3": "^4.0.1",
     "core-js": "^3.6.5",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "element-plus": "^2.2.16",
     "js-cookie": "^3.0.1",

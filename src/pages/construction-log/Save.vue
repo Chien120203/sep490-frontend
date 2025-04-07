@@ -20,10 +20,20 @@
       </div>
       <div class="log-container">
         <div class="log-details">
-          <ConstructLogWorkDetails/>
+          <ConstructLogWorkDetails
+              ref="formLogDetailsRef"
+              :rules="constructLogRules"
+              :logDetails="constructLogDetails.value"
+              @remove-resource="handleRemoveResource"
+              @remove-task="handleRemoveTask"
+          />
         </div>
         <div class="log-infor">
-          <ConstructionLogInfor/>
+          <ConstructionLogInfor
+              ref="formLogInfoRef"
+              :rules="constructLogRules"
+              :logDetails="constructLogDetails.value"
+          />
         </div>
       </div>
     </div>
@@ -42,23 +52,16 @@ import {mixinMethods} from "@/utils/variables";
 import {useContractStore} from "@/store/contract.js";
 import ConstructLogWorkDetails from "@/pages/construction-log/items/ConstructLogWorkDetails.vue";
 import ConstructionLogInfor from "@/pages/construction-log/items/ConstructionLogInfor.vue";
+import {useConstructLog} from "@/store/construct-log.js";
+import {getConstructLogRules} from "@/rules/construct-log/index.js";
 
-const isShowModalItemDtls = ref(false);
-const title = ref("Dự Án ABC");
-
+const constructLogRules = getConstructLogRules();
 // Store Data
-const projectStore = useProjectStore();
-const customerStore = useCustomerStore();
-const userStore = useUserStore();
-const contractStore = useContractStore();
+const constructLogStore = useConstructLog();
 
 const {
-  contractDetails,
-  getContractDetails,
-} = contractStore;
-const {listUsers, getListUsers} = userStore;
-const {listCustomers, getListCustomers} = customerStore;
-const {validation, projectDetails, saveProject, getProjectDetails, clearProjectDetails} = projectStore;
+  constructLogDetails
+} = constructLogStore;
 
 const route = useRoute();
 const router = useRouter();
@@ -67,37 +70,36 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  clearProjectDetails();
 });
+
+const handleRemoveResource = (data) => {
+  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource =>
+      !(
+          resource.taskIndex === data.taskIndex &&
+          resource.resourceId === data.resourceId &&
+          resource.resourceType === data.resourceType
+      )
+  );
+};
+
+const handleRemoveTask = (taskIndex) => {
+  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource => resource.taskIndex !== taskIndex);
+}
+
 
 const handleBack = () => {
   router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
 };
 
-const updateItems = (newItems) => {
-  contractDetails.value.contractDetails = newItems;
-};
-
-const handleEditPlanDetails = (id) => {
-  isShowModalItemDtls.value = true;
-}
-
-const handleCloseModal = () => {
-  isShowModalItemDtls.value = false;
-}
-
-const ruleFormRef = ref(null);
-
-const handleChooseDate = (date) => {
-
-}
+const formLogDetailsRef = ref(null);
+const formLogInfoRef = ref(null);
 
 const submitForm = () => {
-
+  console.log(constructLogDetails.value)
 }
 </script>
 <style scoped>
-.log-container{
+.log-container {
   display: flex;
 }
 

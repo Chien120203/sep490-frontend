@@ -6,6 +6,8 @@ import {UserAPI} from "@/services/UserAPI.js";
 import {ProjectAPI} from "@/services/ProjectAPI.js";
 import {ContractAPI} from "@/services/ContractAPI.js";
 import {SiteSurveyAPI} from "@/services/SiteSurveyAPI.js";
+import {ConstructLogAPI} from "@/services/ConstructLogAPI.js";
+
 import {PlanningAPI} from "@/services/PlanningAPI.js";
 import {MobilizationAPI} from "@/services/MobilizationAPI.js";
 import router from "@/router";
@@ -22,6 +24,7 @@ const services = {
   PlanningAPI,
   CustomerAPI,
   ContractAPI,
+  ConstructLogAPI,
   ProjectAPI,
   MobilizationAPI,
   UserAPI,

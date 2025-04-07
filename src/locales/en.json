@@ -1115,6 +1115,7 @@
   "E-CM-026": "Utility name is duplicated",
   "E-CM-027": "Email is invalid",
   "E-CM-028": "End date must be greater start date",
+  "E-CM-029": "Date cannot be in the future",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",
