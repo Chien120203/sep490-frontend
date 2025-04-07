@@ -209,16 +209,19 @@ const createFormData = (params) => {
   return formData;
 };
 
-const validateForm = async (formRef) => {
+const validateForm = (formRef) => {
   try {
     if (!formRef || typeof formRef.validate !== 'function') {
       console.warn("Invalid formRef:", formRef);
       return false;
     }
-    await formRef.validate();
-    return true; // Validation succeeded
+    let result = false;
+    formRef.validate((valid) => {
+      result = !!valid;
+    });
+    return result;
   } catch (error) {
-    return false; // Validation failed
+    return false;
   }
 };
 const validateField = (index, field, rules, item, validationErrors) => {

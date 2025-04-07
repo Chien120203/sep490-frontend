@@ -16,7 +16,7 @@ export const getConstructLogRules = () => {
             return callback();
           }
           if (new Date(value).getTime() >= new Date(row.endTime).getTime()) {
-            return callback(new Error('Giờ xuất phải trước giờ làm'));
+            return callback(new Error(t('E-CM-031')));
           }
           callback();
         }
@@ -31,7 +31,7 @@ export const getConstructLogRules = () => {
             return callback();
           }
           if (new Date(value).getTime() <= new Date(row.startTime).getTime()) {
-            return callback(new Error('Giờ làm phải sau giờ xuất'));
+            return callback(new Error(t('E-CM-030')));
           }
           callback();
         },
@@ -42,9 +42,12 @@ export const getConstructLogRules = () => {
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, value, new Date(), "E-CM-028"),
+          validateStartBeforeEnd(rule, value, callback, value, new Date(), "E-CM-029"),
         trigger: "blur",
       }
+    ],
+    logName: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
     ],
     quantity: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },

@@ -54,15 +54,16 @@ import ConstructLogWorkDetails from "@/pages/construction-log/items/ConstructLog
 import ConstructionLogInfor from "@/pages/construction-log/items/ConstructionLogInfor.vue";
 import {useConstructLog} from "@/store/construct-log.js";
 import {getConstructLogRules} from "@/rules/construct-log/index.js";
+import {useI18n} from "vue-i18n";
 
 const constructLogRules = getConstructLogRules();
-// Store Data
 const constructLogStore = useConstructLog();
 
 const {
   constructLogDetails
 } = constructLogStore;
 
+const {t} = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -95,6 +96,21 @@ const formLogDetailsRef = ref(null);
 const formLogInfoRef = ref(null);
 
 const submitForm = () => {
+  const formRefs = [
+    ...formLogDetailsRef.value?.machineForm,
+    ...formLogDetailsRef.value?.materialForm,
+    ...formLogDetailsRef.value?.humanForm,
+    formLogInfoRef.value
+  ];
+  for (const form of formRefs) {
+    if (form?.ruleFormRef) { // Access ruleFormRef
+      const isValid = mixinMethods.validateForm(form.ruleFormRef);
+      if (!isValid) {
+        mixinMethods.notifyError(t('E-LOG-001'));
+        return;
+      }
+    }
+  }
   console.log(constructLogDetails.value)
 }
 </script>
@@ -105,10 +121,10 @@ const submitForm = () => {
 
 .log-details {
   margin-right: 12px;
-  width: 65%;
+  width: 60%;
 }
 
 .log-infor {
-  width: 35%;
+  width: 40%;
 }
 </style>

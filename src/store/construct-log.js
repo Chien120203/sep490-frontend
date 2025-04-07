@@ -27,6 +27,7 @@ export const useConstructLog = defineStore(
     //   value: {
     //     id: 0,
     //     logCode: "",
+    //     logName: "",
     //     logDate: "",
     //     resources:[
     //       {
@@ -58,6 +59,7 @@ export const useConstructLog = defineStore(
       value: {
         id: 101,
         logCode: "CLD-20240407",
+        logName: "Log name 1",
         logDate: "2025-04-07",
         resources: [
           {

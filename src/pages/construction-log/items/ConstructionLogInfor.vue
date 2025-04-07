@@ -21,6 +21,10 @@
         <el-input v-model="logDetails.logCode" disabled/>
       </el-form-item>
 
+      <el-form-item label="Tên nhật ký" prop="logName">
+        <el-input v-model="logDetails.logName" required/>
+      </el-form-item>
+
       <el-form-item label="Nhật ký ngày" required prop="logDate">
         <el-date-picker style="width: 100%" v-model="logDetails.logDate" type="date" placeholder="Chọn ngày"/>
       </el-form-item>
@@ -96,6 +100,10 @@ const props = defineProps({
   }
 });
 const timesOfDay = ref(["Sáng", "Chiều", "Tối", "Đêm"]);
+const ruleFormRef = ref(null);
+defineExpose({
+  ruleFormRef,
+});
 
 const handleSelectFiles = (listFiles) => {
   props.logDetails.images = listFiles;

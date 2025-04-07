@@ -22,7 +22,7 @@
           </div>
         </div>
         <!-- Material -->
-        <el-collapse-item name="1">
+        <el-collapse-item :name="task.taskIndex + '-1'">
           <template #title>
             <h3>Vat Lieu</h3>
           </template>
@@ -40,7 +40,7 @@
         </el-collapse-item>
 
         <!-- Employee -->
-        <el-collapse-item name="2">
+        <el-collapse-item :name="task.taskIndex + '-2'">
           <template #title>
             <h3>Nhan Cong</h3>
           </template>
@@ -58,7 +58,7 @@
         </el-collapse-item>
 
         <!-- Vehicle -->
-        <el-collapse-item name="3">
+        <el-collapse-item :name="task.taskIndex + '-3'">
           <template #title>
             <h3>Phuong Tien</h3>
           </template>

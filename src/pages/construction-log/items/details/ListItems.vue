@@ -84,12 +84,13 @@
 import {defineEmits, defineProps, ref, computed} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import {HUMAN_TYPE} from "@/constants/resource.js";
 
 const props = defineProps({
   selectData: {type: Array, default: () => []},
   resources: {type: Array, default: () => []},
   resourceType: {type: Number, default: 0},
-  taskIndex: {type: String, default: ""},
+  taskIndex: {type: [String, Number], default: ""},
   optionKeys: {type: Object, default: () => ({id: '', value: ''})},
   isExport: {type: Boolean, default: false},
   rules: {
@@ -98,6 +99,7 @@ const props = defineProps({
     }
   }
 });
+const isHuman = ref(props.resourceType === HUMAN_TYPE);
 const selectedRow = ref(null);
 const listAddedValues = computed(() => props.resources.filter(resource => resource.taskIndex === props.taskIndex && resource.resourceType === props.resourceType));
 const ruleFormRef = ref(null);
