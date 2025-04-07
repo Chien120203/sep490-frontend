@@ -1,8 +1,8 @@
 import {del, get, post, postFormData, put, putFormData} from '@/services/BaseService';
 import API_CODE from '@/utils/api_code';
 
-const details = async (id, success, error) => {
-    await get(API_CODE.API_MACHINE_001 + "/" + id, {}, success, error);
+const details = async (id, params, success, error) => {
+    await get(API_CODE.API_MACHINE_001 + "/" + id, success, error, params);
 };
 
 const list = async (params, success, error) => {

@@ -253,7 +253,15 @@
       "get_machine_failed": "Get Machine failed",
       "get_machine_dtls_failed": "Get Machine details failed",
       "save_machine_success": "Save Machine Success",
-      "save_machine_failed": "Save Machine Failed"
+      "save_machine_failed": "Save Machine Failed",
+      "get_material_failed": "Get Material failed",
+      "get_material_dtls_failed": "Get Material details failed",
+      "save_material_success": "Save Material Success",
+      "save_material_failed": "Save Material Failed",
+      "get_human_failed": "Get Human failed",
+      "get_human_dtls_failed": "Get Human details failed",
+      "save_human_success": "Save Human Success",
+      "save_human_failed": "Save Human Failed"
     }
   },
   "contract": {
@@ -469,6 +477,98 @@
       },
       "create": {
         "title": "Create Machine"
+      },
+      "table": {
+        "header": {
+          "code": "Machine Code",
+          "name": "Machine Name",
+          "licensePlate": "License Plate",
+          "brand": "Brand",
+          "vehicleType": "Vehicle Type",
+          "driver": "Driver",
+          "type": "Type",
+          "status": "Status",
+          "action": "Action"
+        }
+      }
+    },
+    "material": {
+      "title": "Material Resource Management",
+      "add_new": "Add New",
+      "keyword": "Keyword",
+      "search": "Search",
+      "clear": "Clear",
+      "status": "Status",
+      "type": "Type",
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "details": {
+        "title": "Material Details",
+        "materialCode": "Material Code",
+        "materialName": "Material Name",
+        "unit": "Unit",
+        "branch": "Branch",
+        "status": "Status",
+        "madeIn": "Made In",
+        "chassisNumber": "Chassis Number",
+        "wholesalePrice": "Whole Sale Price",
+        "description": "Description",
+        "retailPrice": "Retail Price",
+        "inventory": "Inventory",
+        "expireDate": "Expire Date",
+        "productionDate": "Production Date",
+        "attachments": "Attachments"
+      },
+      "create": {
+        "title": "Create Material"
+      },
+      "table": {
+        "header": {
+          "materialCode": "Material Code",
+          "materialName": "Material Name",
+          "inventory": "Inventory",
+          "expireDate": "Expire Date",
+          "productionDate": "Production Date",
+          "status": "Status",
+          "action": "Action"
+        }
+      }
+    },
+    "human": {
+      "title": "Human Resource Management",
+      "add_new": "Add New",
+      "keyword": "Keyword",
+      "search": "Search",
+      "clear": "Clear",
+      "status": "Status",
+      "type": "Type",
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "details": {
+        "title": "Team Details",
+        "licensePlate": "License Plate",
+        "brand": "Brand",
+        "yearOfManufacture": "Year of Manufacture",
+        "countryOfManufacture": "Country of Manufacture",
+        "vehicleType": "Vehicle Type",
+        "chassisNumber": "Chassis Number",
+        "engineNumber": "Engine Number",
+        "images": "Images",
+        "status": "Status",
+        "driver": "Driver",
+        "color": "Color",
+        "fuelType": "Fuel Type",
+        "description": "Description",
+        "fuelTankVolume": "Fuel Tank Volume",
+        "fuelUnit": "Fuel Unit",
+        "attachments": "Attachments"
+      },
+      "create": {
+        "title": "Add Participants"
       },
       "table": {
         "header": {

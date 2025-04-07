@@ -57,18 +57,16 @@ export const userMachineResourcesStore = defineStore(
             mixinMethods.endLoading();
         };
 
-        const getMachineResourcesDetails = async (params) => {
+        const getMachineResourcesDetails = async (id) => {
             mixinMethods.startLoading();
             await services.MachineResourceAPI.details(
-                params,
+                id,
+                {},
                 (response) => {
                     machineResourcesDetails.value = response.data;
                     mixinMethods.endLoading();
                 },
                 (error) => {
-                    // validation.value = mixinMethods.handleErrorResponse(
-                    //   error.responseCode
-                    // );
                     mixinMethods.notifyError(t("response.message.get_machine_dtls_failed"));
                     mixinMethods.endLoading();
                 }

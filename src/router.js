@@ -39,6 +39,9 @@ import MachineResourceList from "@/pages/resource/machine-management/MachineReso
 import MaterialResources from "@/pages/resource/material-management/Index.vue";
 import MaterialResourcesSave from "@/pages/resource/material-management/Save.vue";
 import MaterialResourceList from "@/pages/resource/material-management/MaterialResourceList.vue";
+import HumanResources from "@/pages/resource/human-management/Index.vue";
+import HumanResourcesSave from "@/pages/resource/human-management/Save.vue";
+import HumanResourceList from "@/pages/resource/human-management/HumanResourceList.vue";
 import UserProfile from "@/pages/profile/UserProfile.vue";
 
 const routes = [
@@ -292,8 +295,8 @@ const routes = [
     ]
   },
   {
-    path: PAGES.MATERIAL_RESOURCE,
     name: PAGE_NAME.RESOURCE.MATERIAL,
+    path: PAGES.MATERIAL_RESOURCE,
     component: MaterialResources,
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
@@ -313,6 +316,31 @@ const routes = [
         name: PAGE_NAME.RESOURCE.MATERIAL.CREATE,
         path: PAGES.MATERIAL_RESOURCE_CREATE,
         component: MaterialResourcesSave,
+      },
+    ]
+  },
+  {
+    name: PAGE_NAME.RESOURCE.HUMAN,
+    path: PAGES.HUMAN_RESOURCE,
+    component: HumanResources,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        name: PAGE_NAME.RESOURCE.HUMAN.LIST,
+        path: PAGES.HUMAN_RESOURCE_LIST,
+        component: HumanResourceList,
+      },
+      {
+        name: PAGE_NAME.RESOURCE.HUMAN.DETAILS,
+        path: PAGES.HUMAN_RESOURCE_DETAILS,
+        component: HumanResourcesSave,
+      },
+      {
+        name: PAGE_NAME.RESOURCE.HUMAN.CREATE,
+        path: PAGES.HUMAN_RESOURCE_CREATE,
+        component: HumanResourcesSave,
       },
     ]
   },

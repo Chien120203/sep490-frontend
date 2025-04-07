@@ -1,11 +1,11 @@
 <template>
   <div class="material material-list">
     <div class="material-header">
-      <h3 class="page__ttl">{{ $t("resources.material.title") }}</h3>
+      <h3 class="page__ttl">{{ $t("resource.material.title") }}</h3>
       <div class="material-btn-box material-import-box">
         <el-row class="mb-4">
           <el-button class="btn btn-save" @click="handleRedirectToCreate"
-          >{{ $t("resources.add_new") }}
+          >{{ $t("resource.add_new") }}
           </el-button>
         </el-row>
       </div>
@@ -14,7 +14,7 @@
       <div class="material-search">
         <div class="material-search-box col-md-9 col-lg-9">
           <p class="material-search__ttl">
-            {{ $t("resources.keyword") }}
+            {{ $t("resource.keyword") }}
           </p>
           <div class="mb-0 ruleform">
             <el-input

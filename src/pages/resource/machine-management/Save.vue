@@ -185,7 +185,7 @@ export default {
 
     onMounted(() => {
       if(isUpdate.value) {
-        getMachineResourcesDetails({machineId: route.params.id})
+        getMachineResourcesDetails(route.params.id);
       }
     });
 

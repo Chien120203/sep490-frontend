@@ -1,4 +1,4 @@
-import {del, get, post, postFormData, put, putFormData} from '@/services/BaseService';
+import {del, get, postFormData} from '@/services/BaseService';
 import API_CODE from '@/utils/api_code';
 
 const details = async (id, params, success, error) => {
@@ -13,13 +13,13 @@ const save = async (formData, success, error) => {
     await postFormData(API_CODE.API_MATERIAL_003, formData, success, error);
 };
 
-const deleteMaterial = async (id, success, error) => {
+const deleteHuman = async (id, success, error) => {
     await del(API_CODE.API_MATERIAL_004 + "/" + id, {}, success, error);
 };
 
-export const MaterialResourceAPI = {
+export const HumanResourceAPI = {
     list,
     details,
     save,
-    deleteMaterial
+    deleteHuman
 };
