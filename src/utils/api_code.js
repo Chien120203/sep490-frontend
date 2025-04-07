@@ -58,9 +58,8 @@ const API_CODE = {
     //Material Resource
     API_MATERIAL_001: '/material/',
     API_MATERIAL_002: '/material/search',
-    API_MATERIAL_003: '/material/create',
-    API_MATERIAL_004: '/material/update',
-    API_MATERIAL_005: '/material/delete',
+    API_MATERIAL_003: '/material/save',
+    API_MATERIAL_004: '/material/delete',
 
     //Human Resource
     API_HUMAN_001: '/teams/',

@@ -431,7 +431,7 @@
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
   },
-  "resources": {
+  "resource": {
     "title": "Resource Management ",
     "add_new": "Add New",
     "keyword": "Keyword",

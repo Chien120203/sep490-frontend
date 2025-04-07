@@ -36,9 +36,10 @@ import MobilizationList from "@/pages/resource-mobilization/MobilizationList.vue
 import MachineResources from "@/pages/resource/machine-management/Index.vue";
 import MachineResourcesSave from "@/pages/resource/machine-management/Save.vue";
 import MachineResourceList from "@/pages/resource/machine-management/MachineResourceList.vue";
+import MaterialResources from "@/pages/resource/material-management/Index.vue";
+import MaterialResourcesSave from "@/pages/resource/material-management/Save.vue";
+import MaterialResourceList from "@/pages/resource/material-management/MaterialResourceList.vue";
 import UserProfile from "@/pages/profile/UserProfile.vue";
-// import MaterialResourceList from "@/pages/resource/material_management/MaterialResourceList.vue";
-// import HumanResourceList from "@/pages/resource/human_management/HumanResourceList.vue";
 
 const routes = [
   {
@@ -290,22 +291,31 @@ const routes = [
       },
     ]
   },
-  // {
-  //   path: PAGES.MATERIAL_RESOURCE,
-  //   name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
-  //   component: MaterialResourceList,
-  //   meta: {
-  //     middleware: [AUTHENTICATION_MIDDLEWARE],
-  //   },
-  // },
-  // {
-  //   path: PAGES.HUMAN_RESOURCE,
-  //   name: PAGE_NAME.RESOURCE.HUMAN.LIST,
-  //   component: HumanResourceList,
-  //   meta: {
-  //     middleware: [AUTHENTICATION_MIDDLEWARE],
-  //   },
-  // },
+  {
+    path: PAGES.MATERIAL_RESOURCE,
+    name: PAGE_NAME.RESOURCE.MATERIAL,
+    component: MaterialResources,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
+        path: PAGES.MATERIAL_RESOURCE_LIST,
+        component: MaterialResourceList,
+      },
+      {
+        name: PAGE_NAME.RESOURCE.MATERIAL.DETAILS,
+        path: PAGES.MATERIAL_RESOURCE_DETAILS,
+        component: MaterialResourcesSave,
+      },
+      {
+        name: PAGE_NAME.RESOURCE.MATERIAL.CREATE,
+        path: PAGES.MATERIAL_RESOURCE_CREATE,
+        component: MaterialResourcesSave,
+      },
+    ]
+  },
 ];
 
 const router = createRouter({

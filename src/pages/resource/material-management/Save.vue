@@ -5,7 +5,7 @@
         <h3 class="page__ttl">
           <span class="btn-back" @click="handleBack"><IconBackMain/></span>
           {{
-            isUpdate ? $t("resource.machine.details.title") : $t("resource.machine.create.title")
+            isUpdate ? $t("resources.machine.details.title") : $t("resources.machine.create.title")
           }}
         </h3>
         <div class="machine-btn-detail">
@@ -29,7 +29,7 @@
             <el-form-item
                 prop="licensePlate"
                 class="custom-textarea required"
-                :label="$t('resource.machine.details.licensePlate')"
+                :label="$t('resources.machine.details.licensePlate')"
             >
               <el-input v-model="machineResourcesDetails.value.licensePlate" />
               <label class="error-feedback-machine" v-if="validation && validation.value.licensePlate">
@@ -37,70 +37,70 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="brand" class="custom-textarea" :label="$t('resource.machine.details.brand')">
+            <el-form-item prop="brand" class="custom-textarea" :label="$t('resources.machine.details.brand')">
               <el-input v-model="machineResourcesDetails.value.brand" />
               <label class="error-feedback-machine" v-if="validation && validation.value.brand">
                 {{ $t(validation.value.brand) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="yearOfManufacture" class="required" :label="$t('resource.machine.details.yearOfManufacture')">
+            <el-form-item prop="yearOfManufacture" class="required" :label="$t('resources.machine.details.yearOfManufacture')">
               <el-input v-model="machineResourcesDetails.value.yearOfManufacture" />
               <label class="error-feedback-machine" v-if="validation && validation.value.yearOfManufacture">
                 {{ $t(validation.value.yearOfManufacture) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="countryOfManufacture" :label="$t('resource.machine.details.countryOfManufacture')">
+            <el-form-item prop="countryOfManufacture" :label="$t('resources.machine.details.countryOfManufacture')">
               <el-input v-model="machineResourcesDetails.value.countryOfManufacture" />
               <label class="error-feedback-machine" v-if="validation && validation.value.countryOfManufacture">
                 {{ $t(validation.value.countryOfManufacture) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="vehicleType" class="custom-textarea" :label="$t('resource.machine.details.vehicleType')">
+            <el-form-item prop="vehicleType" class="custom-textarea" :label="$t('resources.machine.details.vehicleType')">
               <el-input v-model="machineResourcesDetails.value.vehicleType" />
               <label class="error-feedback-machine" v-if="validation && validation.value.vehicleType">
                 {{ $t(validation.value.vehicleType) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="chassisNumber" class="custom-textarea" :label="$t('resource.machine.details.chassisNumber')">
+            <el-form-item prop="chassisNumber" class="custom-textarea" :label="$t('resources.machine.details.chassisNumber')">
               <el-input v-model="machineResourcesDetails.value.chassisNumber" />
               <label class="error-feedback-machine" v-if="validation && validation.value.chassisNumber">
                 {{ $t(validation.value.chassisNumber) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="engineNumber" class="custom-textarea" :label="$t('resource.machine.details.engineNumber')">
+            <el-form-item prop="engineNumber" class="custom-textarea" :label="$t('resources.machine.details.engineNumber')">
               <el-input v-model="machineResourcesDetails.value.engineNumber" />
               <label class="error-feedback-machine" v-if="validation && validation.value.engineNumber">
                 {{ $t(validation.value.engineNumber) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="color" class="custom-textarea" :label="$t('resource.machine.details.color')">
+            <el-form-item prop="color" class="custom-textarea" :label="$t('resources.machine.details.color')">
               <el-input v-model="machineResourcesDetails.value.color" />
               <label class="error-feedback-machine" v-if="validation && validation.value.color">
                 {{ $t(validation.value.color) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="fuelType" class="custom-textarea" :label="$t('resource.machine.details.fuelType')">
+            <el-form-item prop="fuelType" class="custom-textarea" :label="$t('resources.machine.details.fuelType')">
               <el-input v-model="machineResourcesDetails.value.fuelType" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelType">
                 {{ $t(validation.value.fuelType) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="fuelTankVolume" class="custom-textarea" :label="$t('resource.machine.details.fuelTankVolume')">
+            <el-form-item prop="fuelTankVolume" class="custom-textarea" :label="$t('resources.machine.details.fuelTankVolume')">
               <el-input v-model="machineResourcesDetails.value.fuelTankVolume" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelTankVolume">
                 {{ $t(validation.value.fuelTankVolume) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="fuelUnit" class="custom-textarea" :label="$t('resource.machine.details.fuelUnit')">
+            <el-form-item prop="fuelUnit" class="custom-textarea" :label="$t('resources.machine.details.fuelUnit')">
               <el-input v-model="machineResourcesDetails.value.fuelUnit" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelUnit">
                 {{ $t(validation.value.fuelUnit) }}
@@ -109,28 +109,28 @@
           </div>
 
           <div class="item item-bib-add item-machine-add">
-            <el-form-item prop="status" :label="$t('resource.machine.details.status')">
+            <el-form-item prop="status" :label="$t('resources.machine.details.status')">
               <el-input v-model="machineResourcesDetails.value.status" class="custom-textarea" />
               <label class="error-feedback-machine" v-if="validation && validation.value.status">
                 {{ $t(validation.value.status) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="driver" :label="$t('resource.machine.details.driver')" class="input-item">
+            <el-form-item prop="driver" :label="$t('resources.machine.details.driver')" class="input-item">
               <el-input v-model="machineResourcesDetails.value.driver" type="text" />
               <label class="error-feedback-machine" v-if="validation && validation.value.driver">
                 {{ $t(validation.value.driver) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="description" class="input-item" :label="$t('resource.machine.details.description')">
+            <el-form-item prop="description" class="input-item" :label="$t('resources.machine.details.description')">
               <el-input v-model="machineResourcesDetails.value.description" class="custom-textarea" type="textarea" />
               <label class="error-feedback-machine" v-if="validation && validation.value.description">
                 {{ $t(validation.value.description) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="image" class="input-item" :label="$t('resource.machine.details.images')">
+            <el-form-item prop="image" class="input-item" :label="$t('resources.machine.details.images')">
               <ImageUpload
                   :fileLimit="1"
                   :allowedTypes="'.jpg,.png,.pdf,.docx'"
@@ -139,7 +139,7 @@
               />
             </el-form-item>
 
-            <el-form-item prop="attachments" :label="$t('resource.machine.details.attachments')">
+            <el-form-item prop="attachments" :label="$t('resources.machine.details.attachments')">
               <FileUpload
                   :existingFiles="machineResourcesDetails.value.attachment"
                   :allowedTypes="'.jpg,.png,.pdf,.docx'"

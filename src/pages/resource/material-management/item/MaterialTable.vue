@@ -1,9 +1,9 @@
 <template>
-  <div class="machine-container">
+  <div class="material-container">
     <el-table
         :data="data"
         style="width: 100%"
-        class="el-tbl-custom machine-table"
+        class="el-tbl-custom material-table"
     >
       <el-table-column
           type="index"
@@ -14,61 +14,61 @@
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.machine.table.header.licensePlate')"></p>
+          <p v-html="$t('resources.material.table.header.materialCode')"></p>
         </template>
 
         <template #default="scope">
-          <span class="data-table">{{ scope.row.licensePlate ?? "-" }}</span>
+          <span class="data-table">{{ scope.row.materialCode ?? "-" }}</span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.machine.table.header.brand')"></p>
+          <p v-html="$t('resources.material.table.header.materialName')"></p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.brand ? scope.row.brand : "-" }}
+        <span class="data-table">{{ scope.row.materialName ? scope.row.materialName : "-" }}
         </span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.machine.table.header.vehicleType')"></p>
+          <p v-html="$t('resources.material.table.header.inventory')"></p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.vehicleType ? scope.row.vehicleType : "-" }}
+        <span class="data-table">{{ scope.row.inventory ? scope.row.inventory : "-" }}
         </span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.machine.table.header.driver')"></p>
+          <p v-html="$t('resources.material.table.header.expireDate')"></p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.driver ? scope.row.driver : "-" }}
+        <span class="data-table">{{ scope.row.expireDate ? scope.row.expireDate : "-" }}
         </span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.machine.table.header.status')"></p>
+          <p v-html="$t('resources.material.table.header.productionDate')"></p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.status ? scope.row.status : "-" }}
+        <span class="data-table">{{ scope.row.productionDate ? scope.row.productionDate : "-" }}
         </span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="90">
         <template #header>
-          <p v-html="$t('resource.machine.table.header.action')"></p>
+          <p v-html="$t('resources.material.table.header.action')"></p>
         </template>
         <template #default="scope">
           <div>
@@ -99,7 +99,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 
 export default {
-  name: 'MachineTable',
+  name: 'MaterialTable',
   components: {IconTrash, IconEdit},
   props: {
     data: {
@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.machine-container {
+.material-container {
   padding: 20px;
   background-color: #f5f7fa;
 
@@ -163,7 +163,7 @@ export default {
     }
   }
 
-  .machine-table {
+  .material-table {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);

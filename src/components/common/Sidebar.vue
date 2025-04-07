@@ -50,25 +50,6 @@
           <span class="sidebar-text">{{ route.function_name }}</span>
         </el-menu-item>
       </el-menu>
-
-      <el-menu>
-        <el-sub-menu index="resources" v-if="listRouterResource.length">
-          <template #title>
-            <IconUtility class="icon_sidebar"></IconUtility>
-            <span class="sidebar-text">{{ ("Resource Management") }}</span>
-          </template>
-          <template v-for="(route, index) in listRouterResource" :key="index">
-            <el-menu-item
-                :class="classActive(route)"
-                :index="route.function_page_name"
-                @click="navigateChangeRoute(route)"
-            >
-              <component :is="route.function_icon" class="icon_sidebar"></component>
-              <span class="sidebar-text">{{ route.function_name }}</span>
-            </el-menu-item>
-          </template>
-        </el-sub-menu>
-      </el-menu>
     </div>
   </div>
 </template>
@@ -87,6 +68,10 @@ import IconPlanning from "@/svg/IconPlanning.vue";
 import IconProgress from "@/svg/IconProgress.vue";
 import IconChangeRequest from "@/svg/IconChangeRequest.vue";
 import IconRequestMobilization from "@/svg/IconRequestMobilization.vue";
+import IconResource from "@/svg/IconResource.vue";
+import IconMachine from "@/svg/IconMachine.vue";
+import IconMaterial from "@/svg/IconMaterial.vue";
+import IconHuman from "@/svg/IconHuman.vue";
 import IconLog from "@/svg/IconLog.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useI18n} from "vue-i18n";
@@ -110,7 +95,11 @@ export default {
     IconProgress,
     IconLog,
     IconRequestMobilization,
-    IconChangeRequest
+    IconChangeRequest,
+    IconResource,
+    IconMachine,
+    IconMaterial,
+    IconHuman,
   },
   setup() {
     const {t} = useI18n();
@@ -171,27 +160,27 @@ export default {
         ],
       },
       {
-        function_name: t("side_bar.label.resource"),
+        function_name: t("side_bar.label.resource.title"),
         function_page_name: "",
-        function_icon: "IconChangeRequest",
+        function_icon: "IconResource",
         isShow: isShowProjectSideBar.value,
         children: [
           {
             function_name: t("side_bar.label.resource.machine"),
             function_page_name: PAGE_NAME.RESOURCE.MACHINE.LIST,
-            function_icon: "IconUser",
+            function_icon: "IconMachine",
             isShow: true,
           },
           {
             function_name: t("side_bar.label.resource.material"),
             function_page_name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
-            function_icon: "IconUser",
+            function_icon: "IconMaterial",
             isShow: true,
           },
           {
             function_name: t("side_bar.label.resource.human"),
             function_page_name: PAGE_NAME.RESOURCE.HUMAN.LIST,
-            function_icon: "IconUser",
+            function_icon: "IconHuman",
             isShow: true,
           },
         ],
@@ -216,32 +205,6 @@ export default {
       },
     ]);
 
-    const listRouterResource = computed(() => [
-      {
-        function_name: t("side_bar.label.resource.machine"),
-        function_page_name: PAGE_NAME.RESOURCE.MACHINE.LIST,
-        function_icon: "IconUser",
-        isShow: true,
-        isChild: true,
-        parent_id: "resources",
-      },
-      {
-        function_name: t("side_bar.label.resource.material"),
-        function_page_name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
-        function_icon: "IconUser",
-        isShow: true,
-        isChild: true,
-        parent_id: "resources",
-      },
-      {
-        function_name: t("side_bar.label.resource.human"),
-        function_page_name: PAGE_NAME.RESOURCE.HUMAN.LIST,
-        function_icon: "IconUser",
-        isShow: true,
-        isChild: true,
-        parent_id: "resources",
-      },
-    ]);
 
     const navigateChangeRoute = async (route) => {
       currentPath.value = route.function_page_name;
@@ -254,24 +217,6 @@ export default {
           : "";
     };
 
-    const toggleDropdown = (id) => {
-      openDropdowns.value[id] = !openDropdowns.value[id];
-    };
-
-    const isDropdownOpen = (id) => {
-      return openDropdowns.value[id] || false;
-    };
-
-    const isDropdownActive = (id) => {
-      return listRouterResource.value.some((route) => currentPath.value === route.function_page_name);
-    };
-
-    // Theo dõi currentPath để tự động mở dropdown nếu một mục con active
-    watch(currentPath, (newPath) => {
-      if (listRouterResource.value.some((route) => route.function_page_name === newPath)) {
-        openDropdowns.value["resources"] = true;
-      }
-    });
 
     return {
       isShowComponent,
@@ -280,12 +225,8 @@ export default {
       listRouter,
       listRouterUsers,
       listRouterOthers,
-      listRouterResource,
       navigateChangeRoute,
       classActive,
-      toggleDropdown,
-      isDropdownOpen,
-      isDropdownActive,
     };
   },
 };
