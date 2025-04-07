@@ -1,53 +1,54 @@
 <template>
   <div class="machine machine-list">
+    <!-- Header Section -->
     <div class="machine-header">
-      <h3 class="page__ttl">{{ $t("resource.machine.title") }}</h3>
+      <h3 class="page__ttl">{{ $t("resources.machine.title") }}</h3>
       <div class="machine-btn-box machine-import-box">
         <el-row class="mb-4">
-          <el-button class="btn btn-save" @click="handleRedirectToCreate"
-          >{{ $t("resource.add_new") }}
+          <el-button class="btn btn-save" @click="handleRedirectToCreate">
+            {{ $t("resources.add_new") }}
           </el-button>
         </el-row>
       </div>
     </div>
+
+    <!-- Search Section -->
     <div class="machine-body">
       <div class="machine-search">
         <div class="machine-search-box col-md-9 col-lg-9">
-          <p class="machine-search__ttl">
-            {{ $t("resource.keyword") }}
-          </p>
+          <p class="machine-search__ttl">{{ $t("resources.keyword") }}</p>
           <div class="mb-0 ruleform">
             <el-input
                 :placeholder="$t('common.input_keyword')"
                 @keyup.enter="submitForm"
                 v-model="searchForms.search"
                 prop="search"
-            >
-            </el-input>
+            ></el-input>
           </div>
         </div>
         <div class="btn-search-select col-md-3 col-lg-3 machine-box-btn-all">
           <el-button class="btn btn-search" @click="submitForm()">
-            {{ $t("common.search") }}</el-button
-          >
+            {{ $t("common.search") }}
+          </el-button>
           <el-button class="btn btn-clear" @click="handleClear()">
-            {{ $t("common.clear") }}</el-button
-          >
+            {{ $t("common.clear") }}
+          </el-button>
         </div>
       </div>
     </div>
 
-    <div class="machine-body-table" style="">
+    <!-- Table Section -->
+    <div class="machine-body-table">
       <MachineTable
           :data="listMachineResources.value"
           @details="handleGetMachineResourcesDtls"
           @delete="handleDisplayModal"
       />
-            <LoadMore
-                :listData="listMachineResources.value"
-                :totalItems="totalItems.value"
-                @loadMore="handleLoadMore"
-            />
+      <LoadMore
+          :listData="listMachineResources.value"
+          :totalItems="totalItems.value"
+          @loadMore="handleLoadMore"
+      />
     </div>
     <ModalConfirm
         :isShowModal="isShowModalConfirm.value"
@@ -101,7 +102,7 @@ export default {
       currentPage,
       isShowModalConfirm,
       getListMachineResources,
-      handleDeleteMachineResources
+      handleDeleteMachineResources,
     } = machineStore;
     const isDisabled = ref(false);
 
@@ -180,6 +181,7 @@ export default {
 
 <style lang="scss" scoped>
 .machine-list {
+  /* Header Section */
   .machine-header {
     display: flex;
     justify-content: space-between;
@@ -187,92 +189,93 @@ export default {
     margin-bottom: 20px;
 
     .page__ttl {
-      font-size: 1.5rem;
+      font-size: 1.25rem; /* Giảm kích thước tiêu đề */
       font-weight: 600;
+      color: #0052cc; /* Màu xanh đậm cho tiêu đề */
     }
 
     .machine-btn-box {
       .btn-save {
-        background-color: #409EFF;
+        background-color: #0052cc; /* Màu xanh đậm cho nút Add New */
         color: #fff;
+        border-radius: 4px;
         &:hover {
-          background-color: #66b1ff;
+          background-color: #003f99; /* Đậm hơn khi hover */
         }
       }
     }
   }
 
+  /* Search Section */
   .machine-body {
     .machine-search {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: 20px;
 
       .machine-search-box {
         display: flex;
-        align-items: center;
+        flex-direction: column; /* Xếp dọc nhãn và ô nhập liệu */
+        flex-grow: 1;
 
         .machine-search__ttl {
           font-size: 1rem;
           font-weight: 500;
-          margin-right: 10px;
+          margin-bottom: 5px; /* Khoảng cách giữa nhãn và ô nhập liệu */
+          color: #6c757d; /* Màu xám đậm cho nhãn */
         }
 
         .ruleform {
           width: 100%;
 
-          .el-input__inner {
+          .el-input {
             border-radius: 4px;
+            border-color: #ced4da; /* Viền xám nhạt */
           }
         }
       }
 
       .btn-search-select {
         display: flex;
-        justify-content: flex-end;
         align-items: center;
-
-        .btn-search,
-        .btn-clear {
-          margin-left: 10px;
-        }
+        margin-left: 10px; /* Khoảng cách giữa ô nhập liệu và nút */
 
         .btn-search {
-          background-color: #409EFF;
+          background-color: #a3bffa; /* Màu tím nhạt cho nút Search */
           color: #fff;
+          margin-left: 10px;
+          border-radius: 4px;
           &:hover {
-            background-color: #66b1ff;
+            background-color: #8c9eff; /* Đậm hơn khi hover */
           }
         }
 
         .btn-clear {
-          background-color: #f56c6c;
+          background-color: #a3bffa; /* Màu tím nhạt cho nút Clear */
           color: #fff;
+          margin-left: 10px;
+          border-radius: 4px;
           &:hover {
-            background-color: #f78989;
+            background-color: #8c9eff; /* Đậm hơn khi hover */
           }
         }
       }
     }
-
-    .machine-body-table {
-      margin-top: 20px;
-    }
   }
-}
 
-.close-form {
-  position: absolute;
-  display: flex;
-  justify-content: flex-end;
-  right: 16px;
-  top: 10px;
-  cursor: pointer;
+  /* Close Form Icon */
+  .close-form {
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    right: 16px;
+    top: 10px;
+    cursor: pointer;
 
-  svg {
-    height: 30px;
-    width: 30px;
+    svg {
+      height: 30px;
+      width: 30px;
+    }
   }
 }
 </style>
