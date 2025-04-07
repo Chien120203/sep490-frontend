@@ -54,18 +54,16 @@ export const userMaterialResourcesStore = defineStore(
             mixinMethods.endLoading();
         };
 
-        const getMaterialResourcesDetails = async (params) => {
+        const getMaterialResourcesDetails = async (id) => {
             mixinMethods.startLoading();
             await services.MaterialResourceAPI.details(
-                params,
+                id,
+                {},
                 (response) => {
                     materialResourcesDetails.value = response.data;
                     mixinMethods.endLoading();
                 },
                 (error) => {
-                    // validation.value = mixinMethods.handleErrorResponse(
-                    //   error.responseCode
-                    // );
                     mixinMethods.notifyError(t("response.message.get_material_dtls_failed"));
                     mixinMethods.endLoading();
                 }
@@ -118,28 +116,25 @@ export const userMaterialResourcesStore = defineStore(
         const clearMaterialResourcesDetails = () => {
             materialResourcesDetails.value = {
                 id: 0,
-                licensePlate: "",
-                brand: "",
-                yearOfManufacture: 0,
-                countryOfManufacture: "",
-                vehicleType: 0,
+                materialCode: "",
+                materialName: "",
+                unit: "",
+                branch: "",
+                madeIn: "",
                 chassisNumber: "",
-                engineNumber: "",
-                image: [],
-                status: 0,
-                driver: 0,
-                color: "",
-                fuelType: "",
-                description: "",
-                fuelTankVolume: 0,
-                fuelUnit: "",
+                wholesalePrice: 0,
+                retailPrice: 0,
+                inventory: 0,
                 attachment: [],
+                expireDate: "",
+                productionDate: "",
+                description: "",
             };
         };
 
         return {
             validation,
-            listMaterialResources, // temporary
+            listMaterialResources,
             totalItems,
             currentPage,
             materialResourcesDetails,
