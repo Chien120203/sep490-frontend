@@ -72,7 +72,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import { ADMIN } from "@/constants/roles.js";
-import { userMachineResourcesStore } from "@/store/machine-resources.js";
+import { useMachineResourcesStore } from "@/store/machine-resources.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 
@@ -93,7 +93,7 @@ export default {
     });
     const delete_id = ref();
     const router = useRouter();
-    const machineStore = userMachineResourcesStore();
+    const machineStore = useMachineResourcesStore();
     const {
       validation,
       listMachineResources,

@@ -1,4 +1,4 @@
-<template>
+in<template>
   <SingleOptionSelect
       :defaultList="selectedValue"
       style="width: 30%"

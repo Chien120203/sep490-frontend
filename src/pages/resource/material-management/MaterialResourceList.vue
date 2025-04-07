@@ -72,7 +72,7 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import { ADMIN } from "@/constants/roles.js";
-import { userMaterialResourcesStore } from "@/store/material-resources.js";
+import { useMaterialResourcesStore } from "@/store/material-resources.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 
@@ -94,7 +94,7 @@ export default {
     });
     const delete_id = ref();
     const router = useRouter();
-    const materialStore = userMaterialResourcesStore();
+    const materialStore = useMaterialResourcesStore();
     const {
       validation,
       listMaterialResources,

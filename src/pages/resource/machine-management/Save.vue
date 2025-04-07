@@ -164,14 +164,14 @@ import FileUpload from "@/components/common/FileUpload.vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
 import {MACHINE_RULES} from "@/rules/machine-resource/index.js";
 import {useI18n} from "vue-i18n";
-import {userMachineResourcesStore} from "@/store/machine-resources.js";
+import {useMachineResourcesStore} from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
   components: {FileUpload,ImageUpload, IconBackMain, SingleOptionSelect},
   setup() {
     const {t} = useI18n();
-    const machineResourcesStore = userMachineResourcesStore();
+    const machineResourcesStore = useMachineResourcesStore();
     const {
       machineResourcesDetails,
       validation,

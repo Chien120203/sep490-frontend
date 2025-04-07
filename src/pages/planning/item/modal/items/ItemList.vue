@@ -133,7 +133,7 @@ const handleSelectItem = (id) => {
 };
 
 const getResourceName = (id) => {
-  return props.selectData.find(item => item.id === id)?.name || "-";
+  return props.selectData.find(item => item.id === id)[props.optionKeys.value] || "-";
 }
 
 const handleChangeValue = () => {
@@ -143,7 +143,7 @@ const handleChangeValue = () => {
 const handleRemoveResource = async (id) => {
   // Remove from the form list
   listAddedValues.value = listAddedValues.value.filter(resource => resource.resourceId !== id);
-
+  selectedValue.value = null;
   // Also remove from selectedRow.details if it exists
   if (props.selectedRow && Array.isArray(props.selectedRow.details)) {
     props.selectedRow.details = props.selectedRow.details.filter(detail => detail.resourceId !== id);

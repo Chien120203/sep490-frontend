@@ -62,9 +62,9 @@
       :selectedRow="selectedRow"
       :tasks="planningDetails.value.planItems"
       :isUpdate="isUpdate"
-      :materials="materials"
-      :users="listEmployees"
-      :vehicles="listVehicles"
+      :materials="listMaterialResources.value"
+      :users="listHumanResources.value"
+      :vehicles="listMachineResources.value"
       @close="handleCloseModal"
       @submit="handleSaveItemDetails"
   />
@@ -88,6 +88,9 @@ import {usePlanningStore} from "@/store/planning.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {mixinMethods} from "@/utils/variables.js";
 import {getPlanningRules} from "@/rules/planning/index.js";
+import {useHumanResourcesStore} from "@/store/human-resources.js";
+import {useMachineResourcesStore} from "@/store/machine-resources.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
@@ -114,18 +117,6 @@ const statuses = ref([
     status: "process"
   },
   {title: "Giám đốc duyệt", description: "", status: ""}
-]);
-const materials = ref([
-  {id: 1, name: "Cát xây dựng", unit: "kg", rate: 1, coefficient: 1, quantity: 100, unitPrice: 50000},
-  {id: 2, name: "Xi măng", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
-]);
-const listEmployees = ref([
-  {id: 1, name: "Nhân viên 1", unit: "kg", rate: 1, coefficient: 1, quantity: 100, unitPrice: 50000},
-  {id: 2, name: "Nhân viên 2", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
-]);
-const listVehicles = ref([
-  {id: 1, name: "Xe 1", unit: "kg", rate: 1, coefficient: 1, quantity: 100, unitPrice: 50000},
-  {id: 2, name: "Xe 2", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
 ]);
 const currentStep = ref(1);
 const activities = ref([
@@ -164,14 +155,19 @@ const userStore = useUserStore();
 const contractStore = useContractStore();
 const planningStore = usePlanningStore();
 const persistance = usePersistenceStore();
+const humanStore = useHumanResourcesStore();
+const machineStore = useMachineResourcesStore();
+const materialStore = useMaterialResourcesStore();
 
 const {projectId} = persistance;
 const {
   contractDetails,
   getContractDetails,
 } = contractStore;
+const {listHumanResources, getListHumanResources} = humanStore;
+const {listMachineResources, getListMachineResources} = machineStore;
+const {listMaterialResources, getListMaterialResources} = materialStore;
 const {listUsers, getListUsers} = userStore;
-const {clearProjectDetails} = projectStore;
 const {
   planningDetails,
   planSelectedRow,
@@ -193,6 +189,9 @@ onMounted(async () => {
     await getPlanningDetails(route.params.id);
   }
   await getListUsers({keyWord: "", pageIndex: 1, role: QUALITY_ASSURANCE}, false);
+  await getListHumanResources({pageIndex: 1}, false);
+  await getListMachineResources({pageIndex: 1}, false);
+  await getListMaterialResources({pageIndex: 1}, false);
   listQualityAssurances.value = listUsers.value;
 });
 
@@ -239,6 +238,8 @@ const selectionFormRef = ref(null);
 const detailsFormRef = ref(null);
 const modalFormRef = ref(null);
 const submitForm = () => {
+  planningDetails.value.reviewers = [...planningDetails.value.reviewers.map(reviewer => reviewer.id)];
+  planningDetails.value.projectId = projectId.value;
   const method = !!route.params.id ? "update" : "create";
   savePlanning(planningDetails.value, method);
   // if (selectionFormRef.value?.ruleFormRef) {

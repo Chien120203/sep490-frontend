@@ -4,7 +4,7 @@ import { mixinMethods } from "@/utils/variables";
 import services from "@/plugins/services";
 import { useI18n } from "vue-i18n";
 
-export const userMaterialResourcesStore = defineStore(
+export const useMaterialResourcesStore = defineStore(
     "materialResources",
     () => {
         const {t} = useI18n();

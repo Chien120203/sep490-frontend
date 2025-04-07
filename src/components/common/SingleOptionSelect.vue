@@ -119,7 +119,7 @@ export default {
     const filteredSearchData = computed(() => {
       const lowerCaseSearch = searchName.value.toLowerCase() || "";
       let searchList = props.listData.filter((item) =>
-          item[props.optionKeys.value].toLowerCase().includes(lowerCaseSearch)
+          item[props.optionKeys.value]?.toLowerCase()?.includes(lowerCaseSearch)
       );
       if (props.haveSelectAllOption && searchList.length) {
         searchList.push({

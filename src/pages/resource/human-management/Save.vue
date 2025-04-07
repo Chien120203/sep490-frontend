@@ -141,14 +141,14 @@ import FileUpload from "@/components/common/FileUpload.vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
 import {MATERIAL_RULES} from "@/rules/material-resource/index.js";
 import {useI18n} from "vue-i18n";
-import {userMaterialResourcesStore} from "@/store/material-resources.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
   components: {FileUpload,ImageUpload, IconBackMain, SingleOptionSelect},
   setup() {
     const {t} = useI18n();
-    const materialResourcesStore = userMaterialResourcesStore();
+    const materialResourcesStore = useMaterialResourcesStore();
     const {
       materialResourcesDetails,
       validation,

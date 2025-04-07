@@ -26,7 +26,8 @@ const props = defineProps({
   },
   rules: {
     type: Object,
-    default: () => {}
+    default: () => {
+    }
   }
 });
 const ruleFormRef = ref(null);
@@ -199,41 +200,66 @@ const checkHasChildren = (row) => {
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('contract.create.item_table.action')" width="180">
+        <el-table-column :label="$t('contract.create.item_table.action')" resizable width="180">
           <template #default="{ row }">
             <div class="action-btn">
-              <IconPlus @click="addSubItem(row)" />
-              <IconEdit v-if="checkHasChildren(row)" @click="emit('editPlanDetails', row)" />
-              <IconTrash @click="deleteItem(row)" />
+              <IconPlus @click="addSubItem(row)"/>
+              <IconEdit @click="emit('editPlanDetails', row)"/>
+              <IconTrash @click="deleteItem(row)"/>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('contract.create.item_table.item')" min-width="180">
+        <el-table-column :label="$t('contract.create.item_table.item')" resizable min-width="180">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listItems.${$index}.workName`" :rules="rules.workName">
-              <el-input v-model="listItems[$index].workName" />
+              <el-input v-model="listItems[$index].workName"/>
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column prop="unit" :label="$t('contract.create.item_table.unit')" width="120">
+        <el-table-column :label="$t('planning.modal.start_date')" resizable min-width="220">
+          <template #default="{ row, $index }">
+            <el-form-item :prop="`listItems.${$index}.startDate`" :rules="rules.startDate">
+              <el-date-picker
+                  class="custom-input"
+                  v-model="listItems[$index].startDate"
+                  type="date"
+              />
+            </el-form-item>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="$t('planning.modal.end_date')" resizable min-width="220">
+          <template #default="{ row, $index }">
+            <el-form-item :prop="`listItems.${$index}.endDate`" :rules="rules.endDate">
+              <el-date-picker
+                  class="custom-input"
+                  v-model="listItems[$index].endDate"
+                  type="date"
+              />
+            </el-form-item>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="unit" :label="$t('contract.create.item_table.unit')" resizable width="90">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listItems.${$index}.unit`" :rules="rules.unit">
-              <el-input v-model="listItems[$index].unit" :disabled="isParent(row)" />
+              <el-input v-model="listItems[$index].unit" :disabled="isParent(row)"/>
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column prop="quantity" :label="$t('contract.create.item_table.amount')" width="250">
+        <el-table-column prop="quantity" :label="$t('contract.create.item_table.amount')" resizable width="160">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listItems.${$index}.quantity`" :rules="rules.quantity">
-              <el-input-number style="width: 100%" v-model="listItems[$index].quantity" :min="0" @change="recalculateTotal" :disabled="isParent(row)" />
+              <el-input-number style="width: 100%" v-model="listItems[$index].quantity" :min="0"
+                               @change="recalculateTotal" :disabled="isParent(row)"/>
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" width="350">
+        <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" resizable width="260">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listItems.${$index}.unitPrice`" :rules="rules.unitPrice">
               <el-input
@@ -247,9 +273,9 @@ const checkHasChildren = (row) => {
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('contract.create.item_table.total_price')" width="380">
+        <el-table-column :label="$t('contract.create.item_table.total_price')" resizable width="380">
           <template #default="{ row }">
-            {{ mixinMethods.formatInputMoney(row.unitPrice * row.quantity) }}
+            {{ mixinMethods.formatInputMoney(row.total) }}
           </template>
         </el-table-column>
       </el-table>

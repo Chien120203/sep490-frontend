@@ -48,8 +48,8 @@ defineExpose({
   ruleFormRef,
 });
 
-const selectedFollowers = computed(
-    () => props.planDetails.reviewers?.map((r) => r.id) || []
+const selectedFollowers = ref(
+    props.planDetails.reviewers?.map((r) => r.id) || []
 );
 const emit = defineEmits([ "updateFollowers", "search"]);
 </script>

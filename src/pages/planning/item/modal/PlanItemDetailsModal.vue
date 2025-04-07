@@ -30,7 +30,7 @@
           </el-tab-pane>
 
           <!-- Tài nguyên -->
-          <el-tab-pane :label="$t('planning.modal.el_pane.material')" name="materials">
+          <el-tab-pane v-if="!hasChildren" :label="$t('planning.modal.el_pane.material')" name="materials">
             <ItemList
                 ref="tableMaterialFormRef"
                 :rules="rules"
@@ -44,7 +44,7 @@
           </el-tab-pane>
 
           <!-- Nhân lực -->
-          <el-tab-pane :label="$t('planning.modal.el_pane.human')" name="users">
+          <el-tab-pane v-if="!hasChildren" :label="$t('planning.modal.el_pane.human')" name="users">
             <ItemList
                 ref="tableHumanFormRef"
                 :rules="rules"
@@ -59,7 +59,7 @@
           </el-tab-pane>
 
           <!-- Phương tiện -->
-          <el-tab-pane :label="$t('planning.modal.el_pane.machine')" name="vehicles">
+          <el-tab-pane v-if="!hasChildren" :label="$t('planning.modal.el_pane.machine')" name="vehicles">
             <ItemList
                 ref="tableMachineFormRef"
                 :rules="rules"
@@ -114,15 +114,16 @@ const tableHumanFormRef = ref(null);
 const tableMaterialFormRef = ref(null);
 const dependentFormRef = ref(null);
 const childFormRef = ref(null);
-const materialOptions = ref({id: "id", value: "name"});
-const userOptions = ref({id: "id", value: "name"});
-const vehicleOptions = ref({id: "id", value: "name"});
+const materialOptions = ref({id: "id", value: "materialCode"});
+const userOptions = ref({id: "id", value: "teamName"});
+const vehicleOptions = ref({id: "id", value: "chassisNumber"});
 const totalAllPrice = ref({
   machine: 0,
   labor: 0,
   material: 0,
   totalPrice: 0,
 });
+const hasChildren = computed(() => props.tasks.some(child => child.parentIndex === props.selectedRow.index && !child.deleted));
 
 const getListResourceByType = (list, type) => {
   if (!Array.isArray(list)) return [];
@@ -159,7 +160,9 @@ const closeModal = () => {
 const handleSubmit = async () => {
   let invalidForm = null; // To store the name of the invalid form
   let allValid = true; // Flag to track if all forms are valid
-  const formRefs = [
+  const formRefs = hasChildren ? [
+    {ref: childFormRef.value?.ruleFormRef, name: t("planning.form_ref.planning_info")}
+  ]: [
     {ref: childFormRef.value?.ruleFormRef, name: t("planning.form_ref.planning_info")},
     {ref: tableMaterialFormRef.value?.ruleFormRef, name: t("planning.form_ref.material")},
     {ref: tableMachineFormRef.value?.ruleFormRef, name: t("planning.form_ref.machine")},
