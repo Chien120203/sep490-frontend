@@ -7,7 +7,7 @@
       </h3>
       <div class="planning-btn-box planning-import-box">
         <el-row class="mb-4">
-          <el-button v-if="isAllowCreate" class="btn btn-save" @click="handleRedirectToCreate">
+          <el-button v-if="allowCreate" class="btn btn-save" @click="handleRedirectToCreate">
             {{ $t("planning.add_new") }}
           </el-button>
         </el-row>
@@ -23,11 +23,6 @@
               @keyup.enter="submitForm"
               v-model="searchForms.planName"
           >
-            <template #append>
-              <span @click="handleSearchForm" class="btn-setting">
-                <IconSetting/>
-              </span>
-            </template>
           </el-input>
         </div>
         <div class="btn-search-select col-md-3 col-lg-3 planning-box-btn-all">
@@ -50,8 +45,6 @@
     <ModalConfirm
         :isShowModal="isShowModalConfirm.value"
         @close-modal="handleDisplayModal"
-        :isConfirmByText="true"
-        :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
         :message="$t('project.modal_confirm.message')"
         :title="$t('project.modal_confirm.title')"
@@ -60,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import {ref, onMounted, computed} from "vue";
 import { useRouter } from "vue-router";
 import { usePersistenceStore } from "@/store/persistence.js";
 import { usePlanningStore } from "@/store/planning.js";
@@ -72,7 +65,7 @@ import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
-import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
+import {CONSTRUCTION_MANAGER, HEAD_OF_CONSTRUCTION} from "@/constants/roles.js";
 
 const persistenceStore = usePersistenceStore();
 const planningStore = usePlanningStore();
@@ -85,13 +78,13 @@ const {
   listPlannings,
   currentPage,
   isShowModalConfirm,
-  getListPlannings
+  getListPlannings,
+  handleDeletePlan
 } = planningStore;
-
+const allowCreate = computed(() => localStorage.getItem("role") === CONSTRUCTION_MANAGER)
 const router = useRouter();
 const isShowBoxSearch = ref(false);
-const isAllowCreate = ref(localStorage.getItem('role') === CONSTRUCTION_MANAGER);
-
+const delete_id = ref(0);
 const searchForms = ref({
   planName: "",
   projectId: projectId.value,
@@ -137,10 +130,12 @@ const handleDisplayModal = () => {
 
 const handleConfirm = () => {
   isShowModalConfirm.value = false;
+  handleDeletePlan(delete_id.value);
 };
 
-const handleDeletePlanning = () => {
+const handleDeletePlanning = (id) => {
   isShowModalConfirm.value = true;
+  delete_id.value = id;
 };
 
 const handleBack = () => {

@@ -53,7 +53,7 @@ const routes = [
   {
     name: PAGE_NAME.HOME,
     path: PAGES.HOME,
-    component: Home,
+    component: ProjectList,
     meta: {
       middleware: [AUTHENTICATION_MIDDLEWARE],
     },

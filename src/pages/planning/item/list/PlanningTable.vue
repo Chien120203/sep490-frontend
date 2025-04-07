@@ -48,8 +48,8 @@
         <p v-html="$t('planning.table.header.status')"></p>
       </template>
       <template #default="scope">
-        <span class="planning-status" :class="statusClass(scope.row.status)">
-          {{ $t(formatStatus(scope.row.status)) }}
+        <span class="planning-status" :class="statusClass(scope.row.reviewer)">
+          {{ $t(formatStatus(scope.row)) }}
         </span>
       </template>
     </el-table-column>
@@ -63,7 +63,7 @@
           <button @click="$emit('details', scope.row.id)" class="btn-edit">
             <IconEdit />
           </button>
-          <button @click="$emit('delete', scope.row.id)" class="btn-delete">
+          <button v-if="!scope.row.isApproved" @click="$emit('delete', scope.row.id)" class="btn-delete">
             <IconTrash />
           </button>
         </div>
@@ -78,7 +78,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
-import {STATUS_LABELS} from "@/constants/survey.js";
+import {STATUS_LABELS} from "@/constants/planning.js";
 
 export default {
   components: {
@@ -120,8 +120,8 @@ export default {
       return mixinMethods.formatCurrency(inputCurrency);
     }
 
-    const formatStatus = (status) => {
-      return STATUS_LABELS[status] || 'Unknown';
+    const formatStatus = (row) => {
+      return STATUS_LABELS[row] || 'Unknown';
     };
 
     return {
