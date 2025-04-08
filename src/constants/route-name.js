@@ -37,7 +37,8 @@ const PAGE_NAME = {
   },
   CONSTRUCT_LOG: {
     VIEW: "construct-log-view",
-    DETAILS: 'construct-log-details'
+    DETAILS: 'construct-log-details',
+    CREATE: 'construct-log-create'
 
   },
   RESOURCE_MOBILIZATION: {

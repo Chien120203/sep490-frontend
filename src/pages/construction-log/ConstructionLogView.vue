@@ -12,6 +12,8 @@
       <div>
         <ConstructionLogTable
             :title="title"
+            :dateRange="searchForm"
+            :listLog="listConstructLog.value"
             @choose-date="handleChooseDate"
         />
       </div>
@@ -31,57 +33,51 @@ import {mixinMethods} from "@/utils/variables";
 import {useContractStore} from "@/store/contract.js";
 import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {useConstructLog} from "@/store/construct-log.js";
 
 const isShowModalItemDtls = ref(false);
 const title = ref("Dự Án ABC");
 
 // Store Data
 const projectStore = useProjectStore();
+const constructLog = useConstructLog();
 const customerStore = useCustomerStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
 const persistenceStore = usePersistenceStore();
 
 const {
-  contractDetails,
-  getContractDetails,
-} = contractStore;
-const {listUsers, getListUsers} = userStore;
-const {listCustomers, getListCustomers} = customerStore;
-const {validation, projectDetails, saveProject, getProjectDetails, clearProjectDetails} = projectStore;
+  getListProjectLogs,
+  listConstructLog
+} = constructLog;
 const {
   projectId
 } = persistenceStore;
 
 const route = useRoute();
 const router = useRouter();
-
+const searchForm = ref({
+  startDate: "2024-04-01",
+  endDate: "2024-04-30"
+})
 onMounted(async () => {
+  // await getListProjectLogs(searchForm.value);
 });
 
 onUnmounted(() => {
-  clearProjectDetails();
 });
 
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
 
-const updateItems = (newItems) => {
-  contractDetails.value.contractDetails = newItems;
-};
-
-const handleEditPlanDetails = (id) => {
-  isShowModalItemDtls.value = true;
-}
-
-const handleCloseModal = () => {
-  isShowModalItemDtls.value = false;
-}
-
-const ruleFormRef = ref(null);
-
 const handleChooseDate = (date) => {
-  router.push({name: PAGE_NAME.CONSTRUCT_LOG.DETAILS}, {id: 1, date: date.day});
+  let constructLog = listConstructLog.value.find(log => log.date === date.day);
+  if(!constructLog) {
+    router.push({name: PAGE_NAME.CONSTRUCT_LOG.CREATE});
+  } else router.push({
+    name: PAGE_NAME.CONSTRUCT_LOG.DETAILS,
+    params: { id: constructLog.id }
+  });
 }
 </script>

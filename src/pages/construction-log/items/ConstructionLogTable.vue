@@ -1,5 +1,5 @@
 <template>
-  <el-calendar ref="calendar">
+  <el-calendar ref="calendar" :range="[new Date(plusOneMonth(dateRange.startDate)), new Date(plusOneMonth(dateRange.endDate))]">
     <template #header="{ date }">
       <span>{{title}}</span>
       <span>{{ date }}</span>
@@ -24,19 +24,29 @@
         <p :class="data.isSelected ? 'is-selected' : ''">
           {{ data.day.split('-').slice(2).join('') }}
         </p>
+        <el-tag v-if="getLogName(data.day)" type="primary">{{getLogName(data.day)}}</el-tag>
       </div>
     </template>
   </el-calendar>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref } from 'vue'
+import dayjs from "dayjs";
 
 const props = defineProps(
     {
       title: {
         type: String,
         default: ""
+      },
+      listLog: {
+        type: Array,
+        default: () => []
+      },
+      dateRange: {
+        type: Object,
+        default: () => {},
       }
     }
 );
@@ -44,13 +54,20 @@ const emit = defineEmits(["choose-date"])
 
 const calendar = ref();
 
-const selectDate = (val: string) => {
-  if (!calendar.value) return
-  calendar.value.selectDate(val)
+const selectDate = (val) => {
+  if (!calendar.value) return calendar.value.selectDate(val)
 }
 
 const handleDateClick = (date) => {
   emit('choose-date', date);
+}
+
+const plusOneMonth = (dateStr) => {
+  return dayjs(dateStr).add(0, 'month').format('YYYY-MM-DD')
+}
+
+const getLogName = (data) => {
+  return props.listLog.find(log => log.date === data)?.name || ""
 }
 </script>
 <style scoped>

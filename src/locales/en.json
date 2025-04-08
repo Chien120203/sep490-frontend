@@ -1115,6 +1115,9 @@
   "E-CM-026": "Utility name is duplicated",
   "E-CM-027": "Email is invalid",
   "E-CM-028": "End date must be greater start date",
+  "E-CM-029": "Date cannot be in the future",
+  "E-CM-030": "End time must be greater start time",
+  "E-CM-031": "Start time must be before end time",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",
@@ -1191,5 +1194,7 @@
   "E-RR-010": "At least one resource must be specified!",
   "E-SV-004": "The discount rate must less than or equal {max}",
 
-  "E-PLAN-001": "Actual total price exceed the expected price"
+  "E-PLAN-001": "Actual total price exceed the expected price",
+
+  "E-LOG-001": "Save construction log failed"
 }

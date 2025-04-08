@@ -241,21 +241,20 @@ const submitForm = () => {
   // planningDetails.value.reviewers = [...planningDetails.value.reviewers.map(reviewer => reviewer.id)];
   planningDetails.value.projectId = projectId.value;
   const method = !!route.params.id ? "update" : "create";
+  const formRefs = [
+    selectionFormRef.value,
+    detailsFormRef.value,
+    modalFormRef.value,
+  ];
+  for (const form of formRefs) {
+    if (form?.ruleFormRef) { // Access ruleFormRef
+      const isValid = mixinMethods.validateForm(form.ruleFormRef);
+      if (!isValid) {
+        mixinMethods.notifyError(t('E-LOG-001'));
+        return;
+      }
+    }
+  }
   savePlanning(planningDetails.value, method);
-  // if (selectionFormRef.value?.ruleFormRef) {
-  //   selectionFormRef.value?.validate((selValid) => {
-  //     detailsFormRef.value?.validate((detValid) => {
-  //       modalFormRef.value?.validate((modalValid) => {
-  //         if (selValid && detValid && modalValid) {
-  //           planningDetails.value.projectId = projectId.value;
-  //           let method  = !!route.params.id ? "update" : "create";
-  //
-  //         }
-  //       });
-  //     });
-  //   });
-  // } else {
-  //   mixinMethods.notifyError("Form reference is not available.");
-  // }
 }
 </script>

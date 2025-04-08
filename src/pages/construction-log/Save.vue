@@ -20,10 +20,20 @@
       </div>
       <div class="log-container">
         <div class="log-details">
-          <ConstructLogWorkDetails/>
+          <ConstructLogWorkDetails
+              ref="formLogDetailsRef"
+              :rules="constructLogRules"
+              :logDetails="constructLogDetails.value"
+              @remove-resource="handleRemoveResource"
+              @remove-task="handleRemoveTask"
+          />
         </div>
         <div class="log-infor">
-          <ConstructionLogInfor/>
+          <ConstructionLogInfor
+              ref="formLogInfoRef"
+              :rules="constructLogRules"
+              :logDetails="constructLogDetails.value"
+          />
         </div>
       </div>
     </div>
@@ -31,35 +41,25 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {useProjectStore} from "@/store/project.js";
-import {useCustomerStore} from "@/store/customer.js";
-import {useUserStore} from "@/store/user.js";
 import {mixinMethods} from "@/utils/variables";
-import {useContractStore} from "@/store/contract.js";
 import ConstructLogWorkDetails from "@/pages/construction-log/items/ConstructLogWorkDetails.vue";
 import ConstructionLogInfor from "@/pages/construction-log/items/ConstructionLogInfor.vue";
+import {useConstructLog} from "@/store/construct-log.js";
+import {getConstructLogRules} from "@/rules/construct-log/index.js";
+import {useI18n} from "vue-i18n";
 
-const isShowModalItemDtls = ref(false);
-const title = ref("Dự Án ABC");
-
-// Store Data
-const projectStore = useProjectStore();
-const customerStore = useCustomerStore();
-const userStore = useUserStore();
-const contractStore = useContractStore();
+const constructLogRules = getConstructLogRules();
+const constructLogStore = useConstructLog();
 
 const {
-  contractDetails,
-  getContractDetails,
-} = contractStore;
-const {listUsers, getListUsers} = userStore;
-const {listCustomers, getListCustomers} = customerStore;
-const {validation, projectDetails, saveProject, getProjectDetails, clearProjectDetails} = projectStore;
+  constructLogDetails
+} = constructLogStore;
 
+const {t} = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -67,46 +67,60 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  clearProjectDetails();
 });
+
+const handleRemoveResource = (data) => {
+  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource =>
+      !(
+          resource.taskIndex === data.taskIndex &&
+          resource.resourceId === data.resourceId &&
+          resource.resourceType === data.resourceType
+      )
+  );
+};
+
+const handleRemoveTask = (taskIndex) => {
+  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource => resource.taskIndex !== taskIndex);
+}
+
 
 const handleBack = () => {
   router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
 };
 
-const updateItems = (newItems) => {
-  contractDetails.value.contractDetails = newItems;
-};
-
-const handleEditPlanDetails = (id) => {
-  isShowModalItemDtls.value = true;
-}
-
-const handleCloseModal = () => {
-  isShowModalItemDtls.value = false;
-}
-
-const ruleFormRef = ref(null);
-
-const handleChooseDate = (date) => {
-
-}
+const formLogDetailsRef = ref(null);
+const formLogInfoRef = ref(null);
 
 const submitForm = () => {
-
+  const formRefs = [
+    ...formLogDetailsRef.value?.machineForm,
+    ...formLogDetailsRef.value?.materialForm,
+    ...formLogDetailsRef.value?.humanForm,
+    formLogInfoRef.value
+  ];
+  console.log(constructLogDetails.value)
+  for (const form of formRefs) {
+    if (form?.ruleFormRef) { // Access ruleFormRef
+      const isValid = mixinMethods.validateForm(form.ruleFormRef);
+      if (!isValid) {
+        mixinMethods.notifyError(t('E-LOG-001'));
+        return;
+      }
+    }
+  }
 }
 </script>
 <style scoped>
-.log-container{
+.log-container {
   display: flex;
 }
 
 .log-details {
   margin-right: 12px;
-  width: 65%;
+  width: 60%;
 }
 
 .log-infor {
-  width: 35%;
+  width: 40%;
 }
 </style>

@@ -171,6 +171,11 @@ const routes = [
         path: PAGES.CONSTRUCT_LOG_DETAILS,
         name: PAGE_NAME.CONSTRUCT_LOG.DETAILS,
         component: ConstructLogSave,
+      },
+      {
+        path: PAGES.CONSTRUCT_LOG_CREATE,
+        name: PAGE_NAME.CONSTRUCT_LOG.CREATE,
+        component: ConstructLogSave,
       }
     ]
   },
