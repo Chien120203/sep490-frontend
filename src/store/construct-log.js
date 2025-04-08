@@ -39,6 +39,13 @@ export const useConstructLog = defineStore(
           //   endTime: "",
           // }
         ],
+        workAmount:[
+          // {
+          //   id: 0,
+          //   taskIndex: 0,
+          //   workAmount: 0,
+          // }
+        ],
         weather: [
           { type: "Điều kiện", values: ["", "", "", ""] },
           { type: "Nhiệt độ", values: ["", "", "", ""] },

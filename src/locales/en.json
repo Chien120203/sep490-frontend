@@ -1196,5 +1196,6 @@
 
   "E-PLAN-001": "Actual total price exceed the expected price",
 
-  "E-LOG-001": "Save construction log failed"
+  "E-LOG-001": "Save construction log failed",
+  "E-LOG-002": "Work amount cannot exceed the expected"
 }

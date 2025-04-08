@@ -75,19 +75,16 @@ export const getConstructLogRules = () => {
       }
     ],
     workAmount: [
-      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
-        validator: (rule, value, callback) =>
-          validateMinMax(
-            rule,
-            value,
-            callback,
-            MIN_NUMBER,
-            MAX_NUMBER,
-            t("E-CM-015", { min: MIN_NUMBER }),
-            t("E-CM-018", { max: MAX_NUMBER })
-          ),
-        trigger: "blur",
+        validator: (rule, value, callback) => {
+          const task = rule?.task;
+          if(!value) return callback(new Error(t("E-CM-002")));
+          if (value > task.expectedAmount) {
+            return callback(new Error(t('E-LOG-002')));
+          }
+          callback();
+        },
+        trigger: 'blur',
       }
     ],
   }
