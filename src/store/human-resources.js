@@ -19,9 +19,8 @@ export const useHumanResourcesStore = defineStore(
                 teamName: "",
                 teamManager: "",
                 description: "",
-                manager: [],
+                manager: null,
                 members: [],
-                constructPlanItems: [],
             }
         });
 
@@ -65,9 +64,8 @@ export const useHumanResourcesStore = defineStore(
 
         const saveHumanResources = async (params) => {
             mixinMethods.startLoading();
-            const formData = mixinMethods.createFormData(params);
             await services.HumanResourceAPI.save(
-                formData,
+                params,
                 (response) => {
                     if(response.success) {
                         humanResourcesDetails.value = response.data;
@@ -112,9 +110,8 @@ export const useHumanResourcesStore = defineStore(
                 teamName: "",
                 teamManager: "",
                 description: "",
-                manager: [],
+                manager: null,
                 members: [],
-                constructPlanItems: [],
             };
         };
 

@@ -1,14 +1,14 @@
 <template>
-  <div class="material-block">
-    <div class="material material-create material-detail">
-      <div class="material-header">
+  <div class="human-block">
+    <div class="human human-create human-detail">
+      <div class="human-header">
         <h3 class="page__ttl">
           <span class="btn-back" @click="handleBack"><IconBackMain/></span>
           {{
-            isUpdate ? $t("resource.material.details.title") : $t("resource.material.create.title")
+            isUpdate ? $t("resource.human.details.title") : $t("resource.human.create.title")
           }}
         </h3>
-        <div class="material-btn-detail">
+        <div class="human-btn-detail">
           <div class="item">
             <el-button class="btn btn-save" @click="submitForm()">
               {{ $t("common.save") }}
@@ -17,108 +17,108 @@
         </div>
       </div>
 
-      <div class="material-body mt-0">
+      <div class="human-body mt-0">
         {{validation.value.value}}
         <el-form
             ref="ruleFormRef"
-            :model="materialResourcesDetails.value"
-            :rules="MATERIAL_RULES"
+            :model="humanResourcesDetails.value"
+            :rules="HUMAN_RULES"
             class="form-search-box"
         >
           <div class="item item-bib-add">
             <el-form-item
-                prop="materialCode"
+                prop="humanCode"
                 class="custom-textarea required"
-                :label="$t('resource.material.details.materialCode')"
+                :label="$t('resource.human.details.humanCode')"
             >
-              <el-input v-model="materialResourcesDetails.value.materialCode" />
-              <label class="error-feedback-material" v-if="validation && validation.value.materialCode">
-                {{ $t(validation.value.materialCode) }}
+              <el-input v-model="humanResourcesDetails.value.humanCode" />
+              <label class="error-feedback-human" v-if="validation && validation.value.humanCode">
+                {{ $t(validation.value.humanCode) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="materialName" class="custom-textarea" :label="$t('resource.material.details.materialName')">
-              <el-input v-model="materialResourcesDetails.value.materialName" />
-              <label class="error-feedback-material" v-if="validation && validation.value.materialName">
-                {{ $t(validation.value.materialName) }}
+            <el-form-item prop="humanName" class="custom-textarea" :label="$t('resource.human.details.humanName')">
+              <el-input v-model="humanResourcesDetails.value.humanName" />
+              <label class="error-feedback-human" v-if="validation && validation.value.humanName">
+                {{ $t(validation.value.humanName) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="unit" class="required" :label="$t('resource.material.details.unit')">
-              <el-input v-model="materialResourcesDetails.value.unit" />
-              <label class="error-feedback-material" v-if="validation && validation.value.unit">
+            <el-form-item prop="unit" class="required" :label="$t('resource.human.details.unit')">
+              <el-input v-model="humanResourcesDetails.value.unit" />
+              <label class="error-feedback-human" v-if="validation && validation.value.unit">
                 {{ $t(validation.value.unit) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="branch" :label="$t('resource.material.details.branch')">
-              <el-input v-model="materialResourcesDetails.value.branch" />
-              <label class="error-feedback-material" v-if="validation && validation.value.branch">
+            <el-form-item prop="branch" :label="$t('resource.human.details.branch')">
+              <el-input v-model="humanResourcesDetails.value.branch" />
+              <label class="error-feedback-human" v-if="validation && validation.value.branch">
                 {{ $t(validation.value.branch) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="madeIn" class="custom-textarea" :label="$t('resource.material.details.madeIn')">
-              <el-input v-model="materialResourcesDetails.value.madeIn" />
-              <label class="error-feedback-material" v-if="validation && validation.value.madeIn">
+            <el-form-item prop="madeIn" class="custom-textarea" :label="$t('resource.human.details.madeIn')">
+              <el-input v-model="humanResourcesDetails.value.madeIn" />
+              <label class="error-feedback-human" v-if="validation && validation.value.madeIn">
                 {{ $t(validation.value.madeIn) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="chassisNumber" class="custom-textarea" :label="$t('resource.material.details.chassisNumber')">
-              <el-input v-model="materialResourcesDetails.value.chassisNumber" />
-              <label class="error-feedback-material" v-if="validation && validation.value.chassisNumber">
+            <el-form-item prop="chassisNumber" class="custom-textarea" :label="$t('resource.human.details.chassisNumber')">
+              <el-input v-model="humanResourcesDetails.value.chassisNumber" />
+              <label class="error-feedback-human" v-if="validation && validation.value.chassisNumber">
                 {{ $t(validation.value.chassisNumber) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="wholesalePrice" class="custom-textarea" :label="$t('resource.material.details.wholesalePrice')">
-              <el-input v-model="materialResourcesDetails.value.wholesalePrice" />
-              <label class="error-feedback-material" v-if="validation && validation.value.wholesalePrice">
+            <el-form-item prop="wholesalePrice" class="custom-textarea" :label="$t('resource.human.details.wholesalePrice')">
+              <el-input v-model="humanResourcesDetails.value.wholesalePrice" />
+              <label class="error-feedback-human" v-if="validation && validation.value.wholesalePrice">
                 {{ $t(validation.value.wholesalePrice) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="retailPrice" class="custom-textarea" :label="$t('resource.material.details.retailPrice')">
-              <el-input v-model="materialResourcesDetails.value.retailPrice" />
-              <label class="error-feedback-material" v-if="validation && validation.value.retailPrice">
+            <el-form-item prop="retailPrice" class="custom-textarea" :label="$t('resource.human.details.retailPrice')">
+              <el-input v-model="humanResourcesDetails.value.retailPrice" />
+              <label class="error-feedback-human" v-if="validation && validation.value.retailPrice">
                 {{ $t(validation.value.retailPrice) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="inventory" class="custom-textarea" :label="$t('resource.material.details.inventory')">
-              <el-input v-model="materialResourcesDetails.value.inventory" />
-              <label class="error-feedback-material" v-if="validation && validation.value.inventory">
+            <el-form-item prop="inventory" class="custom-textarea" :label="$t('resource.human.details.inventory')">
+              <el-input v-model="humanResourcesDetails.value.inventory" />
+              <label class="error-feedback-human" v-if="validation && validation.value.inventory">
                 {{ $t(validation.value.inventory) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="expireDate" class="custom-textarea" :label="$t('resource.material.details.expireDate')">
-              <el-input v-model="materialResourcesDetails.value.expireDate" />
-              <label class="error-feedback-material" v-if="validation && validation.value.expireDate">
+            <el-form-item prop="expireDate" class="custom-textarea" :label="$t('resource.human.details.expireDate')">
+              <el-input v-model="humanResourcesDetails.value.expireDate" />
+              <label class="error-feedback-human" v-if="validation && validation.value.expireDate">
                 {{ $t(validation.value.expireDate) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="productionDate" class="custom-textarea" :label="$t('resource.material.details.productionDate')">
-              <el-input v-model="materialResourcesDetails.value.productionDate" />
-              <label class="error-feedback-material" v-if="validation && validation.value.productionDate">
+            <el-form-item prop="productionDate" class="custom-textarea" :label="$t('resource.human.details.productionDate')">
+              <el-input v-model="humanResourcesDetails.value.productionDate" />
+              <label class="error-feedback-human" v-if="validation && validation.value.productionDate">
                 {{ $t(validation.value.productionDate) }}
               </label>
             </el-form-item>
           </div>
 
-          <div class="item item-bib-add item-material-add">
-            <el-form-item prop="description" class="input-item" :label="$t('resource.material.details.description')">
-              <el-input v-model="materialResourcesDetails.value.description" class="custom-textarea" type="textarea" />
-              <label class="error-feedback-material" v-if="validation && validation.value.description">
+          <div class="item item-bib-add item-human-add">
+            <el-form-item prop="description" class="input-item" :label="$t('resource.human.details.description')">
+              <el-input v-model="humanResourcesDetails.value.description" class="custom-textarea" type="textarea" />
+              <label class="error-feedback-human" v-if="validation && validation.value.description">
                 {{ $t(validation.value.description) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="attachments" :label="$t('resource.material.details.attachments')">
+            <el-form-item prop="attachments" :label="$t('resource.human.details.attachments')">
               <FileUpload
-                  :existingFiles="materialResourcesDetails.value.attachment"
+                  :existingFiles="humanResourcesDetails.value.attachment"
                   :allowedTypes="'.jpg,.png,.pdf,.docx'"
                   :fileLimit="3"
                   class="input-wd-96"
@@ -139,40 +139,40 @@ import IconBackMain from "@/svg/IconBackMain.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import FileUpload from "@/components/common/FileUpload.vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
-import {MATERIAL_RULES} from "@/rules/material-resource/index.js";
+import {HUMAN_RULES} from "@/rules/human-resource/index.js";
 import {useI18n} from "vue-i18n";
-import {useMaterialResourcesStore} from "@/store/material-resources.js";
+import {useHumanResourcesStore} from "@/store/human-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
   components: {FileUpload,ImageUpload, IconBackMain, SingleOptionSelect},
   setup() {
     const {t} = useI18n();
-    const materialResourcesStore = useMaterialResourcesStore();
+    const humanResourcesStore = useHumanResourcesStore();
     const {
-      materialResourcesDetails,
+      humanResourcesDetails,
       validation,
-      getMaterialResourcesDetails,
-      saveMaterialResources,
-      clearMaterialResourcesDetails
-    } = materialResourcesStore;
+      getHumanResourcesDetails,
+      saveHumanResources,
+      clearHumanResourcesDetails
+    } = humanResourcesStore;
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
 
     onMounted(() => {
       if(isUpdate.value) {
-        getMaterialResourcesDetails({materialId: route.params.id})
+        getHumanResourcesDetails({humanId: route.params.id})
       }
     });
 
     onUnmounted(() => {
       validation.value = {};
-      clearMaterialResourcesDetails();
+      clearHumanResourcesDetails();
     })
 
     const handleBack = () => {
-      router.push({name: PAGE_NAME.RESOURCE.MATERIAL.LIST});
+      router.push({name: PAGE_NAME.RESOURCE.HUMAN.LIST});
     };
 
     const ruleFormRef = ref(null);
@@ -181,30 +181,30 @@ export default {
       ruleFormRef.value.validate((valid) => {
         if (valid) {
           let method = isUpdate.value ? "update" : "create";
-          saveMaterialResources(materialResourcesDetails.value, method);
+          saveHumanResources(humanResourcesDetails.value, method);
         }
       });
     };
 
     const handleFileUpload = (files) => {
-      materialResourcesDetails.value.attachment = files;
+      humanResourcesDetails.value.attachment = files;
     }
 
     const handleSelectFiles = (listFiles) => {
-      materialResourcesDetails.value.image = [listFiles[0].raw];
+      humanResourcesDetails.value.image = [listFiles[0].raw];
     }
 
     const handleRemoveFile = (file) => {
-      materialResourcesDetails.value.image = materialResourcesDetails.value.filter((f) => f.uid !== file.uid);
+      humanResourcesDetails.value.image = humanResourcesDetails.value.filter((f) => f.uid !== file.uid);
     }
 
 
     return {
       ruleFormRef,
-      materialResourcesDetails,
+      humanResourcesDetails,
       isUpdate,
       validation,
-      MATERIAL_RULES,
+      HUMAN_RULES,
       handleBack,
       submitForm,
       handleFileUpload,
@@ -217,7 +217,7 @@ export default {
 
 <style lang="scss" scoped>
 /* Existing Styles */
-.error-feedback-material {
+.error-feedback-human {
   display: block;
   color: red;
   text-align: left;
@@ -240,7 +240,7 @@ export default {
   line-height: 1.88;
 }
 
-.material-btn-detail {
+.human-btn-detail {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -265,7 +265,7 @@ export default {
   }
 }
 
-.material-preview {
+.human-preview {
   resize: horizontal;
   overflow: auto;
   direction: rtl;
@@ -275,12 +275,12 @@ export default {
 }
 
 /* New Styles for Design Matching */
-.material-block {
+.human-block {
   background-color: #F5F5F5; /* Light grayish-white background */
   padding: 20px; /* Consistent padding around the form */
 }
 
-.material-body .form-search-box {
+.human-body .form-search-box {
   display: flex;
   gap: 20px; /* Space between the two columns */
 }
@@ -316,7 +316,7 @@ export default {
   resize: vertical; /* Allow vertical resizing */
 }
 
-.material-header {
+.human-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -350,12 +350,12 @@ export default {
 </style>
 
 <style>
-.item-material-add {
+.item-human-add {
   padding: 0 8px;
 }
 
-.material-body .form-search-box .el-select,
-.material-body .form-search-box .el-form-item__content {
+.human-body .form-search-box .el-select,
+.human-body .form-search-box .el-form-item__content {
   justify-content: space-between;
   font-size: 16px;
   line-height: 21px;
