@@ -518,6 +518,10 @@
           "status": "Status",
           "action": "Action"
         }
+      },
+      "modal_confirm": {
+        "title": "Confirm delete machine",
+        "message": "Please enter 'Delete' to confirm delete this machine"
       }
     },
     "material": {
@@ -562,6 +566,10 @@
           "status": "Status",
           "action": "Action"
         }
+      },
+      "modal_confirm": {
+        "title": "Confirm delete material",
+        "message": "Please enter 'Delete' to confirm delete this material"
       }
     },
     "human": {

@@ -2,11 +2,11 @@
   <div class="machine machine-list">
     <!-- Header Section -->
     <div class="machine-header">
-      <h3 class="page__ttl">{{ $t("resources.machine.title") }}</h3>
+      <h3 class="page__ttl">{{ $t("resource.machine.title") }}</h3>
       <div class="machine-btn-box machine-import-box">
         <el-row class="mb-4">
           <el-button class="btn btn-save" @click="handleRedirectToCreate">
-            {{ $t("resources.add_new") }}
+            {{ $t("resource.add_new") }}
           </el-button>
         </el-row>
       </div>
@@ -16,7 +16,7 @@
     <div class="machine-body">
       <div class="machine-search">
         <div class="machine-search-box col-md-9 col-lg-9">
-          <p class="machine-search__ttl">{{ $t("resources.keyword") }}</p>
+          <p class="machine-search__ttl">{{ $t("resource.keyword") }}</p>
           <div class="mb-0 ruleform">
             <el-input
                 :placeholder="$t('common.input_keyword')"
@@ -56,8 +56,8 @@
         :isConfirmByText="true"
         :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
-        :message="$t('machine.modal_confirm.message')"
-        :title="$t('machine.modal_confirm.title')"
+        :message="$t('resource.machine.modal_confirm.message')"
+        :title="$t('resource.machine.modal_confirm.title')"
     />
   </div>
 </template>
