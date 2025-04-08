@@ -556,35 +556,25 @@
       },
       "details": {
         "title": "Team Details",
-        "licensePlate": "License Plate",
-        "brand": "Brand",
-        "yearOfManufacture": "Year of Manufacture",
-        "countryOfManufacture": "Country of Manufacture",
-        "vehicleType": "Vehicle Type",
-        "chassisNumber": "Chassis Number",
-        "engineNumber": "Engine Number",
-        "images": "Images",
+        "teamName": "Team Name",
+        "teamManager": "Team Manager",
+        "manager": {
+          "fullName": "Manager Name"
+        },
         "status": "Status",
-        "driver": "Driver",
-        "color": "Color",
-        "fuelType": "Fuel Type",
-        "description": "Description",
-        "fuelTankVolume": "Fuel Tank Volume",
-        "fuelUnit": "Fuel Unit",
+        "action": "Action",
         "attachments": "Attachments"
       },
       "create": {
-        "title": "Add Participants"
+        "title": "Team Management"
       },
       "table": {
         "header": {
-          "code": "Machine Code",
-          "name": "Machine Name",
-          "licensePlate": "License Plate",
-          "brand": "Brand",
-          "vehicleType": "Vehicle Type",
-          "driver": "Driver",
-          "type": "Type",
+          "teamName": "Team Name",
+          "teamManager": "Team Manager",
+          "manager": {
+            "fullName": "Manager Name"
+          },
           "status": "Status",
           "action": "Action"
         }

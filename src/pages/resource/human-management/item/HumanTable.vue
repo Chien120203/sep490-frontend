@@ -1,9 +1,9 @@
 <template>
-  <div class="material-container">
+  <div class="human-container">
     <el-table
         :data="data"
         style="width: 100%"
-        class="el-tbl-custom material-table"
+        class="el-tbl-custom human-table"
     >
       <el-table-column
           type="index"
@@ -14,61 +14,39 @@
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.material.table.header.materialCode')"></p>
+          <p v-html="$t('resource.human.table.header.teamName')"></p>
         </template>
 
         <template #default="scope">
-          <span class="data-table">{{ scope.row.materialCode ?? "-" }}</span>
+          <span class="data-table">{{ scope.row.teamName ?? "-" }}</span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.material.table.header.materialName')"></p>
+          <p v-html="$t('resource.human.table.header.teamManager')"></p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.materialName ? scope.row.materialName : "-" }}
+        <span class="data-table">{{ scope.row.brand ? scope.row.teamManager : "-" }}
         </span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.material.table.header.inventory')"></p>
+          <p v-html="$t('resource.human.table.header.manager.fullName')"></p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.inventory ? scope.row.inventory : "-" }}
-        </span>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="130">
-        <template #header>
-          <p v-html="$t('resource.material.table.header.expireDate')"></p>
-        </template>
-
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.expireDate ? scope.row.expireDate : "-" }}
-        </span>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="130">
-        <template #header>
-          <p v-html="$t('resource.material.table.header.productionDate')"></p>
-        </template>
-
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.productionDate ? scope.row.productionDate : "-" }}
+        <span class="data-table">{{ scope.row.manager.fullName ? scope.row.manager.fullName : "-" }}
         </span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="90">
         <template #header>
-          <p v-html="$t('resource.material.table.header.action')"></p>
+          <p v-html="$t('resource.human.table.header.action')"></p>
         </template>
         <template #default="scope">
           <div>
@@ -99,7 +77,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 
 export default {
-  name: 'MaterialTable',
+  name: 'humanTable',
   components: {IconTrash, IconEdit},
   props: {
     data: {
@@ -114,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.material-container {
+.human-container {
   padding: 20px;
   background-color: #f5f7fa;
 
@@ -163,7 +141,7 @@ export default {
     }
   }
 
-  .material-table {
+  .human-table {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);

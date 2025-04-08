@@ -68,9 +68,9 @@ const API_CODE = {
     //Human Resource
     API_HUMAN_001: '/teams/',
     API_HUMAN_002: '/teams/search',
-    API_HUMAN_003: '/teams/create',
-    API_HUMAN_004: '/teams/update',
-    API_HUMAN_005: '/teams/delete',
+    API_HUMAN_003: '/teams/save',
+    API_HUMAN_004: '/teams/delete',
+
 };
 
 export default API_CODE;
