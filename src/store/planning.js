@@ -69,7 +69,8 @@ export const usePlanningStore = defineStore(
         id,
         {},
         (response) => {
-          planningDetails.value = response.data;
+          // planningDetails.value = response.data;
+          planningDetails.value = {...response.data, reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]};
 
           mixinMethods.endLoading();
         },

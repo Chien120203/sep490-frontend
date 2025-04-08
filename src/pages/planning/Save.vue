@@ -238,7 +238,7 @@ const selectionFormRef = ref(null);
 const detailsFormRef = ref(null);
 const modalFormRef = ref(null);
 const submitForm = () => {
-  planningDetails.value.reviewers = [...planningDetails.value.reviewers.map(reviewer => reviewer.id)];
+  // planningDetails.value.reviewers = [...planningDetails.value.reviewers.map(reviewer => reviewer.id)];
   planningDetails.value.projectId = projectId.value;
   const method = !!route.params.id ? "update" : "create";
   savePlanning(planningDetails.value, method);

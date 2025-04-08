@@ -60,7 +60,7 @@ export const useSiteSurveyStore = defineStore(
 
         const saveSurvey = async (params) => {
             mixinMethods.startLoading();
-            const formData = mixinMethods.createFormData(params);
+            const formData = mixinMethods.createFormData({...params, status: 1});
             await services.SiteSurveyAPI.save(
                 formData,
                 (response) => {

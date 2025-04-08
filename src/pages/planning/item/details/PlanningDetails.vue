@@ -275,7 +275,7 @@ const checkHasChildren = (row) => {
 
         <el-table-column :label="$t('contract.create.item_table.total_price')" resizable width="380">
           <template #default="{ row }">
-            {{ mixinMethods.formatInputMoney(row.total) }}
+            {{ mixinMethods.formatInputMoney(row.total || (row.quantity * row.unitPrice)) }}
           </template>
         </el-table-column>
       </el-table>
