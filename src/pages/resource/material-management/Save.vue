@@ -162,7 +162,7 @@ export default {
 
     onMounted(() => {
       if(isUpdate.value) {
-        getMaterialResourcesDetails({materialId: route.params.id})
+        getMaterialResourcesDetails(route.params.id);
       }
     });
 
