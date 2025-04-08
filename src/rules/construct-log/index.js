@@ -8,11 +8,11 @@ export const getConstructLogRules = () => {
   const constructLog = useConstructLog();
   return {
     startTime: [
-      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) => {
           const row = rule?.row; // we'll pass the row manually in the rule
-          if (!value || !row?.endTime) {
+          if(!value) return callback(new Error(t("E-CM-002")));
+          if (!row?.endTime) {
             return callback();
           }
           if (new Date(value).getTime() >= new Date(row.endTime).getTime()) {
@@ -23,11 +23,11 @@ export const getConstructLogRules = () => {
       }
     ],
     endTime: [
-      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) => {
           const row = rule?.row;
-          if (!value || !row?.startTime) {
+          if(!value) return callback(new Error(t("E-CM-002")));
+          if (!row?.startTime) {
             return callback();
           }
           if (new Date(value).getTime() <= new Date(row.startTime).getTime()) {
@@ -47,6 +47,15 @@ export const getConstructLogRules = () => {
       }
     ],
     logName: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
+    ],
+    safety: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
+    ],
+    quality: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
+    ],
+    progress: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },
     ],
     quantity: [

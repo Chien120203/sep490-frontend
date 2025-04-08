@@ -215,7 +215,7 @@ const validateForm = (formRef) => {
       console.warn("Invalid formRef:", formRef);
       return false;
     }
-    let result = false;
+    let result = true;
     formRef.validate((valid) => {
       result = !!valid;
     });

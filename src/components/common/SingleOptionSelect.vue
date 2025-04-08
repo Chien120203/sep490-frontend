@@ -131,7 +131,7 @@ export default {
     });
 
     watch(selectedItem, (newValue) => {
-      emit("handleSelectedParams", newValue);
+      if(selectedItem.value) emit("handleSelectedParams", newValue);
     });
 
     watch(() => props.defaultList, (newValue) => {

@@ -36,7 +36,7 @@
                 :rules="rules"
                 :selectedRow="selectedRow"
                 :selectData="materials"
-                :resourceType="MATERIAL_RESOURCE"
+                :resourceType="MATERIAL_TYPE"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
                 @update-value="calculateTotal"
@@ -51,7 +51,7 @@
                 :is-human="true"
                 :selectedRow="selectedRow"
                 :selectData="users"
-                :resourceType="HUMAN_RESOURCE"
+                :resourceType="HUMAN_TYPE"
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
                 @update-value="calculateTotal"
@@ -65,7 +65,7 @@
                 :rules="rules"
                 :selectData="vehicles"
                 :selectedRow="selectedRow"
-                :resourceType="MACHINE_RESOURCE"
+                :resourceType="MACHINE_TYPE"
                 :tableData="listSelectedMachines"
                 :optionKeys="vehicleOptions"
                 @update-value="calculateTotal"
@@ -88,7 +88,14 @@ import Modal from "@/components/common/Modal.vue";
 import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
 import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
-import {HUMAN_RESOURCE, MACHINE_RESOURCE, MATERIAL_RESOURCE} from "@/constants/resource.js";
+import {
+  HUMAN_RESOURCE,
+  HUMAN_TYPE,
+  MACHINE_RESOURCE,
+  MACHINE_TYPE,
+  MATERIAL_RESOURCE,
+  MATERIAL_TYPE
+} from "@/constants/resource.js";
 import {mixinMethods} from "@/utils/variables.js";
 import {useI18n} from "vue-i18n";
 

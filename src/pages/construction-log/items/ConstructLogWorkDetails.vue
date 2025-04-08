@@ -2,6 +2,7 @@
   <el-card class="construction-log-details">
     <SingleOptionSelect
         class="select-item"
+        :defaultList="selectedRow"
         :optionKeys="{ id: 'taskIndex', value: 'TaskName' }"
         :listData="tasks"
         :isRemote="true"
@@ -68,7 +69,7 @@
               :taskIndex="task.taskIndex"
               :resourceType="MACHINE_TYPE"
               :resources="logDetails.resources"
-              :selectData="mockDataVehicles"
+              :selectData="listMachineResources.value"
               :optionKeys="vehicleOptionKeys"
               :isExport="false"
               @remove-resource="handleRemoveResource"
@@ -80,11 +81,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from "@/constants/resource.js";
+import {useHumanResourcesStore} from "@/store/human-resources.js";
+import {useMachineResourcesStore} from "@/store/machine-resources.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
 
 const props = defineProps({
   logDetails: {
@@ -103,10 +107,11 @@ const groupedByTasks = ref(props.logDetails?.resources.reduce((acc, task) => {
   acc[task.taskIndex] = task;
   return acc;
 }, {}));
-const emit = defineEmits(["remove-resource"]);
-const materialOptionKeys = ref({ id: 'resourceId', value: 'value' });
-const userOptionKeys = ref({ id: 'resourceId', value: 'value' });
-const vehicleOptionKeys = ref({ id: 'resourceId', value: 'value' });
+const emit = defineEmits(["remove-resource", "remove-task"]);
+const materialOptionKeys = ref({id: "id", value: "materialCode"});
+const userOptionKeys = ref({id: "id", value: "teamName"});
+const vehicleOptionKeys = ref({id: "id", value: "chassisNumber"});
+const selectedRow = ref(null);
 const machineForm = ref(null);
 const materialForm = ref(null);
 const humanForm = ref(null);
@@ -115,29 +120,37 @@ defineExpose({
   materialForm,
   humanForm
 });
+const humanStore = useHumanResourcesStore();
+const machineStore = useMachineResourcesStore();
+const materialStore = useMaterialResourcesStore();
+const {listHumanResources, getListHumanResources} = humanStore;
+const {listMachineResources, getListMachineResources} = machineStore;
+const {listMaterialResources, getListMaterialResources} = materialStore;
+
+onMounted(async () => {
+  await getListHumanResources({pageIndex: 1}, false);
+  await getListMachineResources({pageIndex: 1}, false);
+  await getListMaterialResources({pageIndex: 1}, false);
+});
 //mock data
 const tasks = ref([
-  { taskIndex: 1, TaskName: "Planning", Progress: 100 },
-  { taskIndex: 2, TaskName: "Design", Progress: 86 }
+  { taskIndex: 3, TaskName: "Planning", Progress: 100 },
+  { taskIndex: 4, TaskName: "Design", Progress: 86 }
 ]);
 const mockDataMaterials = [
-  { resourceId: "1", value: "Item A" },
-  { resourceId: "2", value: "Item B" },
-  { resourceId: "3", value: "Item C" },
+  { id: "1", materialCode: "Item A" },
+  { id: "2", materialCode: "Item B" },
+  { id: "3", materialCode: "Item C" },
 ];
 const mockDataEmployees = [
-  { resourceId: "E001", value: "John Doe" },
-  { resourceId: "E002", value: "Jane Smith" },
-  { resourceId: "E003", value: "Michael Johnson" },
-];
-const mockDataVehicles = [
-  { resourceId: "V001", value: "Vehicle 1" },
-  { resourceId: "V002", value: "Vehicle 2" },
-  { resourceId: "V003", value: "Vehicle 3" },
+  { id: "E001", teamName: "John Doe" },
+  { id: "E002", teamName: "Jane Smith" },
+  { id: "E003", teamName: "Michael Johnson" },
 ];
 
 // Handle Task Selection and Dynamically Add Task
 const handleSelectTask = (id) => {
+  selectedRow.value = id;
   const selectedTask = tasks.value.find(task => task.taskIndex === id);
 
   if (selectedTask) {
@@ -150,6 +163,7 @@ const handleSelectTask = (id) => {
 
 // Handle Task Deletion
 const handleDeleteLog = (taskIndex) => {
+  selectedRow.value = null;
   delete groupedByTasks.value[taskIndex];
   emit("remove-task",  taskIndex);
 };

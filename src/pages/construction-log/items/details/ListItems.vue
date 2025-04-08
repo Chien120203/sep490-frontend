@@ -1,8 +1,8 @@
 <template>
   <div class="item-list">
     <SingleOptionSelect
-        class="select-item"
         :defaultList="selectedRow"
+        class="select-item"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
         :listData="selectData"
         :isRemote="true"
@@ -24,7 +24,7 @@
 
         <el-table-column prop="name" label="Tên" width="300">
           <template #default="scope">
-            {{ getResource(scope.row.resourceId).name || "-" }}
+            {{ getResource(scope.row.resourceId)[optionKeys.value] || "-" }}
           </template>
         </el-table-column>
 
@@ -33,7 +33,7 @@
             <el-form-item :prop="`listAddedValues.${$index}.startTime`"
                           :rules="rules.startTime.map(rule => ({ ...rule, row: row }))">
               <el-time-picker
-                  v-model="row.startTime"
+                  v-model="listAddedValues[$index].startTime"
                   :placeholder="isExport ? 'Giờ xuất' : 'Giờ làm'"
               />
             </el-form-item>
@@ -45,7 +45,7 @@
             <el-form-item :prop="`listAddedValues.${$index}.endTime`"
                           :rules="rules.endTime.map(rule => ({ ...rule, row: row }))">
               <el-time-picker
-                  v-model="row.endTime"
+                  v-model="listAddedValues[$index].endTime"
                   placeholder="Giờ nghỉ"
               />
             </el-form-item>
@@ -124,11 +124,11 @@ const handleSelectItem = (id) => {
   }
 };
 const handleRemoveResource = (id) => {
-  selectedRow.value = null;
   emit("remove-resource", {resourceId: id, taskIndex: props.taskIndex, resourceType: props.resourceType});
+  selectedRow.value = null;
 }
 const getResource = (id) => {
-  return props.selectData.find(item => item.resourceId === id) || {};
+  return props.selectData.find(item => item[props.optionKeys.id] === id) || {};
 }
 </script>
 

@@ -41,15 +41,11 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {useProjectStore} from "@/store/project.js";
-import {useCustomerStore} from "@/store/customer.js";
-import {useUserStore} from "@/store/user.js";
 import {mixinMethods} from "@/utils/variables";
-import {useContractStore} from "@/store/contract.js";
 import ConstructLogWorkDetails from "@/pages/construction-log/items/ConstructLogWorkDetails.vue";
 import ConstructionLogInfor from "@/pages/construction-log/items/ConstructionLogInfor.vue";
 import {useConstructLog} from "@/store/construct-log.js";
@@ -102,6 +98,7 @@ const submitForm = () => {
     ...formLogDetailsRef.value?.humanForm,
     formLogInfoRef.value
   ];
+  console.log(constructLogDetails.value)
   for (const form of formRefs) {
     if (form?.ruleFormRef) { // Access ruleFormRef
       const isValid = mixinMethods.validateForm(form.ruleFormRef);
@@ -111,7 +108,6 @@ const submitForm = () => {
       }
     }
   }
-  console.log(constructLogDetails.value)
 }
 </script>
 <style scoped>
