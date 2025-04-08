@@ -1,57 +1,37 @@
 <template>
-  <el-card shadow="hover">
-    <div class="task-details">
-      <p><strong>Task ID:</strong> {{ task.TaskID }}</p>
-      <p><strong>Task Name:</strong> {{ task.TaskName }}</p>
-      <p><strong>Start Date:</strong> {{ formatDate(task.StartDate) }}</p>
-      <p><strong>End Date:</strong> {{ formatDate(task.EndDate) }}</p>
-      <p><strong>Baseline Start Date:</strong> {{ formatDate(task.BaselineStartDate) }}</p>
-      <p><strong>Baseline End Date:</strong> {{ formatDate(task.BaselineEndDate) }}</p>
-      <p><strong>Duration:</strong> {{ task.Duration }} days</p>
-    </div>
+  <el-card shadow="hover" class="task-card">
+    <el-row :gutter="20" class="task-details">
+      <el-col :span="12">
+        <p><strong>Mã công việc:</strong> {{ task.index }}</p>
+        <p><strong>Tên công việc:</strong> {{ task.workName }}</p>
+        <p><strong>Ngày bắt đầu thực tế:</strong> {{ formatDate(task.actualStartDate) }}</p>
+        <p><strong>Ngày kết thúc thực tế:</strong> {{ formatDate(task.actualEndDate) }}</p>
+      </el-col>
 
-    <div class="status-container">
-      <el-tag
-          :type="statusType"
-          class="status-tag"
-          @click="editStatus"
-      >
-        {{ task.status }}
-      </el-tag>
+      <el-col :span="12">
+        <p><strong>Ngày bắt đầu kế hoạch:</strong> {{ formatDate(task.planStartDate) }}</p>
+        <p><strong>Ngày kết thúc kế hoạch:</strong> {{ formatDate(task.planEndDate) }}</p>
 
-      <el-tag
-          type="success"
-          class="progress-tag"
-          @click="editProgress"
-      >
-        {{ task.progress }}%
-      </el-tag>
-    </div>
+        <div class="status-progress">
+          <p><strong>Trạng thái:</strong>
+            <el-tag :type="getStatusTagType(task.status)">
+              {{ getStatusLabel(task.status) }}
+            </el-tag>
+          </p>
 
-    <el-dialog v-model="statusDialog" title="Chỉnh sửa trạng thái">
-      <el-select v-model="newStatus" placeholder="Chọn trạng thái">
-        <el-option label="Hoàn thành" value="Hoàn thành" />
-        <el-option label="Đang thực hiện" value="Đang thực hiện" />
-        <el-option label="Chưa bắt đầu" value="Chưa bắt đầu" />
-      </el-select>
-      <template #footer>
-        <el-button @click="statusDialog = false">Hủy</el-button>
-        <el-button type="primary" @click="saveStatus">Lưu</el-button>
-      </template>
-    </el-dialog>
-
-    <el-dialog v-model="progressDialog" title="Chỉnh sửa tiến độ">
-      <el-input-number v-model="newProgress" :min="0" :max="100" />
-      <template #footer>
-        <el-button @click="progressDialog = false">Hủy</el-button>
-        <el-button type="primary" @click="saveProgress">Lưu</el-button>
-      </template>
-    </el-dialog>
+          <div class="progress-bar">
+            <p><strong>Tiến độ:</strong></p>
+            <el-progress :percentage="task.progress" :stroke-width="16" show-text/>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </el-card>
 </template>
 
 <script setup>
 import {ref, computed, defineProps, defineEmits, watch} from "vue";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   task: {
@@ -66,38 +46,34 @@ const emit = defineEmits(["updateStatus", "updateProgress"]);
 const newStatus = ref(props.task.status);
 const newProgress = ref(props.task.progress);
 
-// Dialog states
-const statusDialog = ref(false);
-const progressDialog = ref(false);
-
 const statusType = computed(() => {
   if (newStatus.value === "Hoàn thành") return "success";
+  if (newStatus.value === 1) return "progress";
   if (newStatus.value === "Đang thực hiện") return "warning";
   return "danger";
 });
 
+const getStatusLabel = (status) => {
+  switch (status) {
+    case 0: return "Hoàn thành";
+    case 1: return "Đang thực hiện";
+    case 2: return "Chưa bắt đầu";
+    default: return "Không xác định";
+  }
+}
+
+const getStatusTagType = (status) => {
+  switch (status) {
+    case 0: return "success";
+    case 1: return "primary";
+    case 2: return "warning";
+    default: return "";
+  }
+}
+
 // Format date function
 const formatDate = (date) => {
-  if (!date) return "N/A";
-  return new Date(date).toLocaleDateString("vi-VN");
-};
-
-const editStatus = () => {
-  statusDialog.value = true;
-};
-
-const saveStatus = () => {
-  statusDialog.value = false;
-  emit("updateStatus", newStatus.value);
-};
-
-const editProgress = () => {
-  progressDialog.value = true;
-};
-
-const saveProgress = () => {
-  progressDialog.value = false;
-  emit("updateProgress", newProgress.value);
+  return mixinMethods.showDateTime(date);
 };
 
 // Watch for prop changes (useful if task data updates externally)
@@ -108,16 +84,26 @@ watch(() => props.task, (newTask) => {
 </script>
 
 <style scoped>
-.task-details {
-  margin-bottom: 15px;
+.task-card {
+  padding: 20px;
 }
 
-.status-container {
-  display: flex;
-  gap: 10px;
+.task-header h3 {
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.status-tag, .progress-tag {
-  cursor: pointer;
+.task-details p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.status-progress {
+  margin-top: 20px;
+}
+
+.progress-bar {
+  margin-top: 10px;
 }
 </style>
