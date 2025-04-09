@@ -12,11 +12,13 @@
 
     <template #body>
       <div class="modal-body-container">
-        <AllocateFormInfo :data="data" :listProjects="listProjects" @searchProject="handleSearchProjects"/>
+        <AllocateFormInfo ref="formAllocationInfo" :data="data" :listProjects="listProjects" @searchProject="handleSearchProjects"/>
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
           <el-tab-pane label="Tài nguyên" name="materials">
             <ItemList
+                ref="formAllocationMaterialInfos"
+                :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="materials"
                 :resourceType="MATERIAL_TYPE"
                 :tableData="listSelectedMaterials"
@@ -28,6 +30,8 @@
           <!-- Nhân lực -->
           <el-tab-pane label="Nhân lực" name="users">
             <ItemList
+                ref="formAllocationHumanInfos"
+                :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="listEmployees"
                 :resourceType="HUMAN_TYPE"
                 :tableData="listSelectedUsers"
@@ -39,6 +43,8 @@
           <!-- Phương tiện -->
           <el-tab-pane label="Phương tiện" name="vehicles">
             <ItemList
+                ref="formAllocationVehicleInfos"
+                :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="listVehicles"
                 :resourceType="MACHINE_TYPE"
                 :tableData="listSelectedVehicles"
@@ -66,6 +72,7 @@ import {
   MATERIAL_TYPE
 } from "@/constants/resource.js";
 import AllocateFormInfo from "@/pages/resource-allocation/items/modal/AllocateFormInfo.vue";
+import { getAllocationResourceItemRules } from "@/rules/allocation";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -80,6 +87,8 @@ const emit = defineEmits(["close", "submit", "searchProjects"]);
 const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
+
+const ALLOCATIONFORMITEMS_RULES = getAllocationResourceItemRules();
 
 watch(props.data.resourceAllocationDetails, () => {
   listSelectedVehicles.value = getListResourcesByType(props.data?.resourceAllocationDetails, MACHINE_TYPE);
@@ -120,11 +129,22 @@ const handleSearchProjects = (value) => {
 }
 
 const handleSubmit = () => {
-  let listRequests = [
-    ...listSelectedUsers.value.map(({ name, ...rest }) => rest),
-    ...listSelectedVehicles.value.map(({ name, ...rest }) => rest),
-    ...listSelectedMaterials.value.map(({ name, ...rest }) => rest),
+  const formRefs = [
+    formAllocationMaterialInfos,
+    formAllocationVehicleInfos,
+    formAllocationHumanInfos,
+    formAllocationInfo
   ];
+  console.log(constructLogDetails.value)
+  for (const form of formRefs) {
+    if (form?.ruleFormRef) { // Access ruleFormRef
+      const isValid = mixinMethods.validateForm(form.ruleFormRef);
+      if (!isValid) {
+        mixinMethods.notifyError(t('E-LOG-001'));
+        return;
+      }
+    }
+  }
   emit("submit", listRequests);
 };
 </script>

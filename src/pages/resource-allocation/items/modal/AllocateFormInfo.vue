@@ -1,6 +1,9 @@
 <template>
   <div class="price-input-form">
-    <el-form label-width="30%">
+    <el-form 
+      label-width="40%"
+      :rules="ALLOCATIONFORMINFO_RULES"
+      :model="data">
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="Request Code">
@@ -20,7 +23,6 @@
                   :optionKeys="{ id: 'id', value: 'projectCode' }"
                   :listData="listProjects"
                   :isRemote="true"
-                  class="input-wd-96"
                   @remoteSearch="handleSearchProject"
                   @handleSelectedParams="handleSelectItem"
               />
@@ -29,7 +31,7 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="Request Date">
+          <el-form-item label="Request Date" prop="requestDate">
             <el-date-picker
                 style="width: 96%"
                 :value-format="DATE_FORMAT"
@@ -65,6 +67,7 @@ import {PRIORITIES, STATUSES} from "@/constants/mobilization.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {usePersistenceStore} from "@/store/persistence.js";
+import { getAllocationRules } from "@/rules/allocation";
 
 const props = defineProps({
   data: { type: Object, default: () => ({}) },
@@ -80,7 +83,13 @@ const {
 } = persist;
 
 const requestType = ref("from");
-const projectSelected = computed(() => requestType.value === "from" ? props.data.fromProjectId : props.data.toProjectId);
+const projectSelected = ref(null);
+
+projectSelected.value = requestType.value === "from" ? props.data.fromProjectId : props.data.toProjectId;
+
+
+const ALLOCATIONFORMINFO_RULES = getAllocationRules();
+
 const handleSearchProject = (value) => {
   emit("searchProject", value);
 };
@@ -107,6 +116,12 @@ const handleSelectItem = (value) => {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  gap: 5px;
+}
+
+.el-radio-group {
+  gap: 5px;
+  flex-wrap: nowrap;
 }
 
 .custom-input {
@@ -115,5 +130,9 @@ const handleSelectItem = (value) => {
 
 :deep(.el-form-item__label) {
   width: 20% !important; /* Label takes 30% width */
+}
+
+:deep(.el-form-item__content) {
+  margin-left: 0% !important;
 }
 </style>

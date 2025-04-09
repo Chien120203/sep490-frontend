@@ -8,27 +8,34 @@
         @handleSelectedParams="handleSelectItem"
         @remoteSearch="handleSearch"
     />
-    <el-table :data="listAddedValues" border style="width: 100%">
-      <el-table-column prop="index" label="STT" width="60">
-        <template #default="scope">
-          {{ scope.$index + 1 }}
-        </template>
-      </el-table-column>
+    <el-form
+        ref="ruleFormRef"
+        :model="{ listAddedValues }"
+        :rules="rules"
+        class="form-search-box"
+    >
+      <el-table :data="listAddedValues" border style="width: 100%">
+        <el-table-column prop="index" label="STT" width="60">
+          <template #default="scope">
+            {{ scope.$index + 1 }}
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="name" label="Tên tài nguyên"/>
+        <el-table-column prop="name" label="Tên tài nguyên"/>
 
-      <el-table-column prop="unit" label="Đơn vị">
-        <template #default="scope">
-          <el-input v-model="scope.row.unit"/>
-        </template>
-      </el-table-column>
+        <el-table-column prop="unit" label="Đơn vị">
+          <template #default="scope">
+            <el-input v-model="scope.row.unit"/>
+          </template>
+        </el-table-column>
 
-      <el-table-column prop="quantity" label="Số lượng">
-        <template #default="scope">
-          <el-input v-model.number="scope.row.quantity"/>
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-table-column prop="quantity" label="Số lượng">
+          <template #default="scope">
+            <el-input v-model.number="scope.row.quantity"/>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-form>
   </div>
 </template>
 
@@ -42,6 +49,16 @@ const props = defineProps({
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
   resourceType: { type: Number, default: 0 },
+  rules: {
+    type: Object,
+    default: () => {
+    }
+  }
+});
+const ruleFormRef = ref(null);
+
+defineExpose({
+  ruleFormRef
 });
 
 const listAddedValues = ref(props.tableData || []);

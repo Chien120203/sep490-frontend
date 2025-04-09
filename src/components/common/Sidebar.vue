@@ -68,6 +68,7 @@ import IconPlanning from "@/svg/IconPlanning.vue";
 import IconProgress from "@/svg/IconProgress.vue";
 import IconChangeRequest from "@/svg/IconChangeRequest.vue";
 import IconRequestMobilization from "@/svg/IconRequestMobilization.vue";
+import IconRequestAllocation from "@/svg/IconRequestAllocation.vue";
 import IconResource from "@/svg/IconResource.vue";
 import IconMachine from "@/svg/IconMachine.vue";
 import IconMaterial from "@/svg/IconMaterial.vue";
@@ -100,6 +101,7 @@ export default {
     IconMachine,
     IconMaterial,
     IconHuman,
+    IconRequestAllocation
   },
   setup() {
     const {t} = useI18n();
@@ -155,6 +157,12 @@ export default {
             function_name: t("side_bar.label.resource_mobilization"),
             function_page_name: PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
             function_icon: "IconRequestMobilization",
+            isShow: true,
+          },
+          {
+            function_name: t("side_bar.label.resource_allocation"),
+            function_page_name: PAGE_NAME.RESOURCE_ALLOCATION.LIST,
+            function_icon: "IconRequestAllocation",
             isShow: true,
           }
         ],

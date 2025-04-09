@@ -1042,6 +1042,7 @@
       "construct_log": "Construction Log",
       "change_request": "Change Request",
       "resource_mobilization": "Mobilization",
+      "resource_allocation": "Allocation",
       "project": "Project",
       "resource": {
         "title": "Resource Management",
