@@ -11,12 +11,15 @@
         </div>
 
         <div v-if="selectedTab === 'statistic'">
-          <GanttTable :tasks="mockTasks" />
+          <StatisticTable :taskDetails="task" :taskPlan="taskPlan" :listLog="listLog" />
         </div>
 
         <div v-if="selectedTab === 'log'">
           <ConstructionLogTable
-            @choose-date="handleChooseDate"
+              :title="title"
+              :dateRange="searchForm"
+              :listLog="listLog"
+              @choose-date="handleChooseDate"
           />
         </div>
 
@@ -64,16 +67,33 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, defineProps, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import TitleNavigation from "@/components/common/TitleNavigation.vue";
-import GanttTable from "@/pages/progress/items/modal/items/progress-details/GanttTable.vue";
+import StatisticTable from "@/pages/progress/items/modal/items/progress-details/StatisticTable.vue";
 import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
 import DependencyTaskTable from "@/pages/progress/items/modal/items/progress-details/DependencyTaskTable.vue";
 import EmployeeTable from "@/pages/progress/items/modal/items/progress-details/EmployeeTable.vue";
 import DependencyModal from "@/pages/progress/items/modal/DependencyModal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-
+const props = defineProps({
+  listLog: {
+    type: Array,
+    default: () => []
+  },
+  taskPlan: {
+    type: Object,
+    default: () => {}
+  },
+  task: {
+    type: Object,
+    default: () => {}
+  }
+});
+const searchForm = ref({
+  startDate: "2024-04-01",
+  endDate: "2024-04-30"
+});
 const selectedTab = ref("statistic"); // Default tab
 const listTabs =ref([
   {

@@ -67,7 +67,7 @@ const plusOneMonth = (dateStr) => {
 }
 
 const getLogName = (data) => {
-  return props.listLog.find(log => log.date === data)?.name || ""
+  return props.listLog.find(log => log.logDate === data)?.name || ""
 }
 </script>
 <style scoped>

@@ -7,15 +7,25 @@ import {useRouter} from "vue-router";
 import {usePersistenceStore} from "@/store/persistence.js";
 import ProgressDetailsModal from "@/pages/progress/items/modal/ProgressDetailsModal.vue"
 import {useProgressStore} from "@/store/progress.js";
+import {useConstructLog} from "@/store/construct-log.js";
+import {usePlanningStore} from "@/store/planning.js";
 
 const router = useRouter();
 const persistenceStore = usePersistenceStore();
 const progressStore = useProgressStore();
-
+const constructStore = useConstructLog();
+const planningStore = usePlanningStore();
 const {
   progressDetails,
   getProgressDetails
 } = progressStore;
+const {
+  taskPlanDetails
+} = planningStore;
+const {
+  listConstructLog,
+  listLogsByTask
+} = constructStore;
 const {
   projectId
 } = persistenceStore;
@@ -81,6 +91,8 @@ const handleCloseModal = () => {
     </div>
     <ProgressDetailsModal
         :progressDetails="progressItem"
+        :listLog="listLogsByTask.value"
+        :taskPlan="taskPlanDetails.value"
         :show="isShowModal"
         @close="handleCloseModal"
     />
