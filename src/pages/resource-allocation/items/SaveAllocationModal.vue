@@ -135,7 +135,7 @@ const handleSubmit = () => {
     formAllocationHumanInfos,
     formAllocationInfo
   ];
-  console.log(constructLogDetails.value)
+
   for (const form of formRefs) {
     if (form?.ruleFormRef) { // Access ruleFormRef
       const isValid = mixinMethods.validateForm(form.ruleFormRef);
