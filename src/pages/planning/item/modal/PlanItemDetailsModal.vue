@@ -39,6 +39,7 @@
                 :resourceType="MATERIAL_TYPE"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
+                @search="handleSearch"
                 @update-value="calculateTotal"
             />
           </el-tab-pane>
@@ -53,6 +54,7 @@
                 :selectData="users"
                 :resourceType="HUMAN_TYPE"
                 :tableData="listSelectedUsers"
+                @search="handleSearch"
                 :optionKeys="userOptions"
                 @update-value="calculateTotal"
             />
@@ -62,11 +64,13 @@
           <el-tab-pane v-if="!hasChildren" :label="$t('planning.modal.el_pane.machine')" name="vehicles">
             <ItemList
                 ref="tableMachineFormRef"
+                :is-human="true"
                 :rules="rules"
                 :selectData="vehicles"
                 :selectedRow="selectedRow"
                 :resourceType="MACHINE_TYPE"
                 :tableData="listSelectedMachines"
+                @search="handleSearch"
                 :optionKeys="vehicleOptions"
                 @update-value="calculateTotal"
             />
@@ -112,7 +116,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["close", "submit"]);
+const emit = defineEmits(["close", "submit", "search"]);
 const {t} = useI18n();
 
 const activeTab = ref("tasks");
@@ -121,7 +125,7 @@ const tableHumanFormRef = ref(null);
 const tableMaterialFormRef = ref(null);
 const dependentFormRef = ref(null);
 const childFormRef = ref(null);
-const materialOptions = ref({id: "id", value: "materialCode"});
+const materialOptions = ref({id: "id", value: "materialName"});
 const userOptions = ref({id: "id", value: "teamName"});
 const vehicleOptions = ref({id: "id", value: "chassisNumber"});
 const totalAllPrice = ref({
@@ -152,6 +156,10 @@ const calculateTotal = () => {
     totalPrice: (machine + labor + material).toFixed(2),
   };
 };
+
+const handleSearch = (data) => {
+  emit("search", data)
+}
 
 const closeModal = () => {
   totalAllPrice.value = {

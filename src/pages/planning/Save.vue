@@ -65,6 +65,7 @@
       :materials="listMaterialResources.value"
       :users="listHumanResources.value"
       :vehicles="listMachineResources.value"
+      @search="handleSearch"
       @close="handleCloseModal"
       @submit="handleSaveItemDetails"
   />
@@ -92,6 +93,7 @@ import {useHumanResourcesStore} from "@/store/human-resources.js";
 import {useMachineResourcesStore} from "@/store/machine-resources.js";
 import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {useI18n} from "vue-i18n";
+import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
@@ -155,12 +157,12 @@ const projectStore = useProjectStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
 const planningStore = usePlanningStore();
-const persistance = usePersistenceStore();
+const persistence = usePersistenceStore();
 const humanStore = useHumanResourcesStore();
 const machineStore = useMachineResourcesStore();
 const materialStore = useMaterialResourcesStore();
 
-const {projectId} = persistance;
+const {projectId} = persistence;
 const {
   contractDetails,
   getContractDetails,
@@ -224,7 +226,6 @@ const handleSaveItemDetails = (data) => {
       item.index === selectedRow.value.index ? {...item, ...data} : item
   );
   handleCloseModal();
-  console.log(planningDetails.value);
 };
 
 const handleTabChange = (tab) => {
@@ -237,6 +238,20 @@ const updateListQAs = (list) => {
 
 const selectionFormRef = ref(null);
 const detailsFormRef = ref(null);
+
+const handleSearch = (data) => {
+  switch (data.type) {
+    case MACHINE_TYPE:
+      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
+      break;
+    case HUMAN_TYPE:
+      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
+      break;
+    case MATERIAL_TYPE:
+      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
+  }
+}
+
 const submitForm = async () => {
   planningDetails.value.projectId = projectId.value;
   const payload = {

@@ -46,6 +46,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column v-if="resourceType === MATERIAL_TYPE" :label="$t('planning.items.inventory')">
+          <template #default="{ row }">
+            {{getInventory(row.resourceId)}}
+          </template>
+        </el-table-column>
+
         <el-table-column prop="unitPrice" :label="$t('planning.items.price')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unitPrice`" :rules="rules.unitPrice">
@@ -90,6 +96,7 @@ import {defineEmits, defineProps, reactive, ref, watch} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
+import {MATERIAL_TYPE} from "@/constants/resource.js";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
@@ -98,7 +105,7 @@ const props = defineProps({
     default: () => {
     }
   },
-  isHuman: { type: Boolean, default:false },
+  isHuman: { type: Boolean, default: false },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
   resourceType: { type: String, default: '' },
@@ -116,7 +123,7 @@ defineExpose({
 });
 const emit = defineEmits(["search", "update-value"]);
 const handleSearch = (value) => {
-  emit('search', value);
+  emit('search', {value: value, type: props.resourceType});
 }
 const handleSelectItem = (id) => {
   const exists = listAddedValues.value.some(entry => entry.resourceId === id);
@@ -134,6 +141,10 @@ const handleSelectItem = (id) => {
 
 const getResourceName = (id) => {
   return props.selectData.find(item => item.id === id)[props.optionKeys.value] || "-";
+}
+
+const getInventory = (id) => {
+  return props.selectData.find(item => item.id === id).inventory || 0;
 }
 
 const handleChangeValue = () => {

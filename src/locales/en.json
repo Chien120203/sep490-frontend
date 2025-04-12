@@ -823,7 +823,8 @@
       "quantity": "Quantity",
       "price": "Price",
       "total": "Total Price",
-      "action": "Action"
+      "action": "Action",
+      "inventory": "Inventory quantity"
     },
     "planned": {
       "material": "Planned Material Price",
