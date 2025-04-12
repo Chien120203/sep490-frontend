@@ -12,19 +12,15 @@
 
     <template #body>
       <div class="modal-body-container">
-        <MobilizeFormInfo 
-          :data="data"
-          :rules="MOBILIZEFORMINFO_RULES"
-        />
-        <label class="error-feedback" v-if="listSelectedMaterials.length <= 0 && listSelectedUsers.length<= 0 && listSelectedVehicles.length <= 0">
-          {{ $t('E-RR-FE-002') }}
-        </label>
+        <AllocateFormInfo ref="formAllocationInfo" :data="data" :listProjects="listProjects" @searchProject="handleSearchProjects"/>
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
           <el-tab-pane label="Tài nguyên" name="materials">
             <ItemList
+                ref="formAllocationMaterialInfos"
+                :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="materials"
-                :resourceType="RESOURCE_TYPE_MATERIALS"
+                :resourceType="MATERIAL_TYPE"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
                 @update-list="updateListMaterials"
@@ -34,8 +30,10 @@
           <!-- Nhân lực -->
           <el-tab-pane label="Nhân lực" name="users">
             <ItemList
+                ref="formAllocationHumanInfos"
+                :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="listEmployees"
-                :resourceType="RESOURCE_TYPE_USERS"
+                :resourceType="HUMAN_TYPE"
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
                 @update-list="updateListUsers"
@@ -45,8 +43,10 @@
           <!-- Phương tiện -->
           <el-tab-pane label="Phương tiện" name="vehicles">
             <ItemList
+                ref="formAllocationVehicleInfos"
+                :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="listVehicles"
-                :resourceType="RESOURCE_TYPE_VEHICLES"
+                :resourceType="MACHINE_TYPE"
                 :tableData="listSelectedVehicles"
                 :optionKeys="vehicleOptions"
                 @update-list="updateListVehicles"
@@ -63,21 +63,38 @@
 </template>
 
 <script setup>
-import {defineProps, ref, watch} from "vue";
+import {defineProps, ref, watch, watchEffect} from "vue";
 import Modal from "@/components/common/Modal.vue";
-import MobilizeFormInfo from "@/pages/resource-mobilization/items/modal/MobilizeFormInfo.vue";
 import ItemList from "@/pages/resource-mobilization/items/modal/ItemList.vue";
-import { getMobilizationInfoRules } from "@/rules/mobilization/index.js";
-import { RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_VEHICLES, RESOURCE_TYPE_USERS } from "@/constants/mobilization";
+import {
+  HUMAN_TYPE,
+  MACHINE_TYPE,
+  MATERIAL_TYPE
+} from "@/constants/resource.js";
+import AllocateFormInfo from "@/pages/resource-allocation/items/modal/AllocateFormInfo.vue";
+import { getAllocationResourceItemRules } from "@/rules/allocation";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
   data: { type: Object, default: () => ({}) },
+  listProjects: { type: Array, default: () => [] },
 });
-const emit = defineEmits(["close", "submit"]);
-const listSelectedVehicles = ref( []);
+const getListResourcesByType = (data, type) => {
+  if(!data) return [];
+  return data.filter(item => item?.resourceType === type);
+}
+const emit = defineEmits(["close", "submit", "searchProjects"]);
+const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
+
+const ALLOCATIONFORMITEMS_RULES = getAllocationResourceItemRules();
+
+watch(props.data.resourceAllocationDetails, () => {
+  listSelectedVehicles.value = getListResourcesByType(props.data?.resourceAllocationDetails, MACHINE_TYPE);
+  listSelectedMaterials.value = getListResourcesByType(props.data?.resourceAllocationDetails, MATERIAL_TYPE);
+  listSelectedUsers.value = getListResourcesByType(props.data?.resourceAllocationDetails, HUMAN_TYPE);
+});
 const materialOptions = ref({ id: "id", value: "name" });
 const userOptions = ref({ id: "id", value: "name" });
 const vehicleOptions = ref({ id: "id", value: "name" });
@@ -97,8 +114,6 @@ const listVehicles = ref([
   {id: 2, name: "Xe 2", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
 ]);
 
-const MOBILIZEFORMINFO_RULES = getMobilizationInfoRules();
-
 const updateListMaterials = (listData) => {
   listSelectedMaterials.value = listData;
 };
@@ -109,40 +124,27 @@ const updateListVehicles = (listData) => {
   listSelectedVehicles.value = listData;
 };
 
-watch(() => props.data, (data) => {
-  if (data) {
-    let listUsers = [];
-    let listVehicles = [];
-    let listMaterials = [];
-
-    const resourceMobilizationDetails = data.resourceMobilizationDetails;
-
-    resourceMobilizationDetails.forEach(item => {
-      switch(item.resourceType) {
-        case RESOURCE_TYPE_MATERIALS:
-          listMaterials.push(item);
-          break;
-        case RESOURCE_TYPE_VEHICLES:
-          listVehicles.push(item);
-          break;
-        case RESOURCE_TYPE_USERS:
-          listUsers.push(item);
-          break;
-      }
-    })
-
-    updateListMaterials(listMaterials);
-    updateListUsers(listUsers);
-    updateListVehicles(listVehicles);
-  }
-}, { deep: true });
+const handleSearchProjects = (value) => {
+  emit("searchProjects", value);
+}
 
 const handleSubmit = () => {
-  let listRequests = [
-    ...listSelectedUsers.value.map(({ name, ...rest }) => rest),
-    ...listSelectedVehicles.value.map(({ name, ...rest }) => rest),
-    ...listSelectedMaterials.value.map(({ name, ...rest }) => rest),
+  const formRefs = [
+    formAllocationMaterialInfos,
+    formAllocationVehicleInfos,
+    formAllocationHumanInfos,
+    formAllocationInfo
   ];
+
+  for (const form of formRefs) {
+    if (form?.ruleFormRef) { // Access ruleFormRef
+      const isValid = mixinMethods.validateForm(form.ruleFormRef);
+      if (!isValid) {
+        mixinMethods.notifyError(t('E-LOG-001'));
+        return;
+      }
+    }
+  }
   emit("submit", listRequests);
 };
 </script>
