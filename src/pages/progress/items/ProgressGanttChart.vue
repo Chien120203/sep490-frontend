@@ -34,7 +34,7 @@ const handleAddNewAllocation = () => {
 
 // Configure task mappings
 const taskSettings = ref({
-  id: "index",
+  id: "id",
   name: "workName",
   startDate: "actualStartDate",
   endDate: "actualEndDate",

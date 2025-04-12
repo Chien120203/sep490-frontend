@@ -14,7 +14,7 @@
         <ModalItemInformation :task="progressDetails"/>
       </div>
       <div style="display: flex">
-        <ModalItemProgressDetails :task="progressDetails" :taskPlan="taskPlan" :listLog="listLog" style="width: 100%"/>
+        <ModalItemProgressDetails :task="progressDetails" :taskPlan="taskPlan" :listLogsByTask="listLogsByTask" style="width: 100%"/>
       </div>
     </template>
   </Modal>
@@ -36,7 +36,7 @@ const props = defineProps({
   taskPlan: {
     type: Object, default: () => {}
   },
-  listLog: {
+  listLogsByTask: {
     type: Array,
     default: () => []
   }

@@ -17,11 +17,12 @@ export const useProgressStore = defineStore(
       let data = {
         id: 20,
         projectId: 5,
+        planId: 20,
         progressItems: [
           {
+            id: 1,
             workCode: "EW05-016",
             index: "1",
-            planId: 20,
             parentIndex: null,
             workName: "Work 1",
             unit: "m2",
@@ -41,9 +42,9 @@ export const useProgressStore = defineStore(
             teams: []
           },
           {
+            id: 2,
             workCode: "EW05-1-002",
             index: "1.1",
-            planId: 20,
             parentIndex: "1",
             workName: "Work 1.1",
             unit: "m2",
@@ -63,9 +64,9 @@ export const useProgressStore = defineStore(
             teams: []
           },
           {
+            id: 3,
             workCode: "EW05-017",
             index: "2",
-            planId: 20,
             parentIndex: null,
             workName: "Work 2",
             unit: "m2",

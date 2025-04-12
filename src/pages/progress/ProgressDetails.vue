@@ -23,7 +23,6 @@ const {
   taskPlanDetails
 } = planningStore;
 const {
-  listConstructLog,
   listLogsByTask
 } = constructStore;
 const {
@@ -91,7 +90,7 @@ const handleCloseModal = () => {
     </div>
     <ProgressDetailsModal
         :progressDetails="progressItem"
-        :listLog="listLogsByTask.value"
+        :listLogsByTask="listLogsByTask.value"
         :taskPlan="taskPlanDetails.value"
         :show="isShowModal"
         @close="handleCloseModal"

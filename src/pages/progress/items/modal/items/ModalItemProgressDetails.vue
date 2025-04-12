@@ -11,27 +11,24 @@
         </div>
 
         <div v-if="selectedTab === 'statistic'">
-          <StatisticTable :taskDetails="task" :taskPlan="taskPlan" :listLog="listLog" />
+          <StatisticTable :taskDetails="task" :taskPlan="taskPlan" :listLogsByTask="listLogsByTask" />
         </div>
 
         <div v-if="selectedTab === 'log'">
           <ConstructionLogTable
               :title="title"
               :dateRange="searchForm"
-              :listLog="listLog"
+              :listLog="listLogsByTask"
               @choose-date="handleChooseDate"
           />
         </div>
 
         <div v-if="selectedTab === 'dependency'">
-          <div class="add-new-dependency-container">
-            <el-button class="btn btn-save" @click="handleDisplayDependencyModal">
-              {{ $t("customer.add_new") }}
-            </el-button>
-          </div>
           <DependencyTaskTable
-            @details="handleDisplayDependencyModal"
-            @delete="handleDisplayDeleteDepModal"
+              ref="dependentFormRef"
+              :rules="PLANNING_RULES"
+              :tasks="tasks"
+              :selectedRow="selectedRow"
           />
         </div>
 
@@ -49,13 +46,6 @@
         </div>
       </div>
     </div>
-
-<!--    Dependency Modal-->
-    <DependencyModal
-      :show="isShowModalDependency"
-      @close="handleDisplayDependencyModal(false)"
-      @submit="handleSaveDependency"
-    />
     <ModalConfirm
         :isShowModal="isShowModalConfirm"
         @close-modal="handleDisplayDeleteDepModal(false)"
@@ -67,17 +57,18 @@
 </template>
 
 <script setup>
-import {computed, defineProps, onMounted, onUnmounted, ref} from "vue";
+import {defineProps, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import TitleNavigation from "@/components/common/TitleNavigation.vue";
 import StatisticTable from "@/pages/progress/items/modal/items/progress-details/StatisticTable.vue";
 import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
-import DependencyTaskTable from "@/pages/progress/items/modal/items/progress-details/DependencyTaskTable.vue";
+import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
 import EmployeeTable from "@/pages/progress/items/modal/items/progress-details/EmployeeTable.vue";
-import DependencyModal from "@/pages/progress/items/modal/DependencyModal.vue";
+import {getPlanningRules} from "@/rules/planning/index.js";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
+
 const props = defineProps({
-  listLog: {
+  listLogsByTask: {
     type: Array,
     default: () => []
   },
@@ -91,8 +82,8 @@ const props = defineProps({
   }
 });
 const searchForm = ref({
-  startDate: "2024-04-01",
-  endDate: "2024-04-30"
+  startDate: "2025-04-01",
+  endDate: "2025-04-30"
 });
 const selectedTab = ref("statistic"); // Default tab
 const listTabs =ref([
@@ -113,90 +104,6 @@ const listTabs =ref([
     label: "Danh sách người thực hiện",
   }
 ]);
-const mockTasks = [
-  {
-    id: 1,
-    name: "Vận chuyển đất bằng ô tô 5T",
-    plan: 100,
-    actual: 100,
-    progress: 100,
-    dates: {
-      "01/01": 7.8,
-      "02/01": 7.98,
-      "03/01": 0.8,
-      "04/01": 1.79,
-      "05/01": 1.71,
-      "06/01": 0,
-      "07/01": 0.56,
-      "08/01": 6.32,
-      "09/01": 0,
-      "10/01": 8.11,
-      "11/01": 0.69,
-      "12/01": 5.56,
-      "13/01": 8.9,
-      "14/01": 1.93,
-      "15/01": 0,
-      "16/01": 9.58,
-      "17/01": 1.61,
-      "18/01": 0,
-      "19/01": 3.77,
-      "20/01": 0,
-      "21/01": 9.07,
-      "22/01": 0,
-      "23/01": 6.77,
-      "24/01": 7.94,
-      "25/01": 8.83,
-      "26/01": 0,
-      "27/01": 6.7,
-      "28/01": 1.37,
-      "29/01": 0,
-      "30/01": 0,
-      "31/01": 5.54
-    },
-    children: [
-      {
-        id: 2,
-        name: "Ô tô tự đổ 5T",
-        plan: 50,
-        actual: 50,
-        progress: 100,
-        dates: {
-          "01/01": 6.14,
-          "02/01": 5.48,
-          "03/01": 3.34,
-          "04/01": 0,
-          "05/01": 7.39,
-          "06/01": 6.97,
-          "07/01": 0,
-          "08/01": 0,
-          "09/01": 0,
-          "10/01": 2.6,
-          "11/01": 8.89,
-          "12/01": 0,
-          "13/01": 0,
-          "14/01": 5.89,
-          "15/01": 0,
-          "16/01": 0,
-          "17/01": 0,
-          "18/01": 0,
-          "19/01": 6.17,
-          "20/01": 0,
-          "21/01": 0,
-          "22/01": 0.74,
-          "23/01": 1.97,
-          "24/01": 3.22,
-          "25/01": 2.46,
-          "26/01": 6.24,
-          "27/01": 0,
-          "28/01": 0,
-          "29/01": 0,
-          "30/01": 7.15,
-          "31/01": 9.57
-        }
-      }
-    ]
-  }
-];
 const dataUsers = ref([
   {
     id: 1,
@@ -301,8 +208,9 @@ const dataUsers = ref([
 ]);
 const title = ref('');
 const message = ref('');
-const isShowModalDependency = ref(false);
 const isShowModalConfirm = ref(false);
+
+const PLANNING_RULES = getPlanningRules();
 
 const route = useRoute();
 const router = useRouter();
@@ -322,25 +230,10 @@ const handleChooseDate = (date) => {
 
 const handleTabChange = (tab) => {
   selectedTab.value = tab;
+  if(tab === "dependency") {
+
+  }
 };
-
-const handleDisplayDependencyModal = (isDisplay = true) => {
-  isShowModalDependency.value = isDisplay;
-}
-
-const handleDisplayDeleteDepModal = (isDisplay = true) => {
-  title.value = "Delete Dependency";
-  message.value = "Do you really want to delete Dependency?";
-  isShowModalConfirm.value = isDisplay;
-}
-
-const handleSaveDependency = (obj) => {
-  console.log(obj);
-}
-
-const handleConfirmDeleteDep = () => {
-
-}
 
 const handleDisplayDeleteEmployeeModal = (isDisplay = true) => {
   title.value = "Delete Employee";
