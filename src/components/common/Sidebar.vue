@@ -75,6 +75,7 @@ import IconMaterial from "@/svg/IconMaterial.vue";
 import IconHuman from "@/svg/IconHuman.vue";
 import IconLog from "@/svg/IconLog.vue";
 import IconInventory from "@/svg/IconInventory.vue";
+import IconInspection from "@/svg/IconInspection.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
@@ -103,7 +104,8 @@ export default {
     IconMachine,
     IconMaterial,
     IconHuman,
-    IconRequestAllocation
+    IconRequestAllocation,
+    IconInspection
   },
   setup() {
     const {t} = useI18n();
@@ -112,12 +114,11 @@ export default {
     const homePath = ref(`${FRONT_END_URL}${PAGES.HOME}`);
     const isShowComponent = ref(true);
     const currentPath = ref("");
-    const openDropdowns = ref({});
 
     const isShowProjectSideBar = computed(() => {
       return PROJECT_SIDEBARS.includes(route.name);
     });
-    const menuOpen = ref("");
+
     const listRouter = computed(() => [
       {
         function_name: t("side_bar.label.customer"),
@@ -200,6 +201,12 @@ export default {
             isShow: !isShowProjectSideBar.value,
           },
         ],
+      },
+      {
+        function_name: t("side_bar.label.inspector_report"),
+        function_page_name: PAGE_NAME.INSPECTION_REPORT.LIST,
+        function_icon: "IconInspection",
+        isShow: isShowProjectSideBar.value, // set later
       },
     ]);
 

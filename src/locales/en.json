@@ -1053,11 +1053,12 @@
       "resource_allocation": "Allocation",
       "project": "Project",
       "inventory": "Inventory",
+      "inspector_report": "Inspector Report",
       "resource": {
         "title": "Resource",
-        "machine": "Machine Resource ",
-        "material": "Material Resource ",
-        "human": "Human Resource "
+        "machine": "Machine Resource",
+        "material": "Material Resource",
+        "human": "Human Resource"
       }
     }
   },

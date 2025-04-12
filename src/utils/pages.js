@@ -67,6 +67,13 @@ const PAGES = {
   HUMAN_RESOURCE_LIST: "/resource/human-management/list",
   HUMAN_RESOURCE_CREATE: "/resource/human-management/create",
   HUMAN_RESOURCE_DETAILS: "/resource/human-management/:id",
+
+  //inspector report
+  INSPECTION_REPORT: "/inspection-report",
+  INSPECTION_REPORT_LIST: "/inspection-report/list",
+  INSPECTION_REPORT_CREATE: "/inspection-report/create",
+  INSPECTION_REPORT_DETAILS: "/inspection-report/details/:id",
+
   //allocation
   ALLOCATION: "/allocation",
 

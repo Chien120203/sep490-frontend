@@ -47,6 +47,11 @@ import Allocation from "@/pages/resource-allocation/Index.vue";
 import AllocationList from "@/pages/resource-allocation/AllocationList.vue";
 import Inventory from "@/pages/inventory/Index.vue";
 import InventoryList from "@/pages/inventory/InventoryList.vue";
+import InspectionReport from "@/pages/inspection-report/Index.vue";
+import InspectionReportList from "@/pages/inspection-report/InspectionReportList.vue";
+import InspectionReportSave from "@/pages/inspection-report/Save.vue";
+import InspectionReportDetails from "@/pages/inspection-report/InspectionReportDetails.vue";
+
 
 const routes = [
   {
@@ -381,6 +386,31 @@ const routes = [
         name: PAGE_NAME.INVENTORY.LIST,
         component: InventoryList,
       }
+    ]
+  },
+  {
+    name: PAGE_NAME.INSPECTION_REPORT,
+    path: PAGES.INSPECTION_REPORT,
+    component: InspectionReport,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        name: PAGE_NAME.INSPECTION_REPORT.LIST,
+        path: PAGES.INSPECTION_REPORT_LIST,
+        component: InspectionReportList,
+      },
+      {
+        name: PAGE_NAME.INSPECTION_REPORT.DETAILS,
+        path: PAGES.INSPECTION_REPORT_DETAILS,
+        component: InspectionReportDetails,
+      },
+      {
+        name: PAGE_NAME.INSPECTION_REPORT.CREATE,
+        path: PAGES.INSPECTION_REPORT_CREATE,
+        component: InspectionReportSave,
+      },
     ]
   },
 ];

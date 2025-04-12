@@ -61,6 +61,11 @@ const PAGE_NAME = {
       CREATE:"human-resources-create",
     },
   },
+  INSPECTION_REPORT: {
+    LIST: "inspection-report-list",
+    DETAILS:"inspection-report-details",
+    CREATE:"inspection-report-create",
+  },
   RESOURCE_ALLOCATION: {
     LIST: "resource-allocation-list",
   },
