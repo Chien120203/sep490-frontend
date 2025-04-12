@@ -1,7 +1,14 @@
 <template>
   <div class="mobilization mobilization-list">
     <div class="mobilization-header">
-      <h3 class="page__ttl">{{ $t("mobilization.title") }}</h3>
+      <div class="contract-save-title">
+        <h3 class="page__ttl">
+          <span class="btn-back" @click="handleBack"><IconBackMain/></span>
+          {{
+            $t("mobilization.title")
+          }}
+        </h3>
+      </div>
       <div class="mobilization-btn-box mobilization-import-box">
         <el-row
             class="mb-4"
@@ -89,8 +96,12 @@
     />
     <SaveMobilizationModal
         :show="isShowModalSave"
+        :materials="listMaterialResources.value"
+        :vehicles="listMachineResources.value"
+        :users="listHumanResources.value"
         :data="mobilizationDetails.value"
         @close="handleDisplayModalSave"
+        @search="handleSearch"
         @submit="handleSaveRequest"
     />
   </div>
@@ -107,9 +118,19 @@ import {STATUSES} from "@/constants/mobilization";
 import IconSetting from "@/svg/IconSettingMain.vue";
 import SaveMobilizationModal from "@/pages/resource-mobilization/items/SaveMobilizationModal.vue";
 import {useI18n} from "vue-i18n";
+import {useHumanResourcesStore} from "@/store/human-resources.js";
+import {useMachineResourcesStore} from "@/store/machine-resources.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
+import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
+import IconBackMain from "@/svg/IconBackMain.vue";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 const mobilizationStore = useMobilizationStore();
 const persist = usePersistenceStore();
+const humanStore = useHumanResourcesStore();
+const machineStore = useMachineResourcesStore();
+const materialStore = useMaterialResourcesStore();
 const {
   projectId
 } = persist;
@@ -125,12 +146,16 @@ const {
   handleChangeRequestStatus,
   saveRequest
 } = mobilizationStore;
+const {listHumanResources, getListHumanResources} = humanStore;
+const {listMachineResources, getListMachineResources} = machineStore;
+const {listMaterialResources, getListMaterialResources} = materialStore;
 
 const {t} = useI18n();
 const delete_id = ref(null);
 const isShowModalConfirm = ref(false);
 const isShowModalSave = ref(false);
 const isShowBoxSearch = ref(false);
+const router = useRouter();
 const title = ref("");
 const changeObject = ref({});
 const searchForms = ref({projectId: projectId.value, pageIndex: 1});
@@ -151,13 +176,30 @@ const handleChangeStatus = (data) => {
   changeObject.value = data;
   title.value = t('mobilization.modal_confirm.message_change_status');
   isShowModalConfirm.value = true;
-}
+};
+
+const handleBack = () => {
+  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
+};
 
 const submitForm = () => {
   searchForms.value.pageIndex = 1;
   currentPage.value = 1;
   getListMobilizations(searchForms.value);
 };
+
+const handleSearch = (data) => {
+  switch (data.type) {
+    case MACHINE_TYPE:
+      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
+      break;
+    case HUMAN_TYPE:
+      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
+      break;
+    case MATERIAL_TYPE:
+      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
+  }
+}
 
 const handleLoadMore = () => {
   currentPage.value++;
@@ -202,8 +244,11 @@ const handleGetMobilizationDtls = (mobilization_id) => {
   isShowModalSave.value = true;
 }
 
-onMounted(() => {
-  getListMobilizations(searchForms.value);
+onMounted(async () => {
+  await getListMobilizations(searchForms.value);
+  await getListHumanResources({pageIndex: 1}, false);
+  await getListMachineResources({pageIndex: 1}, false);
+  await getListMaterialResources({pageIndex: 1}, false);
 });
 
 onUnmounted(() => {
