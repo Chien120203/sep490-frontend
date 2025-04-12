@@ -141,6 +141,13 @@
             </el-form-item>
 
             <el-form-item
+                :label="$t('project.create.location')"
+                prop="location"
+            >
+              <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.location"/>
+            </el-form-item>
+
+            <el-form-item
                 prop="area"
                 class="custom-textarea required"
                 :label="$t('project.create.area')"

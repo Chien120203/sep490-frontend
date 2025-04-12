@@ -704,6 +704,7 @@
       "construct_type": "Construct Type",
       "area": "Area",
       "purpose": "Purpose",
+      "location": "Location",
       "technical_reqs": "Technical Requirements",
       "start_date": "Start Date",
       "end_date": "End Date",
@@ -1091,6 +1092,10 @@
       "manager_approved": "Manager Approved",
       "bod_approved": "BOD Approved",
       "rejected": "Rejected"
+    },
+    "type": {
+      "supply_more": "Supply more resource",
+      "add_new": "Add new resource"
     }
   },
   "allocation": {
@@ -1112,6 +1117,10 @@
         "to": "To Project",
         "action": "Action"
       }
+    },
+    "type": {
+      "project": "Project to Project",
+      "task": "Task to Task"
     }
   },
 
