@@ -87,7 +87,7 @@ export const usePlanningStore = defineStore(
         params,
         (response) => {
           if (response.success) {
-            planningDetails.value = response.data;
+            planningDetails.value = {...response.data, reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]};
             validation.value = [];
             mixinMethods.notifySuccess(t("response.message.save_project_success"));
           } else {

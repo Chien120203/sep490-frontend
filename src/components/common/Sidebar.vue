@@ -9,9 +9,9 @@
       </a>
     </div>
     <div class="menu-box">
-      <el-menu default-active="" class="menu-box" :router="true">
+      <el-menu class="menu-box" :router="true">
         <template v-for="(route, index) in listRouter" :key="index">
-          <el-sub-menu v-if="route.children?.length && route.isShow" :index="route.function_page_name">
+          <el-sub-menu v-if="route.children?.length && route.isShow" :index="route.function_page_name" :unique-opened="true">
             <template #title>
               <component :is="route.function_icon" class="icon_sidebar"/>
               <span class="sidebar-text">{{ route.function_name }}</span>
@@ -157,13 +157,13 @@ export default {
             function_name: t("side_bar.label.resource_mobilization"),
             function_page_name: PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
             function_icon: "IconRequestMobilization",
-            isShow: true,
+            isShow: isShowProjectSideBar.value,
           },
           {
             function_name: t("side_bar.label.resource_allocation"),
             function_page_name: PAGE_NAME.RESOURCE_ALLOCATION.LIST,
             function_icon: "IconRequestAllocation",
-            isShow: true,
+            isShow: isShowProjectSideBar.value,
           }
         ],
       },
@@ -177,19 +177,19 @@ export default {
             function_name: t("side_bar.label.resource.machine"),
             function_page_name: PAGE_NAME.RESOURCE.MACHINE.LIST,
             function_icon: "IconMachine",
-            isShow: true,
+            isShow: isShowProjectSideBar.value,
           },
           {
             function_name: t("side_bar.label.resource.material"),
             function_page_name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
             function_icon: "IconMaterial",
-            isShow: true,
+            isShow: isShowProjectSideBar.value,
           },
           {
             function_name: t("side_bar.label.resource.human"),
             function_page_name: PAGE_NAME.RESOURCE.HUMAN.LIST,
             function_icon: "IconHuman",
-            isShow: true,
+            isShow: isShowProjectSideBar.value,
           },
         ],
       },

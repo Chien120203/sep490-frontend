@@ -25,7 +25,7 @@ export const CUSTOMER_RULES = {
     { required: true, message: i18n.global.t("E-CUS-004"), trigger: "blur" },
     {
       pattern: TAX_CODE,
-      message: i18n.global.t("E-CUS-007"),
+      message: i18n.global.t("E-CUS-005"),
       trigger: "change",
     },
   ],

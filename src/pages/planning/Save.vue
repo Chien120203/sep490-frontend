@@ -91,6 +91,7 @@ import {getPlanningRules} from "@/rules/planning/index.js";
 import {useHumanResourcesStore} from "@/store/human-resources.js";
 import {useMachineResourcesStore} from "@/store/machine-resources.js";
 import {useMaterialResourcesStore} from "@/store/material-resources.js";
+import {useI18n} from "vue-i18n";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
@@ -148,7 +149,7 @@ const activities = ref([
     date: "24/05/2024",
   },
 ]); // Placeholder for activity data
-
+const {t} = useI18n();
 // Store Data
 const projectStore = useProjectStore();
 const userStore = useUserStore();
@@ -180,10 +181,10 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
-  if(!route.params.id) {
+  if (!route.params.id) {
     await getContractDetails(projectId.value);
     planningDetails.value.planItems = contractDetails.value.contractDetails.map(
-        ({ contractId, deleted, workCode, ...rest }) => ({ ...rest })
+        ({contractId, deleted, workCode, ...rest}) => ({...rest})
     );
   } else {
     await getPlanningDetails(route.params.id);
@@ -236,25 +237,39 @@ const updateListQAs = (list) => {
 
 const selectionFormRef = ref(null);
 const detailsFormRef = ref(null);
-const modalFormRef = ref(null);
-const submitForm = () => {
-  // planningDetails.value.reviewers = [...planningDetails.value.reviewers.map(reviewer => reviewer.id)];
+const submitForm = async () => {
   planningDetails.value.projectId = projectId.value;
+  const payload = {
+    id: planningDetails.value.id,
+    planName: planningDetails.value.planName,
+    projectId: planningDetails.value.projectId,
+    planItems: planningDetails.value.planItems,
+    reviewers: planningDetails.value.reviewers
+  };
   const method = !!route.params.id ? "update" : "create";
-  const formRefs = [
-    selectionFormRef.value,
-    detailsFormRef.value,
-    modalFormRef.value,
+  const forms = [
+    {
+      ref: selectionFormRef,
+      name: t("planning.form_ref.planning_info"),
+    },
+    {
+      ref: detailsFormRef,
+      name: t("planning.form_ref.planning_items"),
+    }
   ];
-  for (const form of formRefs) {
-    if (form?.ruleFormRef) { // Access ruleFormRef
-      const isValid = mixinMethods.validateForm(form.ruleFormRef);
-      if (!isValid) {
-        mixinMethods.notifyError(t('E-LOG-001'));
-        return;
-      }
+
+  for (const form of forms) {
+    const isValid = await new Promise((resolve) => {
+      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+    });
+
+    if (!isValid) {
+      mixinMethods.notifyError(
+          t("planning.errors.invalid_form", {form: form.name})
+      );
+      return; // stop here if one form is invalid
     }
   }
-  savePlanning(planningDetails.value, method);
+  await savePlanning(payload, method);
 }
 </script>

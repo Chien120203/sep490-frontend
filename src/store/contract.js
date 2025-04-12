@@ -74,7 +74,7 @@ export const useContractStore = defineStore(
       await services.ContractAPI.save(
         formData,
         (response) => {
-          contractDetails.value = response.data;
+          contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
           mixinMethods.notifySuccess(t("response.message.save_contract_success"));
           mixinMethods.endLoading();
         },

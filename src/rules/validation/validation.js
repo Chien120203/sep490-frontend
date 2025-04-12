@@ -41,8 +41,7 @@ export function validateChooseDateRelation(rule, value, callback, selectedRow, p
 }
 
 export function validateChooseTypeRelation(rule, value, callback, selectedRow, planList) {
-  const depIndex = rule.field.split('itemRelations.')[1];
-  const result = validateRelationTypeChange(depIndex, value, selectedRow, planList);
+  const result = validateRelationTypeChange(rule.relatedIndex, selectedRow, planList);
   if (!result.valid) {
     callback(new Error(result.message));
   } else {
@@ -50,8 +49,8 @@ export function validateChooseTypeRelation(rule, value, callback, selectedRow, p
   }
 }
 
-const validateRelationTypeChange = (depIndex, newRelation, selectedRow, planningList) => {
-  const {index: selectedIndex, startDate: selectedStart, endDate: selectedEnd} = selectedRow;
+const validateRelationTypeChange = (depIndex, selectedRow, planningList) => {
+  const {index: selectedIndex, startDate: selectedStart, endDate: selectedEnd, itemRelations} = selectedRow;
 
   // Get the related task's index and find the related task
   const relatedTask = planningList.planItems.find(item => item.index === depIndex);
@@ -66,11 +65,11 @@ const validateRelationTypeChange = (depIndex, newRelation, selectedRow, planning
   if (relatedTask) {
     const {startDate: relatedStart, endDate: relatedEnd} = relatedTask;
     // Check if the new relation type satisfies the date constraints
-    const isValid = checkDateRelation(selectedStart, selectedEnd, relatedStart, relatedEnd, newRelation);
+    const isValid = checkDateRelation(relatedStart, relatedEnd, selectedStart, selectedEnd, itemRelations[depIndex]);
     if (!isValid) {
       return {
         valid: false,
-        message: generateErrorMessage(depIndex, newRelation, selectedIndex)
+        message: generateErrorMessage(selectedIndex, itemRelations[depIndex], depIndex)
       };
     }
   }

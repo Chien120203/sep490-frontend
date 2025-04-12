@@ -50,3 +50,7 @@ export const MIN_NUMBER = 0;
 export const MAX_NUMBER = 1000000;
 export const MIN_PRICE = 0;
 export const MAX_PRICE = 1000000000000;
+export const GENDERS = [
+    {value: true, label: 'user.gender.male'},
+    {value: false, label: 'user.gender.female'},
+]

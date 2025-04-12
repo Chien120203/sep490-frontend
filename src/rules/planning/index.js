@@ -14,6 +14,12 @@ export const getPlanningRules = () => {
     const index = field.split(".")[1];
     return planningDetails.value.planItems[index];
   }
+  const getParentRow = (index, byId = false) => {
+    if(!index) return null;
+    let currentRow = byId ? planningDetails.value.planItems[index] : planningDetails.value.planItems.find(item => item.index === index);
+    if(!currentRow.parentIndex) return null;
+    return planningDetails.value.planItems.find(item => item.index === currentRow.parentIndex) || null;
+  }
   return {
     planName: [
       {required: true, message: t("E-CM-002"), trigger: "blur"},
@@ -30,6 +36,9 @@ export const getPlanningRules = () => {
       { required: true, message: t("E-CM-002"), trigger: 'blur' }
     ],
     unit: [
+      { required: true, message: t("E-CM-002"), trigger: 'blur' }
+    ],
+    reviewers: [
       { required: true, message: t("E-CM-002"), trigger: 'blur' }
     ],
     quantity: [
@@ -80,7 +89,12 @@ export const getPlanningRules = () => {
         validator: (rule, value, callback) =>
           validateChooseDateRelation(rule, value, callback, planSelectedRow.value, planningDetails.value),
         trigger: "blur",
-      }
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, getParentRow(planSelectedRow.value.index)?.startDate || getParentRow(rule.field.split(".")[1], true)?.startDate, value, "E-CM-032"),
+        trigger: "blur",
+      },
     ],
     endDate: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },
@@ -98,10 +112,15 @@ export const getPlanningRules = () => {
         validator: (rule, value, callback) =>
           validateChooseDateRelation(rule, value, callback, planSelectedRow.value, planningDetails.value),
         trigger: "blur",
-      }
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, value, getParentRow(planSelectedRow.value.index)?.endDate || getParentRow(rule.field.split(".")[1], true)?.endDate, "E-CM-033"),
+        trigger: "blur",
+      },
     ],
     dependency: [
-      // { required: true, message: t("E-CM-002"), trigger: "blur" },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
           validateChooseTypeRelation(rule, value, callback, planSelectedRow.value, planningDetails.value),

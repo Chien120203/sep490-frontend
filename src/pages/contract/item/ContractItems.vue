@@ -194,7 +194,9 @@ const hierarchicalItems = computed(() => {
 
       <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" width="180">
         <template #default="{ row }">
-          <el-input-number v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) || !isAllowUpdate" />
+          <el-input :formatter="(value) => mixinMethods.formatInputMoney(value)"
+                           :parser="(value) => mixinMethods.parseInputCurrency(value)"
+                           v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) || !isAllowUpdate" />
         </template>
       </el-table-column>
 

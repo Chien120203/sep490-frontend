@@ -179,13 +179,13 @@ const handleErrorResponse = (error) => {
   }, {});
 };
 
-const createFormData = (params) => {
+const createFormData = (params, skipArray = []) => {
   const formData = new FormData();
 
   Object.keys(params).forEach((key) => {
     const value = params[key];
 
-    if (Array.isArray(value)) {
+    if (Array.isArray(value) && !skipArray.includes(key)) {
       // Check if the array contains only File or Blob objects
       const isArrayOfFiles = value.every(item => item instanceof File || item instanceof Blob);
 

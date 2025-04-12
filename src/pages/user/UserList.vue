@@ -22,8 +22,8 @@
             <el-input
                 :placeholder="$t('common.input_keyword')"
                 @keyup.enter="submitForm"
-                v-model="searchForms.searchValue"
-                prop="searchValue"
+                v-model="searchForms.keyWord"
+                prop="keyWord"
             >
             </el-input>
           </div>
@@ -116,12 +116,12 @@ export default {
     });
 
     const handleClear = () => {
-      searchForms.value.search = "";
+      searchForms.value.keyWord = "";
     };
 
     const submitForm = () => {
       searchForms.value.pageIndex = 1;
-      currentPage.value = 0;
+      currentPage.value = 1;
       getListUsers(searchForms.value);
     };
 

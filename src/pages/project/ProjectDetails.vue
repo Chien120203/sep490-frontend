@@ -208,9 +208,9 @@ export default {
       pageIndex: 1,
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
-    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === PLANNING_STATUS && listContracts.value.length === 0));
-    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull));
-    const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull));
+    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listContracts.value.length === 0));
+    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull.value));
+    const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(() => {
       projectId.value = route.params.id;
       getProjectDetails(route.params.id);

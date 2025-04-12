@@ -43,6 +43,7 @@ import {getContractRules} from "@/rules/contract/index.js";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
+import {RECEIVE_STATUS} from "@/constants/project.js";
 
 const projectStore = useProjectStore();
 const contractStore = useContractStore();

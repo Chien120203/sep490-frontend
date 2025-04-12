@@ -154,7 +154,6 @@ const calculateTotal = () => {
 };
 
 const closeModal = () => {
-  activeTab.value = "tasks";
   totalAllPrice.value = {
     machine: 0,
     labor: 0,
@@ -165,37 +164,62 @@ const closeModal = () => {
 };
 
 const handleSubmit = async () => {
-  let invalidForm = null; // To store the name of the invalid form
-  let allValid = true; // Flag to track if all forms are valid
-  const formRefs = hasChildren ? [
-    {ref: childFormRef.value?.ruleFormRef, name: t("planning.form_ref.planning_info")}
-  ]: [
-    {ref: childFormRef.value?.ruleFormRef, name: t("planning.form_ref.planning_info")},
-    {ref: tableMaterialFormRef.value?.ruleFormRef, name: t("planning.form_ref.material")},
-    {ref: tableMachineFormRef.value?.ruleFormRef, name: t("planning.form_ref.machine")},
-    {ref: tableHumanFormRef.value?.ruleFormRef, name: t("planning.form_ref.human")}
+  const forms = hasChildren.value ? [
+    {
+      ref: dependentFormRef,
+      name: t("planning.form_ref.dependency"),
+    },
+    {
+      ref: childFormRef,
+      name: t("planning.form_ref.planning_info"),
+    }
+  ] : [
+    {
+      ref: dependentFormRef,
+      name: t("planning.form_ref.dependency"),
+    },
+    {
+      ref: childFormRef,
+      name: t("planning.form_ref.planning_info"),
+    },
+    {
+      ref: tableMaterialFormRef,
+      name: t("planning.form_ref.material"),
+    },
+    {
+      ref: tableMachineFormRef,
+      name: t("planning.form_ref.machine"),
+    },
+    {
+      ref: tableHumanFormRef,
+      name: t("planning.form_ref.human"),
+    },
   ];
 
-  for (const {ref, name} of formRefs) {
-    const isValid = await mixinMethods.validateForm(ref);
+  for (const form of forms) {
+    const isValid = await new Promise((resolve) => {
+      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+    });
+
     if (!isValid) {
-      allValid = false;
-      invalidForm = name;
-      break; // Stop checking further forms once we find an invalid one
+      mixinMethods.notifyError(
+          t("planning.errors.invalid_form", { form: form.name })
+      );
+      return; // stop here if one form is invalid
     }
   }
-  if (allValid) {
-    props.selectedRow.details = [
-      ...listSelectedUsers.value,
-      ...listSelectedMachines.value,
-      ...listSelectedMaterials.value,
-    ];
-    emit("submit", props.selectedRow);
-    emit("close");
-  } else {
-    mixinMethods.notifyError(t('planning.errors.invalid_form', {form: invalidForm}));
-  }
+
+  // ✅ All forms are valid — proceed with submission
+  props.selectedRow.details = [
+    ...listSelectedUsers.value,
+    ...listSelectedMachines.value,
+    ...listSelectedMaterials.value,
+  ];
+
+  emit("submit", props.selectedRow);
+  emit("close");
 };
+
 </script>
 
 <style scoped>

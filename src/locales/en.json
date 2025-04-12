@@ -368,9 +368,6 @@
     "date": "Contract Date",
     "status": "Status",
     "type": "Type",
-    "room": "Room",
-    "tenant": "Tenant",
-    "landlord": "Landlord",
     "statuses": {
       "active": "Active",
       "terminated": "Terminated",
@@ -421,7 +418,9 @@
       "status": "Status",
       "comments": "Comments",
       "attachments": "Attachments",
-      "surveyDetails": "Survey Details"
+      "surveyDetails": "Survey Details",
+      "bid_approve": "Approve",
+      "bid_reject": "Reject"
     },
     "table": {
       "header": {
@@ -811,6 +810,9 @@
     },
     "form_ref": {
       "planning_info": "Plan Information",
+      "planning_items": "Plan Items",
+      "planning_item_dtls": "Plan Item Details",
+      "dependency": "Task dependency",
       "material": "Material Form",
       "machine": "Machine Form",
       "human": "Human Form"
@@ -1045,7 +1047,7 @@
       "resource_allocation": "Allocation",
       "project": "Project",
       "resource": {
-        "title": "Resource Management",
+        "title": "Resource",
         "machine": "Machine Resource ",
         "material": "Material Resource ",
         "human": "Human Resource "
@@ -1143,6 +1145,8 @@
   "E-CM-029": "Date cannot be in the future",
   "E-CM-030": "End time must be greater start time",
   "E-CM-031": "Start time must be before end time",
+  "E-CM-032": "Start date must be after its parent start date",
+  "E-CM-033": "End date must be before its parent end date",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",
@@ -1153,9 +1157,8 @@
   "E-CUS-001": "Customer code is required",
   "E-CUS-002": "Duplicate Customer Code",
   "E-CUS-004": "Tax code is required",
-  "E-CUS-005": "Phone number is invalid",
+  "E-CUS-005": "Tax code is invalid",
   "E-CUS-006": "Fax number is invalid",
-  "E-CUS-007": "Tax code is invalid",
 
   "E-CTR-001": "Contract code is required",
   "E-CTR-002": "Project is required",

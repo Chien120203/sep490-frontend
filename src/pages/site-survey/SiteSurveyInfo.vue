@@ -2,7 +2,7 @@
   <div class="project-progress">
     <div v-if="data && !isSurveyNull">
       <div class="header">
-        <h2>{{ $t('survey.details.survey_name') }}: {{ data.siteSurveyName }}</h2>
+        <h2>{{ $t('survey.details.siteSurveyName') }}: {{ data.siteSurveyName }}</h2>
         <div class="status">
           <el-button class="btn btn-save" @click="$emit('details')">
             {{ $t("common.edit") }}
@@ -12,8 +12,7 @@
 
       <div class="details-container">
         <div class="column">
-          <p><strong>{{ $t('survey.details.project_code') }}:</strong> {{ data.siteSurveyCode }}</p>
-          <p><strong>{{ $t('survey.details.biddingDecision') }}:</strong> {{ data.biddingDecision }}</p>
+          <p><strong>{{ $t('survey.details.biddingDecision') }}:</strong> {{ $t(getBidDecision(data.biddingDecision)) }}</p>
           <span><strong>{{ $t('survey.details.status') }}:</strong> {{ $t(formatStatus(data.status)) }}</span>
         </div>
         <div class="column">
@@ -50,7 +49,7 @@
 </template>
 
 <script setup>
-import { RECEIVE_STATUS, STATUS_LABELS } from "@/constants/survey.js";
+import {BID_DECISION_LABELS, RECEIVE_STATUS, STATUS_LABELS} from "@/constants/survey.js";
 import { mixinMethods } from "@/utils/variables.js";
 import { toRefs } from 'vue';
 
@@ -77,6 +76,10 @@ const { data, isSurveyNull } = toRefs(props);
 const formatStatus = (status) => {
   return STATUS_LABELS[status] || 'Unknown';
 };
+
+const getBidDecision = (bidDecision) => {
+  return BID_DECISION_LABELS[bidDecision];
+}
 
 const formatCurrency = (inputCurrency) => {
   return mixinMethods.formatCurrency(inputCurrency);

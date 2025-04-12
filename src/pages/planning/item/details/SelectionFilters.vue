@@ -17,9 +17,9 @@
 
         <div>
           <!-- Người theo dõi -->
-          <el-form-item prop="selectedFollowers" label-class="custom-label">
+          <el-form-item prop="reviewers" label-class="custom-label">
             <template #label> {{$t('planning.form.inspector')}} </template>
-            <el-select v-model="selectedFollowers" multiple @change="emit('updateFollowers', selectedFollowers)">
+            <el-select v-model="planDetails.reviewers" multiple>
               <el-option v-for="user in followers" :key="user.id" :label="user.username" :value="user.id"></el-option>
             </el-select>
           </el-form-item>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits, computed} from "vue";
+import {ref, defineProps, defineEmits, computed, watch} from "vue";
 
 const props = defineProps({
   followers: Array,
@@ -47,10 +47,6 @@ const ruleFormRef = ref(null);
 defineExpose({
   ruleFormRef,
 });
-
-const selectedFollowers = computed( () =>
-    props.planDetails.reviewers || []
-);
 const emit = defineEmits([ "updateFollowers", "search"]);
 </script>
 

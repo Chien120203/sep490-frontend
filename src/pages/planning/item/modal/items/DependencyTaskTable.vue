@@ -1,4 +1,4 @@
-in<template>
+<template>
   <SingleOptionSelect
       :defaultList="selectedValue"
       style="width: 30%"
@@ -38,7 +38,7 @@ in<template>
       <!-- Dependency -->
       <el-table-column label="Depends Type" width="390">
         <template #default="{ row }">
-          <el-form-item :prop="`itemRelations.${row.index}`" :rules="rules.dependency">
+          <el-form-item :prop="`itemRelations.${row.index}`" :rules="rules.dependency.map(rule => ({ ...rule, relatedIndex: row.index }))">
             <el-select v-model="selectedRow.itemRelations[row.index]">
               <el-option
                   v-for="(type, index) in TASK_RELATIONSHIPS"
