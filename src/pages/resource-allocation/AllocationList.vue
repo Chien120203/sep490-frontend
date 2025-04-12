@@ -3,16 +3,16 @@
     <div class="mobilization-header">
       <h3 class="page__ttl">{{ $t("allocation.title") }}</h3>
       <div class="mobilization-btn-box mobilization-import-box">
-        <el-row
-            class="mb-4"
-        >
-          <el-button class="btn btn-save" @click="handleDisplayModalSave(true)"
-          >{{ $t("allocation.add_new") }}
+        <el-row class="mb-4">
+          <el-button class="btn btn-save" @click="handleDisplayModalSave(true)">
+            {{ $t("allocation.add_new") }}
           </el-button>
         </el-row>
       </div>
     </div>
+
     <div class="mobilization-body">
+      <!-- Search bar -->
       <div class="mobilization-search">
         <div class="mobilization-search-box col-md-9 col-lg-9">
           <p class="mobilization-search__ttl">
@@ -27,7 +27,7 @@
             >
               <template #append>
                 <span @click="handleSearchForm" class="btn-setting">
-                  <IconSetting/>
+                  <IconSetting />
                 </span>
               </template>
             </el-input>
@@ -36,17 +36,17 @@
         <div class="btn-search-select col-md-3 col-lg-3 mobilization-box-btn-all">
           <el-button class="btn btn-search" @click="submitForm()">
             {{ $t("common.search") }}
-          </el-button
-          >
+          </el-button>
           <el-button class="btn btn-clear" @click="handleClear()">
             {{ $t("common.clear") }}
-          </el-button
-          >
+          </el-button>
         </div>
       </div>
+
+      <!-- Advanced Search -->
       <div class="form-search" :class="{ active: isShowBoxSearch }">
         <div class="close-form">
-          <IconCircleClose @click="isShowBoxSearch = false"/>
+          <IconCircleClose @click="isShowBoxSearch = false" />
         </div>
         <div class="form-search-box">
           <div class="item">
@@ -58,8 +58,7 @@
                     :key="index"
                     :label="$t(status)"
                     :value="index"
-                >
-                </el-option>
+                />
               </el-select>
             </el-form-item>
           </div>
@@ -67,35 +66,72 @@
       </div>
     </div>
 
-    <div class="mobilization-body-table" style="">
+    <!-- Table section with nested tabs -->
+    <div class="mobilization-body-table">
       <el-tabs v-model="activeTab">
-        <el-tab-pane label="From Current Project" name="from-project">
-          <AllocationTable
-              :isFrom="true"
-              :data="listAllocations.value"
-              @details="handleGetAllocationDtls"
-              @delete="handleDisplayModal"
-          />
-          <LoadMore
-              :listData="listAllocations.value"
-              :totalItems="totalItems.value"
-              @loadMore="handleLoadMore"
-          />
+        <el-tab-pane label="Project" name="project">
+          <el-tabs v-model="activeSubTab">
+            <el-tab-pane label="From" name="from-project">
+              <AllocationTable
+                  :isFrom="true"
+                  :data="listAllocations.value"
+                  @details="handleGetAllocationDtls"
+                  @delete="handleDisplayModal"
+              />
+              <LoadMore
+                  :listData="listAllocations.value"
+                  :totalItems="totalItems.value"
+                  @loadMore="handleLoadMore"
+              />
+            </el-tab-pane>
+            <el-tab-pane label="To" name="to-project">
+              <AllocationTable
+                  :data="listAllocations.value"
+                  @details="handleGetAllocationDtls"
+                  @delete="handleDisplayModal"
+              />
+              <LoadMore
+                  :listData="listAllocations.value"
+                  :totalItems="totalItems.value"
+                  @loadMore="handleLoadMore"
+              />
+            </el-tab-pane>
+          </el-tabs>
         </el-tab-pane>
-        <el-tab-pane label="To Current Project" name="to-project">
-          <AllocationTable
-              :data="listAllocations.value"
-              @details="handleGetAllocationDtls"
-              @delete="handleDisplayModal"
-          />
-          <LoadMore
-              :listData="listAllocations.value"
-              :totalItems="totalItems.value"
-              @loadMore="handleLoadMore"
-          />
+
+        <el-tab-pane label="Task" name="task">
+          <el-tabs v-model="activeSubTab">
+            <el-tab-pane label="From" name="from-task">
+              <AllocationTable
+                  :isFrom="true"
+                  :data="listAllocations.value"
+                  @details="handleGetAllocationDtls"
+                  @delete="handleDisplayModal"
+              />
+              <LoadMore
+                  :listData="listAllocations.value"
+                  :totalItems="totalItems.value"
+                  @loadMore="handleLoadMore"
+              />
+            </el-tab-pane>
+            <el-tab-pane label="To" name="to-task">
+              <AllocationTable
+                  :data="listAllocations.value"
+                  @details="handleGetAllocationDtls"
+                  @delete="handleDisplayModal"
+              />
+              <LoadMore
+                  :listData="listAllocations.value"
+                  :totalItems="totalItems.value"
+                  @loadMore="handleLoadMore"
+              />
+            </el-tab-pane>
+          </el-tabs>
         </el-tab-pane>
       </el-tabs>
     </div>
+
+    <!-- Modals -->
     <ModalConfirm
         :isShowModal="isShowModalConfirm"
         @close-modal="closeModalConfirm"
@@ -113,6 +149,7 @@
     />
   </div>
 </template>
+
 <script setup>
 import {ref, onMounted, onUnmounted, watch} from "vue";
 import LoadMore from "@/components/common/LoadMore.vue";
@@ -151,7 +188,8 @@ const delete_id = ref(null);
 const isShowModalConfirm = ref(false);
 const isShowModalSave = ref(false);
 const isShowBoxSearch = ref(false);
-const activeTab = ref("from-project"); // Default active tab
+const activeTab = ref("project");
+const activeSubTab = ref("from-project");
 const searchForms = ref({fromProjectId: projectId.value, toProjectId: null, status: "", pageIndex: 1});
 const formSearchProject = ref({keyWord: "",  pageIndex: 1});
 const handleClear = () => {
@@ -217,18 +255,31 @@ onUnmounted(() => {
   totalItems.value = 0;
 });
 
-watch(activeTab, (newValue) => {
-  if(newValue === "from-project") {
+watch([activeTab, activeSubTab], ([newTab, newSubTab]) => {
+  if (newTab === "project") {
+    searchForms.value.toTask = null;
+    searchForms.value.fromTask = null;
+    if (newSubTab === "from-project") {
+      searchForms.value.fromProjectId = projectId.value;
+      searchForms.value.toProjectId = null;
+    } else if (newSubTab === "to-project") {
+      searchForms.value.fromProjectId = null;
+      searchForms.value.toProjectId = projectId.value;
+    }
+  } else if (newTab === "task") {
     searchForms.value.fromProjectId = projectId.value;
-    searchForms.value.toProjectId = null;
-    getListAllocations(searchForms.value);
-  }
-
-  if(newValue === "to-project") {
     searchForms.value.toProjectId = projectId.value;
-    searchForms.value.fromProjectId = null;
-    getListAllocations(searchForms.value);
+    if (newSubTab === "from-task") {
+      searchForms.value.fromTask = projectId.value;
+      searchForms.value.toTask = null;
+    } else if (newSubTab === "to-task") {
+      searchForms.value.fromTask = null;
+      searchForms.value.toTask = projectId.value;
+    }
   }
+  searchForms.value.pageIndex = 1;
+  currentPage.value = 1;
+  getListAllocations(searchForms.value);
 });
 </script>
 

@@ -29,6 +29,17 @@
         </el-col>
 
         <el-col :span="12">
+          <el-form-item label="Request Type" required>
+            <el-select v-model="data.requestType">
+              <el-option
+                  v-for="request in MOBILIZE_REQUEST_TYPES"
+                  :key="request.value"
+                  :label="$t(request.label)"
+                  :value="request.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="Priority">
             <el-select v-model="data.priorityLevel">
               <el-option
@@ -52,7 +63,7 @@
 
 <script setup>
 import { defineProps, ref, computed } from "vue";
-import {PRIORITIES, STATUSES} from "@/constants/mobilization.js";
+import {MOBILIZE_REQUEST_TYPES, PRIORITIES, STATUSES} from "@/constants/mobilization.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({

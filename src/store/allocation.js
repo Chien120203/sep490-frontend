@@ -14,10 +14,12 @@ export const useAllocationStore = defineStore(
     const listAllocations = reactive({value: []});
     const allocationDetails = reactive({
       value: {
-        // id: null,
+        requestType: 1,
         requestCode: "",
         fromProjectId: 0,
         toProjectId: 0,
+        fromTask: null,
+        toTask: null,
         requestName: "",
         resourceAllocationDetails: [],
         description: "",

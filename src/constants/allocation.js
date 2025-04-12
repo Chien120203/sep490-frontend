@@ -7,6 +7,13 @@ export const STATUSES = [
   'Reject'
 ];
 
+export const PROJECT_TO_PROJECT = 1;
+export const TASK_TO_TASK = 2;
+export const ALLOCATION_REQUEST_TYPES = [
+  {value: PROJECT_TO_PROJECT, label: "allocation.type.project"},
+  {value: TASK_TO_TASK, label: "allocation.type.task"},
+];
+
 export const PRIORITIES = [
   "Low",
   "Medium",
