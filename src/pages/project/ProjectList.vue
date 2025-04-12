@@ -282,7 +282,7 @@ export default {
     };
 
     const handleConfirm = () => {
-      handleDeleteCustomerReq(delete_id.value);
+      handleDeleteProject(delete_id.value);
     };
 
     const handleSearchCustomer = (searchValue) => {

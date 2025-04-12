@@ -2,7 +2,7 @@ import {del, get, post, postFormData, put, putFormData} from '@/services/BaseSer
 import API_CODE from '@/utils/api_code';
 
 const details = async (id, params, success, error) => {
-    await get(API_CODE.API_MATERIAL_001 + "/" + id, params, success, error);
+    await get(API_CODE.API_MATERIAL_001 + "/" + id, success, error, params);
 };
 
 const list = async (params, success, error) => {

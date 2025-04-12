@@ -72,9 +72,8 @@ export const useMaterialResourcesStore = defineStore(
 
         const saveMaterialResources = async (params) => {
             mixinMethods.startLoading();
-            const formData = mixinMethods.createFormData(params);
             await services.MaterialResourceAPI.save(
-                formData,
+                params,
                 (response) => {
                     if(response.success) {
                         materialResourcesDetails.value = response.data;

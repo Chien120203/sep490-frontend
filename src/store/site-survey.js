@@ -48,7 +48,10 @@ export const useSiteSurveyStore = defineStore(
                 {projectId: id},
                 (response) => {
                     if (!response.data) isSiteSurveyNull.value = true;
-                    else siteSurveyDetails.value = response.data;
+                    else {
+                      siteSurveyDetails.value = response.data;
+                      isSiteSurveyNull.value = false;
+                    }
                     mixinMethods.endLoading();
                 },
                 (error) => {

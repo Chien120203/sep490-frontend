@@ -6,10 +6,12 @@ export const usePersistenceStore = defineStore(
   () => {
     const loggedIn = reactive({ value: false });
     const projectId = reactive({ value: 0 });
+    const projectStatus = reactive({ value: "" });
 
     return {
       loggedIn,
-      projectId
+      projectId,
+      projectStatus,
     };
   },
 {persist: true}

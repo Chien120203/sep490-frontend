@@ -140,7 +140,8 @@ export default {
     const { siteSurveyDetails, isSiteSurveyNull, getSurveyDetails } = surveyStore;
 
     const {
-      projectId
+      projectId,
+      projectStatus
     } = persist;
 
     const activeCollapseItems = ref(["3", "2", "4", "5"]);
@@ -211,14 +212,17 @@ export default {
     const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listContracts.value.length === 0));
     const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull.value));
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
-    onMounted(() => {
+    onMounted(async () => {
       projectId.value = route.params.id;
-      getProjectDetails(route.params.id);
-      getListContracts(contractSearchForms.value);
-      getSurveyDetails(route.params.id);
+      await getProjectDetails(route.params.id);
+      projectStatus.value = projectDetails.value.status;
+      await getListContracts(contractSearchForms.value);
+      await getSurveyDetails(route.params.id);
     });
 
-    onUnmounted(() => {});
+    onUnmounted(() => {
+      listContracts.value = []
+    });
 
     const getContractDetails = (id) => {
       projectId.value = route.params.id;

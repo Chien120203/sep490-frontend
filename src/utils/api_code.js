@@ -60,7 +60,7 @@ const API_CODE = {
   API_MACHINE_005: '/vehicle/delete',
 
   //Material Resource
-  API_MATERIAL_001: '/material/',
+  API_MATERIAL_001: '/material/detail',
   API_MATERIAL_002: '/material/search',
   API_MATERIAL_003: '/material/save',
   API_MATERIAL_004: '/material/delete',

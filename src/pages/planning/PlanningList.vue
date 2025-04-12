@@ -66,12 +66,14 @@ import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import {CONSTRUCTION_MANAGER, HEAD_OF_CONSTRUCTION} from "@/constants/roles.js";
+import {PLANNING_STATUS} from "@/constants/project.js";
 
 const persistenceStore = usePersistenceStore();
 const planningStore = usePlanningStore();
 
 const {
-  projectId
+  projectId,
+  projectStatus
 } = persistenceStore;
 
 const {
@@ -81,7 +83,7 @@ const {
   getListPlannings,
   handleDeletePlan
 } = planningStore;
-const allowCreate = computed(() => localStorage.getItem("role") === CONSTRUCTION_MANAGER)
+const allowCreate = computed(() => localStorage.getItem("role") === CONSTRUCTION_MANAGER && projectStatus.value === PLANNING_STATUS)
 const router = useRouter();
 const isShowBoxSearch = ref(false);
 const delete_id = ref(0);
@@ -95,12 +97,8 @@ onMounted(() => {
   getListPlannings(searchForms.value);
 });
 
-const handleSearchForm = () => {
-  isShowBoxSearch.value = !isShowBoxSearch.value;
-};
-
 const handleClear = () => {
-  searchForms.value = { planName: "", projectId: null, pageIndex: 1 };
+  searchForms.value = { planName: "", projectId: projectId.value, pageIndex: 1 };
 };
 
 const submitForm = () => {
