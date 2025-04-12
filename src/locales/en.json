@@ -1224,6 +1224,7 @@
   "E-SV-004": "The discount rate must less than or equal {max}",
 
   "E-PLAN-001": "Actual total price exceed the expected price",
+  "E-PLAN-002": "Plan quantity exceeds inventory",
 
   "E-LOG-001": "Save construction log failed",
   "E-LOG-002": "Work amount cannot exceed the expected"

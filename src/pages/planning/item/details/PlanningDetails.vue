@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, computed, ref, watch} from "vue";
+import {defineProps, defineEmits, computed, ref, watch, onMounted} from "vue";
 import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import IconEdit from "@/svg/IconEdit.vue";
@@ -55,7 +55,7 @@ const createNewItem = (unit = "", parentIndex = null) => ({
   unitPrice: 0,
   startDate: "",
   endDate: "",
-  total: 0,
+  totalPrice: 0,
   deleted: false
 });
 
@@ -72,7 +72,7 @@ const addSubItem = (parentItem) => {
   const newSubItem = createNewItem(parentItem.unit, parentItem.index);
   parentItem.quantity = 0;
   parentItem.unitPrice = 0;
-  if (!hasChildren(parentItem)) parentItem.total = 0;
+  if (!hasChildren(parentItem)) parentItem.totalPrice = 0;
   listItems.value.push(newSubItem);
   updateItems();
   sortItems(); // Sort items after adding a sub-item
@@ -96,12 +96,12 @@ const deleteItem = (itemToDelete) => {
   sortItems(); // Sort items after deletion
 };
 
-// Recalculate total amount
+// Recalculate totalPrice amount
 const recalculateTotal = () => {
-  // Calculate total for leaf nodes (ignoring deleted items)
+  // Calculate totalPrice for leaf nodes (ignoring deleted items)
   listItems.value.forEach((item) => {
     if (!isParent(item) && !item.deleted) {
-      item.total = item.quantity * item.unitPrice;
+      item.totalPrice = item.quantity * item.unitPrice;
     }
   });
 
@@ -109,9 +109,9 @@ const recalculateTotal = () => {
   const updateParentTotal = (parentIndex) => {
     let parent = listItems.value.find((item) => item.index === parentIndex && !item.deleted);
     if (parent) {
-      parent.total = listItems.value
+      parent.totalPrice = listItems.value
           .filter((child) => child.parentIndex === parent.index && !child.deleted)
-          .reduce((sum, child) => sum + child.total, 0);
+          .reduce((sum, child) => sum + child.totalPrice, 0);
 
       if (parent.parentIndex !== null) {
         updateParentTotal(parent.parentIndex);
@@ -176,10 +176,6 @@ const sortItems = () => {
     return 0;
   });
 };
-
-const checkHasChildren = (row) => {
-  return !hasChildren(row);
-}
 </script>
 
 <template>
@@ -275,7 +271,7 @@ const checkHasChildren = (row) => {
 
         <el-table-column :label="$t('contract.create.item_table.total_price')" resizable width="380">
           <template #default="{ row }">
-            {{ mixinMethods.formatInputMoney(row.total || (row.quantity * row.unitPrice)) }}
+            {{ mixinMethods.formatInputMoney(row.totalPrice) }}
           </template>
         </el-table-column>
       </el-table>

@@ -168,6 +168,7 @@ const closeModal = () => {
     material: 0,
     totalPrice: 0,
   };
+  activeTab.value = "tasks"
   emit("close");
 };
 
@@ -226,6 +227,7 @@ const handleSubmit = async () => {
 
   emit("submit", props.selectedRow);
   emit("close");
+  activeTab.value = "tasks"
 };
 
 </script>

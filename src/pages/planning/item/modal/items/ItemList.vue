@@ -41,8 +41,11 @@
         <el-table-column prop="quantity" :label="$t('planning.items.quantity')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input :disabled="isHuman" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue"/>
+              <el-input :disabled="isHuman" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             </el-form-item>
+            <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
+              {{ exceedMessages[row.resourceId] }}
+            </p>
           </template>
         </el-table-column>
 
@@ -59,7 +62,7 @@
                   v-model.number="listAddedValues[$index].unitPrice"
                   :formatter="(value) => mixinMethods.formatInputMoney(value)"
                   :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                  @change="handleChangeValue"
+                  @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"
               />
             </el-form-item>
           </template>
@@ -92,11 +95,12 @@
 </template>
 
 <script setup>
-import {defineEmits, defineProps, reactive, ref, watch} from "vue";
+import {computed, defineEmits, defineProps, reactive, ref, watch} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {MATERIAL_TYPE} from "@/constants/resource.js";
+import {useI18n} from "vue-i18n";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
@@ -115,6 +119,8 @@ const props = defineProps({
   }
 });
 
+const {t} = useI18n();
+const exceedMessages = ref({});
 const listAddedValues = ref(props.tableData);
 const ruleFormRef = ref(null);
 const selectedValue = ref(null);
@@ -144,12 +150,20 @@ const getResourceName = (id) => {
 }
 
 const getInventory = (id) => {
-  return props.selectData.find(item => item.id === id).inventory || 0;
+  return props.selectData.find(item => item.id === id).inventory;
 }
 
-const handleChangeValue = () => {
+const handleChangeValue = (quantity, resourceId) => {
+  if (props.resourceType === MATERIAL_TYPE) {
+    let inventory = props.selectData.find(item => item.id === resourceId)?.inventory ?? 0;
+    if (inventory < quantity) {
+      exceedMessages.value[resourceId] = t('E-PLAN-002');
+    } else {
+      exceedMessages.value[resourceId] = '';
+    }
+  }
   emit("update-value");
-}
+};
 
 const handleRemoveResource = async (id) => {
   // Remove from the form list

@@ -23,12 +23,17 @@ export function validateStartBeforeEnd(rule, value, callback, startDate, endDate
   const start = new Date(startDate);
   const end = new Date(endDate);
 
+  // Normalize both dates to midnight (00:00:00)
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+
   if (start > end) {
-    callback(new Error(i18n.global.t(message))); // Customize the error message key
+    callback(new Error(i18n.global.t(message))); // i18n message key
   } else {
     callback();
   }
 }
+
 
 export function validateChooseDateRelation(rule, value, callback, selectedRow, planList) {
 
