@@ -85,20 +85,9 @@ export const useUserStore = defineStore(
 
         const saveUser = async (params, method) => {
             mixinMethods.startLoading();
-            let data = {
-                id: params.id,
-                userName: params.username,
-                email: params.email,
-                role: params.role,
-                fullName: params.fullName,
-                phone: params.phone,
-                gender: params.gender,
-                isVerify: true,
-                dob: params.dob,
-            };
             await services.UserAPI[method](
                 {
-                    id: params.id,
+                    id: params.userId,
                     userName: params.username,
                     email: params.email,
                     role: params.role,

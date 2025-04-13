@@ -1171,6 +1171,7 @@
   "E-CM-031": "Start time must be before end time",
   "E-CM-032": "Start date must be after its parent start date",
   "E-CM-033": "End date must be before its parent end date",
+  "E-CM-034": "Phone Number is invalid",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",
@@ -1183,6 +1184,13 @@
   "E-CUS-004": "Tax code is required",
   "E-CUS-005": "Tax code is invalid",
   "E-CUS-006": "Fax number is invalid",
+
+  "E-USER-001": "User Name is required",
+  "E-USER-002": "Email is required",
+  "E-USER-003": "Full Name is required",
+  "E-USER-004": "Phone is required",
+  "E-USER-005": "Role is required",
+  "E-USER-006": "Gender is required",
 
   "E-CTR-001": "Contract code is required",
   "E-CTR-002": "Project is required",
