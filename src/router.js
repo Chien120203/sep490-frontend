@@ -45,6 +45,8 @@ import HumanResourceList from "@/pages/resource/human-management/HumanResourceLi
 import UserProfile from "@/pages/profile/UserProfile.vue";
 import Allocation from "@/pages/resource-allocation/Index.vue";
 import AllocationList from "@/pages/resource-allocation/AllocationList.vue";
+import Inventory from "@/pages/inventory/Index.vue";
+import InventoryList from "@/pages/inventory/InventoryList.vue";
 
 const routes = [
   {
@@ -364,6 +366,21 @@ const routes = [
         path: PAGES.HUMAN_RESOURCE_CREATE,
         component: HumanResourcesSave,
       },
+    ]
+  },
+  {
+    name: PAGE_NAME.INVENTORY,
+    path: PAGES.INVENTORY,
+    component: Inventory,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.INVENTORY_LIST,
+        name: PAGE_NAME.INVENTORY.LIST,
+        component: InventoryList,
+      }
     ]
   },
 ];

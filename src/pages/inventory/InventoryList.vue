@@ -1,0 +1,138 @@
+<template>
+  <div class="mobilization mobilization-list">
+    <div class="mobilization-header">
+      <h3 class="page__ttl">{{ $t("inventory.title") }}</h3>
+    </div>
+
+    <div class="mobilization-body">
+      <!-- SEARCH -->
+      <div class="mobilization-search">
+        <div class="mobilization-search-box col-md-9 col-lg-9">
+          <p class="mobilization-search__ttl">
+            {{ $t("mobilization.keyword") }}
+          </p>
+          <div class="mb-0 ruleform">
+            <el-input
+                :placeholder="$t('common.input_keyword')"
+                @keyup.enter="submitForm"
+                v-model="searchForms.search"
+                prop="search"
+            >
+            </el-input>
+          </div>
+        </div>
+        <div class="btn-search-select col-md-3 col-lg-3 mobilization-box-btn-all">
+          <el-button class="btn btn-search" @click="submitForm()">
+            {{ $t("common.search") }}
+          </el-button>
+          <el-button class="btn btn-clear" @click="handleClear()">
+            {{ $t("common.clear") }}
+          </el-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLES BY TYPE -->
+    <div class="mobilization-body-table">
+      <el-tabs v-model="activeTab">
+        <el-tab-pane :label="`${$t('inventory.type.team')} (${listTeams.length})`" :name="HUMAN_TYPE">
+          <InventoryTable
+              :data="listTeams"
+          />
+        </el-tab-pane>
+        <el-tab-pane :label="`${$t('inventory.type.machine')} (${listMachines.length})`" :name="MACHINE_TYPE">
+          <InventoryTable
+              :data="listMachines"
+          />
+        </el-tab-pane>
+        <el-tab-pane :label="`${$t('inventory.type.material')} (${listMaterials.length})`" :name="MATERIAL_TYPE">
+          <InventoryTable
+              :data="listMaterials"
+          />
+        </el-tab-pane>
+      </el-tabs>
+
+      <LoadMore
+          :listData="inventoryData.value"
+          :totalItems="totalItems.value"
+          @loadMore="handleLoadMore"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { useI18n } from "vue-i18n";
+import { usePersistenceStore } from "@/store/persistence.js";
+import LoadMore from "@/components/common/LoadMore.vue";
+import InventoryTable from "@/pages/inventory/items/InventoryTable.vue";
+import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js"
+import {useInventoryStore} from "@/store/inventory.js";
+
+// State
+const activeTab = ref(HUMAN_TYPE);
+const isShowBoxSearch = ref(false);
+
+const { t } = useI18n();
+const persist = usePersistenceStore();
+const inventoryStore = useInventoryStore();
+const {
+  inventoryData,
+  totalItems,
+  currentPage,
+  getListInventory
+} = inventoryStore;
+const {
+  projectId
+} = persist;
+
+const listMaterials = computed(() => inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE));
+const listMachines = computed(() => inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE));
+const listTeams = computed(() => inventoryData.value.filter(item => item.resourceType === HUMAN_TYPE));
+
+const searchForms = ref({
+  projectId: projectId.value,
+  type: HUMAN_TYPE,
+  pageIndex: 1
+});
+
+// Methods
+const handleClear = () => {
+  // searchForms.value.search = "";
+};
+
+const submitForm = () => {
+
+};
+
+const handleLoadMore = () => {
+  currentPage.value++;
+  searchForms.value.pageIndex++;
+  getListInventory(searchForms.value);
+};
+
+// Lifecycle
+onMounted(() => {
+  getListInventory(searchForms.value);
+});
+
+onUnmounted(() => {
+  totalItems.value = 0;
+});
+</script>
+
+<style lang="scss" scoped>
+.close-form {
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  right: 16px;
+  top: 10px;
+  cursor: pointer;
+
+  svg {
+    height: 30px;
+  }
+}
+</style>
