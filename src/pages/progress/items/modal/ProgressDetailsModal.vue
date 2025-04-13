@@ -14,7 +14,7 @@
         <ModalItemInformation :task="progressDetails"/>
       </div>
       <div style="display: flex">
-        <ModalItemProgressDetails style="width: 100%"/>
+        <ModalItemProgressDetails :task="progressDetails" :taskPlan="taskPlan" :listLogsByTask="listLogsByTask" style="width: 100%"/>
       </div>
     </template>
   </Modal>
@@ -31,14 +31,16 @@ const {t} = useI18n();
 const props = defineProps({
   show: {type: Boolean, default: false},
   progressDetails: {
-    type: Object, default: () => {
-    }
+    type: Object, default: () => {}
+  },
+  taskPlan: {
+    type: Object, default: () => {}
+  },
+  listLogsByTask: {
+    type: Array,
+    default: () => []
   }
 });
-
-const materialOptions = {id: 'id', value: 'name'};
-const userOptions = {id: 'id', value: 'name'};
-const vehicleOptions = {id: 'id', value: 'name'};
 
 const emit = defineEmits(["close", "submit"]);
 const selectedUsers = ref([]);

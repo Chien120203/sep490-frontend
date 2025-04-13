@@ -1,224 +1,57 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import ProgressGanttChart from "@/pages/progress/items/ProgressGanttChart.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useRouter} from "vue-router";
 import {usePersistenceStore} from "@/store/persistence.js";
 import ProgressDetailsModal from "@/pages/progress/items/modal/ProgressDetailsModal.vue"
+import {useProgressStore} from "@/store/progress.js";
+import {useConstructLog} from "@/store/construct-log.js";
+import {usePlanningStore} from "@/store/planning.js";
 
 const router = useRouter();
 const persistenceStore = usePersistenceStore();
-
+const progressStore = useProgressStore();
+const constructStore = useConstructLog();
+const planningStore = usePlanningStore();
+const {
+  progressDetails,
+  getProgressDetails
+} = progressStore;
+const {
+  taskPlanDetails
+} = planningStore;
+const {
+  listLogsByTask
+} = constructStore;
 const {
   projectId
 } = persistenceStore;
 
-// mock data
-const task2 = ref([
-  {
-    TaskID: 1,
-    TaskName: "Planning",
-    StartDate: new Date("02/03/2017"),
-    EndDate: new Date("02/07/2017"),
-    BaselineStartDate: new Date("02/02/2017"),
-    BaselineEndDate: new Date("02/06/2017"),
-    Progress: 100,
-    Duration: 5,
-    subtasks: [
-      {
-        TaskID: 2,
-        TaskName: "Plan timeline",
-        StartDate: new Date("02/03/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/02/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 5,
-        Progress: 100
-      },
-      {
-        TaskID: 3,
-        TaskName: "Plan budget",
-        StartDate: new Date("02/03/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/02/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 5,
-        Progress: 100,
-        Predecessor: "2SS"
-      },
-      {
-        TaskID: 4,
-        TaskName: "Allocate resources",
-        StartDate: new Date("02/03/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/02/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 5,
-        Progress: 100,
-        Predecessor: "3SS"
-      },
-      {
-        TaskID: 5,
-        TaskName: "Planning complete",
-        StartDate: new Date("02/07/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/06/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 0,
-        Progress: 0,
-        Predecessor: "4FS"
-      }
-    ]
-  },
-  {
-    TaskID: 6,
-    TaskName: "Design",
-    StartDate: new Date("02/10/2017"),
-    EndDate: new Date("02/14/2017"),
-    BaselineStartDate: new Date("02/09/2017"),
-    BaselineEndDate: new Date("02/13/2017"),
-    Duration: 3,
-    Progress: 86,
-    subtasks: [
-      {
-        TaskID: 7,
-        TaskName: "Software Specification",
-        StartDate: new Date("02/10/2017"),
-        EndDate: new Date("02/12/2017"),
-        BaselineStartDate: new Date("02/09/2017"),
-        BaselineEndDate: new Date("02/11/2017"),
-        Duration: 3,
-        Progress: 60
-      },
-      {
-        TaskID: 8,
-        TaskName: "Develop prototype",
-        StartDate: new Date("02/10/2017"),
-        EndDate: new Date("02/12/2017"),
-        BaselineStartDate: new Date("02/09/2017"),
-        BaselineEndDate: new Date("02/11/2017"),
-        Duration: 3,
-        Progress: 100,
-        Predecessor: "7SS"
-      },
-      {
-        TaskID: 9,
-        TaskName: "Get approval from customer",
-        StartDate: new Date("02/13/2017"),
-        EndDate: new Date("02/14/2017"),
-        BaselineStartDate: new Date("02/12/2017"),
-        BaselineEndDate: new Date("02/13/2017"),
-        Duration: 2,
-        Progress: 100,
-        Predecessor: "8FS"
-      },
-      {
-        TaskID: 10,
-        TaskName: "Design Documentation",
-        StartDate: new Date("02/13/2017"),
-        EndDate: new Date("02/14/2017"),
-        BaselineStartDate: new Date("02/12/2017"),
-        BaselineEndDate: new Date("02/13/2017"),
-        Duration: 2,
-        Progress: 100,
-        Predecessor: "9SS"
-      },
-      {
-        TaskID: 11,
-        TaskName: "Design complete",
-        StartDate: new Date("02/14/2017"),
-        EndDate: new Date("02/14/2017"),
-        BaselineStartDate: new Date("02/13/2017"),
-        BaselineEndDate: new Date("02/13/2017"),
-        Duration: 0,
-        Progress: 0,
-        Predecessor: "10FS"
-      }
-    ]
-  },
-  {
-    TaskID: 12,
-    TaskName: "Development",
-    StartDate: new Date("02/15/2017"),
-    EndDate: new Date("03/01/2017"),
-    Duration: 10,
-    Progress: 50,
-    subtasks: [
-      {
-        TaskID: 13,
-        TaskName: "Backend Development",
-        StartDate: new Date("02/15/2017"),
-        EndDate: new Date("02/24/2017"),
-        Duration: 7,
-        Progress: 70
-      },
-      {
-        TaskID: 14,
-        TaskName: "Frontend Development",
-        StartDate: new Date("02/16/2017"),
-        EndDate: new Date("02/25/2017"),
-        Duration: 7,
-        Progress: 60,
-        Predecessor: "13FS"
-      },
-      {
-        TaskID: 15,
-        TaskName: "Integration",
-        StartDate: new Date("02/26/2017"),
-        EndDate: new Date("03/01/2017"),
-        Duration: 4,
-        Progress: 30,
-        Predecessor: "14FS"
-      }
-    ]
-  },
-  {
-    TaskID: 16,
-    TaskName: "Testing",
-    StartDate: new Date("03/02/2017"),
-    EndDate: new Date("03/10/2017"),
-    Duration: 7,
-    Progress: 20,
-    subtasks: [
-      {
-        TaskID: 17,
-        TaskName: "Unit Testing",
-        StartDate: new Date("03/02/2017"),
-        EndDate: new Date("03/05/2017"),
-        Duration: 3,
-        Progress: 40
-      },
-      {
-        TaskID: 18,
-        TaskName: "Integration Testing",
-        StartDate: new Date("03/06/2017"),
-        EndDate: new Date("03/08/2017"),
-        Duration: 3,
-        Progress: 30,
-        Predecessor: "17FS"
-      },
-      {
-        TaskID: 19,
-        TaskName: "User Acceptance Testing",
-        StartDate: new Date("03/09/2017"),
-        EndDate: new Date("03/10/2017"),
-        Duration: 2,
-        Progress: 10,
-        Predecessor: "18FS"
-      }
-    ]
-  }
-]);
-const progressItem = ref([]);
+const progressItem = ref(null);
 const isShowModal = ref(false);
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
-}
+};
+
+const tasks = ref(progressDetails.value.progressItems);
+
+watch(
+    () => progressDetails.value,
+    (newVal) => {
+      tasks.value = newVal.progressItems;
+    },
+    { immediate: true, deep: true } // `immediate` handles initial assignment; `deep` tracks nested changes
+)
+
+onMounted(() => {
+  getProgressDetails();
+});
 
 const handleEditProgressItem = (item) => {
   isShowModal.value = true;
-  progressItem.value = item;
+  progressItem.value = item[0]?.taskData;
 }
 
 const handleAddAllocation = () => {
@@ -245,9 +78,10 @@ const handleCloseModal = () => {
           }}
         </h3>
       </div>
-      <div>
+      <div v-if="!tasks"></div>
+      <div v-else>
         <ProgressGanttChart
-            :tasks="task2"
+            :tasks="tasks"
             @handleSelectRow="handleEditProgressItem"
             @add-task="handleAddTask"
             @add-allocation="handleAddAllocation"
@@ -256,6 +90,8 @@ const handleCloseModal = () => {
     </div>
     <ProgressDetailsModal
         :progressDetails="progressItem"
+        :listLogsByTask="listLogsByTask.value"
+        :taskPlan="taskPlanDetails.value"
         :show="isShowModal"
         @close="handleCloseModal"
     />

@@ -63,11 +63,11 @@ const handleDateClick = (date) => {
 }
 
 const plusOneMonth = (dateStr) => {
-  return dayjs(dateStr).add(0, 'month').format('YYYY-MM-DD')
+  return dayjs(dateStr).format('YYYY-MM-DD')
 }
 
 const getLogName = (data) => {
-  return props.listLog.find(log => log.date === data)?.name || ""
+  return props.listLog.find(log => log.logDate === data)?.logName || ""
 }
 </script>
 <style scoped>

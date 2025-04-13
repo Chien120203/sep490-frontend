@@ -4,3 +4,10 @@ export const TIME_LINES = [
   {label: "progress.timeline.month", value: 'Month'},
   {label: "progress.timeline.year", value: 'Year'},
 ];
+
+export const PROGRESS_STATUS = [
+  'progress.status.not_started',
+  'progress.status.in_progress',
+  'progress.status.completed',
+  'progress.status.behind_schedule',
+]
