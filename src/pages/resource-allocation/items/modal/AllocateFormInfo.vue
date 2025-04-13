@@ -1,9 +1,10 @@
 <template>
   <div class="price-input-form">
-    <el-form 
-      label-width="40%"
-      :rules="ALLOCATIONFORMINFO_RULES"
-      :model="data">
+    <el-form
+        label-width="40%"
+        :rules="ALLOCATIONFORMINFO_RULES"
+        :model="data"
+    >
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="Request Code">
@@ -12,19 +13,72 @@
           <el-form-item label="Request Name">
             <el-input v-model="data.requestName" class="custom-input" />
           </el-form-item>
-          <el-form-item>
+
+          <!-- Allocation type radio buttons -->
+          <el-form-item label="Request Type" required>
+            <el-select v-model="data.requestType">
+              <el-option
+                  v-for="request in ALLOCATION_REQUEST_TYPES"
+                  :key="request.value"
+                  :label="$t(request.label)"
+                  :value="request.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <!-- Target project/task selector -->
+          <el-form-item v-if="data.requestType === PROJECT_TO_PROJECT" label="Target Project">
             <div class="select-project-container">
-              <el-radio-group v-model="requestType">
-                <el-radio-button label="From Current Project" value="from" />
-                <el-radio-button label="To Current Project" value="to" />
-              </el-radio-group>
               <SingleOptionSelect
-                  v-model="projectSelected"
+                  v-model="data.toProjectId"
                   :optionKeys="{ id: 'id', value: 'projectCode' }"
                   :listData="listProjects"
                   :isRemote="true"
                   @remoteSearch="handleSearchProject"
-                  @handleSelectedParams="handleSelectItem"
+                  :showClearable="true"
+              />
+            </div>
+          </el-form-item>
+
+          <!-- Target project/task selector -->
+          <el-form-item v-if="data.requestType === PROJECT_TO_TASK" label="Target Task">
+            <div class="select-project-container">
+              <SingleOptionSelect
+                  v-model="data.toTask"
+                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :listData="progressDetails.progressItems"
+                  :isRemote="true"
+                  @remoteSearch="handleSearchTask"
+                  :showClearable="true"
+              />
+            </div>
+          </el-form-item>
+
+          <!-- Target project/task selector -->
+          <el-form-item v-if="data.requestType === TASK_TO_TASK" label="From Task">
+            <div class="select-project-container">
+              <SingleOptionSelect
+                  v-model="data.fromTask"
+                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :listData="progressDetails.progressItems"
+                  :isRemote="true"
+                  @remoteSearch="handleSearchTask"
+                  :showClearable="true"
+              />
+            </div>
+          </el-form-item>
+
+          <!-- Target project/task selector -->
+          <el-form-item v-if="data.requestType === TASK_TO_TASK" label="To Task">
+            <div class="select-project-container">
+              <SingleOptionSelect
+                  v-model="data.toTask"
+                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :listData="progressDetails.progressItems.filter(task => task.index !== data.fromTask)"
+                  :isRemote="true"
+                  @remoteSearch="handleSearchTask"
+                  :showClearable="true"
               />
             </div>
           </el-form-item>
@@ -40,6 +94,7 @@
                 class="input-wd-96"
             />
           </el-form-item>
+
           <el-form-item label="Priority">
             <el-select v-model="data.priorityLevel">
               <el-option
@@ -47,13 +102,16 @@
                   :key="index"
                   :label="status"
                   :value="index"
-              >
-              </el-option>
+              />
             </el-select>
           </el-form-item>
 
           <el-form-item label="Description">
-            <el-input v-model="data.description" type="textarea" class="custom-input" />
+            <el-input
+                v-model="data.description"
+                type="textarea"
+                class="custom-input"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -62,46 +120,29 @@
 </template>
 
 <script setup>
-import {computed, defineProps, ref} from "vue";
-import {PRIORITIES, STATUSES} from "@/constants/mobilization.js";
-import {DATE_FORMAT} from "@/constants/application.js";
+import { defineProps } from "vue";
+import { PRIORITIES} from "@/constants/mobilization.js";
+import { DATE_FORMAT } from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import {usePersistenceStore} from "@/store/persistence.js";
 import { getAllocationRules } from "@/rules/allocation";
+import {ALLOCATION_REQUEST_TYPES, PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 
 const props = defineProps({
   data: { type: Object, default: () => ({}) },
-  listProjects: {
-    type: Array,
-    default: () => []
-  },
+  listProjects: { type: Array, default: () => [] },
+  progressDetails: { type: Object, default: () => ({}) },
 });
 
-const persist = usePersistenceStore();
-const {
-  projectId
-} = persist;
-
-const requestType = ref("from");
-const projectSelected = ref(null);
-
-projectSelected.value = requestType.value === "from" ? props.data.fromProjectId : props.data.toProjectId;
-
-
+const emit = defineEmits(["searchProject",  "searchTask"]);
 const ALLOCATIONFORMINFO_RULES = getAllocationRules();
 
-const handleSearchProject = (value) => {
-  emit("searchProject", value);
+// Search remote project/task
+const handleSearchProject = (keyword) => {
+  emit("searchProject", keyword);
 };
-const handleSelectItem = (value) => {
-  if(requestType.value === "from") {
-    props.data.fromProjectId = projectId.value;
-    props.data.toProjectId = value;
-  }
-  if(requestType.value === "to") {
-    props.data.fromProjectId = value;
-    props.data.toProjectId = projectId.value;
-  }
+
+const handleSearchTask = (keyword) => {
+  emit("searchTask", keyword);
 }
 </script>
 
@@ -125,11 +166,11 @@ const handleSelectItem = (value) => {
 }
 
 .custom-input {
-  width: 80%; /* Input takes 70% width */
+  width: 80%;
 }
 
 :deep(.el-form-item__label) {
-  width: 20% !important; /* Label takes 30% width */
+  width: 20% !important;
 }
 
 :deep(.el-form-item__content) {

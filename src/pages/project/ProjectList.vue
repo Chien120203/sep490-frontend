@@ -6,7 +6,7 @@
         <el-row
             class="mb-4"
         >
-          <el-button class="btn btn-save" @click="handleRedirectToCreate"
+          <el-button v-if="allowCreateProject" class="btn btn-save" @click="handleRedirectToCreate"
           >{{ $t("project.add_new") }}
           </el-button>
         </el-row>
@@ -132,7 +132,7 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-import {onMounted, onUnmounted, reactive, ref} from "vue";
+import {computed, onMounted, onUnmounted, reactive, ref} from "vue";
 import {NUMBER_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
 import {BUSINESS_EMPLOYEE} from "@/constants/roles.js"
 import {useRouter} from "vue-router";
@@ -169,6 +169,7 @@ export default {
     const customerStore = useCustomerStore();
     const isShowBoxSearch = ref(false);
     const role = ref(localStorage.getItem('role'));
+    const allowCreateProject = computed(() => role === BUSINESS_EMPLOYEE)
     const {
       validation,
       listProjects, // temporary
@@ -308,6 +309,7 @@ export default {
       validation,
       isShowModalCreate,
       projectDetails,
+      allowCreateProject,
       handleSearchForm,
       handleSearchCustomer,
       handleClear,
