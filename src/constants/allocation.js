@@ -1,4 +1,8 @@
 export const DRAFT_STATUS = 0;
+export const WAIT_MANAGER_APPROVE = 1;
+export const MANAGER_APPROVED = 2;
+export const BOD_APPROVED = 3;
+export const REJECTED = 4;
 export const STATUSES = [
   'Draft',
   'Wait Manager Approval',

@@ -148,42 +148,42 @@ const formAllocationHumanInfos = ref(null);
 const formAllocationInfo = ref(null);
 
 const handleSubmit = async () => {
-  const forms = [
-    {
-      ref: formAllocationMaterialInfos,
-      name: "Material",
-    },
-    {
-      ref: formAllocationVehicleInfos,
-      name:"Vehicle",
-    },
-    {
-      ref: formAllocationHumanInfos,
-      name: "Human",
-    },
-    {
-      ref: formAllocationInfo,
-      name: "allocation",
-    }
-  ];
-  for (const form of forms) {
-    const isValid = await new Promise((resolve) => {
-      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
-    });
-
-    if (!isValid) {
-      mixinMethods.notifyError(
-          t("planning.errors.invalid_form", {form: form.name})
-      );
-      return; // stop here if one form is invalid
-    }
-  }
+  // const forms = [
+  //   {
+  //     ref: formAllocationMaterialInfos,
+  //     name: "Material",
+  //   },
+  //   {
+  //     ref: formAllocationVehicleInfos,
+  //     name:"Vehicle",
+  //   },
+  //   {
+  //     ref: formAllocationHumanInfos,
+  //     name: "Human",
+  //   },
+  //   {
+  //     ref: formAllocationInfo,
+  //     name: "allocation",
+  //   }
+  // ];
+  // for (const form of forms) {
+  //   const isValid = await new Promise((resolve) => {
+  //     form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+  //   });
+  //
+  //   if (!isValid) {
+  //     mixinMethods.notifyError(
+  //         t("planning.errors.invalid_form", {form: form.name})
+  //     );
+  //     return; // stop here if one form is invalid
+  //   }
+  // }
   let listData = [
       ...listSelectedMaterials.value,
       ...listSelectedUsers.value,
       ...listSelectedVehicles.value
   ];
-  emit("submit" listData);
+  emit("submit", listData);
 };
 </script>
 

@@ -1,4 +1,4 @@
-import {del, get, post} from '@/services/BaseService';
+import {del, get, post, put} from '@/services/BaseService';
 import API_CODE from '@/utils/api_code';
 
 const list = async (params, success, error) => {
@@ -13,13 +13,29 @@ const save = async (data, success, error) => {
   await post(API_CODE.API_ALLOCATION_002, data, success, error);
 };
 
-const deleteMobilization = async (id, success, error) => {
-  await del(API_CODE.API_MOBILIZE_003 + "/" + id, {}, success, error);
+const deleteAllocation = async (id, success, error) => {
+  await del(API_CODE.API_ALLOCATION_004 + "/" + id, {}, success, error);
+};
+
+const send = async (id, success, error) => {
+  await put(API_CODE.API_ALLOCATION_005 + '/' + id, {}, success, error);
+};
+
+const approve = async (id, success, error) => {
+  await put(API_CODE.API_ALLOCATION_006 + '/' + id, {comments: "change later"}, success, error);
+};
+
+
+const reject = async (id, success, error) => {
+  await put(API_CODE.API_ALLOCATION_007 + '/' + id, {reason: "change later"}, success, error);
 };
 
 export const AllocationAPI = {
   list,
   details,
-  deleteMobilization,
+  deleteAllocation,
+  send,
+  approve,
+  reject,
   save,
 };

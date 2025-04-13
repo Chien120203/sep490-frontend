@@ -34,6 +34,7 @@
               :data="listAllocations.value"
               @details="handleGetAllocationDtls"
               @delete="handleDisplayModal"
+              @changeStatus="handleChangeStatus"
           />
           <LoadMore
               :listData="listAllocations.value"
@@ -103,6 +104,8 @@ const {
   currentPage,
   allocationDetails,
   getListAllocations,
+  handleDeleteAllocation,
+  handleChangeRequestStatus,
   getAllocationDtls,
   saveRequest
 } = allocationStore;
@@ -142,7 +145,9 @@ const handleLoadMore = () => {
   getListAllocations(searchForms.value);
 };
 
-const handleSaveRequest = () => {
+const handleSaveRequest = (data) => {
+  allocationDetails.value.resourceAllocationDetails = data;
+  allocationDetails.value.fromProjectId = projectId.value;
   saveRequest(allocationDetails.value);
   handleDisplayModalSave(false);
 };
@@ -156,9 +161,15 @@ const closeModalConfirm = () => {
   isShowModalConfirm.value = false;
 };
 
-const handleConfirm = () => {
+const handleConfirm = async () => {
   closeModalConfirm();
-  // handle delete logic here if needed
+  if(delete_id.value) {
+    await handleDeleteAllocation(delete_id.value);
+    delete_id.value = null;
+  } else {
+    await handleChangeRequestStatus(changeObject.value.id, changeObject.value.type);
+  }
+  await getListAllocations(searchForms.value);
 };
 
 const handleGetAllocationDtls = (id) => {
@@ -174,6 +185,12 @@ const handleSearchProjects = (value) => {
 // need to add function query task from progress later
 const handleSearchTasks = (value) => {
   formSearchTask.value.keyWord = value;
+};
+
+const handleChangeStatus = (data) => {
+  changeObject.value = data;
+  title.value = t('mobilization.modal_confirm.message_change_status');
+  isShowModalConfirm.value = true;
 };
 
 const handleTabChange = () => {

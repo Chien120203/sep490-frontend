@@ -97,6 +97,48 @@ export const useAllocationStore = defineStore(
       await mixinMethods.endLoading();
     };
 
+    const handleDeleteAllocation = async (id) => {
+      mixinMethods.startLoading();
+      await services.AllocationAPI.deleteAllocation(
+        id,
+        (response) => {
+          if(response.success) {
+            listAllocations.value = listAllocations.value.filter(mobilize => mobilize.id !== id);
+            mixinMethods.notifySuccess(t("response.message.delete_mobilize_success"));
+          } else {
+            mixinMethods.notifyError(t("response.message.delete_mobilize_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.delete_mobilize_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+      await mixinMethods.endLoading();
+    };
+
+    const handleChangeRequestStatus = async (id, method) => {
+      mixinMethods.startLoading();
+      await services.MobilizationAPI[method](
+        id,
+        (response) => {
+          if(response.success) {
+            mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
+          }else {
+            validation.value = mixinMethods.handleErrorResponse(response);
+            mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+      await mixinMethods.endLoading();
+    };
+
     return {
       validation,
       totalItems,
@@ -104,6 +146,8 @@ export const useAllocationStore = defineStore(
       allocationDetails,
       listAllocations,
       saveRequest,
+      handleDeleteAllocation,
+      handleChangeRequestStatus,
       getListAllocations,
       getAllocationDtls,
     };
