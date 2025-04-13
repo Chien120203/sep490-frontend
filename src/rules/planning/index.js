@@ -38,9 +38,6 @@ export const getPlanningRules = () => {
     unit: [
       { required: true, message: t("E-CM-002"), trigger: 'blur' }
     ],
-    reviewers: [
-      { required: true, message: t("E-CM-002"), trigger: 'blur' }
-    ],
     quantity: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
@@ -120,7 +117,6 @@ export const getPlanningRules = () => {
       },
     ],
     dependency: [
-      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
           validateChooseTypeRelation(rule, value, callback, planSelectedRow.value, planningDetails.value),

@@ -713,6 +713,7 @@
       "description": "Description",
       "technical_manager": "Technical Manager",
       "resource_manager": "Resource Manager",
+      "qa": "Quality Assurance",
       "construction_manager": "Construction Manager",
       "upload_file": "Upload File"
     },
@@ -787,7 +788,7 @@
     },
     "form": {
       "name": "Plan Name",
-      "inspector": "Inspectors"
+      "inspector": "Reviewers"
     },
     "modal": {
       "work_name": "Work Name",

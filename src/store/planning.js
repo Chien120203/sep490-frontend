@@ -39,7 +39,32 @@ export const usePlanningStore = defineStore(
         reviewers: []
       }
     });
-
+    // const approveStatuses = reactive({value: []});
+    const approveStatuses = reactive({
+      value: [
+        {
+          id: 4,
+          name: "Technical Manager",
+          role: "Technical Manager",
+          email: "longrpk200315@gmail.com",
+          isApproved: true
+        },
+        {
+          id: 6,
+          name: "Executive Board",
+          role: "Executive Board",
+          email: "longrpk200317@gmail.com",
+          isApproved: ""
+        },
+        {
+          id: 8,
+          name: "Resource Manager",
+          role: "Resource Manager",
+          email: "longrpk200319@gmail.com",
+          isApproved: true
+        }
+      ]
+    });
     const getListPlannings = async (params, isLoading = true) => {
       if (isLoading) mixinMethods.startLoading();
       await services.PlanningAPI.list(
@@ -69,9 +94,8 @@ export const usePlanningStore = defineStore(
         id,
         {},
         (response) => {
-          // planningDetails.value = response.data;
           planningDetails.value = {...response.data, reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]};
-
+          // approveStatuses.value = [...response.data.reviewers, {isBODApprove: response.data.isApproved}];
           mixinMethods.endLoading();
         },
         () => {
@@ -89,6 +113,38 @@ export const usePlanningStore = defineStore(
           if (response.success) {
             planningDetails.value = {...response.data, reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]};
             validation.value = [];
+            mixinMethods.notifySuccess(t("response.message.save_project_success"));
+          } else {
+            validation.value = mixinMethods.handleErrorResponse(response);
+            mixinMethods.notifyError(t("response.message.save_project_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.save_project_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const approvePlanning = async () => {
+      mixinMethods.startLoading();
+      let currentEmail = localStorage.getItem('email');
+      let userId = approveStatuses.value.find(item => item.email === currentEmail)?.id;
+      if(!userId) {
+        mixinMethods.notifyError(t("response.message.save_project_failed"));
+        await mixinMethods.endLoading();
+        return;
+      }
+      await services.PlanningAPI.approve(
+        {
+          actionBy: userId,
+          planId: planningDetails.value.id,
+          isApproved: true,
+          rejectReason: "abc"
+        },
+        (response) => {
+          if (response.success) {
             mixinMethods.notifySuccess(t("response.message.save_project_success"));
           } else {
             validation.value = mixinMethods.handleErrorResponse(response);
@@ -139,7 +195,9 @@ export const usePlanningStore = defineStore(
       currentPage,
       planSelectedRow,
       planningDetails,
+      approveStatuses,
       isShowModalConfirm,
+      approvePlanning,
       clearPlanningDetails,
       handleDeletePlan,
       getListPlannings,

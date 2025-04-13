@@ -1,6 +1,7 @@
 <template>
   <div class="item-list">
     <SingleOptionSelect
+        :isDisabled="!allowEdit"
         class="select-item"
         :defaultList="selectedValue"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
@@ -33,7 +34,7 @@
         <el-table-column prop="unit" :label="$t('planning.items.unit')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
-              <el-input v-model="listAddedValues[$index].unit" />
+              <el-input :disabled="!allowEdit" v-model="listAddedValues[$index].unit" />
             </el-form-item>
           </template>
         </el-table-column>
@@ -41,7 +42,7 @@
         <el-table-column prop="quantity" :label="$t('planning.items.quantity')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input :disabled="isHuman" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+              <el-input :disabled="isHuman && !allowEdit" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             </el-form-item>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}
@@ -59,6 +60,7 @@
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unitPrice`" :rules="rules.unitPrice">
               <el-input
+                  :disabled="!allowEdit"
                   v-model.number="listAddedValues[$index].unitPrice"
                   :formatter="(value) => mixinMethods.formatInputMoney(value)"
                   :parser="(value) => mixinMethods.parseInputCurrency(value)"
@@ -83,7 +85,7 @@
         <el-table-column :label="$t('planning.items.action')">
           <template #default="{ row, $index }">
             <div>
-              <button @click="handleRemoveResource(row.resourceId); $event.preventDefault()" class="btn-edit">
+              <button v-if="allowEdit" @click="handleRemoveResource(row.resourceId); $event.preventDefault()" class="btn-edit">
                 <IconTrash />
               </button>
             </div>
@@ -116,6 +118,10 @@ const props = defineProps({
   rules: {
     type: Object,
     default: () => {}
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
   }
 });
 

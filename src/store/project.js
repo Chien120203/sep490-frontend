@@ -35,6 +35,7 @@ export const useProjectStore = defineStore(
         status: 0,
         technicalManager: "",
         constructionManager: "",
+        qa: "",
         resourceManager: "",
         attachments: [],
         description: "",

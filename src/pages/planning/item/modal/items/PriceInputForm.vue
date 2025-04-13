@@ -13,6 +13,7 @@
                 class="custom-input"
                 v-model="selectedRow.startDate"
                 type="date"
+                :disabled="!allowEdit"
                 placeholder="Select Date"
             />
           </el-form-item>
@@ -23,6 +24,7 @@
                 class="custom-input"
                 v-model="selectedRow.endDate"
                 type="date"
+                :disabled="!allowEdit"
                 placeholder="Select Date"
             />
           </el-form-item>
@@ -105,6 +107,10 @@ const props = defineProps({
         }
       ]
     })
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
   }
 });
 

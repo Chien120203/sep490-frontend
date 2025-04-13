@@ -4,6 +4,7 @@ import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import IconEdit from "@/svg/IconEdit.vue";
 import {mixinMethods} from "@/utils/variables.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
   items: Array,
@@ -28,6 +29,10 @@ const props = defineProps({
     type: Object,
     default: () => {
     }
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
   }
 });
 const ruleFormRef = ref(null);
@@ -79,7 +84,10 @@ const addSubItem = (parentItem) => {
 };
 
 const hasChildren = (parent) => listItems.value.some(child => child.parentIndex === parent.index && !child.deleted);
-const isParent = (item) => hasChildren(item);
+const isParent = (item) => {
+ if(!props.allowEdit) return true;
+ else return hasChildren(item);
+};
 
 // Function to delete an item
 const deleteItem = (itemToDelete) => {
@@ -186,7 +194,7 @@ const sortItems = () => {
       class="form-search-box"
   >
     <div class="contract-items">
-      <el-button class="btn btn-save new-parent-btn" @click="addItem">
+      <el-button class="btn btn-save new-parent-btn" v-if="allowEdit" @click="addItem">
         {{ $t('contract.create.btn.new_item') }}
       </el-button>
       <el-table :data="listItems" style="width: 100%" border>
@@ -199,9 +207,9 @@ const sortItems = () => {
         <el-table-column :label="$t('contract.create.item_table.action')" resizable width="180">
           <template #default="{ row }">
             <div class="action-btn">
-              <IconPlus @click="addSubItem(row)"/>
+              <IconPlus v-if="allowEdit" @click="addSubItem(row)"/>
               <IconEdit @click="emit('editPlanDetails', row)"/>
-              <IconTrash @click="deleteItem(row)"/>
+              <IconTrash v-if="allowEdit" @click="deleteItem(row)"/>
             </div>
           </template>
         </el-table-column>
@@ -209,7 +217,7 @@ const sortItems = () => {
         <el-table-column :label="$t('contract.create.item_table.item')" resizable min-width="180">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listItems.${$index}.workName`" :rules="rules.workName">
-              <el-input v-model="listItems[$index].workName"/>
+              <el-input :disabled="!allowEdit" v-model="listItems[$index].workName"/>
             </el-form-item>
           </template>
         </el-table-column>
@@ -218,7 +226,10 @@ const sortItems = () => {
           <template #default="{ row, $index }">
             <el-form-item :prop="`listItems.${$index}.startDate`" :rules="rules.startDate">
               <el-date-picker
+                  :disabled="!allowEdit"
                   class="custom-input"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
                   v-model="listItems[$index].startDate"
                   type="date"
               />
@@ -230,7 +241,10 @@ const sortItems = () => {
           <template #default="{ row, $index }">
             <el-form-item :prop="`listItems.${$index}.endDate`" :rules="rules.endDate">
               <el-date-picker
+                  :disabled="!allowEdit"
                   class="custom-input"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
                   v-model="listItems[$index].endDate"
                   type="date"
               />

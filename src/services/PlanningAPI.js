@@ -13,6 +13,10 @@ const create = async (params, success, error) => {
   await post(API_CODE.API_PLANNING_002, params, success, error);
 };
 
+const approve = async (params, success, error) => {
+  await post(API_CODE.API_PLANNING_006, params, success, error);
+};
+
 const deletePlan = async (id, success, error) => {
   await del(API_CODE.API_PLANNING_005 + "/" + id, {}, success, error);
 };
@@ -24,6 +28,7 @@ const update = async (params, success, error) => {
 export const PlanningAPI = {
   list,
   details,
+  approve,
   create,
   deletePlan,
   update

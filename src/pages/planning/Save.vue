@@ -11,8 +11,10 @@
           </h3>
         </div>
         <div class="contract-save-btn">
-          <div class="item">
-            <el-button class="btn btn-save" @click="submitForm">
+          <div class="btn-container">
+            <el-button v-if="allowApprove" style="height: 36px" type="success" @click="handleApprove()">{{ $t("common.approve") }}</el-button>
+            <el-button v-if="allowReject" class="btn btn-refuse" @click="handleReject()">{{ $t("common.reject") }}</el-button>
+            <el-button v-if="allowEdit" class="btn btn-save" @click="submitForm">
               {{ $t("common.save") }}
             </el-button>
           </div>
@@ -31,13 +33,14 @@
         <div v-if="selectedTab === 'info'">
           <SelectionFilters
               ref="selectionFormRef"
+              :allowEdit="allowEdit"
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
-              :followers="listQualityAssurances"
-              @updateFollowers="updateListQAs"
+              :followers="listManagers"
           />
           <PlanningDetails
               ref="detailsFormRef"
+              :allowEdit="allowEdit"
               :rules="PLANNING_RULES"
               :items="planningDetails.value.planItems"
               :isUpdate="isUpdate" @update:items="updateItems"
@@ -60,6 +63,7 @@
       :rules="PLANNING_RULES"
       :show="isShowModalItemDtls"
       :selectedRow="selectedRow"
+      :allowEdit="allowEdit"
       :tasks="planningDetails.value.planItems"
       :isUpdate="isUpdate"
       :materials="listMaterialResources.value"
@@ -82,7 +86,6 @@ import ActivityComponent from "@/pages/planning/item/details/ActivityComponent.v
 import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
 import {useUserStore} from "@/store/user.js";
-import {QUALITY_ASSURANCE} from "@/constants/roles.js";
 import PlanItemDetailsModal from "@/pages/planning/item/modal/PlanItemDetailsModal.vue";
 import {useContractStore} from "@/store/contract.js";
 import {usePlanningStore} from "@/store/planning.js";
@@ -94,6 +97,7 @@ import {useMachineResourcesStore} from "@/store/machine-resources.js";
 import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {useI18n} from "vue-i18n";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
+import {CONSTRUCTION_MANAGER, EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
@@ -106,21 +110,12 @@ const listTabs = ref([
     label: "Activity",
   },
 ]);
-const listQualityAssurances = ref([]);
+const listManagers = ref([]);
 const isShowModalItemDtls = ref(false);
 const isUpdate = computed(() => !!route.params.id);
 const selectedRow = ref({});
 const PLANNING_RULES = getPlanningRules();
-// Mock Data
-const statuses = ref([
-  {title: "Khởi tạo", description: "", status: "success"},
-  {
-    title: "Duyệt phòng ban",
-    description: "Phòng kỹ thuật, Phòng tài nguyên",
-    status: "process"
-  },
-  {title: "Giám đốc duyệt", description: "", status: ""}
-]);
+
 const currentStep = ref(1);
 const activities = ref([
   {
@@ -153,7 +148,6 @@ const activities = ref([
 ]); // Placeholder for activity data
 const {t} = useI18n();
 // Store Data
-const projectStore = useProjectStore();
 const userStore = useUserStore();
 const contractStore = useContractStore();
 const planningStore = usePlanningStore();
@@ -174,11 +168,68 @@ const {listUsers, getListUsers} = userStore;
 const {
   planningDetails,
   planSelectedRow,
+  approveStatuses,
+  approvePlanning,
   clearPlanningDetails,
   getPlanningDetails,
   savePlanning,
 } = planningStore;
+const currentEmail = localStorage.getItem("email");
+const currentRole = localStorage.getItem("role");
+const allowReject = computed(() =>  approveStatuses.value.find(p => (p.role === EXECUTIVE_BOARD && p.email === currentEmail))?.isApproved === "");
+const allowApprove = computed(() => approveStatuses.value.find(p => p.email === currentEmail)?.isApproved === "");
+const allowEdit = computed(() => {
+  const isCreate = !route.params.id;
 
+  if (isCreate) {
+    return currentRole === CONSTRUCTION_MANAGER;
+  }
+
+  const statusMap = approveStatuses.value.reduce((acc, item) => {
+    acc[item.role] = item.isApproved;
+    return acc;
+  }, {});
+
+  if (currentRole === EXECUTIVE_BOARD) {
+    return false; // Executive Board never allowed to edit
+  }
+
+  if (currentRole === CONSTRUCTION_MANAGER || currentRole === RESOURCE_MANAGER) {
+    return statusMap[RESOURCE_MANAGER] === "" && statusMap[TECHNICAL_MANAGER] === "";
+  }
+
+  if (currentRole === TECHNICAL_MANAGER) {
+    return statusMap[TECHNICAL_MANAGER] === "";
+  }
+
+  return false;
+});
+
+
+const statuses = computed(() => {
+
+  const resourceApprove = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER).isApproved;
+  const techApprove = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER).isApproved;
+  const bodApprove = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD).isApproved;
+  const bodStatus = bodApprove === "" ? "process" : (bodApprove === true ? "success" : "fail");
+
+  return [
+    { title: "Khởi tạo", description: "", status: "success" },
+    {
+      title: "Phòng tài nguyên",
+      status: resourceApprove ? "success" : "process"
+    },
+    {
+      title: "Phòng kỹ thuật",
+      status: techApprove ? "success" : "process"
+    },
+    {
+      title: "Giám đốc duyệt",
+      description: "",
+      status: bodStatus
+    }
+  ];
+});
 const route = useRoute();
 const router = useRouter();
 
@@ -191,12 +242,16 @@ onMounted(async () => {
   } else {
     await getPlanningDetails(route.params.id);
   }
-  await getListUsers({keyWord: "", pageIndex: 1, role: QUALITY_ASSURANCE}, false);
+  await getListUsers({keyWord: "", pageIndex: 1}, false);
   await getListHumanResources({pageIndex: 1}, false);
   await getListMachineResources({pageIndex: 1}, false);
   await getListMaterialResources({pageIndex: 1}, false);
-  listQualityAssurances.value = listUsers.value;
+  listManagers.value = listUsers.value;
 });
+
+const handleApprove = () => {
+  approvePlanning();
+}
 
 onUnmounted(() => {
   clearPlanningDetails();
@@ -232,10 +287,6 @@ const handleTabChange = (tab) => {
   selectedTab.value = tab;
 };
 
-const updateListQAs = (list) => {
-  planningDetails.value.reviewers = list;
-}
-
 const selectionFormRef = ref(null);
 const detailsFormRef = ref(null);
 
@@ -259,7 +310,7 @@ const submitForm = async () => {
     planName: planningDetails.value.planName,
     projectId: planningDetails.value.projectId,
     planItems: planningDetails.value.planItems,
-    reviewers: planningDetails.value.reviewers
+    reviewers: [...planningDetails.value.reviewers]
   };
   const method = !!route.params.id ? "update" : "create";
   const forms = [
@@ -288,3 +339,9 @@ const submitForm = async () => {
   await savePlanning(payload, method);
 }
 </script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+}
+</style>

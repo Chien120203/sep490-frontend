@@ -1,5 +1,6 @@
 <template>
   <SingleOptionSelect
+      :isDisabled="!allowEdit"
       :defaultList="selectedValue"
       style="width: 30%"
       class="select-item"
@@ -39,7 +40,7 @@
       <el-table-column label="Depends Type" width="390">
         <template #default="{ row }">
           <el-form-item :prop="`itemRelations.${row.index}`" :rules="rules.dependency.map(rule => ({ ...rule, relatedIndex: row.index }))">
-            <el-select v-model="selectedRow.itemRelations[row.index]">
+            <el-select :disabled="!allowEdit" v-model="selectedRow.itemRelations[row.index]">
               <el-option
                   v-for="(type, index) in TASK_RELATIONSHIPS"
                   :key="index"
@@ -56,7 +57,7 @@
       <el-table-column label="Actions" width="100">
         <template #default="{ row }">
           <div>
-            <button @click="handleRemoveTask(row.index); $event.preventDefault()" class="btn-edit">
+            <button v-if="allowEdit" @click="handleRemoveTask(row.index); $event.preventDefault()" class="btn-edit">
               <IconTrash/>
             </button>
           </div>
@@ -87,6 +88,10 @@ const props = defineProps({
     type: Object,
     default: () => {
     }
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
   }
 });
 

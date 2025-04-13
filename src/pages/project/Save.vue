@@ -129,6 +129,25 @@
               </el-form-item>
             </div>
 
+            <el-form-item prop="qa">
+              <template #label>
+                <span class="label-start">{{ $t('project.create.qa') }}</span>
+              </template>
+              <SingleOptionSelect
+                  v-model="projectDetails.value.qa"
+                  :optionKeys="{ id: 'id', value: 'username' }"
+                  :listData="listQAs"
+                  :role="QUALITY_ASSURANCE"
+                  :isRemote="true"
+                  :disabled="!isAllowEdit"
+                  class="input-wd-96"
+                  @remoteSearch="handleSearchManager"
+              />
+              <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
+                {{ $t(validation.viewerUserIds) }}
+              </label>
+            </el-form-item>
+
             <el-form-item
                 :label="$t('project.create.construct_type')"
                 prop="constructType"
@@ -287,7 +306,13 @@ import { mixinMethods } from "@/utils/variables";
 import {PROJECT_RULES} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import {useUserStore} from "@/store/user.js";
-import {BUSINESS_EMPLOYEE, CONSTRUCTION_MANAGER, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {
+  BUSINESS_EMPLOYEE,
+  CONSTRUCTION_MANAGER,
+  QUALITY_ASSURANCE,
+  RESOURCE_MANAGER,
+  TECHNICAL_MANAGER
+} from "@/constants/roles.js";
 import {RECEIVE_STATUS} from "@/constants/project.js";
 
 export default {
@@ -317,6 +342,7 @@ export default {
     const listConstructionManagers = ref([]);
     const listTechnicalManagers = ref([]);
     const listResourceManagers = ref([]);
+    const listQAs = ref([]);
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
 
     const route = useRoute();
@@ -331,10 +357,12 @@ export default {
         projectDetails.value.technicalManager = getUserIdByRole(projectDetails.value.viewerUserIds, TECHNICAL_MANAGER)?.id;
         projectDetails.value.constructionManager = getUserIdByRole(projectDetails.value.viewerUserIds, CONSTRUCTION_MANAGER)?.id;
         projectDetails.value.resourceManager = getUserIdByRole(projectDetails.value.viewerUserIds, RESOURCE_MANAGER)?.id;
+        projectDetails.value.qa = getUserIdByRole(projectDetails.value.viewerUserIds, QUALITY_ASSURANCE)?.id;
       } else await clearProjectDetails();
       listConstructionManagers.value = listUsers.value.filter((item) => item.role === CONSTRUCTION_MANAGER);
       listResourceManagers.value = listUsers.value.filter((item) => item.role === RESOURCE_MANAGER);
       listTechnicalManagers.value = listUsers.value.filter((item) => item.role === TECHNICAL_MANAGER);
+      listQAs.value = listUsers.value.filter((item) => item.role === QUALITY_ASSURANCE);
     });
 
     onUnmounted(() => {
@@ -349,7 +377,7 @@ export default {
 
     const submitForm = () => {
       projectDetails.value.budget = mixinMethods.handleChangeNumber(projectDetails.value.budget);
-      projectDetails.value.viewerUserIds = [projectDetails.value.technicalManager, projectDetails.value.resourceManager, projectDetails.value.constructionManager];
+      projectDetails.value.viewerUserIds = [projectDetails.value.technicalManager, projectDetails.value.resourceManager, projectDetails.value.constructionManager, projectDetails.value.qa];
       ruleFormRef.value.validate((valid) => {
         if (valid) {
           saveProject(projectDetails.value);
@@ -380,6 +408,9 @@ export default {
           break;
         case TECHNICAL_MANAGER:
           listTechnicalManagers.value = listUsers.value.filter((item) => item.role === TECHNICAL_MANAGER);
+          break;
+        case QUALITY_ASSURANCE:
+          listQAs.value = listUsers.value.filter((item) => item.role === QUALITY_ASSURANCE);
       }
     }
 
@@ -393,11 +424,13 @@ export default {
       CONSTRUCTION_MANAGER,
       RESOURCE_MANAGER,
       TECHNICAL_MANAGER,
+      QUALITY_ASSURANCE,
       isAllowEdit,
       ruleFormRef,
       isUpdate,
       projectDetails,
       validation,
+      listQAs,
       listTechnicalManagers,
       listResourceManagers,
       listConstructionManagers,

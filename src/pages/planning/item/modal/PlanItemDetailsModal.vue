@@ -15,6 +15,7 @@
         <PriceInputForm
             ref="childFormRef"
             :rules="rules"
+            :allowEdit="allowEdit"
             :total="totalAllPrice"
             :selectedRow="selectedRow"
         />
@@ -23,6 +24,7 @@
           <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="tasks">
             <DependencyTaskTable
                 ref="dependentFormRef"
+                :allowEdit="allowEdit"
                 :rules="rules"
                 :tasks="tasks"
                 :selectedRow="selectedRow"
@@ -34,6 +36,7 @@
             <ItemList
                 ref="tableMaterialFormRef"
                 :rules="rules"
+                :allowEdit="allowEdit"
                 :selectedRow="selectedRow"
                 :selectData="materials"
                 :resourceType="MATERIAL_TYPE"
@@ -50,6 +53,7 @@
                 ref="tableHumanFormRef"
                 :rules="rules"
                 :is-human="true"
+                :allowEdit="allowEdit"
                 :selectedRow="selectedRow"
                 :selectData="users"
                 :resourceType="HUMAN_TYPE"
@@ -66,6 +70,7 @@
                 ref="tableMachineFormRef"
                 :is-human="true"
                 :rules="rules"
+                :allowEdit="allowEdit"
                 :selectData="vehicles"
                 :selectedRow="selectedRow"
                 :resourceType="MACHINE_TYPE"
@@ -79,7 +84,7 @@
       </div>
 
       <div class="modal-footer">
-        <el-button class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
+        <el-button v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
         <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
@@ -113,6 +118,10 @@ const props = defineProps({
   rules: {
     type: Object,
     default: () => ({})
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
   }
 });
 
