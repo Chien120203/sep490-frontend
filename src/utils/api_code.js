@@ -78,6 +78,9 @@ const API_CODE = {
   API_ALLOCATION_002: '/resourcereq/allocation/save',
   API_ALLOCATION_003: '/resourcereq/allocation/',
 
+  //Inventory
+  API_INVENTORY_001: '/resourcereq/inventory/list',
+
 };
 
 export default API_CODE;

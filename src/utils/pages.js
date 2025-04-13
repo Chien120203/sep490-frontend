@@ -69,6 +69,10 @@ const PAGES = {
   HUMAN_RESOURCE_DETAILS: "/resource/human-management/:id",
   //allocation
   ALLOCATION: "/allocation",
+
+  //inventory
+  INVENTORY: "/inventory",
+  INVENTORY_LIST: "/inventory/list",
 };
 
 export default PAGES;
