@@ -224,7 +224,7 @@
       "create_user_success": "Create user successfully",
       "create_user_failed": "Create user failed",
       "delete_user_failed": "Delete user failed",
-      "delete_user_success": "Create user success",
+      "delete_user_success": "Delete user success",
       "get_user_dtls_failed": "Get user details failed",
       "create_contract_success": "Create contract success",
       "create_contract_failed": "Create contract failed",
@@ -235,6 +235,9 @@
       "get_customer_dtls_failed": "Get customer details failed",
       "save_customer_success": "Save Customer Success",
       "save_customer_failed": "Save Customer Failed",
+      "get_user_failed": "Get list users failed",
+      "save_user_success": "Save user success",
+      "save_user_failed": "Save user failed",
       "delete_customer_success": "Delete Customer Success",
       "delete_customer_failed": "Delete Customer Failed",
       "delete_plan_success": "Delete Plan Success",
@@ -945,10 +948,6 @@
     "sale_department_type": "Sale Department",
     "prd_department_type": "Production Department",
     "text_create": "Create",
-    "delete": {
-      "title_delete": "Delete User",
-      "text_delete": "Do you want to delete this user?"
-    },
     "messages": {
       "err_get_all_users": "Get all users failed",
       "err_catch_find_user": "Find user failed",
@@ -1011,7 +1010,10 @@
     },
     "modal_confirm": {
       "message_delete": "WARNING: You will delete user. Please type 'Delete' to continue.",
-      "title_delete": "Delete User"
+      "title_delete": "Delete User",
+      "title": "Confirm delete user",
+      "message": "Please enter 'Delete' to confirm delete this user"
+
     },
     "gender": {
       "male": "Male",

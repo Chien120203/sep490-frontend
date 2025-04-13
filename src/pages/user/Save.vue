@@ -173,6 +173,7 @@ export default {
     });
 
     onUnmounted(() => {
+      validation.value = {};
       clearUserDetails();
     });
 

@@ -24,11 +24,22 @@ export const useUserStore = defineStore(
                 fullName: "",
                 phone: "",
                 gender: "",
+                dob: ""
+            }
+        });
+        const userProfileDetails = reactive({
+            value: {
+                id: 0,
+                username: "",
+                email: "",
+                role: "",
+                fullName: "",
+                phone: "",
+                gender: "",
                 dob: "",
                 picProfile: []
             }
         });
-
 
         const getListUsers = async (params, isLoading = true) => {
             if (isLoading) mixinMethods.startLoading();
@@ -74,17 +85,40 @@ export const useUserStore = defineStore(
 
         const saveUser = async (params, method) => {
             mixinMethods.startLoading();
+            let data = {
+                id: params.id,
+                userName: params.username,
+                email: params.email,
+                role: params.role,
+                fullName: params.fullName,
+                phone: params.phone,
+                gender: params.gender,
+                isVerify: true,
+                dob: params.dob,
+            };
             await services.UserAPI[method](
-                params,
+                {
+                    id: params.id,
+                    userName: params.username,
+                    email: params.email,
+                    role: params.role,
+                    fullName: params.fullName,
+                    phone: params.phone,
+                    gender: params.gender,
+                    isVerify: true,
+                    dob: params.dob,
+                },
                 (response) => {
-                    userDetails.value = response.data;
-                    mixinMethods.notifySuccess(t("response.message.save_user_success"));
+                    if (response.success) {
+                        userDetails.value = response.data;
+                        mixinMethods.notifySuccess(t("response.message.save_user_success"));
+                    } else {
+                        validation.value = mixinMethods.handleErrorResponse(response);
+                        mixinMethods.notifyError(t("response.message.save_user_failed"));
+                    }
                     mixinMethods.endLoading();
                 },
-                (error) => {
-                    validation.value = mixinMethods.handleErrorResponse(
-                        error.responseCode
-                    );
+                () => {
                     mixinMethods.notifyError(t("response.message.save_user_failed"));
                     mixinMethods.endLoading();
                 }
@@ -94,17 +128,17 @@ export const useUserStore = defineStore(
         const handleDeleteUser = async (id) => {
             mixinMethods.startLoading();
             await services.UserAPI.deleteUser(
-                {customerId: id},
+                id,
                 (response) => {
-                    userDetails.value = response.data;
-                    mixinMethods.notifySuccess(t("response.message.delete_user_success"));
+                    if (response.success) {
+                        listUsers.value = listUsers.value.filter(user => user.id !== id);
+                        mixinMethods.notifySuccess(t("response.message.delete_user_success"));
+                    } else {
+                        mixinMethods.notifyError(t("response.message.delete_user_failed"));
+                    }
                     mixinMethods.endLoading();
                 },
                 (error) => {
-                    validation.value = mixinMethods.handleErrorResponse(
-                        error.responseCode
-                    );
-                    mixinMethods.notifyError(t("response.message.delete_user_failed"));
                     mixinMethods.endLoading();
                 }
             );
@@ -133,15 +167,21 @@ export const useUserStore = defineStore(
         };
 
         const updateUserProfile = async (params) => {
-            mixinMethods.startLoading();
-            const formData = mixinMethods.createFormData({
-                ...params,
+            mixinMethods.startLoading();3
+            let data = {
+                username: params.username,
+                fullName: params.fullName,
+                phone: params.phone,
+                gender: params.gender,
+                dob: params.dob,
+                address: params.address,
                 picProfile: params.picProfile?.[0]?.raw ? [params.picProfile[0].raw] : []
-            });
+            }
+            const formData = mixinMethods.createFormData(data);
             await services.AuthenticationAPI.updateUserProfile(
                 formData,
                 (response) => {
-                    userDetails.value = response.data;
+                    userProfileDetails.value = response.data;
                     mixinMethods.notifySuccess(t("response.message.update_success"));
                     mixinMethods.endLoading();
                 },
