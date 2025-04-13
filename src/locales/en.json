@@ -1167,6 +1167,10 @@
       }
     }
   },
+  "construct_team": {
+    "title": "Construction Team",
+    "manager": "Construction Manager"
+  },
 
   "E-CM-001": "Login Failed",
   "E-CM-002": "Required",
