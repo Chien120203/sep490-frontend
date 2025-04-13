@@ -8,9 +8,11 @@ export const STATUSES = [
 ];
 
 export const PROJECT_TO_PROJECT = 1;
-export const TASK_TO_TASK = 2;
+export const PROJECT_TO_TASK = 2;
+export const TASK_TO_TASK = 3;
 export const ALLOCATION_REQUEST_TYPES = [
   {value: PROJECT_TO_PROJECT, label: "allocation.type.project"},
+  {value: PROJECT_TO_TASK, label: "allocation.type.project_task"},
   {value: TASK_TO_TASK, label: "allocation.type.task"},
 ];
 
