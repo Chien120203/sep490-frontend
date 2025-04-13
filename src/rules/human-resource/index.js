@@ -1,7 +1,7 @@
 import { i18n } from "@/utils/i18n.js"
 import { MAX_CHARACTER, MAX_DESCRIPTION } from "@/constants/application.js"
 
-export const MACHINE_RULES = {
+export const HUMAN_RULES = {
     licensePlate: [
         { required: true, message: i18n.global.t("E-MACH-001"), trigger: "blur" },
         {
