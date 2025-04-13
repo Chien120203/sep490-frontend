@@ -47,7 +47,7 @@ export const usePlanningStore = defineStore(
           name: "Technical Manager",
           role: "Technical Manager",
           email: "longrpk200315@gmail.com",
-          isApproved: true
+          isApproved: ""
         },
         {
           id: 6,
@@ -61,10 +61,46 @@ export const usePlanningStore = defineStore(
           name: "Resource Manager",
           role: "Resource Manager",
           email: "longrpk200319@gmail.com",
-          isApproved: true
+          isApproved: ""
         }
       ]
     });
+    const taskPlanDetails = reactive({value: {
+        id: 1,
+        planName: "April Maintenance Plan",
+        projectId: 101,
+        planItems: [
+          {
+            id: 1,
+            taskName: "Inspect Conveyor Belt",
+            startDate: "2025-04-15",
+            endDate: "2025-04-16",
+            assignedTo: "John Doe",
+            status: "Planned"
+          },
+          {
+            id: 2,
+            taskName: "Lubricate Gears",
+            startDate: "2025-04-17",
+            endDate: "2025-04-18",
+            assignedTo: "Jane Smith",
+            status: "Planned"
+          }
+        ],
+        reviewers: [
+          {
+            id: 1,
+            name: "Emily Johnson",
+            role: "Supervisor"
+          },
+          {
+            id: 2,
+            name: "Michael Lee",
+            role: "Quality Assurance"
+          }
+        ]
+      }})
+
     const getListPlannings = async (params, isLoading = true) => {
       if (isLoading) mixinMethods.startLoading();
       await services.PlanningAPI.list(
@@ -197,6 +233,7 @@ export const usePlanningStore = defineStore(
       planningDetails,
       approveStatuses,
       isShowModalConfirm,
+      taskPlanDetails,
       approvePlanning,
       clearPlanningDetails,
       handleDeletePlan,

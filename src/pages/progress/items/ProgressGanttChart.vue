@@ -13,8 +13,8 @@ watch(
     () => props.tasks,
     (newVal) => {
       if (newVal && newVal.length > 0) {
-        if (gantt.value?.ej2Instances && ganttObj.dataSource) {
-          let ganttObj = gantt.value.ej2Instances;
+        if (gantt.value?.ej2Instances && gantt.value?.ej2Instances.dataSource) {
+        let ganttObj = gantt.value.ej2Instances;
           ganttObj.hideSpinner();
           ganttObj.dataSource = newVal;
           ganttObj.refresh();
