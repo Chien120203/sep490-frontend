@@ -5,6 +5,9 @@ export const getAllocationRules = () => {
   return {
     requestDate: [
       { required: true, message: t("E-RR-FE-001"), trigger: "blur" }
+    ],
+    requestType: [
+      { required: true, message: t("E-RR-FE-006"), trigger: "blur" }
     ]
   };
 };

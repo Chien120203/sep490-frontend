@@ -20,6 +20,9 @@
             @searchProject="handleSearchProjects"
             @searchTask="handleSearchTask"
         />
+        <label class="error-feedback" v-if="listSelectedMaterials.length <= 0 && listSelectedUsers.length<= 0 && listSelectedVehicles.length <= 0">
+          {{ $t('E-RR-FE-002') }}
+        </label>
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
           <el-tab-pane label="Tài nguyên" name="materials">
