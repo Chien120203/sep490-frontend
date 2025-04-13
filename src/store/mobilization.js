@@ -32,6 +32,7 @@ export const useMobilizationStore = defineStore(
         requestCode: "",
         projectId: 0,
         requestName: "",
+        requestType: 1,
         resourceMobilizationDetails: [],
         description: "",
         priorityLevel: 0,

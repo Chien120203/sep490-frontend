@@ -29,7 +29,7 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="Request Type" required>
+          <el-form-item prop="requestType" label="Request Type" required>
             <el-select v-model="data.requestType">
               <el-option
                   v-for="request in MOBILIZE_REQUEST_TYPES"
@@ -39,6 +39,9 @@
               >
               </el-option>
             </el-select>
+            <label class="error-feedback-customer" v-if="validation && validation.requestType">
+              {{ $t(validation.requestType) }}
+            </label>
           </el-form-item>
           <el-form-item label="Priority">
             <el-select v-model="data.priorityLevel">
@@ -75,7 +78,8 @@ const props = defineProps({
   validation: {
     type: Object,
     default: () => ({
-      requestDate: ""
+      requestDate: "",
+      requestType: ""
     })
   },
 });
