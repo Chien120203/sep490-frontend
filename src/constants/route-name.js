@@ -63,6 +63,9 @@ const PAGE_NAME = {
   },
   RESOURCE_ALLOCATION: {
     LIST: "resource-allocation-list",
+  },
+  INVENTORY: {
+    LIST: "inventory-list",
   }
 };
 

@@ -272,7 +272,8 @@
       "save_human_failed": "Save Human Failed",
       "get_planning_dtls_failed": "Get planning details failed",
       "get_allocation_failed": "Get allocation requests failed",
-      "get_allocation_dtls_failed": "Get allocation request details failed"
+      "get_allocation_dtls_failed": "Get allocation request details failed",
+      "get_list_inventory_failed": "Get list inventory failed"
     }
   },
   "contract": {
@@ -1124,6 +1125,14 @@
     "type": {
       "project": "Project to Project",
       "task": "Task to Task"
+    }
+  },
+  "inventory": {
+    "title": "Inventory",
+    "type": {
+      "team": "Team",
+      "material": "Material",
+      "machine": "Machinne"
     }
   },
 
