@@ -46,6 +46,15 @@
         <span class="data-table">{{ scope.row.quantity }}</span>
       </template>
     </el-table-column>
+
+    <el-table-column min-width="120">
+      <template #header>
+        <p>Description</p>
+      </template>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.description }}</span>
+      </template>
+    </el-table-column>
   </el-table>
 </template>
 
