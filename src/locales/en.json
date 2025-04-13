@@ -1125,6 +1125,7 @@
     },
     "type": {
       "project": "Project to Project",
+      "project_task": "Project to Task",
       "task": "Task to Task"
     }
   },
