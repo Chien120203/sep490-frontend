@@ -28,15 +28,57 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item label="Target">
+          <el-form-item v-if="data.requestType === PROJECT_TO_PROJECT" label="Target Project">
             <div class="select-project-container">
               <SingleOptionSelect
-                  v-model="targetSelected"
+                  v-model="data.toProjectId"
                   :optionKeys="{ id: 'id', value: 'projectCode' }"
                   :listData="listProjects"
                   :isRemote="true"
                   @remoteSearch="handleSearchProject"
-                  @handleSelectedParams="handleSelectItem"
+                  :showClearable="true"
+              />
+            </div>
+          </el-form-item>
+
+          <!-- Target project/task selector -->
+          <el-form-item v-if="data.requestType === PROJECT_TO_TASK" label="Target Task">
+            <div class="select-project-container">
+              <SingleOptionSelect
+                  v-model="data.toTask"
+                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :listData="progressDetails.progressItems"
+                  :isRemote="true"
+                  @remoteSearch="handleSearchTask"
+                  :showClearable="true"
+              />
+            </div>
+          </el-form-item>
+
+          <!-- Target project/task selector -->
+          <el-form-item v-if="data.requestType === TASK_TO_TASK" label="From Task">
+            <div class="select-project-container">
+              <SingleOptionSelect
+                  v-model="data.fromTask"
+                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :listData="progressDetails.progressItems"
+                  :isRemote="true"
+                  @remoteSearch="handleSearchTask"
+                  :showClearable="true"
+              />
+            </div>
+          </el-form-item>
+
+          <!-- Target project/task selector -->
+          <el-form-item v-if="data.requestType === TASK_TO_TASK" label="To Task">
+            <div class="select-project-container">
+              <SingleOptionSelect
+                  v-model="data.toTask"
+                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :listData="progressDetails.progressItems.filter(task => task.index !== data.fromTask)"
+                  :isRemote="true"
+                  @remoteSearch="handleSearchTask"
+                  :showClearable="true"
               />
             </div>
           </el-form-item>
@@ -78,54 +120,30 @@
 </template>
 
 <script setup>
-import { defineProps, ref, watch } from "vue";
-import {MOBILIZE_REQUEST_TYPES, PRIORITIES} from "@/constants/mobilization.js";
+import { defineProps } from "vue";
+import { PRIORITIES} from "@/constants/mobilization.js";
 import { DATE_FORMAT } from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import { usePersistenceStore } from "@/store/persistence.js";
 import { getAllocationRules } from "@/rules/allocation";
-import {ALLOCATION_REQUEST_TYPES} from "@/constants/allocation.js";
+import {ALLOCATION_REQUEST_TYPES, PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 
 const props = defineProps({
   data: { type: Object, default: () => ({}) },
   listProjects: { type: Array, default: () => [] },
+  progressDetails: { type: Object, default: () => ({}) },
 });
 
-const emit = defineEmits(["searchProject"]);
-
-const persist = usePersistenceStore();
-const { projectId } = persist;
-
-// Options: 'project-to-project', 'project-to-task', 'task-to-task'
-const requestType = ref("project-to-project");
-const targetSelected = ref(null);
-
+const emit = defineEmits(["searchProject",  "searchTask"]);
 const ALLOCATIONFORMINFO_RULES = getAllocationRules();
-
-// When selecting a project/task
-const handleSelectItem = (value) => {
-  if (requestType.value === "project-to-project") {
-    props.data.fromProjectId = projectId.value;
-    props.data.toProjectId = value;
-    props.data.fromTask = null;
-    props.data.toTask = null;
-  } else if (requestType.value === "project-to-task") {
-    props.data.fromProjectId = projectId.value;
-    props.data.fromTask = null;
-    props.data.toProjectId = projectId.value;
-    props.data.toTask = value;
-  } else if (requestType.value === "task-to-task") {
-    props.data.fromProjectId = projectId.value;
-    props.data.toProjectId = projectId.value;
-    props.data.fromTask = value[0];
-    props.data.toTask = value[1];
-  }
-};
 
 // Search remote project/task
 const handleSearchProject = (keyword) => {
   emit("searchProject", keyword);
 };
+
+const handleSearchTask = (keyword) => {
+  emit("searchTask", keyword);
+}
 </script>
 
 <style scoped>

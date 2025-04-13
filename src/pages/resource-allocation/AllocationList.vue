@@ -69,8 +69,10 @@
     <SaveAllocationModal
         :show="isShowModalSave"
         :data="allocationDetails.value"
-        :listProjects="listProjects.value"
+        :listProjects="listFilteredProjects"
+        :progressDetails="progressDetails.value"
         @searchProjects="handleSearchProjects"
+        @searchTask="handleSearchTasks"
         @close="handleDisplayModalSave"
         @submit="handleSaveRequest"
     />
@@ -78,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import {ref, onMounted, onUnmounted, computed} from "vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import AllocationTable from "@/pages/resource-allocation/items/AllocationTable.vue";
@@ -87,10 +89,12 @@ import { usePersistenceStore } from "@/store/persistence.js";
 import { useAllocationStore } from "@/store/allocation.js";
 import { useProjectStore } from "@/store/project.js";
 import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
+import {useProgressStore} from "@/store/progress.js";
 
 const persist = usePersistenceStore();
 const allocationStore = useAllocationStore();
 const projectStore = useProjectStore();
+const progressStore = useProgressStore();
 
 const { projectId } = persist;
 const {
@@ -102,9 +106,11 @@ const {
   getAllocationDtls,
   saveRequest
 } = allocationStore;
-
+const {
+  progressDetails
+} = progressStore;
 const { listProjects, getListProjects } = projectStore;
-
+const listFilteredProjects = computed(() => listProjects.value.filter(project => project.id != projectId.value));
 const isShowModalConfirm = ref(false);
 const isShowModalSave = ref(false);
 const activeTab = ref("project");
@@ -121,6 +127,11 @@ const formSearchProject = ref({
   pageIndex: 1
 });
 
+const formSearchTask = ref({
+  keyWord: "",
+  pageIndex: 1
+});
+
 const handleDisplayModalSave = (show = false) => {
   isShowModalSave.value = show;
 };
@@ -131,8 +142,7 @@ const handleLoadMore = () => {
   getListAllocations(searchForms.value);
 };
 
-const handleSaveRequest = (data) => {
-  allocationDetails.value.resourceAllocationDetails = data;
+const handleSaveRequest = () => {
   saveRequest(allocationDetails.value);
   handleDisplayModalSave(false);
 };
@@ -159,6 +169,11 @@ const handleGetAllocationDtls = (id) => {
 const handleSearchProjects = (value) => {
   formSearchProject.value.keyWord = value;
   getListProjects(formSearchProject.value);
+};
+
+// need to add function query task from progress later
+const handleSearchTasks = (value) => {
+  formSearchTask.value.keyWord = value;
 };
 
 const handleTabChange = () => {

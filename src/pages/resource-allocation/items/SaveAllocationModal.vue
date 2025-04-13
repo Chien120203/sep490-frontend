@@ -12,7 +12,14 @@
 
     <template #body>
       <div class="modal-body-container">
-        <AllocateFormInfo ref="formAllocationInfo" :data="data" :listProjects="listProjects" @searchProject="handleSearchProjects"/>
+        <AllocateFormInfo
+            ref="formAllocationInfo"
+            :data="data"
+            :listProjects="listProjects"
+            :progressDetails="progressDetails"
+            @searchProject="handleSearchProjects"
+            @searchTask="handleSearchTask"
+        />
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
           <el-tab-pane label="Tài nguyên" name="materials">
@@ -72,18 +79,20 @@ import {
   MATERIAL_TYPE
 } from "@/constants/resource.js";
 import AllocateFormInfo from "@/pages/resource-allocation/items/modal/AllocateFormInfo.vue";
-import { getAllocationResourceItemRules } from "@/rules/allocation";
+import {getAllocationResourceItemRules} from "@/rules/allocation";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
-  data: { type: Object, default: () => ({}) },
-  listProjects: { type: Array, default: () => [] },
+  data: {type: Object, default: () => ({})},
+  progressDetails: {type: Object, default: () => ({})},
+  listProjects: {type: Array, default: () => []},
 });
 const getListResourcesByType = (data, type) => {
-  if(!data) return [];
+  if (!data) return [];
   return data.filter(item => item?.resourceType === type);
 }
-const emit = defineEmits(["close", "submit", "searchProjects"]);
+const emit = defineEmits(["close", "submit", "searchProjects", "searchTask"]);
 const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
@@ -95,9 +104,10 @@ watch(props.data.resourceAllocationDetails, () => {
   listSelectedMaterials.value = getListResourcesByType(props.data?.resourceAllocationDetails, MATERIAL_TYPE);
   listSelectedUsers.value = getListResourcesByType(props.data?.resourceAllocationDetails, HUMAN_TYPE);
 });
-const materialOptions = ref({ id: "id", value: "name" });
-const userOptions = ref({ id: "id", value: "name" });
-const vehicleOptions = ref({ id: "id", value: "name" });
+
+const materialOptions = ref({id: "id", value: "name"});
+const userOptions = ref({id: "id", value: "name"});
+const vehicleOptions = ref({id: "id", value: "name"});
 const activeTab = ref("materials");
 
 //mock data
@@ -128,24 +138,52 @@ const handleSearchProjects = (value) => {
   emit("searchProjects", value);
 }
 
-const handleSubmit = () => {
-  const formRefs = [
-    formAllocationMaterialInfos,
-    formAllocationVehicleInfos,
-    formAllocationHumanInfos,
-    formAllocationInfo
-  ];
+const handleSearchTask = (keyword) => {
+  emit("searchTask", keyword);
+}
 
-  for (const form of formRefs) {
-    if (form?.ruleFormRef) { // Access ruleFormRef
-      const isValid = mixinMethods.validateForm(form.ruleFormRef);
-      if (!isValid) {
-        mixinMethods.notifyError(t('E-LOG-001'));
-        return;
-      }
+const formAllocationMaterialInfos = ref(null);
+const formAllocationVehicleInfos = ref(null);
+const formAllocationHumanInfos = ref(null);
+const formAllocationInfo = ref(null);
+
+const handleSubmit = async () => {
+  const forms = [
+    {
+      ref: formAllocationMaterialInfos,
+      name: "Material",
+    },
+    {
+      ref: formAllocationVehicleInfos,
+      name:"Vehicle",
+    },
+    {
+      ref: formAllocationHumanInfos,
+      name: "Human",
+    },
+    {
+      ref: formAllocationInfo,
+      name: "allocation",
+    }
+  ];
+  for (const form of forms) {
+    const isValid = await new Promise((resolve) => {
+      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+    });
+
+    if (!isValid) {
+      mixinMethods.notifyError(
+          t("planning.errors.invalid_form", {form: form.name})
+      );
+      return; // stop here if one form is invalid
     }
   }
-  emit("submit", listRequests);
+  let listData = [
+      ...listSelectedMaterials.value,
+      ...listSelectedUsers.value,
+      ...listSelectedVehicles.value
+  ];
+  emit("submit" listData);
 };
 </script>
 
@@ -158,6 +196,7 @@ const handleSubmit = () => {
 .modal-title {
   margin: 0;
 }
+
 .modal-body-container {
   min-height: 550px;
 }
