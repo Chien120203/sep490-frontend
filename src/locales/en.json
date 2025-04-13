@@ -1052,6 +1052,7 @@
       "resource_mobilization": "Mobilization",
       "resource_allocation": "Allocation",
       "project": "Project",
+      "inventory": "Inventory",
       "resource": {
         "title": "Resource",
         "machine": "Machine Resource ",

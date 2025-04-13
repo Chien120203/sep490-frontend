@@ -15,6 +15,7 @@ import {MachineResourceAPI} from "@/services/MachineResourceAPI.js";
 import {MaterialResourceAPI} from "@/services/MaterialResourceAPI.js";
 import {HumanResourceAPI} from "@/services/HumanResourceAPI.js";
 import {AllocationAPI} from "@/services/AllocationAPI.js";
+import {InventoryAPI} from "@/services/InventoryAPI.js";
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
   initializeService(axios, "/sep490", router);
@@ -25,6 +26,7 @@ const services = {
   AllocationAPI,
   PlanningAPI,
   CustomerAPI,
+  InventoryAPI,
   ContractAPI,
   ConstructLogAPI,
   ProjectAPI,

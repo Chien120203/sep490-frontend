@@ -74,6 +74,7 @@ import IconMachine from "@/svg/IconMachine.vue";
 import IconMaterial from "@/svg/IconMaterial.vue";
 import IconHuman from "@/svg/IconHuman.vue";
 import IconLog from "@/svg/IconLog.vue";
+import IconInventory from "@/svg/IconInventory.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
@@ -97,6 +98,7 @@ export default {
     IconLog,
     IconRequestMobilization,
     IconChangeRequest,
+    IconInventory,
     IconResource,
     IconMachine,
     IconMaterial,
@@ -145,6 +147,12 @@ export default {
         function_name: t("side_bar.label.construct_log"),
         function_page_name: PAGE_NAME.CONSTRUCT_LOG.VIEW,
         function_icon: "IconLog",
+        isShow: isShowProjectSideBar.value, // set later
+      },
+      {
+        function_name: t("side_bar.label.inventory"),
+        function_page_name: PAGE_NAME.INVENTORY.LIST,
+        function_icon: "IconInventory",
         isShow: isShowProjectSideBar.value, // set later
       },
       {

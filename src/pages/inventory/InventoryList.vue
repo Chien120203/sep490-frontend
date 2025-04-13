@@ -1,7 +1,8 @@
 <template>
   <div class="mobilization mobilization-list">
     <div class="mobilization-header">
-      <h3 class="page__ttl">{{ $t("inventory.title") }}</h3>
+      <h3 class="page__ttl"><span class="btn-back" @click="handleBack"><IconBackMain/></span>{{ $t("inventory.title") }}
+      </h3>
     </div>
 
     <div class="mobilization-body">
@@ -62,19 +63,20 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import { useI18n } from "vue-i18n";
-import { usePersistenceStore } from "@/store/persistence.js";
+import {ref, computed, onMounted, onUnmounted, watch} from "vue";
+import {useI18n} from "vue-i18n";
+import {usePersistenceStore} from "@/store/persistence.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import InventoryTable from "@/pages/inventory/items/InventoryTable.vue";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js"
 import {useInventoryStore} from "@/store/inventory.js";
+import IconBackMain from "@/svg/IconBackMain.vue";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 // State
 const activeTab = ref(HUMAN_TYPE);
-const isShowBoxSearch = ref(false);
-
-const { t } = useI18n();
+const router = useRouter();
 const persist = usePersistenceStore();
 const inventoryStore = useInventoryStore();
 const {
@@ -111,7 +113,9 @@ const handleLoadMore = () => {
   searchForms.value.pageIndex++;
   getListInventory(searchForms.value);
 };
-
+const handleBack = () => {
+  router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: projectId.value } });
+};
 // Lifecycle
 onMounted(() => {
   getListInventory(searchForms.value);
@@ -119,6 +123,13 @@ onMounted(() => {
 
 onUnmounted(() => {
   totalItems.value = 0;
+});
+
+watch(() => activeTab.value, (newValue) => {
+  searchForms.value.type = newValue;
+  searchForms.value.pageIndex = 1;
+  currentPage.value = 1;
+  getListInventory(searchForms.value);
 });
 </script>
 
