@@ -57,8 +57,8 @@
         :isConfirmByText="true"
         :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
-        :message="$t('user.delete.text_delete')"
-        :title="$t('user.delete.title_delete')"
+        :message="$t('user.modal_confirm.message')"
+        :title="$t('user.modal_confirm.title')"
     />
   </div>
 </template>

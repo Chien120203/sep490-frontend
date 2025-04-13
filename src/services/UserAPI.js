@@ -19,7 +19,7 @@ const create = async (params, success, error) => {
 };
 
 const deleteUser = async (id, success, error) => {
-    await del(API_CODE.API_USER_004 + "?userId=" + id, {}, success, error);
+    await del(API_CODE.API_USER_004 + "/" + id, {}, success, error);
 };
 
 export const UserAPI = {
