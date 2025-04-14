@@ -3,6 +3,8 @@
     <SingleOptionSelect
         :isDisabled="!allowEdit"
         class="select-item"
+        :showClearable="true"
+        :role="CONSTRUCTION_EMPLOYEE"
         :defaultList="selectedValue"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
         :listData="selectData"
@@ -12,8 +14,7 @@
     />
     <el-form
         ref="ruleFormRef"
-        :model="{ listAddedValues }"
-        :rules="rules"
+        :model="members"
         class="form-search-box"
     >
       <el-table :data="listAddedValues" border style="width: 100%">
@@ -26,58 +27,23 @@
         <el-table-column prop="name" :label="$t('planning.items.name')">
           <template #default="{ row }">
             <el-form-item>
-              {{getResourceName(row.resourceId)}}
+              {{row.username}}
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column prop="unit" :label="$t('planning.items.unit')">
-          <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
-              <el-input :disabled="!allowEdit" v-model="listAddedValues[$index].unit" />
-            </el-form-item>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="quantity" :label="$t('planning.items.quantity')">
-          <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input :disabled="isHuman && !allowEdit" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
-            </el-form-item>
-            <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
-              {{ exceedMessages[row.resourceId] }}
-            </p>
-          </template>
-        </el-table-column>
-
-        <el-table-column v-if="resourceType === MATERIAL_TYPE" :label="$t('planning.items.inventory')">
+        <el-table-column prop="name" :label="$t('planning.items.name')">
           <template #default="{ row }">
-            {{getInventory(row.resourceId)}}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="unitPrice" :label="$t('planning.items.price')">
-          <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.${$index}.unitPrice`" :rules="rules.unitPrice">
-              <el-input
-                  :disabled="!allowEdit"
-                  v-model.number="listAddedValues[$index].unitPrice"
-                  :formatter="(value) => mixinMethods.formatInputMoney(value)"
-                  :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                  @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"
-              />
+            <el-form-item>
+              {{row.fullName}}
             </el-form-item>
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('planning.items.total')">
-          <template #default="{ row, $index }">
-            <el-form-item :prop="`listAddedValues.${$index}.total`">
-              <el-input
-                  v-model="listAddedValues[$index].total"
-                  :disabled="true"
-                  :value="mixinMethods.formatInputMoney(row.quantity * row.unitPrice)"
-              />
+        <el-table-column prop="name" :label="$t('planning.items.name')">
+          <template #default="{ row }">
+            <el-form-item>
+              {{$t(getUserRole(row.role))}}
             </el-form-item>
           </template>
         </el-table-column>
@@ -97,90 +63,68 @@
 </template>
 
 <script setup>
-import {computed, defineEmits, defineProps, reactive, ref, watch} from "vue";
+import { computed, defineEmits, defineProps, reactive, ref, watch } from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
-import {mixinMethods} from "@/utils/variables.js";
-import {MATERIAL_TYPE} from "@/constants/resource.js";
-import {useI18n} from "vue-i18n";
+import { mixinMethods } from "@/utils/variables.js";
+import { MATERIAL_TYPE } from "@/constants/resource.js";
+import { useI18n } from "vue-i18n";
+import {CONSTRUCTION_EMPLOYEE, CONSTRUCTION_MANAGER, ROLE_LABELS} from "@/constants/roles.js";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
-  selectedRow: {
-    type: Object,
-    default: () => {
-    }
-  },
+  members: { type: Array, default: () => [] },
   isHuman: { type: Boolean, default: false },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
-  resourceType: { type: String, default: '' },
-  rules: {
-    type: Object,
-    default: () => {}
-  },
   allowEdit: {
     type: Boolean,
     default: false
   }
 });
 
-const {t} = useI18n();
-const exceedMessages = ref({});
-const listAddedValues = ref(props.tableData);
 const ruleFormRef = ref(null);
 const selectedValue = ref(null);
+
 defineExpose({
   ruleFormRef,
 });
+
 const emit = defineEmits(["search", "update-value"]);
+
+const listAddedValues = computed(() => props.members);
+
 const handleSearch = (value) => {
-  emit('search', {value: value, type: props.resourceType});
-}
-const handleSelectItem = (id) => {
-  const exists = listAddedValues.value.some(entry => entry.resourceId === id);
-  selectedValue.value = id;
+  emit('search', value);
+};
+
+const handleSelectItem = (selected) => {
+  if (!selected) return;
+
+  const exists = props.members.some(m => m.resourceId === selected.id);
   if (!exists) {
-    listAddedValues.value.push({
-      resourceId: id,
-      resourceType: props.resourceType,
-      unit: "",
-      quantity: 1,
-      unitPrice: 0
-    });
+    const newMember = {
+      resourceId: selected.id,
+      username: selected.username || selected.value || '',
+      fullName: selected.fullName || selected.label || '',
+      role: selected.role || '', // Ensure role exists in selected object
+    };
+    props.members.push(newMember);
   }
-};
 
-const getResourceName = (id) => {
-  return props.selectData.find(item => item.id === id)[props.optionKeys.value] || "-";
-}
-
-const getInventory = (id) => {
-  return props.selectData.find(item => item.id === id).inventory;
-}
-
-const handleChangeValue = (quantity, resourceId) => {
-  if (props.resourceType === MATERIAL_TYPE) {
-    let inventory = props.selectData.find(item => item.id === resourceId)?.inventory ?? 0;
-    if (inventory < quantity) {
-      exceedMessages.value[resourceId] = t('E-PLAN-002');
-    } else {
-      exceedMessages.value[resourceId] = '';
-    }
-  }
-  emit("update-value");
-};
-
-const handleRemoveResource = async (id) => {
-  // Remove from the form list
-  listAddedValues.value = listAddedValues.value.filter(resource => resource.resourceId !== id);
   selectedValue.value = null;
-  // Also remove from selectedRow.details if it exists
-  if (props.selectedRow && Array.isArray(props.selectedRow.details)) {
-    props.selectedRow.details = props.selectedRow.details.filter(detail => detail.resourceId !== id);
+};
+
+const getUserRole = (role) => {
+  return ROLE_LABELS[role] || role;
+};
+
+const handleRemoveResource = (id) => {
+  const index = props.members.findIndex(m => m.resourceId === id);
+  if (index !== -1) {
+    props.members.splice(index, 1);
   }
-  emit("update-value");
-}
+};
 </script>
 
 <style scoped>

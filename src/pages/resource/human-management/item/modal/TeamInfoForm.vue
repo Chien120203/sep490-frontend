@@ -4,12 +4,13 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="$t('planning.modal.work_name')">
-            <el-input disabled v-model="teamInfo.teamName" class="custom-input" />
+            <el-input :disabled="!allowEdit" v-model="teamInfo.teamName" class="custom-input" />
           </el-form-item>
 
           <el-form-item prop="startDate" :label="$t('planning.modal.start_date')">
             <SingleOptionSelect
                 v-model="teamInfo.teamManager"
+                :isDisabled="!allowEdit"
                 :optionKeys="{ id: 'id', value: 'username' }"
                 :listData="lisTeamManagers"
                 :role="CONSTRUCTION_MANAGER"
@@ -50,6 +51,7 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
+  allowEdit: {type: Boolean, default: false},
   lisTeamManagers: {
     type: Array,
     default: () => []
@@ -59,7 +61,7 @@ const props = defineProps({
 const emit = defineEmits(["handleSearchManager"]);
 
 const handleSearchManager = (searchValue, role) => {
-  emit("searchManager", {searchValue, role});
+  emit("searchManager", {value: searchValue, role: role});
 }
 const ruleFormRef = ref(null);
 
