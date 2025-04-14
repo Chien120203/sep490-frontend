@@ -1171,6 +1171,21 @@
     "title": "Construction Team",
     "manager": "Construction Manager"
   },
+  "inspection": {
+    "title": "Inspection Report",
+    "table": {
+      "header": {
+        "projectCode": "Project Code",
+        "inspectionCode": "Inspection Report Code",
+        "inspectionName": "Inspection Report Name",
+        "date": "Date",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "status": "Status",
+        "action": "Action"
+      }
+    }
+  },
 
   "E-CM-001": "Login Failed",
   "E-CM-002": "Required",
