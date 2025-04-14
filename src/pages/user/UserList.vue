@@ -47,7 +47,7 @@
       />
       <LoadMore
           :listData="listUsers.value"
-          :totalItems="totalItems.value"
+            :totalItems="totalItems.value"
           @loadMore="handleLoadMore"
       />
     </div>
