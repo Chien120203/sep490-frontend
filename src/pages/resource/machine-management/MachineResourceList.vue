@@ -1,6 +1,5 @@
 <template>
   <div class="machine machine-list">
-    <!-- Header Section -->
     <div class="machine-header">
       <h3 class="page__ttl">{{ $t("resource.machine.title") }}</h3>
       <div class="machine-btn-box machine-import-box">
@@ -12,7 +11,6 @@
       </div>
     </div>
 
-    <!-- Search Section -->
     <div class="machine-body">
       <div class="machine-search">
         <div class="machine-search-box col-md-9 col-lg-9">
@@ -38,7 +36,7 @@
     </div>
 
     <!-- Table Section -->
-    <div class="machine-body-table">
+    <div class="machine-body-table" style="">
       <MachineTable
           :data="listMachineResources.value"
           @details="handleGetMachineResourcesDtls"
@@ -180,102 +178,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.machine-list {
-  /* Header Section */
-  .machine-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-
-    .page__ttl {
-      font-size: 1.25rem; /* Giảm kích thước tiêu đề */
-      font-weight: 600;
-      color: #0052cc; /* Màu xanh đậm cho tiêu đề */
-    }
-
-    .machine-btn-box {
-      .btn-save {
-        background-color: #0052cc; /* Màu xanh đậm cho nút Add New */
-        color: #fff;
-        border-radius: 4px;
-        &:hover {
-          background-color: #003f99; /* Đậm hơn khi hover */
-        }
-      }
-    }
-  }
-
-  /* Search Section */
-  .machine-body {
-    .machine-search {
-      display: flex;
-      align-items: flex-start;
-      margin-bottom: 20px;
-
-      .machine-search-box {
-        display: flex;
-        flex-direction: column; /* Xếp dọc nhãn và ô nhập liệu */
-        flex-grow: 1;
-
-        .machine-search__ttl {
-          font-size: 1rem;
-          font-weight: 500;
-          margin-bottom: 5px; /* Khoảng cách giữa nhãn và ô nhập liệu */
-          color: #6c757d; /* Màu xám đậm cho nhãn */
-        }
-
-        .ruleform {
-          width: 100%;
-
-          .el-input {
-            border-radius: 4px;
-            border-color: #ced4da; /* Viền xám nhạt */
-          }
-        }
-      }
-
-      .btn-search-select {
-        display: flex;
-        align-items: center;
-        margin-left: 10px; /* Khoảng cách giữa ô nhập liệu và nút */
-
-        .btn-search {
-          background-color: #a3bffa; /* Màu tím nhạt cho nút Search */
-          color: #fff;
-          margin-left: 10px;
-          border-radius: 4px;
-          &:hover {
-            background-color: #8c9eff; /* Đậm hơn khi hover */
-          }
-        }
-
-        .btn-clear {
-          background-color: #a3bffa; /* Màu tím nhạt cho nút Clear */
-          color: #fff;
-          margin-left: 10px;
-          border-radius: 4px;
-          &:hover {
-            background-color: #8c9eff; /* Đậm hơn khi hover */
-          }
-        }
-      }
-    }
-  }
-
-  /* Close Form Icon */
-  .close-form {
-    position: absolute;
-    display: flex;
-    justify-content: flex-end;
-    right: 16px;
-    top: 10px;
-    cursor: pointer;
-
-    svg {
-      height: 30px;
-      width: 30px;
-    }
+.close-form {
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  right: 16px;
+  top: 10px;
+  cursor: pointer;
+  svg {
+    height: 30px;
   }
 }
 </style>

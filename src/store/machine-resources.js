@@ -46,8 +46,8 @@ export const useMachineResourcesStore = defineStore(
                     } else {
                         listMachineResources.value = [...listMachineResources.value, ...response.data];
                     }
-                    totalItems.value = response.meta?.total;
-                    currentPage.value = response.meta?.index;
+                    totalItems.value = response.meta.total;
+                    currentPage.value = response.meta.index;
                     mixinMethods.endLoading();
                 },
                 (error) => {
