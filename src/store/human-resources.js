@@ -19,7 +19,6 @@ export const useHumanResourcesStore = defineStore(
                 teamName: "",
                 teamManager: "",
                 description: "",
-                manager: null,
                 members: [],
             }
         });
