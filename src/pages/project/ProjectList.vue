@@ -14,11 +14,11 @@
     </div>
 
     <!--    DASHBOARD AND USER TASK-->
-    <div v-if="role !== ''" class="project-container">
+    <div class="project-container">
       <div class="project-items">
         <!--    charts-->
         <div class="project-body">
-          <div class="project-chart">
+          <div v-if="listProjects.value === 0" class="project-chart">
             <DonutChart :chart-data="chartData"/>
           </div>
         </div>
@@ -168,7 +168,7 @@ export default {
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
     const isShowBoxSearch = ref(false);
-    const role = ref(localStorage.getItem('role'));
+    const role = localStorage.getItem('role');
     const allowCreateProject = computed(() => role === BUSINESS_EMPLOYEE)
     const {
       validation,

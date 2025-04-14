@@ -21,7 +21,7 @@
         <el-form
             ref="ruleFormRef"
             :model="projectDetails.value"
-            :rules="PROJECT_RULES"
+            :rules="projectRules"
             class="form-search-box"
         >
           <div class="item item-bib-add">
@@ -231,7 +231,8 @@
             >
               <el-input
                   :disabled="!isAllowEdit"
-                  :formatter="(value) => formatCurrency(value)"
+                  :formatter="(value) => mixinMethods.formatInputMoney(value)"
+                  :parser="(value) => mixinMethods.parseInputCurrency(value)"
                   v-model="projectDetails.value.budget"
               />
               <label
@@ -303,7 +304,7 @@ import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
 import {useCustomerStore} from "@/store/customer.js";
 import { mixinMethods } from "@/utils/variables";
-import {PROJECT_RULES} from "@/rules/project/index.js";
+import {getProjectRules} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import {useUserStore} from "@/store/user.js";
 import {
@@ -344,6 +345,7 @@ export default {
     const listResourceManagers = ref([]);
     const listQAs = ref([]);
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const projectRules = getProjectRules();
 
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
@@ -376,7 +378,6 @@ export default {
     const ruleFormRef = ref(null);
 
     const submitForm = () => {
-      projectDetails.value.budget = mixinMethods.handleChangeNumber(projectDetails.value.budget);
       projectDetails.value.viewerUserIds = [projectDetails.value.technicalManager, projectDetails.value.resourceManager, projectDetails.value.constructionManager, projectDetails.value.qa];
       ruleFormRef.value.validate((valid) => {
         if (valid) {
@@ -419,12 +420,13 @@ export default {
     }
 
     return {
-      PROJECT_RULES,
       DATE_FORMAT,
       CONSTRUCTION_MANAGER,
       RESOURCE_MANAGER,
       TECHNICAL_MANAGER,
       QUALITY_ASSURANCE,
+      mixinMethods,
+      projectRules,
       isAllowEdit,
       ruleFormRef,
       isUpdate,

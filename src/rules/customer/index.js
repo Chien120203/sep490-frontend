@@ -22,7 +22,7 @@ export const CUSTOMER_RULES = {
     },
   ],
   taxCode: [
-    { required: true, message: i18n.global.t("E-CUS-004"), trigger: "blur" },
+    { required: true, message: i18n.global.t("E-CUS-007"), trigger: "blur" },
     {
       pattern: TAX_CODE,
       message: i18n.global.t("E-CUS-005"),

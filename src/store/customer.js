@@ -78,6 +78,7 @@ export const useCustomerStore = defineStore(
           if(response.success) {
             customerDetails.value = response.data;
             mixinMethods.notifySuccess(t("response.message.save_customer_success"));
+            validation.value = {};
           }else {
             validation.value = mixinMethods.handleErrorResponse(response);
             mixinMethods.notifyError(t("response.message.save_customer_failed"));

@@ -642,6 +642,7 @@
         "name": " Customer Names",
         "phone": "Phone Number",
         "fax": "Fax Code",
+        "tax": "Tax Code",
         "address": "Address",
         "email": "Email",
         "action": "Action",
@@ -1207,9 +1208,10 @@
 
   "E-CUS-001": "Customer code is required",
   "E-CUS-002": "Duplicate Customer Code",
-  "E-CUS-004": "Tax code is required",
+  "E-CUS-004": "Fax code is invalid",
   "E-CUS-005": "Tax code is invalid",
   "E-CUS-006": "Fax number is invalid",
+  "E-CUS-007": "Tax code is required",
 
   "E-USER-001": "User Name is required",
   "E-USER-002": "Email is required",
