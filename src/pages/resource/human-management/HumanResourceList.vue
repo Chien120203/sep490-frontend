@@ -46,8 +46,9 @@
                   v-model="searchForms.teamManager"
                   :optionKeys="{ id: 'id', value: 'username' }"
                   :listData="listUsers.value"
+                  :role="CONSTRUCTION_MANAGER"
                   :isRemote="true"
-                  @remoteSearch="handleSearchManagers"
+                  @remoteSearch="handleSearchUsers"
               />
             </el-form-item>
           </div>
@@ -59,6 +60,8 @@
     <div class="mobilization-body-table">
       <ConstructTeamTable
           :data="listHumanResources.value"
+          @details="handleGetTeamDetails"
+          @delete="handleDeleteTeam"
       />
       <LoadMore
           :listData="listHumanResources.value"
@@ -66,29 +69,47 @@
           @loadMore="handleLoadMore"
       />
     </div>
+    <ConstructTeamModal
+        :show="isShowModalTeam"
+        :teamInfo="humanResourcesDetails.value"
+        :allowEdit="allowEdit"
+        :managers="managersList"
+        :employees="employeesList"
+        @search="handleSearchUsers"
+        @close="() => isShowModalTeam = false"
+        @submit="handleSave"
+    />
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm.value"
+        @close-modal="() => isShowModalConfirm.value = false"
+        @confirmAction="handleConfirm"
+        :message="$t('human.modal_confirm.message')"
+        :title="$t('human.modal_confirm.title')"
+    />
   </div>
 </template>
 
 <script setup>
-import {ref, onMounted, onUnmounted, computed} from "vue";
+import {ref, onMounted, onUnmounted, computed, watch} from "vue";
 import {usePersistenceStore} from "@/store/persistence.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ConstructTeamTable from "@/pages/resource/human-management/item/ConstructTeamTable.vue";
-import {useRouter} from "vue-router";
 import {useHumanResourcesStore} from "@/store/human-resources.js";
 import IconSetting from "@/svg/IconSettingMain.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useUserStore} from "@/store/user.js";
-import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
+import {CONSTRUCTION_EMPLOYEE, CONSTRUCTION_MANAGER} from "@/constants/roles.js";
+import ConstructTeamModal from "@/pages/resource/human-management/item/modal/ConstructTeamModal.vue";
+import ModalConfirm from "@/components/common/ModalConfirm.vue";
 
 // State
-const router = useRouter();
 const persist = usePersistenceStore();
 const humanResourceStore = useHumanResourcesStore();
 const userStore = useUserStore();
 const {
   listHumanResources,
+  humanResourcesDetails,
   totalItems,
   currentPage,
   isShowModalConfirm,
@@ -110,8 +131,27 @@ const searchForms = ref({
   teamName: "",
   pageIndex: 1
 });
-const isShowBoxSearch = ref(false);
 
+// Local state to store cloned and filtered lists
+const managersList = ref([]);
+const employeesList = ref([]);
+
+// Deep copy and split when store list updates
+watch(
+    () => listUsers.value,
+    (newVal) => {
+      // Deep clone before filtering
+      const cloned = JSON.parse(JSON.stringify(newVal));
+
+      managersList.value = cloned.filter(user => user.role === CONSTRUCTION_MANAGER);
+      employeesList.value = cloned.filter(user => user.role !== CONSTRUCTION_EMPLOYEE && user.teamId === null); // Or use EMPLOYEE constant
+    },
+    { immediate: true }
+);
+const isShowBoxSearch = ref(false);
+const isShowModalTeam = ref(false);
+const allowEdit = ref(true);
+const delete_id = ref();
 const handleSearchForm = () => {
   isShowBoxSearch.value = !isShowBoxSearch.value;
 };
@@ -130,13 +170,31 @@ const handleLoadMore = () => {
   searchForms.value.pageIndex++;
   getListHumanResources(searchForms.value);
 };
-const handleSearchManagers = (value) => {
+
+const handleGetTeamDetails = (teamId) => {
+  getHumanResourcesDetails(teamId);
+};
+
+const handleDeleteTeam = (userId) => {
+  isShowModalConfirm.value = true;
+  delete_id.value = userId;
+};
+
+const handleSearchUsers = (data) => {
   getListUsers({
-    keyWord: value,
-    role: CONSTRUCTION_MANAGER,
+    keyWord: data.value,
+    role: data.role,
     pageIndex: 1,
   }, false)
-}
+};
+
+const handleSave = (data) => {
+  saveHumanResources(data);
+};
+
+const handleConfirm = () => {
+  handleDeleteHumanResources(delete_id.value);
+};
 
 // Lifecycle
 onMounted(() => {

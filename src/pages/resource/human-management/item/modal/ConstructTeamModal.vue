@@ -17,21 +17,18 @@
             :rules="constructTeamRule"
             :allowEdit="allowEdit"
             :teamInfo="teamInfo"
-            @searchManager="handleSearchManager"
+            @searchManager="handleSearch"
         />
         <el-tabs v-model="activeTab">
           <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="tasks">
             <ItemList
                 ref="tableHumanFormRef"
-                :rules="constructTeamRule"
                 :is-human="true"
                 :allowEdit="allowEdit"
-                :selectedRow="teamInfo.memberss"
+                :members="teamInfo.members"
                 :selectData="employees"
-                :resourceType="HUMAN_TYPE"
-                :tableData="listSelectedUsers"
                 @search="handleSearch"
-                :optionKeys="userOptions"
+                :optionKeys="{id: 'id', value: 'username'}"
             />
           </el-tab-pane>
         </el-tabs>
@@ -62,6 +59,7 @@ import {
 import {mixinMethods} from "@/utils/variables.js";
 import {useI18n} from "vue-i18n";
 import {getConstructionTeamRule} from "@/rules/construct-team/index.js";
+import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
 
 const props = defineProps({
   teamInfo: {type: Object, default: () => ({})},
@@ -76,69 +74,29 @@ const {t} = useI18n();
 const activeTab = ref("member");
 const childFormRef = ref(null);
 const constructTeamRule = getConstructionTeamRule();
-const handleSearchManager = (data) => {
-  emit("search", data)
-}
 
 const closeModal = () => {
   activeTab.value = "tasks"
   emit("close");
 };
 
+const handleSearch = (data) => {
+  emit("search", data)
+}
+
 const handleSubmit = async () => {
-  const forms = hasChildren.value ? [
-    {
-      ref: dependentFormRef,
-      name: t("planning.form_ref.dependency"),
-    },
-    {
-      ref: childFormRef,
-      name: t("planning.form_ref.planning_info"),
-    }
-  ] : [
-    {
-      ref: dependentFormRef,
-      name: t("planning.form_ref.dependency"),
-    },
-    {
-      ref: childFormRef,
-      name: t("planning.form_ref.planning_info"),
-    },
-    {
-      ref: tableMaterialFormRef,
-      name: t("planning.form_ref.material"),
-    },
-    {
-      ref: tableMachineFormRef,
-      name: t("planning.form_ref.machine"),
-    },
-    {
-      ref: tableHumanFormRef,
-      name: t("planning.form_ref.human"),
-    },
-  ];
+  const isValid = await new Promise((resolve) => {
+    childFormRef.value?.ruleFormRef.validate((valid) => resolve(valid));
+  });
 
-  for (const form of forms) {
-    const isValid = await new Promise((resolve) => {
-      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
-    });
-
-    if (!isValid) {
-      mixinMethods.notifyError(
-          t("planning.errors.invalid_form", { form: form.name })
-      );
-      return; // stop here if one form is invalid
-    }
+  if (!isValid) {
+    mixinMethods.notifyError(
+        t("response.message.save_human_failed")
+    );
+    return;
   }
 
-  // ✅ All forms are valid — proceed with submission
-  props.selectedRow.details = [
-    ...listSelectedUsers.value,
-    ...listSelectedMachines.value,
-    ...listSelectedMaterials.value,
-  ];
-
-  emit("submit", props.selectedRow);
+  emit("submit", props.teamInfo);
   emit("close");
   activeTab.value = "tasks"
 };
