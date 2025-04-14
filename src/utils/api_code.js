@@ -67,11 +67,10 @@ const API_CODE = {
   API_MATERIAL_004: '/material/delete',
 
   //Human Resource
-  API_HUMAN_001: '/teams/',
+  API_HUMAN_001: '/teams/detail',
   API_HUMAN_002: '/teams/search',
-  API_HUMAN_003: '/teams/create',
-  API_HUMAN_004: '/teams/update',
-  API_HUMAN_005: '/teams/delete',
+  API_HUMAN_003: '/teams/save',
+  API_HUMAN_004: '/teams/delete',
 
   //Allocation
   API_ALLOCATION_001: '/resourcereq/allocation/list',

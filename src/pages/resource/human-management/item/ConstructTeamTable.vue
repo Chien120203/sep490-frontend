@@ -14,61 +14,37 @@
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.material.table.header.materialCode')"></p>
+          <p>Team Name</p>
         </template>
 
         <template #default="scope">
-          <span class="data-table">{{ scope.row.materialCode ?? "-" }}</span>
+          <span class="data-table">{{ scope.row.teamName ?? "-" }}</span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="130">
         <template #header>
-          <p v-html="$t('resource.material.table.header.materialName')"></p>
+          <p>Team Manager</p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.materialName ? scope.row.materialName : "-" }}
-        </span>
+          <span class="data-table">{{ scope.row.manager.username ?? "-" }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column min-width="130">
+      <el-table-column min-width="200">
         <template #header>
-          <p v-html="$t('resource.material.table.header.inventory')"></p>
+          <p>Description</p>
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.inventory ? scope.row.inventory : "-" }}
-        </span>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="130">
-        <template #header>
-          <p v-html="$t('resource.material.table.header.expireDate')"></p>
-        </template>
-
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.expireDate ? scope.row.expireDate : "-" }}
-        </span>
-        </template>
-      </el-table-column>
-
-      <el-table-column min-width="130">
-        <template #header>
-          <p v-html="$t('resource.material.table.header.productionDate')"></p>
-        </template>
-
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.productionDate ? scope.row.productionDate : "-" }}
-        </span>
+          <span class="data-table">{{ scope.row.description ?? "-" }}</span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="90">
         <template #header>
-          <p v-html="$t('resource.material.table.header.action')"></p>
+          <p>Action</p>
         </template>
         <template #default="scope">
           <div>
@@ -116,7 +92,6 @@ export default {
 <style lang="scss" scoped>
 .material-container {
   padding: 20px;
-  background-color: #f5f7fa;
 
   .header {
     margin-bottom: 20px;
@@ -166,7 +141,6 @@ export default {
   .material-table {
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
 
     .license-plate {

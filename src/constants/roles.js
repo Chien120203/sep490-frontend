@@ -17,3 +17,14 @@ export const LIST_ROLES = [
   EXECUTIVE_BOARD,
   RESOURCE_MANAGER
 ]
+
+export const ROLE_LABELS = {
+  CONSTRUCTION_MANAGER: "role.label.construct_manager",
+  CONSTRUCTION_EMPLOYEE: "role.label.employee",
+  BUSINESS_EMPLOYEE: "role.label.business",
+  TECHNICAL_MANAGER: "role.label.technical",
+  QUALITY_ASSURANCE: "role.label.qa",
+  EXECUTIVE_BOARD: "role.label.bod",
+  RESOURCE_MANAGER: "role.label.resource"
+};
+
