@@ -12,16 +12,27 @@
 
     <template #body>
       <div class="modal-body-container">
-        <PriceInputForm
+        <TeamInfoForm
             ref="childFormRef"
-            :rules="rules"
+            :rules="constructTeamRule"
             :allowEdit="allowEdit"
-            :total="totalAllPrice"
-            :selectedRow="selectedRow"
+            :teamInfo="teamInfo"
+            @searchManager="handleSearchManager"
         />
         <el-tabs v-model="activeTab">
           <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="tasks">
-
+            <ItemList
+                ref="tableHumanFormRef"
+                :rules="constructTeamRule"
+                :is-human="true"
+                :allowEdit="allowEdit"
+                :selectedRow="teamInfo.memberss"
+                :selectData="employees"
+                :resourceType="HUMAN_TYPE"
+                :tableData="listSelectedUsers"
+                @search="handleSearch"
+                :optionKeys="userOptions"
+            />
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -37,7 +48,7 @@
 <script setup>
 import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw} from "vue";
 import Modal from "@/components/common/Modal.vue";
-import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
+import TeamInfoForm from "@/pages/resource/human-management/item/modal/TeamInfoForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
 import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
 import {
@@ -50,76 +61,26 @@ import {
 } from "@/constants/resource.js";
 import {mixinMethods} from "@/utils/variables.js";
 import {useI18n} from "vue-i18n";
+import {getConstructionTeamRule} from "@/rules/construct-team/index.js";
 
 const props = defineProps({
-  selectedRow: {type: Object, default: () => ({})},
+  teamInfo: {type: Object, default: () => ({})},
   show: {type: Boolean, default: false},
-  materials: {type: Array, default: () => []},
-  users: {type: Array, default: () => []},
-  vehicles: {type: Array, default: () => []},
-  tasks: {type: Array, default: () => []},
-  rules: {
-    type: Object,
-    default: () => ({})
-  },
-  allowEdit: {
-    type: Boolean,
-    default: false
-  }
+  allowEdit: {type: Boolean, default: false},
+  managers: {type: Array, default: () => []},
+  employees: {type: Array, default: () => []},
 });
 
 const emit = defineEmits(["close", "submit", "search"]);
 const {t} = useI18n();
-
-const activeTab = ref("tasks");
-const tableMachineFormRef = ref(null);
-const tableHumanFormRef = ref(null);
-const tableMaterialFormRef = ref(null);
-const dependentFormRef = ref(null);
+const activeTab = ref("member");
 const childFormRef = ref(null);
-const materialOptions = ref({id: "id", value: "materialName"});
-const userOptions = ref({id: "id", value: "teamName"});
-const vehicleOptions = ref({id: "id", value: "chassisNumber"});
-const totalAllPrice = ref({
-  machine: 0,
-  labor: 0,
-  material: 0,
-  totalPrice: 0,
-});
-const hasChildren = computed(() => props.tasks.some(child => child.parentIndex === props.selectedRow.index && !child.deleted));
-
-const getListResourceByType = (list, type) => {
-  if (!Array.isArray(list)) return [];
-  return list.filter(item => item.resourceType === type);
-};
-
-const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_RESOURCE));
-const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_RESOURCE));
-const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_RESOURCE));
-const calculateTotal = () => {
-  const machine = listSelectedMachines.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
-  const labor = listSelectedUsers.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
-  const material = listSelectedMaterials.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
-
-  totalAllPrice.value = {
-    machine: machine.toFixed(2),
-    labor: labor.toFixed(2),
-    material: material.toFixed(2),
-    totalPrice: (machine + labor + material).toFixed(2),
-  };
-};
-
-const handleSearch = (data) => {
+const constructTeamRule = getConstructionTeamRule();
+const handleSearchManager = (data) => {
   emit("search", data)
 }
 
 const closeModal = () => {
-  totalAllPrice.value = {
-    machine: 0,
-    labor: 0,
-    material: 0,
-    totalPrice: 0,
-  };
   activeTab.value = "tasks"
   emit("close");
 };
