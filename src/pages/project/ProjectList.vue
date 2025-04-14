@@ -168,7 +168,7 @@ export default {
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
     const isShowBoxSearch = ref(false);
-    const role = ref(localStorage.getItem('role'));
+    const role = localStorage.getItem('role');
     const allowCreateProject = computed(() => role === BUSINESS_EMPLOYEE)
     const {
       validation,

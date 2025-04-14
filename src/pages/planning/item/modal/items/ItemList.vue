@@ -134,8 +134,8 @@ defineExpose({
   ruleFormRef,
 });
 const emit = defineEmits(["search", "update-value"]);
-const handleSearch = (value) => {
-  emit('search', {value: value, type: props.resourceType});
+const handleSearch = (value, role) => {
+  emit('search', {value: value, role: role});
 }
 const handleSelectItem = (id) => {
   const exists = listAddedValues.value.some(entry => entry.resourceId === id);
