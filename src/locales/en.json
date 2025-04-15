@@ -282,7 +282,9 @@
       "get_planning_dtls_failed": "Get planning details failed",
       "get_allocation_failed": "Get allocation requests failed",
       "get_allocation_dtls_failed": "Get allocation request details failed",
-      "get_list_inventory_failed": "Get list inventory failed"
+      "get_list_inventory_failed": "Get list inventory failed",
+      "delete_project_success": "Delete Project Success",
+      "delete_project_failed": "Delete Project Failed"
     }
   },
   "contract": {

@@ -20,6 +20,7 @@ const API_CODE = {
     API_PRJ_002: '/project/save',
     API_PRJ_003: '/project/detail',
     API_PRJ_004: '/project/list-project-status',
+    API_PRJ_005: '/project/delete',
 
     API_CTR_001: '/contract/save-contract',
     API_CTR_002: '/contract/list-contract',
