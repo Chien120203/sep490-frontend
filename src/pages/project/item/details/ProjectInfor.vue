@@ -17,7 +17,10 @@
       </div>
       <div class="column">
         <p><strong>{{$t('project.details.infor.area')}}:</strong> {{ project.area || "" }}</p>
-        <span><strong>{{$t('project.details.infor.start_date') }} - {{$t('project.details.infor.end_date') }}:</strong> {{ formatDate(project.startDate) }} - {{ formatDate(project.endDate) }}</span>
+        <p>
+          <span><strong>{{$t('project.details.infor.start_date') }}:</strong> {{ formatDate(project.startDate) }}</span>
+        </p>
+        <span><strong>{{$t('project.details.infor.end_date') }}:</strong>{{ formatDate(project.endDate) }}</span>
       </div>
       <div class="column">
         <p><strong>{{$t('project.details.infor.construct_type')}}:</strong> {{ project.constructType }}</p>
