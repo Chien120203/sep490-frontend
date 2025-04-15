@@ -106,7 +106,7 @@
       <ProjectTable
           :data="listProjects.value"
           @details="handleToProjectDtls"
-          @delete="handleDeleteProject"
+          @delete="handleDisplayModal"
       />
       <LoadMore
           :listData="listProjects.value"
