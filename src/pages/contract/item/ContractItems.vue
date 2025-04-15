@@ -31,7 +31,7 @@ const createNewItem = (unit = "", parentIndex = null) => ({
   quantity: 0,
   unitPrice: 0,
   total: 0,
-  deleted: false
+  IsDelete: false
 });
 
 // Add a new main item
@@ -51,13 +51,13 @@ const addSubItem = (parentItem) => {
   updateItems();
 };
 
-const hasChildren = (parent) => listItems.value.some(child => child.parentIndex === parent.index && !child.deleted);
+const hasChildren = (parent) => listItems.value.some(child => child.parentIndex === parent.index && !child.IsDelete);
 const isParent = (item) => hasChildren(item);
 
 // Function to delete an item
 const deleteItem = (itemToDelete) => {
   if (props.isUpdate) {
-    itemToDelete.deleted = true; // Mark as deleted
+    itemToDelete.IsDelete = true; // Mark as deleted
   } else {
     listItems.value = listItems.value.filter(
         (item) => item.index !== itemToDelete.index && item.parentIndex !== itemToDelete.index
@@ -72,17 +72,17 @@ const deleteItem = (itemToDelete) => {
 const recalculateTotal = () => {
   // Calculate total for leaf nodes (ignoring deleted items)
   listItems.value.forEach((item) => {
-    if (!isParent(item) && !item.deleted) {
+    if (!isParent(item) && !item.IsDelete) {
       item.total = item.quantity * item.unitPrice;
     }
   });
 
   // Recursive function to update parent totals
   const updateParentTotal = (parentIndex) => {
-    let parent = listItems.value.find((item) => item.index === parentIndex && !item.deleted);
+    let parent = listItems.value.find((item) => item.index === parentIndex && !item.IsDelete);
     if (parent) {
       parent.total = listItems.value
-          .filter((child) => child.parentIndex === parent.index && !child.deleted)
+          .filter((child) => child.parentIndex === parent.index && !child.IsDelete)
           .reduce((sum, child) => sum + child.total, 0);
 
       if (parent.parentIndex !== null) {
@@ -93,7 +93,7 @@ const recalculateTotal = () => {
 
   // Find all parents and update their totals
   listItems.value
-      .filter((item) => isParent(item) && !item.deleted)
+      .filter((item) => isParent(item) && !item.IsDelete)
       .forEach((parent) => updateParentTotal(parent.index));
 
   updateItems();
@@ -108,9 +108,9 @@ const updateItems = () => {
     let index = 1;
 
     items
-        .filter((item) => item.parentIndex === parentIndex && (!item.deleted || !props.isUpdate))
+        .filter((item) => item.parentIndex === parentIndex && (!item.IsDelete || !props.isUpdate))
         .forEach((item) => {
-          if (!item.deleted) {
+          if (!item.IsDelete) {
             let currentIndex = prefix ? `${prefix}.${index}` : `${index}`;
             item.index = currentIndex;
             indexMap.set(item, currentIndex);
@@ -125,7 +125,7 @@ const updateItems = () => {
     generateIndex(listItems.value);
     result = [...listItems.value]; // Keep deleted items
   } else {
-    listItems.value = listItems.value.filter(item => !item.deleted);
+    listItems.value = listItems.value.filter(item => !item.IsDelete);
     generateIndex(listItems.value);
   }
 
@@ -135,7 +135,7 @@ const updateItems = () => {
 // Computed property to filter and sort items
 const hierarchicalItems = computed(() => {
   return [...listItems.value]
-      .filter(item => !item.deleted)
+      .filter(item => !item.IsDelete)
       .sort((a, b) => {
         const aParts = a.index.split(".").map(Number);
         const bParts = b.index.split(".").map(Number);
