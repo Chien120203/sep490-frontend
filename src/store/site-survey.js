@@ -38,7 +38,7 @@ export const useSiteSurveyStore = defineStore(
                 status: 1,
                 comments: "",
                 attachments: [],
-                surveyDetails: null
+                surveyDate: "2025-01-01"
             }
         });
 
@@ -97,10 +97,9 @@ export const useSiteSurveyStore = defineStore(
                 discountRate: null,
                 projectCost: null,
                 finalProfit: null,
-                status: null,
                 comments: "",
                 attachments: "",
-                surveyDetails: null
+                surveyDate: "2025-01-01"
             };
         };
 

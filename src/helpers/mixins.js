@@ -144,10 +144,27 @@ const formatInputMoney = (value) => {
   return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-const parseInputCurrency = (value) => {
-  if(!value) return;
-  return value.replace(/\$\s?|(,*)/g, '');
-}
+const parseInputCurrency = (value, allowNegative = false) => {
+  if (!value) return;
+
+  // Extract negative sign if allowed and present at the beginning
+  let isNegative = false;
+  if (allowNegative && value.trim().startsWith('-')) {
+    isNegative = true;
+  }
+
+  // Remove everything except digits and decimal point
+  const cleaned = value.replace(/[^\d.]/g, '');
+
+  // Handle multiple decimals
+  const parts = cleaned.split('.');
+  const normalized = parts.length > 2
+    ? parts[0] + '.' + parts.slice(1).join('')
+    : cleaned;
+
+  // Reattach negative sign if applicable
+  return isNegative ? `-${normalized}` : normalized;
+};
 
 const formatNumberVietnam = (number) => {
   if (number === null || number === undefined) return "";

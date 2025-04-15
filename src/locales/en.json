@@ -767,6 +767,7 @@
   "progress": {
     "add_new_cr": "Add New CR",
     "add_new": "Add New",
+    "hide_gantt_chart": "Hide Gantt Chart",
     "timeline": {
       "day": "Day",
       "week": "Week",
