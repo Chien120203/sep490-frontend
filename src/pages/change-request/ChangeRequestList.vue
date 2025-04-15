@@ -1,0 +1,229 @@
+<template>
+  <div class="mobilization mobilization-list">
+    <div class="mobilization-header">
+      <div class="contract-save-title">
+        <h3 class="page__ttl">
+          <span class="btn-back" @click="handleBack"><IconBackMain/></span>
+          {{
+            $t("change_request.title")
+          }}
+        </h3>
+      </div>
+      <div class="mobilization-btn-box mobilization-import-box">
+        <el-row
+            class="mb-4"
+        >
+          <el-button class="btn btn-save" @click="handleDisplayModalSave(true)"
+          >{{ $t("change_request.add_new") }}
+          </el-button>
+        </el-row>
+      </div>
+    </div>
+    <div class="mobilization-body">
+      <div class="mobilization-search">
+        <div class="mobilization-search-box col-md-9 col-lg-9">
+          <p class="mobilization-search__ttl">
+            {{ $t("mobilization.keyword") }}
+          </p>
+          <div class="mb-0 ruleform">
+            <el-input
+                :placeholder="$t('common.input_keyword')"
+                @keyup.enter="submitForm"
+                v-model="searchForms.search"
+                prop="search"
+            >
+              <template #append>
+                <span @click="handleSearchForm" class="btn-setting">
+                  <IconSetting/>
+                </span>
+              </template>
+            </el-input>
+          </div>
+        </div>
+        <div class="btn-search-select col-md-3 col-lg-3 mobilization-box-btn-all">
+          <el-button class="btn btn-search" @click="submitForm()">
+            {{ $t("common.search") }}
+          </el-button
+          >
+          <el-button class="btn btn-clear" @click="handleClear()">
+            {{ $t("common.clear") }}
+          </el-button
+          >
+        </div>
+      </div>
+      <div class="form-search" :class="{ active: isShowBoxSearch }">
+        <div class="close-form">
+          <IconCircleClose @click="isShowBoxSearch = false"/>
+        </div>
+        <div class="form-search-box">
+          <div class="item">
+            <el-form-item :label="$t('project.status')">
+              <el-select v-model="searchForms.status">
+                <el-option :label="$t('common.all')" value=""></el-option>
+                <el-option
+                    v-for="status in CHANGE_REQUEST_STATUSES"
+                    :key="status.value"
+                    :label="$t(status.label)"
+                    :value="status.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobilization-body-table" style="">
+      <ChangeRequestTable
+          :data="listChangeRequests.value"
+          @details="handleDisplayModalSave(true)"
+          @changeStatus="handleChangeStatus"
+      />
+      <LoadMore
+          :listData="listChangeRequests.value"
+          :totalItems="totalItems.value"
+          @loadMore="handleLoadMore"
+      />
+    </div>
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm"
+        @close-modal="closeModalConfirm"
+        @confirmAction="handleConfirm"
+        :message="title"
+        :title="$t('mobilization.modal_confirm.title')"
+    />
+    <ChangeRequestModal
+        :show="isShowModalSave"
+        :materials="listMaterialResources.value"
+        :vehicles="listMachineResources.value"
+        :users="listHumanResources.value"
+        :data="changeRequestDetails.value"
+        @close="handleDisplayModalSave"
+        @search="handleSearch"
+        @submit="saveChangeRequest"
+    />
+  </div>
+</template>
+<script setup>
+import {ref, onMounted, onUnmounted} from "vue";
+import LoadMore from "@/components/common/LoadMore.vue";
+import ModalConfirm from "@/components/common/ModalConfirm.vue";
+import MobilizationTable from "@/pages/resource-mobilization/items/MobilizationTable.vue";
+import {useMobilizationStore} from "@/store/mobilization";
+import {usePersistenceStore} from "@/store/persistence.js";
+import IconCircleClose from "@/svg/IconCircleClose.vue";
+import {STATUSES} from "@/constants/mobilization";
+import IconSetting from "@/svg/IconSettingMain.vue";
+import SaveMobilizationModal from "@/pages/resource-mobilization/items/SaveMobilizationModal.vue";
+import {useI18n} from "vue-i18n";
+import {useHumanResourcesStore} from "@/store/human-resources.js";
+import {useMachineResourcesStore} from "@/store/machine-resources.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
+import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
+import IconBackMain from "@/svg/IconBackMain.vue";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
+import {CHANGE_REQUEST_STATUSES} from "@/constants/change-request.js";
+import ChangeRequestTable from "@/pages/change-request/item/ChangeRequestTable.vue";
+import {useChangeRequestStore} from "@/store/change-request.js";
+import ChangeRequestModal from "@/pages/change-request/item/modal/ChangeRequestModal.vue";
+
+const persist = usePersistenceStore();
+const changeRequestStore = useChangeRequestStore();
+const humanStore = useHumanResourcesStore();
+const machineStore = useMachineResourcesStore();
+const materialStore = useMaterialResourcesStore();
+const {listHumanResources, getListHumanResources} = humanStore;
+const {listMachineResources, getListMachineResources} = machineStore;
+const {listMaterialResources, getListMaterialResources} = materialStore;
+const {
+  projectId
+} = persist;
+const {
+  listChangeRequests,
+  currentPage,
+  totalItems,
+  changeRequestDetails,
+  saveChangeRequest
+} =changeRequestStore;
+
+const {t} = useI18n();
+const delete_id = ref(null);
+const isShowModalConfirm = ref(false);
+const isShowModalSave = ref(false);
+const isShowBoxSearch = ref(false);
+const router = useRouter();
+const title = ref("");
+const changeObject = ref({});
+const searchForms = ref({projectId: projectId.value, pageIndex: 1});
+const handleClear = () => {
+  searchForms.value.search = "";
+};
+
+const handleSearchForm = () => {
+  isShowBoxSearch.value = !isShowBoxSearch.value;
+};
+
+const handleDisplayModalSave = (show = false) => {
+  isShowModalSave.value = show;
+}
+
+const handleChangeStatus = (data) => {
+  changeObject.value = data;
+  title.value = t('mobilization.modal_confirm.message_change_status');
+  isShowModalConfirm.value = true;
+};
+
+const handleBack = () => {
+  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
+};
+
+const submitForm = () => {
+  searchForms.value.pageIndex = 1;
+  currentPage.value = 1;
+};
+
+const handleSearch = (data) => {
+  switch (data.type) {
+    case MACHINE_TYPE:
+      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
+      break;
+    case HUMAN_TYPE:
+      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
+      break;
+    case MATERIAL_TYPE:
+      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
+  }
+}
+
+const handleLoadMore = () => {
+  currentPage.value++;
+  searchForms.value.pageIndex++;
+};
+
+onMounted(async () => {
+  await getListHumanResources({pageIndex: 1}, false);
+  await getListMachineResources({pageIndex: 1}, false);
+  await getListMaterialResources({pageIndex: 1}, false);
+});
+
+onUnmounted(() => {
+  totalItems.value = 0;
+});
+</script>
+
+<style lang="scss" scoped>
+.close-form {
+  position: absolute;
+  display: flex;
+  justify-content: end;
+  right: 16px;
+  top: 10px;
+  cursor: pointer;
+
+  svg {
+    height: 30px;
+  }
+}
+</style>

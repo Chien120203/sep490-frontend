@@ -136,6 +136,7 @@
     "note": "Note",
     "select_date": "Select date",
     "approve": "Approve",
+    "wait": "Wait for Approval",
     "remain": "Remain",
     "reject": "Reject",
     "review": "Review",
@@ -1172,6 +1173,25 @@
   "construct_team": {
     "title": "Construction Team",
     "manager": "Construction Manager"
+  },
+  "change_request": {
+    "title": "Change Request",
+    "add_new": "Add New",
+    "type": {
+      "add_new": "Add New",
+      "update": "Modification"
+    },
+    "table": {
+      "header": {
+        "name": "Name",
+        "request_type": "Request Type",
+        "request_date": "Request Date",
+        "creator": "Creator",
+        "no": "No",
+        "action": "Action",
+        "status": "Status"
+      }
+    }
   },
   "inspection": {
     "title": "Inspection Report",
