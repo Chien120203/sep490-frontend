@@ -23,6 +23,13 @@ watch(
     },
     {immediate: true, deep: true} // `immediate` handles initial assignment; `deep` tracks nested changes
 )
+
+const handleRefresh = () => {
+  let ganttObj = gantt.value.ej2Instances;
+  ganttObj.hideSpinner();
+  ganttObj.dataSource = props.tasks;
+  ganttObj.refresh();
+}
 const emit = defineEmits(["handleSelectRow", "addTask", "addAllocation"]);
 
 const handleAddNewTask = () => {
@@ -122,8 +129,10 @@ provide('gantt', [Toolbar, Filter, Selection]);
           >
           <el-button class="btn btn-clear" @click="handleSearch(true)">
             {{ $t("common.clear") }}
-          </el-button
-          >
+          </el-button>
+          <el-button class="btn btn-clear" @click="handleRefresh">
+            Refresh
+          </el-button>
         </div>
       </div>
       <div class="col-md-3 col-lg-3 d-flex btn-cr">

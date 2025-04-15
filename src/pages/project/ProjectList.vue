@@ -18,7 +18,7 @@
       <div class="project-items">
         <!--    charts-->
         <div class="project-body">
-          <div v-if="listProjects.value === 0" class="project-chart">
+          <div v-if="listProjects.value !== 0" class="project-chart">
             <DonutChart :chart-data="chartData"/>
           </div>
         </div>

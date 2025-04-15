@@ -136,7 +136,22 @@ export const useProjectStore = defineStore(
     }
 
     const handleDeleteProject = async (id) => {
-      alert("delete customer "+ id)
+      mixinMethods.startLoading();
+      await services.ProjectAPI.deleteProject(
+        id,
+        (response) => {
+          if(response.success) {
+            listProjects.value = listProjects.value.filter(project => project.id !== id);
+            mixinMethods.notifySuccess(t("response.message.delete_project_success"));
+          } else {
+            mixinMethods.notifyError(t("response.message.delete_project_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.endLoading();
+        }
+      );
       isShowModalConfirm.value = false;
     }
 

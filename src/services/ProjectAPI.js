@@ -1,4 +1,4 @@
-import {get, postFormData} from '@/services/BaseService';
+import {del, get, postFormData} from '@/services/BaseService';
 import API_CODE from '@/utils/api_code';
 
 // Function to handle login
@@ -18,9 +18,14 @@ const details =  async (id, params, success, error) => {
   await get(API_CODE.API_PRJ_003 + "/" + id, success, error, params);
 }
 
+const deleteProject = async (id, success, error) => {
+  await del(API_CODE.API_PRJ_005 + "/" + id, {}, success, error);
+};
+
 export const ProjectAPI = {
   list,
   save,
   getChart,
+  deleteProject,
   details
 };
