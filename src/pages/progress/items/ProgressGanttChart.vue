@@ -14,7 +14,7 @@ watch(
     (newVal) => {
       if (newVal && newVal.length > 0) {
         if (gantt.value?.ej2Instances && gantt.value?.ej2Instances.dataSource) {
-        let ganttObj = gantt.value.ej2Instances;
+          let ganttObj = gantt.value.ej2Instances;
           ganttObj.hideSpinner();
           ganttObj.dataSource = newVal;
           ganttObj.refresh();
@@ -22,8 +22,7 @@ watch(
       }
     },
     {immediate: true, deep: true} // `immediate` handles initial assignment; `deep` tracks nested changes
-)
-
+);
 const handleRefresh = () => {
   let ganttObj = gantt.value.ej2Instances;
   ganttObj.hideSpinner();
@@ -137,22 +136,11 @@ provide('gantt', [Toolbar, Filter, Selection]);
       </div>
       <div class="col-md-3 col-lg-3 d-flex btn-cr">
         <el-button class="btn btn-save" @click="change(isCollapse)"
-        >Ẩn Gantt Chart
+        >{{$t('progress.hide_gantt_chart')}}
         </el-button>
-        <el-dropdown>
-          <el-button class="btn btn-save">
-            Add New CR
-            <el-icon class="el-icon--right">
-              <arrow-down/>
-            </el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="handleAddNewTask">Add New Task</el-dropdown-item>
-              <el-dropdown-item @click="handleAddNewAllocation">Add New ALlocation</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-button @click="handleAddNewTask" class="btn btn-save">
+          {{ $t('common.add_new') }}
+        </el-button>
       </div>
     </div>
     <div style="padding-top: 70px">
