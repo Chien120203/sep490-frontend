@@ -88,6 +88,7 @@ export const useMobilizationStore = defineStore(
         (response) => {
           if(response.success) {
             mobilizationDetails.value = response.data;
+            listMobilizations.value.push(response.data);
             mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
           }else {
             validation.value = mixinMethods.handleErrorResponse(response);

@@ -128,36 +128,37 @@
                 </label>
               </el-form-item>
             </div>
-
-            <el-form-item prop="qa">
-              <template #label>
-                <span class="label-start">{{ $t('project.create.qa') }}</span>
-              </template>
-              <SingleOptionSelect
-                  v-model="projectDetails.value.qa"
-                  :optionKeys="{ id: 'id', value: 'username' }"
-                  :listData="listQAs"
-                  :role="QUALITY_ASSURANCE"
-                  :isRemote="true"
-                  :disabled="!isAllowEdit"
-                  class="input-wd-96"
-                  @remoteSearch="handleSearchManager"
-              />
-              <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
-                {{ $t(validation.viewerUserIds) }}
-              </label>
-            </el-form-item>
-
-            <el-form-item
-                :label="$t('project.create.construct_type')"
-                prop="constructType"
-            >
-              <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.constructType"/>
-              <label
-                  class="error-feedback-user"
-                  v-if="validation.value && validation.value.constructType"
-              >{{ $t(validation.value.constructType) }}</label>
-            </el-form-item>
+            <div class="item-project-members">
+              <el-form-item prop="qa" class="input-select-member">
+                <template #label>
+                  <span class="label-start">{{ $t('project.create.qa') }}</span>
+                </template>
+                <SingleOptionSelect
+                    v-model="projectDetails.value.qa"
+                    :optionKeys="{ id: 'id', value: 'username' }"
+                    :listData="listQAs"
+                    :role="QUALITY_ASSURANCE"
+                    :isRemote="true"
+                    :disabled="!isAllowEdit"
+                    class="input-wd-96"
+                    @remoteSearch="handleSearchManager"
+                />
+                <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
+                  {{ $t(validation.viewerUserIds) }}
+                </label>
+              </el-form-item>
+              <el-form-item
+                  :label="$t('project.create.construct_type')"
+                  prop="constructType"
+                  class="input-select-member"
+              >
+                <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.constructType"/>
+                <label
+                    class="error-feedback-user"
+                    v-if="validation.value && validation.value.constructType"
+                >{{ $t(validation.value.constructType) }}</label>
+              </el-form-item>
+            </div>
 
             <el-form-item
                 :label="$t('project.create.location')"
@@ -258,7 +259,8 @@
                 class="custom-textarea required"
                 :label="$t('project.create.technical_reqs')"
             >
-              <el-input :disabled="!isAllowEdit" :rows="4" type="textarea" v-model="projectDetails.value.technicalReqs"/>
+              <el-input :disabled="!isAllowEdit" :rows="4" type="textarea"
+                        v-model="projectDetails.value.technicalReqs"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.technicalReqs"
@@ -303,7 +305,7 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
 import {useCustomerStore} from "@/store/customer.js";
-import { mixinMethods } from "@/utils/variables";
+import {mixinMethods} from "@/utils/variables";
 import {getProjectRules} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import {useUserStore} from "@/store/user.js";
@@ -354,7 +356,7 @@ export default {
     onMounted(async () => {
       await getListCustomers({search: "", pageIndex: 1}, false);
       await getListUsers({keyWord: "", pageIndex: 1}, false);
-      if(route.params.id) {
+      if (route.params.id) {
         await getProjectDetails(route.params.id);
         projectDetails.value.technicalManager = getUserIdByRole(projectDetails.value.viewerUserIds, TECHNICAL_MANAGER)?.id;
         projectDetails.value.constructionManager = getUserIdByRole(projectDetails.value.viewerUserIds, CONSTRUCTION_MANAGER)?.id;
@@ -372,7 +374,10 @@ export default {
     });
 
     const handleBack = () => {
-      router.push(isUpdate.value ? {name: PAGE_NAME.PROJECT.DETAILS, params:{id: route.params.id}} :{name: PAGE_NAME.PROJECT.LIST});
+      router.push(isUpdate.value ? {
+        name: PAGE_NAME.PROJECT.DETAILS,
+        params: {id: route.params.id}
+      } : {name: PAGE_NAME.PROJECT.LIST});
     };
 
     const ruleFormRef = ref(null);
@@ -535,7 +540,7 @@ export default {
 }
 
 .user-body .form-search-box,
-.user-body .form-search-box{
+.user-body .form-search-box {
   justify-content: space-between;
   font-size: 16px;
   line-height: 21px;

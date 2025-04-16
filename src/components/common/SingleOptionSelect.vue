@@ -8,6 +8,7 @@
       :placeholder="placeholder || ''"
       :disabled="isDisabled"
       :clearable="showClearable"
+      :multiple="multiple"
       ref="singleOptionSelect"
   >
     <div class="bs-searchbox">
@@ -68,6 +69,10 @@ export default {
       default: () => ({ id: 'id', value: 'value' }),
     },
     showClearable: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
       type: Boolean,
       default: false,
     },
