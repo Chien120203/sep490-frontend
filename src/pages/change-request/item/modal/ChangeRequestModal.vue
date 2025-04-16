@@ -12,7 +12,7 @@
 
     <template #body>
       <div class="modal-body-container">
-        <PriceInputForm
+        <TaskInputForm
             ref="childFormRef"
             :rules="rules"
             :allowEdit="allowEdit"
@@ -107,6 +107,7 @@ import {
 } from "@/constants/resource.js";
 import {mixinMethods} from "@/utils/variables.js";
 import {useI18n} from "vue-i18n";
+import TaskInputForm from "@/pages/change-request/item/modal/items/TaskInputForm.vue";
 
 const props = defineProps({
   selectedRow: {type: Object, default: () => ({})},

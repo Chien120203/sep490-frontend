@@ -1191,6 +1191,17 @@
         "action": "Action",
         "status": "Status"
       }
+    },
+    "modal": {
+      "request_name": "Request Name",
+      "request_date": "Request Date",
+      "parent_index": "Parent Index",
+      "work_name": "Work Name",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "unit_price": "Unit Price",
+      "start_date": "Plan Start Date",
+      "end_date": "Plan End Date"
     }
   },
   "inspection": {
