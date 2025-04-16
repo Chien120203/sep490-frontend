@@ -29,35 +29,15 @@ export const useContractStore = defineStore(
       }
     });
 
-    const getListContracts = async (params, isLoading = true) => {
-      if(isLoading) mixinMethods.startLoading();
-      await services.ContractAPI.list(
-        params,
-        (response) => {
-          if (currentPage.value === 1) {
-            listContracts.value = response.data;
-          } else {
-            listContracts.value = [...listContracts.value, ...response.data];
-          }
-          totalItems.value = response.meta.total;
-          currentPage.value = response.meta.index;
-
-          mixinMethods.endLoading();
-        },
-        (error) => {
-          mixinMethods.notifyError(t("response.message.get_contracts_failed"));
-          mixinMethods.endLoading();
-        }
-      );
-    };
-
     const getContractDetails = async (id) => {
       mixinMethods.startLoading();
       await services.ContractAPI.details(
         id,
         {},
         (response) => {
-          contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
+          if(response.code === 200) {
+            contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
+          } else clearContractDetails();
 
           mixinMethods.endLoading();
         },
@@ -113,7 +93,6 @@ export const useContractStore = defineStore(
       getContractDetails,
       clearContractDetails,
       saveContract,
-      getListContracts,
     };
   }
 );

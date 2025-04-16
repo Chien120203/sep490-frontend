@@ -45,8 +45,8 @@
                 </div>
               </div>
               <ContractList
-                  :data="listContracts.value"
-                  @details="getContractDetails"
+                  :data="contractDetails.value"
+                  @details="getContractDtls"
               />
             </el-collapse-item>
             <el-collapse-item name="5">
@@ -131,10 +131,9 @@ export default {
     } = projectStore;
 
     const {
-      listContracts,
       totalItems,
-      currentPage,
-      getListContracts,
+      contractDetails,
+      getContractDetails,
     } = contractStore;
 
     const { siteSurveyDetails, isSiteSurveyNull, getSurveyDetails } = surveyStore;
@@ -209,25 +208,16 @@ export default {
       pageIndex: 1,
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
-    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && listContracts.value.length === 0));
+    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && contractDetails.value.id === 0));
     const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull.value));
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
       projectId.value = route.params.id;
       await getProjectDetails(route.params.id);
       projectStatus.value = projectDetails.value.status;
-      await getListContracts(contractSearchForms.value);
+      await getContractDetails(projectId.value);
       await getSurveyDetails(route.params.id);
     });
-
-    onUnmounted(() => {
-      listContracts.value = []
-    });
-
-    const getContractDetails = (id) => {
-      projectId.value = route.params.id;
-      router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
-    }
 
     const getSiteSurveyDetails = () => {
       router.push({ name: PAGE_NAME.SITE_SURVEY.DETAILS, params: { id: route.params.id } });
@@ -241,18 +231,16 @@ export default {
       router.push({ name: PAGE_NAME.PROJECT.EDIT, params: { id: route.params.id } });
     };
 
+    const getContractDtls = (id) => {
+      router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
+    }
+
     const handleBack = () => {
       router.push({ name: PAGE_NAME.PROJECT.LIST });
     };
 
     const handleContractSearchForm = () => {
       isShowBoxContractSearch.value = !isShowBoxContractSearch.value;
-    };
-
-    const handleSearchContract = (isSearch = false) => {
-      currentPage.value = isSearch ? 1 : currentPage.value + 1;
-      contractSearchForms.value.pageIndex = isSearch ? 1 : contractSearchForms.value.pageIndex + 1;
-      getListContracts(contractSearchForms.value);
     };
 
     const closeModalConfirm = () => {
@@ -276,7 +264,6 @@ export default {
     };
 
     const handleRedirectToCreate = () => {
-      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.CREATE});
     }
 
@@ -305,12 +292,13 @@ export default {
       isAllowCreateSiteSurvey,
       isShowBoxContractSearch,
       contractSearchForms,
-      listContracts,
       siteSurveyDetails,
       totalItems,
+      contractDetails,
       isAllowEdit,
       actionText,
       closeModalConfirm,
+      getContractDtls,
       handleChangeStatus,
       handleConfirm,
       handleBack,
@@ -319,7 +307,6 @@ export default {
       getSiteSurveyDetails,
       handleContractSearchForm,
       handleClearSearchContractForm,
-      handleSearchContract,
       getContractDetails,
       handleCreateSiteSurvey,
     };

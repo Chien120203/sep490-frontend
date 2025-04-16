@@ -168,8 +168,8 @@ const hierarchicalItems = computed(() => {
       <el-table-column v-if="isAllowUpdate" :label="$t('contract.create.item_table.action')" width="120">
         <template #default="{ row }">
           <div class="action-btn">
-            <IconPlus @click="addSubItem(row)" />
-            <IconTrash @click="deleteItem(row)" />
+            <IconPlus @click="addSubItem(row); $event.preventDefault()" />
+            <IconTrash @click="deleteItem(row); $event.preventDefault()" />
           </div>
         </template>
       </el-table-column>
