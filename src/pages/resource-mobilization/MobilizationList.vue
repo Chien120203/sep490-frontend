@@ -13,7 +13,7 @@
         <el-row
             class="mb-4"
         >
-          <el-button class="btn btn-save" @click="handleDisplayModalSave(true)"
+          <el-button v-if="allowCreate" class="btn btn-save" @click="handleDisplayModalSave(true)"
           >{{ $t("mobilization.add_new") }}
           </el-button>
         </el-row>
@@ -107,7 +107,7 @@
   </div>
 </template>
 <script setup>
-import {ref, onMounted, onUnmounted} from "vue";
+import {ref, onMounted, onUnmounted, computed} from "vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import MobilizationTable from "@/pages/resource-mobilization/items/MobilizationTable.vue";
@@ -125,6 +125,7 @@ import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useRouter} from "vue-router";
+import {RESOURCE_MANAGER} from "@/constants/roles.js";
 
 const mobilizationStore = useMobilizationStore();
 const persist = usePersistenceStore();
@@ -155,6 +156,7 @@ const delete_id = ref(null);
 const isShowModalConfirm = ref(false);
 const isShowModalSave = ref(false);
 const isShowBoxSearch = ref(false);
+const allowCreate = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER);
 const router = useRouter();
 const title = ref("");
 const changeObject = ref({});
@@ -212,7 +214,6 @@ const handleSaveRequest = (data) => {
   mobilizationDetails.value.projectId = projectId.value;
   isShowModalSave.value = false;
   saveRequest(mobilizationDetails.value);
-  getListMobilizations(searchForms.value);
 }
 
 const handleDisplayModal = (mobilization_id) => {

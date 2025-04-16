@@ -3,6 +3,7 @@
     <!-- Conditional layout based on requestType -->
     <div v-if="requestType === REQUEST_TYPE_SUPPLY_MORE">
       <SingleOptionSelect
+          :showClearable="true"
           class="select-item"
           :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
           :listData="selectData"
@@ -68,7 +69,7 @@
         <el-table-column label="Actions">
           <template #default="{ row }">
             <div>
-              <button @click="handleRemoveResource(row.resourceId || row.tempId)" class="btn-edit">
+              <button @click="handleRemoveResource(row.resourceId || row.tempId); $event.preventDefault()" class="btn-edit">
                 <IconTrash />
               </button>
             </div>

@@ -10,9 +10,8 @@ export const getPlanningRules = () => {
   const planningStore = usePlanningStore();
   const { planningDetails, planSelectedRow } = planningStore;
   const {t} = useI18n();
-  const getSelectedRow = (field) => {
-    const index = field.split(".")[1];
-    return planningDetails.value.planItems[index];
+  const getSelectedRow = (rowIndex) => {
+    return planningDetails.value.planItems.find(item => item.index === rowIndex);
   }
   const getParentRow = (index, byId = false) => {
     if(!index) return null;
@@ -74,7 +73,7 @@ export const getPlanningRules = () => {
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, value, planSelectedRow.value.endDate || getSelectedRow(rule.field).endDate, "E-CM-020"),
+          validateStartBeforeEnd(rule, value, callback, value, planSelectedRow.value.endDate || getSelectedRow(rule.rowIndex).endDate, "E-CM-020"),
         trigger: "blur",
       },
       {
@@ -97,7 +96,7 @@ export const getPlanningRules = () => {
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, planSelectedRow.value.startDate || getSelectedRow(rule.field).startDate, value, "E-CM-028"),
+          validateStartBeforeEnd(rule, value, callback, planSelectedRow.value.startDate || getSelectedRow(rule.rowIndex).startDate, value, "E-CM-028"),
         trigger: "blur",
       },
       {

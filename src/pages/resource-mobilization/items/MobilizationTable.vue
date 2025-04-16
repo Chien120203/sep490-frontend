@@ -78,7 +78,7 @@
           <button v-if="scope.row.status === DRAFT_STATUS && currentRole === RESOURCE_MANAGER" @click="$emit('changeStatus', {id: scope.row.id, type: 'send'})" class="btn-edit">
             <IconChatSend/>
           </button>
-          <button v-if="allowApprove(scope.row)" @click="$emit('changeStatus', {id: scope.row.id, type: 'approve'})" class="btn-edit">
+          <button v-if="allowApprove(scope.row.status)" @click="$emit('changeStatus', {id: scope.row.id, type: 'approve'})" class="btn-edit">
             <IconApprove/>
           </button>
           <button v-if="allowReject(scope.row.status)" @click="$emit('changeStatus', {id: scope.row.id, type: 'reject'})" class="btn-edit">
@@ -162,9 +162,9 @@ export default {
       return STATUS_LABELS[status] || 'Unknown';
     };
 
-    const allowApprove = (row) => {
-      if(row.status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
-      return row.status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD;
+    const allowApprove = (status) => {
+      if(status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
+      return status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD;
     }
 
     const allowReject = (status) => {

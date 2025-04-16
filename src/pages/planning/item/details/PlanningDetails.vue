@@ -224,7 +224,7 @@ const sortItems = () => {
 
         <el-table-column :label="$t('planning.modal.start_date')" resizable min-width="220">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listItems.${$index}.startDate`" :rules="rules.startDate">
+            <el-form-item :prop="`listItems.${$index}.startDate`" :rules="rules.startDate.map(rule => ({ ...rule, rowIndex: row.index }))">
               <el-date-picker
                   :disabled="!allowEdit"
                   class="custom-input"
@@ -239,7 +239,7 @@ const sortItems = () => {
 
         <el-table-column :label="$t('planning.modal.end_date')" resizable min-width="220">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listItems.${$index}.endDate`" :rules="rules.endDate">
+            <el-form-item :prop="`listItems.${$index}.endDate`" :rules="rules.endDate.map(rule => ({ ...rule, rowIndex: row.index }))">
               <el-date-picker
                   :disabled="!allowEdit"
                   class="custom-input"
