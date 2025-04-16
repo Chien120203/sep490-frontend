@@ -1,6 +1,6 @@
 <template>
   <el-table
-      :data="data"
+      :data="listContracts"
       max-height="400"
       style="width: 100%"
       class="el-tbl-custom change-request-tbl"
@@ -81,6 +81,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import { mixinMethods } from "@/utils/variables.js";
 import { DATE_FORMAT } from "@/constants/application.js";
+import {computed} from "vue";
 
 export default {
   components: {
@@ -89,17 +90,18 @@ export default {
   },
   props: {
     data: {
-      type: Array,
-      default: [],
+      type: Object,
+      default: () => {},
     },
   },
-  setup() {
-
+  setup(props, {emit}) {
+    const listContracts = computed(() => props.data.id ? [props.data] : []);
     const formatDate = (inputDate) => {
       return mixinMethods.showDateTime(inputDate, DATE_FORMAT);
     };
 
     return {
+      listContracts,
       formatDate,
     };
   },
