@@ -94,6 +94,9 @@ const API_CODE = {
     API_INSPECTION_003: '/inspection/save',
     API_INSPECTION_004: '/inspection/delete',
 
+  //Construction Log
+  API_CONSTRUCT_LOG_001: '/construction-log/save',
+
 };
 
 export default API_CODE;

@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item label="Tệp đính kèm">
         <FileUpload
-            :existingFiles="logDetails.attachments"
+            :existingFiles="logDetails.attachmentFiles"
             :allowedTypes="'.jpg,.png,.pdf,.docx'"
             :fileLimit="3"
             @file-selected="handleSelectAttachments"
@@ -26,7 +26,7 @@
       </el-form-item>
 
       <el-form-item label="Nhật ký ngày" required prop="logDate">
-        <el-date-picker style="width: 100%" v-model="logDetails.logDate" type="date" placeholder="Chọn ngày"/>
+        <el-date-picker style="width: 100%" v-model="logDetails.logDate" :format="DATE_FORMAT" :value-format="DATE_FORMAT" type="date" placeholder="Chọn ngày"/>
       </el-form-item>
 
       <el-form-item label="Thời tiết">
@@ -86,6 +86,7 @@ import {ref} from "vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
 import FileUpload from "@/components/common/FileUpload.vue";
 import {BAD_CONDITION, GOOD_CONDITION, MEDIUM_CONDITION} from "@/constants/construct-log.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
   logDetails: {
@@ -106,16 +107,16 @@ defineExpose({
 });
 
 const handleSelectFiles = (listFiles) => {
-  props.logDetails.images = listFiles;
+  props.logDetails.images = listFiles.map(item => item.raw);
 }
 const handleSelectAttachments = (listFiles) => {
-  props.logDetails.attachments = listFiles;
+  props.logDetails.attachmentFiles = listFiles || [];
 }
 const handleRemoveFile = (file) => {
   props.logDetails.images =  props.logDetails.images.filter((f) => f.uid !== file.uid);
 }
 const handleRemoveAttachments = (file) => {
-  props.logDetails.attachments = props.logDetails.attachments.filter((f) => f.uid !== file.uid);
+  props.logDetails.attachmentFiles = props.logDetails.attachmentFiles.filter((f) => f.uid !== file.uid);
 }
 
 </script>

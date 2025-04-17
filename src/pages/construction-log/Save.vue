@@ -51,12 +51,18 @@ import ConstructionLogInfor from "@/pages/construction-log/items/ConstructionLog
 import {useConstructLog} from "@/store/construct-log.js";
 import {getConstructLogRules} from "@/rules/construct-log/index.js";
 import {useI18n} from "vue-i18n";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 const constructLogRules = getConstructLogRules();
 const constructLogStore = useConstructLog();
+const persistenceStore = usePersistenceStore();
 
 const {
-  constructLogDetails
+  projectId
+} = persistenceStore;
+const {
+  constructLogDetails,
+  saveConstructLog
 } = constructLogStore;
 
 const {t} = useI18n();
@@ -92,24 +98,29 @@ const handleBack = () => {
 const formLogDetailsRef = ref(null);
 const formLogInfoRef = ref(null);
 
-const submitForm = () => {
-  const formRefs = [
-    ...formLogDetailsRef.value?.machineForm,
-    ...formLogDetailsRef.value?.materialForm,
-    ...formLogDetailsRef.value?.humanForm,
-    ...formLogDetailsRef.value?.workAmountForm,
-    formLogInfoRef.value
-  ];
-  console.log(constructLogDetails.value)
-  for (const form of formRefs) {
-    if (form?.ruleFormRef) { // Access ruleFormRef
-      const isValid = mixinMethods.validateForm(form.ruleFormRef);
-      if (!isValid) {
-        mixinMethods.notifyError(t('E-LOG-001'));
-        return;
-      }
-    }
-  }
+const submitForm = async () => {
+  constructLogDetails.value.projectId = projectId.value;
+  // const formRefs = [
+  //   ...formLogDetailsRef.value?.machineForm,
+  //   ...formLogDetailsRef.value?.materialForm,
+  //   ...formLogDetailsRef.value?.humanForm,
+  //   ...formLogDetailsRef.value?.workAmountForm,
+  //   formLogInfoRef.value
+  // ];
+  // console.log(constructLogDetails.value)
+  // for (const form of formRefs) {
+  //   const isValid = await new Promise((resolve) => {
+  //     form.ruleFormRef.validate((valid) => resolve(valid));
+  //   });
+  //
+  //   if (!isValid) {
+  //     mixinMethods.notifyError(
+  //         t("Failed")
+  //     );
+  //     return; // stop here if one form is invalid
+  //   }
+  // }
+  await saveConstructLog(constructLogDetails.value);
 }
 </script>
 <style scoped>

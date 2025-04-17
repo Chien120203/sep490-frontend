@@ -212,27 +212,12 @@ export const useConstructLog = defineStore(
     const constructLogDetails = reactive({
       value: {
         id: 0,
-        logCode: "",
+        logCode: "casddca",
         logName: "",
         logDate: "",
-        resources: [
-          // {
-          //   id: 0,
-          //   taskIndex: 0,
-          //   resourceType: 0,
-          //   quantity: 0,
-          //   resourceId: 0,
-          //   startTime: "",
-          //   endTime: "",
-          // }
-        ],
-        workAmount: [
-          // {
-          //   id: 0,
-          //   taskIndex: 0,
-          //   workAmount: 0,
-          // }
-        ],
+        projectId: 0,
+        resources: [],
+        workAmount: [],
         weather: [
           {type: "Điều kiện", values: ["", "", "", ""]},
           {type: "Nhiệt độ", values: ["", "", "", ""]},
@@ -243,7 +228,7 @@ export const useConstructLog = defineStore(
         problem: "",
         advice: "",
         images: [],
-        attachments: [],
+        attachmentFiles: [],
         note: "",
       }
     });
@@ -631,6 +616,27 @@ export const useConstructLog = defineStore(
       );
     };
 
+    const saveConstructLog = async (params) => {
+      mixinMethods.startLoading();
+      const formData = mixinMethods.createFormData(params, []);
+      await services.ConstructLogAPI.save(
+        formData,
+        (response) => {
+          if(response.code === 200) {
+            constructLogDetails.value = {...response.data, projectId: response.data?.project.id, images: response.data.images || []};
+            mixinMethods.notifySuccess(t("response.message.save_contract_success"));
+          } else {
+            mixinMethods.notifyError(t("response.message.save_contract_failed"));
+          }
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.save_contract_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    }
+
     return {
       validation,
       listConstructLog,
@@ -639,7 +645,8 @@ export const useConstructLog = defineStore(
       constructLogDetails,
       isShowModalConfirm,
       isShowModalCreate,
-      getListProjectLogs
+      getListProjectLogs,
+      saveConstructLog
     };
   }
 );

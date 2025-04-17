@@ -36,14 +36,10 @@ import {usePersistenceStore} from "@/store/persistence.js";
 import {useConstructLog} from "@/store/construct-log.js";
 
 const isShowModalItemDtls = ref(false);
-const title = ref("Dự Án ABC");
 
 // Store Data
-const projectStore = useProjectStore();
 const constructLog = useConstructLog();
-const customerStore = useCustomerStore();
-const userStore = useUserStore();
-const contractStore = useContractStore();
+const projectStore = useProjectStore();
 const persistenceStore = usePersistenceStore();
 
 const {
@@ -51,15 +47,22 @@ const {
   listConstructLog
 } = constructLog;
 const {
+
+} = projectStore;
+const {
   projectId
 } = persistenceStore;
 
 const route = useRoute();
 const router = useRouter();
+const now = new Date();
+const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
 const searchForm = ref({
-  startDate: "2025-04-01",
-  endDate: "2025-04-30"
-})
+  startDate: firstDay.toISOString().split('T')[0],
+  endDate: lastDay.toISOString().split('T')[0]
+});
 onMounted(async () => {
   // await getListProjectLogs(searchForm.value);
 });
