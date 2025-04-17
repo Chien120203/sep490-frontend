@@ -16,6 +16,7 @@ export const useMachineResourcesStore = defineStore(
         const machineResourcesDetails = reactive({
             value: {
                 id: 0,
+                vehicleName: "",
                 licensePlate: "",
                 brand: "",
                 yearOfManufacture: 0,
@@ -119,6 +120,7 @@ export const useMachineResourcesStore = defineStore(
         const clearMachineResourcesDetails = () => {
             machineResourcesDetails.value = {
                 id: 0,
+                vehicleName: "",
                 licensePlate: "",
                 brand: "",
                 yearOfManufacture: 0,
