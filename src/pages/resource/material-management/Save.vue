@@ -72,6 +72,10 @@
               </label>
             </el-form-item>
 
+
+          </div>
+
+          <div class="item item-bib-add item-material-add">
             <el-form-item prop="wholesalePrice" class="custom-textarea" :label="$t('resource.material.details.wholesalePrice')">
               <el-input v-model="materialResourcesDetails.value.wholesalePrice" />
               <label class="error-feedback-material" v-if="validation && validation.value.wholesalePrice">
@@ -94,21 +98,29 @@
             </el-form-item>
 
             <el-form-item prop="expireDate" class="custom-textarea" :label="$t('resource.material.details.expireDate')">
-              <el-input v-model="materialResourcesDetails.value.expireDate" />
+              <el-date-picker
+                  style="width: 90%"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
+                  v-model="materialResourcesDetails.value.expireDate"
+              />
               <label class="error-feedback-material" v-if="validation && validation.value.expireDate">
                 {{ $t(validation.value.expireDate) }}
               </label>
             </el-form-item>
 
             <el-form-item prop="productionDate" class="custom-textarea" :label="$t('resource.material.details.productionDate')">
-              <el-input v-model="materialResourcesDetails.value.productionDate" />
+              <el-date-picker
+                  style="width: 90%"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
+                  v-model="materialResourcesDetails.value.productionDate"
+              />
               <label class="error-feedback-material" v-if="validation && validation.value.productionDate">
                 {{ $t(validation.value.productionDate) }}
               </label>
             </el-form-item>
-          </div>
 
-          <div class="item item-bib-add item-material-add">
             <el-form-item prop="description" class="input-item" :label="$t('resource.material.details.description')">
               <el-input v-model="materialResourcesDetails.value.description" class="custom-textarea" type="textarea" />
               <label class="error-feedback-material" v-if="validation && validation.value.description">
@@ -142,6 +154,7 @@ import ImageUpload from "@/components/common/ImageUpload.vue";
 import {MATERIAL_RULES} from "@/rules/material-resource/index.js";
 import {useI18n} from "vue-i18n";
 import {useMaterialResourcesStore} from "@/store/material-resources.js";
+import {DATE_FORMAT, GENDERS} from "@/constants/application.js";
 import PAGE_NAME from "@/constants/route-name.js";
 
 export default {
@@ -205,6 +218,7 @@ export default {
       isUpdate,
       validation,
       MATERIAL_RULES,
+      DATE_FORMAT,
       handleBack,
       submitForm,
       handleFileUpload,
@@ -216,7 +230,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* Existing Styles */
 .error-feedback-material {
   display: block;
   color: red;
@@ -274,79 +287,6 @@ export default {
   max-width: 50%;
 }
 
-/* New Styles for Design Matching */
-.material-block {
-  background-color: #F5F5F5; /* Light grayish-white background */
-  padding: 20px; /* Consistent padding around the form */
-}
-
-.material-body .form-search-box {
-  display: flex;
-  gap: 20px; /* Space between the two columns */
-}
-
-.item {
-  flex: 1; /* Each column takes equal width */
-}
-
-.el-form-item__label {
-  color: #666666; /* Gray text for labels */
-  font-size: 14px; /* Label font size */
-}
-
-.required .el-form-item__label::before {
-  content: '*';
-  color: red;
-  margin-right: 4px;
-}
-
-.el-input__inner {
-  background-color: #F5F5F5; /* Light gray background */
-  border: 1px solid #D9D9D9; /* Light gray border */
-  color: #000000; /* Black text */
-  font-size: 16px; /* Input text font size */
-}
-
-.custom-textarea .el-textarea__inner {
-  background-color: #F5F5F5;
-  border: 1px solid #D9D9D9;
-  color: #000000;
-  font-size: 16px;
-  height: 100px; /* Larger height for textarea */
-  resize: vertical; /* Allow vertical resizing */
-}
-
-.material-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btn-save {
-  background-color: #1890FF; /* Blue background */
-  color: #fff; /* White text */
-  border: none;
-  border-radius: 4px; /* Rounded corners */
-  padding: 10px 20px; /* Comfortable padding */
-}
-
-.page__ttl {
-  color: #1890FF; /* Blue text */
-  font-weight: bold;
-}
-
-.btn-back {
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.btn-back svg {
-  fill: #1890FF; /* Blue color for the icon */
-}
-
-.el-form-item {
-  margin-bottom: 20px; /* Vertical spacing between fields */
-}
 </style>
 
 <style>

@@ -271,10 +271,14 @@
       "get_machine_dtls_failed": "Get Machine details failed",
       "save_machine_success": "Save Machine Success",
       "save_machine_failed": "Save Machine Failed",
+      "delete_machine_success": "Delete machine success",
+      "delete_machine_failed": "Delete machine failed",
       "get_material_failed": "Get Material failed",
       "get_material_dtls_failed": "Get Material details failed",
       "save_material_success": "Save Material Success",
       "save_material_failed": "Save Material Failed",
+      "delete_material_success": "Delete material success",
+      "delete_material_failed": "Delete material failed",
       "get_human_failed": "Get Human failed",
       "get_human_dtls_failed": "Get Human details failed",
       "save_human_success": "Save Human Success",
@@ -518,6 +522,10 @@
           "status": "Status",
           "action": "Action"
         }
+      },
+      "modal_confirm": {
+        "title": "Confirm delete machine",
+        "message": "Please enter 'Delete' to confirm delete this machine"
       }
     },
     "material": {
@@ -562,6 +570,10 @@
           "status": "Status",
           "action": "Action"
         }
+      },
+      "modal_confirm": {
+        "title": "Confirm delete material",
+        "message": "Please enter 'Delete' to confirm delete this material"
       }
     },
     "human": {
@@ -1300,5 +1312,46 @@
   "E-PLAN-002": "Plan quantity exceeds inventory",
 
   "E-LOG-001": "Save construction log failed",
-  "E-LOG-002": "Work amount cannot exceed the expected"
+  "E-LOG-002": "Work amount cannot exceed the expected",
+
+  "E-MACH-001": "License Plate is required",
+  "E-MACH-002": "Brand is required",
+  "E-MACH-003": "Year Of Manufacture is required",
+  "E-MACH-004": "Vehicle Name is required",
+  "E-MACH-005": "Vehicle Type is required",
+  "E-MACH-006": "Chassis Number is required",
+  "E-MACH-007": "Engine Number is required",
+  "E-MACH-009": "Status is required",
+  "E-MACH-010": "Driver is required",
+  "E-MACH-011": "Fuel Type is required",
+  "E-MACH-012": "Fuel Tank Volume is required",
+  "E-MACH-013": "Fuel Tank Volume must be a number",
+  "E-MACH-014": "Fuel Unit is required",
+  "E-MACH-015": "Invalid License Plate format",
+  "E-MACH-016": "Invalid Year Of Manufacture",
+  "E-MACH-017": "Invalid Chassis Number format",
+  "E-MACH-018": "Invalid Engine Number format",
+  "E-MACH-020": "Fuel Tank Volume must be must be from 0 to 1,000,000",
+  "E-MACH-022": "Year Of Manufacture must be a number",
+
+  "E-MAT-001": "Material Code is required",
+  "E-MAT-002": "Material Code format is invalid",
+  "E-MAT-003": "Material Name is required",
+  "E-MAT-004": "Unit is required",
+  "E-MAT-005": "Chassis Number is required",
+  "E-MAT-006": "Chassis Number format is invalid",
+  "E-MAT-007": "Wholesale Price is required",
+  "E-MAT-008": "Wholesale Price must be a valid number",
+  "E-MAT-009": "Wholesale Price must be between 0 and 100,000,000,000,000",
+  "E-MAT-010": "Retail Price is required",
+  "E-MAT-011": "Retail Price must be a valid number",
+  "E-MAT-012": "Retail Price must be between 0 and 100,000,000,000,000",
+  "E-MAT-013": "Inventory is required",
+  "E-MAT-014": "Inventory must be a valid number",
+  "E-MAT-015": "Inventory must be a positive integer",
+  "E-MAT-016": "Inventory must be between 0 and 1,000,000",
+  "E-MAT-017": "Attachment size exceeds 10MB",
+  "E-MAT-018": "Expire Date must be a valid date",
+  "E-MAT-019": "Production Date must be a valid date",
+  "E-MAT-020": "Production Date cannot be in the future"
 }

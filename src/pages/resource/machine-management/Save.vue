@@ -27,6 +27,17 @@
         >
           <div class="item item-bib-add">
             <el-form-item
+                prop="vehicleName"
+                class="custom-textarea required"
+                :label="$t('resource.machine.details.vehicleName')"
+            >
+              <el-input v-model="machineResourcesDetails.value.vehicleName" />
+              <label class="error-feedback-machine" v-if="validation && validation.value.vehicleName">
+                {{ $t(validation.value.vehicleName) }}
+              </label>
+            </el-form-item>
+
+            <el-form-item
                 prop="licensePlate"
                 class="custom-textarea required"
                 :label="$t('resource.machine.details.licensePlate')"
@@ -37,7 +48,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="brand" class="custom-textarea" :label="$t('resource.machine.details.brand')">
+            <el-form-item prop="brand" class="custom-textarea required" :label="$t('resource.machine.details.brand')">
               <el-input v-model="machineResourcesDetails.value.brand" />
               <label class="error-feedback-machine" v-if="validation && validation.value.brand">
                 {{ $t(validation.value.brand) }}
@@ -51,72 +62,72 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="countryOfManufacture" :label="$t('resource.machine.details.countryOfManufacture')">
+            <el-form-item prop="countryOfManufacture required" :label="$t('resource.machine.details.countryOfManufacture')">
               <el-input v-model="machineResourcesDetails.value.countryOfManufacture" />
               <label class="error-feedback-machine" v-if="validation && validation.value.countryOfManufacture">
                 {{ $t(validation.value.countryOfManufacture) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="vehicleType" class="custom-textarea" :label="$t('resource.machine.details.vehicleType')">
+            <el-form-item prop="vehicleType" class="custom-textarea required" :label="$t('resource.machine.details.vehicleType')">
               <el-input v-model="machineResourcesDetails.value.vehicleType" />
               <label class="error-feedback-machine" v-if="validation && validation.value.vehicleType">
                 {{ $t(validation.value.vehicleType) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="chassisNumber" class="custom-textarea" :label="$t('resource.machine.details.chassisNumber')">
+            <el-form-item prop="chassisNumber" class="custom-textarea required" :label="$t('resource.machine.details.chassisNumber')">
               <el-input v-model="machineResourcesDetails.value.chassisNumber" />
               <label class="error-feedback-machine" v-if="validation && validation.value.chassisNumber">
                 {{ $t(validation.value.chassisNumber) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="engineNumber" class="custom-textarea" :label="$t('resource.machine.details.engineNumber')">
+            <el-form-item prop="engineNumber" class="custom-textarea required" :label="$t('resource.machine.details.engineNumber')">
               <el-input v-model="machineResourcesDetails.value.engineNumber" />
               <label class="error-feedback-machine" v-if="validation && validation.value.engineNumber">
                 {{ $t(validation.value.engineNumber) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="color" class="custom-textarea" :label="$t('resource.machine.details.color')">
+            <el-form-item prop="color" class="custom-textarea required" :label="$t('resource.machine.details.color')">
               <el-input v-model="machineResourcesDetails.value.color" />
               <label class="error-feedback-machine" v-if="validation && validation.value.color">
                 {{ $t(validation.value.color) }}
               </label>
             </el-form-item>
+          </div>
 
-            <el-form-item prop="fuelType" class="custom-textarea" :label="$t('resource.machine.details.fuelType')">
+          <div class="item item-bib-add item-machine-add">
+            <el-form-item prop="fuelType" class="custom-textarea required" :label="$t('resource.machine.details.fuelType')">
               <el-input v-model="machineResourcesDetails.value.fuelType" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelType">
                 {{ $t(validation.value.fuelType) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="fuelTankVolume" class="custom-textarea" :label="$t('resource.machine.details.fuelTankVolume')">
+            <el-form-item prop="fuelTankVolume" class="custom-textarea required" :label="$t('resource.machine.details.fuelTankVolume')">
               <el-input v-model="machineResourcesDetails.value.fuelTankVolume" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelTankVolume">
                 {{ $t(validation.value.fuelTankVolume) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="fuelUnit" class="custom-textarea" :label="$t('resource.machine.details.fuelUnit')">
+            <el-form-item prop="fuelUnit" class="custom-textarea required" :label="$t('resource.machine.details.fuelUnit')">
               <el-input v-model="machineResourcesDetails.value.fuelUnit" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelUnit">
                 {{ $t(validation.value.fuelUnit) }}
               </label>
             </el-form-item>
-          </div>
 
-          <div class="item item-bib-add item-machine-add">
             <el-form-item prop="status" :label="$t('resource.machine.details.status')">
-              <el-input v-model="machineResourcesDetails.value.status" class="custom-textarea" />
+              <el-input v-model="machineResourcesDetails.value.status" class="custom-textarea required" />
               <label class="error-feedback-machine" v-if="validation && validation.value.status">
                 {{ $t(validation.value.status) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="driver" :label="$t('resource.machine.details.driver')" class="input-item">
+            <el-form-item prop="driver" :label="$t('resource.machine.details.driver')" class="input-item required">
               <el-input v-model="machineResourcesDetails.value.driver" type="text" />
               <label class="error-feedback-machine" v-if="validation && validation.value.driver">
                 {{ $t(validation.value.driver) }}
@@ -166,6 +177,7 @@ import {MACHINE_RULES} from "@/rules/machine-resource/index.js";
 import {useI18n} from "vue-i18n";
 import {useMachineResourcesStore} from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
+import {useUserStore} from "@/store/user.js";
 
 export default {
   components: {FileUpload,ImageUpload, IconBackMain, SingleOptionSelect},
@@ -179,6 +191,10 @@ export default {
       saveMachineResources,
       clearMachineResourcesDetails
     } = machineResourcesStore;
+    const {
+      getListUsers,
+        getUserIdByRole
+    } = useUserStore();
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
@@ -239,7 +255,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* Existing Styles */
 .error-feedback-machine {
   display: block;
   color: red;
@@ -295,80 +310,6 @@ export default {
   padding: 20px;
   min-width: 35%;
   max-width: 50%;
-}
-
-/* New Styles for Design Matching */
-.machine-block {
-  background-color: #F5F5F5; /* Light grayish-white background */
-  padding: 20px; /* Consistent padding around the form */
-}
-
-.machine-body .form-search-box {
-  display: flex;
-  gap: 20px; /* Space between the two columns */
-}
-
-.item {
-  flex: 1; /* Each column takes equal width */
-}
-
-.el-form-item__label {
-  color: #666666; /* Gray text for labels */
-  font-size: 14px; /* Label font size */
-}
-
-.required .el-form-item__label::before {
-  content: '*';
-  color: red;
-  margin-right: 4px;
-}
-
-.el-input__inner {
-  background-color: #F5F5F5; /* Light gray background */
-  border: 1px solid #D9D9D9; /* Light gray border */
-  color: #000000; /* Black text */
-  font-size: 16px; /* Input text font size */
-}
-
-.custom-textarea .el-textarea__inner {
-  background-color: #F5F5F5;
-  border: 1px solid #D9D9D9;
-  color: #000000;
-  font-size: 16px;
-  height: 100px; /* Larger height for textarea */
-  resize: vertical; /* Allow vertical resizing */
-}
-
-.machine-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.btn-save {
-  background-color: #1890FF; /* Blue background */
-  color: #fff; /* White text */
-  border: none;
-  border-radius: 4px; /* Rounded corners */
-  padding: 10px 20px; /* Comfortable padding */
-}
-
-.page__ttl {
-  color: #1890FF; /* Blue text */
-  font-weight: bold;
-}
-
-.btn-back {
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.btn-back svg {
-  fill: #1890FF; /* Blue color for the icon */
-}
-
-.el-form-item {
-  margin-bottom: 20px; /* Vertical spacing between fields */
 }
 </style>
 

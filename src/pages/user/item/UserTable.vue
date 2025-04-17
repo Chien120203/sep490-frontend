@@ -10,7 +10,7 @@
         :label="$t('common.no')"
         align="right"
     ></el-table-column>
-    <el-table-column min-width="130">
+    <el-table-column min-width="80">
       <template #header>
         <p v-html="$t('user.table.header.username')"></p>
       </template>
@@ -19,7 +19,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="130">
+    <el-table-column min-width="100">
       <template #header>
         <p v-html="$t('user.table.header.fullName')"></p>
       </template>
@@ -37,7 +37,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="120">
+    <el-table-column min-width="80">
       <template #header>
         <p v-html="$t('user.table.header.dob')"></p>
       </template>
@@ -46,7 +46,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="130">
+    <el-table-column min-width="50">
       <template #header>
         <p v-html="$t('user.table.header.gender')"></p>
       </template>
@@ -55,7 +55,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="100">
+    <el-table-column min-width="80">
       <template #header>
         <p v-html="$t('user.table.header.role')"></p>
       </template>
@@ -64,7 +64,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="100">
+    <el-table-column min-width="80">
       <template #header>
         <p v-html="$t('user.table.header.phone')"></p>
       </template>
