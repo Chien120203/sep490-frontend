@@ -27,7 +27,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.inspectionCode ?? "-" }} </span>
+        <span class="data-table">{{ scope.row.inspect_code ?? "-" }} </span>
       </template>
     </el-table-column>
 

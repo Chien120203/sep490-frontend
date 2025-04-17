@@ -284,7 +284,11 @@
       "get_allocation_dtls_failed": "Get allocation request details failed",
       "get_list_inventory_failed": "Get list inventory failed",
       "delete_project_success": "Delete Project Success",
-      "delete_project_failed": "Delete Project Failed"
+      "delete_project_failed": "Delete Project Failed",
+      "get_inspection_failed": "Get inspection report failed",
+      "get_inspection_dtls_failed": "Get inspection report details failed",
+      "save_inspection_success": "Save inspection report success",
+      "save_inspection_failed": "Save inspection report failed"
     }
   },
   "contract": {
@@ -481,6 +485,7 @@
       "details": {
         "title": "Machine Details",
         "licensePlate": "License Plate",
+        "vehicleName": "Vehicle Name",
         "brand": "Brand",
         "yearOfManufacture": "Year of Manufacture",
         "countryOfManufacture": "Country of Manufacture",
@@ -505,6 +510,7 @@
           "code": "Machine Code",
           "name": "Machine Name",
           "licensePlate": "License Plate",
+          "vehicleName": "Vehicle Name",
           "brand": "Brand",
           "vehicleType": "Vehicle Type",
           "driver": "Driver",
@@ -1165,25 +1171,10 @@
         "status": "Status",
         "action": "Action"
       }
-    }
-  },
-  "construct_team": {
-    "title": "Construction Team",
-    "manager": "Construction Manager"
-  },
-  "inspection": {
-    "title": "Inspection Report",
-    "table": {
-      "header": {
-        "projectCode": "Project Code",
-        "inspectionCode": "Inspection Report Code",
-        "inspectionName": "Inspection Report Name",
-        "date": "Date",
-        "startDate": "Start Date",
-        "endDate": "End Date",
-        "status": "Status",
-        "action": "Action"
-      }
+    },
+    "modal_confirm": {
+      "title": "Confirm delete inspection report",
+      "message": "Please enter 'Delete' to confirm delete this inspection report"
     }
   },
 

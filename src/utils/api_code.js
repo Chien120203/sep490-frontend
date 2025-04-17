@@ -37,53 +37,59 @@ const API_CODE = {
     API_SURVEY_002: '/survey/save',
     API_SURVEY_003: '/survey/delete',
 
-  //Planning
-  API_PLANNING_001: '/plans/search',
-  API_PLANNING_002: '/plans/create',
-  API_PLANNING_003: '/plans/detail',
-  API_PLANNING_004: '/plans/update',
-  API_PLANNING_005: '/plans',
-  API_PLANNING_006: '/plans/approve',
+    //Planning
+    API_PLANNING_001: '/plans/search',
+    API_PLANNING_002: '/plans/create',
+    API_PLANNING_003: '/plans/detail',
+    API_PLANNING_004: '/plans/update',
+    API_PLANNING_005: '/plans',
+    API_PLANNING_006: '/plans/approve',
 
-  //Mobilization
-  API_MOBILIZE_001: '/resourcereq/mobilization/list',
-  API_MOBILIZE_002: '/resourcereq/mobilization/save',
-  API_MOBILIZE_003: '/resourcereq/mobilization/delete',
-  API_MOBILIZE_004: '/resourcereq/mobilization',
-  API_MOBILIZE_005: '/resourcereq/mobilization/send',
-  API_MOBILIZE_006: '/resourcereq/mobilization/approve',
-  API_MOBILIZE_007: '/resourcereq/mobilization/reject',
+    //Mobilization
+    API_MOBILIZE_001: '/resourcereq/mobilization/list',
+    API_MOBILIZE_002: '/resourcereq/mobilization/save',
+    API_MOBILIZE_003: '/resourcereq/mobilization/delete',
+    API_MOBILIZE_004: '/resourcereq/mobilization',
+    API_MOBILIZE_005: '/resourcereq/mobilization/send',
+    API_MOBILIZE_006: '/resourcereq/mobilization/approve',
+    API_MOBILIZE_007: '/resourcereq/mobilization/reject',
 
-  //Machine Resource
-  API_MACHINE_001: '/vehicle/',
-  API_MACHINE_002: '/vehicle/search',
-  API_MACHINE_003: '/vehicle/create',
-  API_MACHINE_004: '/vehicle/update',
-  API_MACHINE_005: '/vehicle/delete',
+    //Machine Resource
+    API_MACHINE_001: '/vehicle/',
+    API_MACHINE_002: '/vehicle/search',
+    API_MACHINE_003: '/vehicle/create',
+    API_MACHINE_004: '/vehicle/update',
+    API_MACHINE_005: '/vehicle/delete',
 
-  //Material Resource
-  API_MATERIAL_001: '/material/detail',
-  API_MATERIAL_002: '/material/search',
-  API_MATERIAL_003: '/material/save',
-  API_MATERIAL_004: '/material/delete',
+    //Material Resource
+    API_MATERIAL_001: '/material/detail',
+    API_MATERIAL_002: '/material/search',
+    API_MATERIAL_003: '/material/save',
+    API_MATERIAL_004: '/material/delete',
 
-  //Human Resource
-  API_HUMAN_001: '/teams/detail',
-  API_HUMAN_002: '/teams/search',
-  API_HUMAN_003: '/teams/save',
-  API_HUMAN_004: '/teams/delete',
+    //Human Resource
+    API_HUMAN_001: '/teams/detail',
+    API_HUMAN_002: '/teams/search',
+    API_HUMAN_003: '/teams/save',
+    API_HUMAN_004: '/teams/delete',
 
-  //Allocation
-  API_ALLOCATION_001: '/resourcereq/allocation/list',
-  API_ALLOCATION_002: '/resourcereq/allocation/save',
-  API_ALLOCATION_003: '/resourcereq/allocation/',
-  API_ALLOCATION_004: '/resourcereq/allocation',
-  API_ALLOCATION_005: '/resourcereq/allocation/send',
-  API_ALLOCATION_006: '/resourcereq/allocation/approve',
-  API_ALLOCATION_007: '/resourcereq/allocation/reject',
+    //Allocation
+    API_ALLOCATION_001: '/resourcereq/allocation/list',
+    API_ALLOCATION_002: '/resourcereq/allocation/save',
+    API_ALLOCATION_003: '/resourcereq/allocation/',
+    API_ALLOCATION_004: '/resourcereq/allocation',
+    API_ALLOCATION_005: '/resourcereq/allocation/send',
+    API_ALLOCATION_006: '/resourcereq/allocation/approve',
+    API_ALLOCATION_007: '/resourcereq/allocation/reject',
 
-  //Inventory
-  API_INVENTORY_001: '/resourcereq/inventory/list',
+    //Inventory
+    API_INVENTORY_001: '/resourcereq/inventory/list',
+
+    //Inspection Report
+    API_INSPECTION_001: '/inspection/list',
+    API_INSPECTION_002: '/inspection/detail',
+    API_INSPECTION_003: '/inspection/save',
+    API_INSPECTION_004: '/inspection/delete',
 
 };
 

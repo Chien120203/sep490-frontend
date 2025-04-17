@@ -42,6 +42,11 @@
           @details="handleGetInspectionDetails"
           @delete="handleDisplayModal"
       />
+      <LoadMore
+          :listData="listInspectionReports.value"
+          :totalItems="totalItems.value"
+          @loadMore="handleLoadMore"
+      />
     </div>
 
     <ModalConfirm
@@ -57,16 +62,17 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import InspectionReportTable from "./item/InspectionReportTable.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
+import {TEXT_CONFIRM_DELETE} from "@/constants/application.js";
 import IconSetting from "@/svg/IconSettingMain.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
+import {useInspectionReportStore} from "@/store/inspection.js";
 
 export default {
   name: "InspectionReportList",
@@ -83,138 +89,59 @@ export default {
       search: "",
       pageIndex: 1,
     });
-
     const delete_id = ref();
     const router = useRouter();
+    const inspectionStore = useInspectionReportStore();
+    const {
+      validation,
+      listInspectionReports,
+      totalItems,
+      currentPage,
+      isShowModalConfirm,
+      getListInspectionReport,
+      handleDeleteInspectionReport,
+    } = inspectionStore;
+    const isDisabled = ref(false);
 
-    const isShowModalConfirm = ref(false);
-    const listInspectionReports = ref([
-      {
-        id: 9,
-        projectCode: "PJ009",
-        inspectionCode: "INSP009",
-        inspectionName: "Nghiệm thu kết cấu bê tông",
-        date: "2023-11-05",
-        status: "Hoàn thành",
-        tenCongTrinh: "Tòa nhà văn phòng KLM",
-        diaDiem: "456 Đường Nguyễn Huệ, Quận 1, TP.HCM",
-        loaiCongTrinh: "Dân dụng",
-        capCongTrinh: "Cấp II",
-        moTaCongTrinh: "Tòa nhà 15 tầng, diện tích sàn 8000 m²",
-        chuDauTu: "Công ty Bất động sản UVW",
-        nhaThauThiCong: "Công ty Xây dựng XYZ",
-        donViThietKe: "Công ty Thiết kế ABC",
-        donViGiamSat: "Công ty Giám sát DEF",
-        daiDienChuDauTu: "Nguyễn Văn L",
-        daiDienNhaThau: "Trần Thị M",
-        daiDienThietKe: "Lê Văn N",
-        daiDienGiamSat: "Phạm Thị O",
-        loaiNghiemThu: "Nghiệm thu công việc",
-        ketQuaNghiemThu: "Đạt",
-        yeuCauSuaChua: null,
-        thoiHanSuaChua: null,
-        ghiChu: "Kết cấu đạt tiêu chuẩn thiết kế",
-        bienBanNghiemThu: "BBNT_009.pdf",
-        hoSoNghiemThu: "HSNT_009.pdf",
-        taiLieuKiemTra: "TLKT_009.pdf",
-        trangThaiNghiemThu: "Hoàn thành",
-        nguoiChiuTrachNhiem: "Hoàng Văn P",
-        ngayCapNhat: "2023-11-06"
-      },
-      {
-        id: 10,
-        projectCode: "PJ010",
-        inspectionCode: "INSP010",
-        inspectionName: "Nghiệm thu hệ thống PCCC",
-        date: "2023-11-10",
-        status: "Đang tiến hành",
-        tenCongTrinh: "Nhà máy sản xuất GHI",
-        diaDiem: "KCN Tân Bình, TP.HCM",
-        loaiCongTrinh: "Công nghiệp",
-        capCongTrinh: "Cấp III",
-        moTaCongTrinh: "Nhà máy diện tích 12000 m², sản xuất linh kiện điện tử",
-        chuDauTu: "Công ty Sản xuất JKL",
-        nhaThauThiCong: "Công ty Xây dựng MNO",
-        donViThietKe: "Công ty Thiết kế PQR",
-        donViGiamSat: "Công ty Giám sát STU",
-        daiDienChuDauTu: "Trần Văn Q",
-        daiDienNhaThau: "Nguyễn Thị R",
-        daiDienThietKe: "Phạm Văn S",
-        daiDienGiamSat: "Lê Thị T",
-        // Quá trình nghiệm thu
-        loaiNghiemThu: "Nghiệm thu giai đoạn",
-        ketQuaNghiemThu: "Đạt có điều kiện",
-        yeuCauSuaChua: "Điều chỉnh vị trí các đầu phun nước",
-        thoiHanSuaChua: "2023-11-15",
-        ghiChu: "Cần kiểm tra lại áp suất nước",
-        // Tài liệu liên quan
-        bienBanNghiemThu: "BBNT_010.pdf",
-        hoSoNghiemThu: "HSNT_010.pdf",
-        taiLieuKiemTra: "TLKT_010.pdf",
-        // Các trường bổ sung
-        trangThaiNghiemThu: "Đang xử lý",
-        nguoiChiuTrachNhiem: "Võ Văn U",
-        ngayCapNhat: "2023-11-11"
-      },
-      {
-        id: 11,
-        projectCode: "PJ011",
-        inspectionCode: "INSP011",
-        inspectionName: null, // Trường hợp giá trị thiếu để kiểm tra hiển thị "-"
-        date: "2023-11-12",
-        status: "Chưa bắt đầu",
-        // Thông tin công trình
-        tenCongTrinh: "Cầu Sài Gòn 2",
-        diaDiem: "Quận 2, TP.HCM",
-        loaiCongTrinh: "Giao thông",
-        capCongTrinh: "Cấp I",
-        moTaCongTrinh: "Cầu dài 600m, rộng 15m, 6 làn xe",
-        // Các bên liên quan
-        chuDauTu: "Ban Quản lý Dự án VWX",
-        nhaThauThiCong: "Công ty Xây dựng YZA",
-        donViThietKe: "Công ty Thiết kế BCD",
-        donViGiamSat: "Công ty Giám sát EFG",
-        daiDienChuDauTu: "Hoàng Văn V",
-        daiDienNhaThau: "Trần Thị W",
-        daiDienThietKe: "Nguyễn Văn X",
-        daiDienGiamSat: "Phạm Thị Y",
-        // Quá trình nghiệm thu
-        loaiNghiemThu: "Nghiệm thu hoàn thành",
-        ketQuaNghiemThu: null,
-        yeuCauSuaChua: null,
-        thoiHanSuaChua: null,
-        ghiChu: "Chưa tiến hành nghiệm thu do thiếu tài liệu",
-        // Tài liệu liên quan
-        bienBanNghiemThu: null,
-        hoSoNghiemThu: null,
-        taiLieuKiemTra: null,
-        // Các trường bổ sung
-        trangThaiNghiemThu: "Chưa bắt đầu",
-        nguoiChiuTrachNhiem: "Lê Văn Z",
-        ngayCapNhat: "2023-11-12"
-      }
-    ]);
+    onMounted(() => {
+      getListInspectionReport(searchForms.value);
+    });
 
+    onUnmounted(() => {
+      listInspectionReports.value = [];
+    });
+
+    const handleClear = () => {
+      searchForms.value.keyWord = "";
+    };
+
+    const submitForm = () => {
+      searchForms.value.pageIndex = 1;
+      currentPage.value = 1;
+      getListInspectionReport(searchForms.value);
+    };
+
+    const handleLoadMore = () => {
+      currentPage.value++;
+      searchForms.value.pageIndex++;
+      getListInspectionReport(searchForms.value);
+    };
 
     const handleRedirectToCreate = () => {
-      router.push({ name: PAGE_NAME.INSPECTION_REPORT.CREATE });
+      router.push({name: PAGE_NAME.INSPECTION_REPORT.CREATE});
     };
 
     const handleGetInspectionDetails = (id) => {
       router.push({name: PAGE_NAME.INSPECTION_REPORT.DETAILS, params: {id}});
     };
 
-    const handleClear = () => {
-      searchForms.value.search = "";
+    const handleCloseModal = () => {
+      validation.value = [];
     };
 
-    const submitForm = () => {
-      searchForms.value.pageIndex = 1;
-    };
-
-    const handleDisplayModal = (id) => {
-      isShowModalConfirm.value = true;
-      delete_id.value = id;
+    const handleDisplayModal = (inspection_id) => {
+      isShowModalConfirm.value = !!inspection_id;
+      delete_id.value = inspection_id;
     };
 
     const closeModalConfirm = () => {
@@ -222,14 +149,21 @@ export default {
     };
 
     const handleConfirm = () => {
+      handleDeleteInspectionReport(delete_id.value)
     };
 
     return {
       searchForms,
       isShowModalConfirm,
       delete_id,
-      TEXT_CONFIRM_DELETE,
+      validation,
+      isDisabled,
       listInspectionReports,
+      totalItems,
+      currentPage,
+      handleLoadMore,
+      handleCloseModal,
+      TEXT_CONFIRM_DELETE,
       handleClear,
       submitForm,
       handleDisplayModal,
@@ -250,6 +184,7 @@ export default {
   right: 16px;
   top: 10px;
   cursor: pointer;
+
   svg {
     height: 30px;
   }

@@ -16,6 +16,7 @@ import {MaterialResourceAPI} from "@/services/MaterialResourceAPI.js";
 import {HumanResourceAPI} from "@/services/HumanResourceAPI.js";
 import {AllocationAPI} from "@/services/AllocationAPI.js";
 import {InventoryAPI} from "@/services/InventoryAPI.js";
+import {InspectionReportAPI} from "@/services/InspectionReportAPI.js";
 // Initialize the BaseService with the axios instance and API prefix
 (function() {
   initializeService(axios, "/sep490", router);
@@ -36,6 +37,7 @@ const services = {
   MachineResourceAPI,
   MaterialResourceAPI,
   HumanResourceAPI,
+  InspectionReportAPI
 };
 
 export default services;

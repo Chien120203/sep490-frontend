@@ -50,7 +50,6 @@ import InventoryList from "@/pages/inventory/InventoryList.vue";
 import InspectionReport from "@/pages/inspection-report/Index.vue";
 import InspectionReportList from "@/pages/inspection-report/InspectionReportList.vue";
 import InspectionReportSave from "@/pages/inspection-report/Save.vue";
-import InspectionReportDetails from "@/pages/inspection-report/InspectionReportDetails.vue";
 
 
 const routes = [
@@ -404,7 +403,7 @@ const routes = [
       {
         name: PAGE_NAME.INSPECTION_REPORT.DETAILS,
         path: PAGES.INSPECTION_REPORT_DETAILS,
-        component: InspectionReportDetails,
+        component: InspectionReportSave,
       },
       {
         name: PAGE_NAME.INSPECTION_REPORT.CREATE,

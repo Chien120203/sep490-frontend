@@ -12,7 +12,17 @@
           align="right"
       ></el-table-column>
 
-      <el-table-column min-width="130">
+      <el-table-column min-width="120">
+        <template #header>
+          <p v-html="$t('resource.machine.table.header.vehicleName')"></p>
+        </template>
+
+        <template #default="scope">
+          <span class="data-table">{{ scope.row.vehicleName ?? "-" }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column min-width="120">
         <template #header>
           <p v-html="$t('resource.machine.table.header.licensePlate')"></p>
         </template>
@@ -22,7 +32,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="130">
+      <el-table-column min-width="80">
         <template #header>
           <p v-html="$t('resource.machine.table.header.brand')"></p>
         </template>
@@ -33,7 +43,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="130">
+      <el-table-column min-width="100">
         <template #header>
           <p v-html="$t('resource.machine.table.header.vehicleType')"></p>
         </template>
@@ -44,7 +54,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="130">
+      <el-table-column min-width="100">
         <template #header>
           <p v-html="$t('resource.machine.table.header.driver')"></p>
         </template>
@@ -55,7 +65,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="130">
+      <el-table-column min-width="80">
         <template #header>
           <p v-html="$t('resource.machine.table.header.status')"></p>
         </template>
