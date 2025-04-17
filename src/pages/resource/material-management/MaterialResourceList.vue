@@ -180,97 +180,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.material-list {
-  .material-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-
-    .page__ttl {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .material-btn-box {
-      .btn-save {
-        background-color: #409EFF;
-        color: #fff;
-        &:hover {
-          background-color: #66b1ff;
-        }
-      }
-    }
-  }
-
-  .material-body {
-    .material-search {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-
-      .material-search-box {
-        display: flex;
-        align-items: center;
-
-        .material-search__ttl {
-          font-size: 1rem;
-          font-weight: 500;
-          margin-right: 10px;
-        }
-
-        .ruleform {
-          width: 100%;
-
-          .el-input__inner {
-            border-radius: 4px;
-          }
-        }
-      }
-
-      .btn-search-select {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-
-        .btn-search,
-        .btn-clear {
-          margin-left: 10px;
-        }
-
-        .btn-search {
-          background-color: #409EFF;
-          color: #fff;
-          &:hover {
-            background-color: #66b1ff;
-          }
-        }
-
-        .btn-clear {
-          background-color: #f56c6c;
-          color: #fff;
-          &:hover {
-            background-color: #f78989;
-          }
-        }
-      }
-    }
-
-    .material-body-table {
-      margin-top: 20px;
-    }
-  }
-}
-
 .close-form {
   position: absolute;
   display: flex;
-  justify-content: flex-end;
+  justify-content: end;
   right: 16px;
   top: 10px;
   cursor: pointer;
-
   svg {
     height: 30px;
     width: 30px;

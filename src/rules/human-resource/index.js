@@ -50,7 +50,6 @@ export const HUMAN_RULES = {
             trigger: "change",
         },
     ],
-    image: [{ required: true, message: i18n.global.t("E-MACH-008"), trigger: "blur" }],
     status: [{ required: true, message: i18n.global.t("E-MACH-009"), trigger: "blur" }],
     driver: [{ required: true, message: i18n.global.t("E-MACH-010"), trigger: "blur" }],
     color: [

@@ -24,5 +24,6 @@ htmlの<head> ~ </head>内、"abui.css"の後で読み込んでください
 @import "log.scss";
 @import "inspection.scss";
 @import "machine_resources.scss";
+@import "material_resources.scss";
 
 $image-path: "~@/assets/images/";

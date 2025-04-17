@@ -53,4 +53,5 @@ export const MAX_PRICE = 100000000000000;
 export const GENDERS = [
     {value: true, label: 'user.gender.male'},
     {value: false, label: 'user.gender.female'},
-]
+];
+export const LICENSE_PLATE_PATTERN = /^\d{2}[A-Z]-[A-Z0-9]{1,2}\s?\d{3,5}(\.\d{2})?$/;
