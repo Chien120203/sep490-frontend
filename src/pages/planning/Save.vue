@@ -37,7 +37,6 @@
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
               :contractDetails="contractDetails.value"
-              :followers="listManagers"
           />
           <PlanningDetails
               ref="detailsFormRef"
@@ -111,7 +110,6 @@ const listTabs = ref([
     label: "Activity",
   },
 ]);
-const listManagers = ref([]);
 const isShowModalItemDtls = ref(false);
 const isUpdate = computed(() => !!route.params.id);
 const selectedRow = ref({});
@@ -149,7 +147,6 @@ const activities = ref([
 ]); // Placeholder for activity data
 const {t} = useI18n();
 // Store Data
-const userStore = useUserStore();
 const contractStore = useContractStore();
 const planningStore = usePlanningStore();
 const persistence = usePersistenceStore();
@@ -165,7 +162,6 @@ const {
 const {listHumanResources, getListHumanResources} = humanStore;
 const {listMachineResources, getListMachineResources} = machineStore;
 const {listMaterialResources, getListMaterialResources} = materialStore;
-const {listUsers, getListUsers} = userStore;
 const {
   planningDetails,
   planSelectedRow,
@@ -209,9 +205,9 @@ const allowEdit = computed(() => {
 
 const statuses = computed(() => {
 
-  const resourceApprove = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER).isApproved;
-  const techApprove = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER).isApproved;
-  const bodApprove = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD).isApproved;
+  const resourceApprove = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved;
+  const techApprove = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved;
+  const bodApprove = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD)?.isApproved;
   const bodStatus = bodApprove === "" ? "process" : (bodApprove === true ? "success" : "fail");
 
   return [
@@ -243,11 +239,9 @@ onMounted(async () => {
   } else {
     await getPlanningDetails(route.params.id);
   }
-  await getListUsers({keyWord: "", pageIndex: 1, pageSize: 50}, false);
   await getListHumanResources({pageIndex: 1}, false);
   await getListMachineResources({pageIndex: 1}, false);
   await getListMaterialResources({pageIndex: 1}, false);
-  listManagers.value = listUsers.value;
 });
 
 const handleApprove = () => {

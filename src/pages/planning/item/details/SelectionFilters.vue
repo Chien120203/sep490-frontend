@@ -20,8 +20,8 @@
             <!-- Người theo dõi -->
             <el-form-item prop="reviewers" label-class="custom-label">
               <template #label> {{$t('planning.form.inspector')}} </template>
-              <el-select disabled v-model="planDetails.reviewers" multiple>
-                <el-option v-for="user in followers" :key="user.id" :label="user.username" :value="user.id"></el-option>
+              <el-select disabled v-model="listSelectedUsers" multiple>
+                <el-option v-for="user in planDetails.reviewers" :key="user.id" :label="user.name" :value="user.id"></el-option>
               </el-select>
             </el-form-item>
           </div>
@@ -64,7 +64,6 @@
 import {ref, defineProps, defineEmits, computed, watch} from "vue";
 
 const props = defineProps({
-  followers: Array,
   planDetails: {
     type: Object,
     default: () => {},
@@ -83,6 +82,7 @@ const props = defineProps({
   }
 });
 const ruleFormRef = ref(null);
+const listSelectedUsers = computed(() => props.planDetails.reviewers.map(user => user.id));
 defineExpose({
   ruleFormRef,
 });

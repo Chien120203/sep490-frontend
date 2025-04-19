@@ -162,8 +162,11 @@ const parseInputCurrency = (value, allowNegative = false) => {
     ? parts[0] + '.' + parts.slice(1).join('')
     : cleaned;
 
-  // Reattach negative sign if applicable
-  return isNegative ? `-${normalized}` : normalized;
+  // Parse to number
+  const result = parseFloat(normalized);
+  if (isNaN(result)) return;
+
+  return isNegative ? -result : result;
 };
 
 const formatNumberVietnam = (number) => {

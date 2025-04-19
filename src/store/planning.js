@@ -135,10 +135,9 @@ export const usePlanningStore = defineStore(
         {},
         (response) => {
           planningDetails.value = {
-            ...response.data,
-            reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]
+            ...response.data
           };
-          // approveStatuses.value = [...response.data.reviewers, {isBODApprove: response.data.isApproved}];
+          // approveStatuses.value = response.data.reviewers;
           mixinMethods.endLoading();
         },
         () => {

@@ -35,13 +35,11 @@ export const useContractStore = defineStore(
         id,
         {},
         (response) => {
-          if(response.code === 200) {
-            contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
-          } else clearContractDetails();
-
-          mixinMethods.endLoading();
+          contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
+            mixinMethods.endLoading();
         },
         (error) => {
+          clearContractDetails();
           mixinMethods.endLoading();
         }
       );
