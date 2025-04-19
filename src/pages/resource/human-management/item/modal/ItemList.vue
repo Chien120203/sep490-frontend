@@ -7,7 +7,7 @@
         :role="CONSTRUCTION_EMPLOYEE"
         :defaultList="selectedValue"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
-        :listData="selectData"
+        :listData="listFreeEmployees"
         :isRemote="true"
         @handleSelectedParams="handleSelectItem"
         @remoteSearch="handleSearch"
@@ -27,7 +27,7 @@
         <el-table-column prop="name" :label="$t('planning.items.name')">
           <template #default="{ row }">
             <el-form-item>
-              {{row.username}}
+              {{getUserAttr(row, 'username')}}
             </el-form-item>
           </template>
         </el-table-column>
@@ -35,7 +35,7 @@
         <el-table-column prop="name" :label="$t('planning.items.name')">
           <template #default="{ row }">
             <el-form-item>
-              {{row.fullName}}
+              {{getUserAttr(row, 'fullName')}}
             </el-form-item>
           </template>
         </el-table-column>
@@ -43,7 +43,7 @@
         <el-table-column prop="name" :label="$t('planning.items.name')">
           <template #default="{ row }">
             <el-form-item>
-              {{$t(getUserRole(row.role))}}
+              {{getUserAttr(row, 'phone')}}
             </el-form-item>
           </template>
         </el-table-column>
@@ -51,7 +51,7 @@
         <el-table-column :label="$t('planning.items.action')">
           <template #default="{ row, $index }">
             <div>
-              <button v-if="allowEdit" @click="handleRemoveResource(row.resourceId); $event.preventDefault()" class="btn-edit">
+              <button v-if="allowEdit" @click="handleRemoveResource(row); $event.preventDefault()" class="btn-edit">
                 <IconTrash />
               </button>
             </div>
@@ -83,6 +83,12 @@ const props = defineProps({
   }
 });
 
+const listFreeEmployees = computed(() => {
+  return props.selectData.filter((item) => {
+    return item.teamId === null && !props.members.includes(item.id);
+  })
+});
+
 const ruleFormRef = ref(null);
 const selectedValue = ref(null);
 
@@ -98,29 +104,23 @@ const handleSearch = (value) => {
   emit('search', value);
 };
 
-const handleSelectItem = (selected) => {
-  if (!selected) return;
+const handleSelectItem = (id) => {
+  if (!id) return;
 
-  const exists = props.members.some(m => m.resourceId === selected.id);
+  const exists = props.members.some(m => m.id === id);
   if (!exists) {
-    const newMember = {
-      resourceId: selected.id,
-      username: selected.username || selected.value || '',
-      fullName: selected.fullName || selected.label || '',
-      role: selected.role || '', // Ensure role exists in selected object
-    };
-    props.members.push(newMember);
+    props.members.push(id);
   }
 
   selectedValue.value = null;
 };
 
-const getUserRole = (role) => {
-  return ROLE_LABELS[role] || role;
-};
+const getUserAttr = (id, attr) => {
+  return props.selectData.find(user => user.id === id)?.[attr] || "-";
+}
 
 const handleRemoveResource = (id) => {
-  const index = props.members.findIndex(m => m.resourceId === id);
+  const index = props.members.findIndex(m => m === id);
   if (index !== -1) {
     props.members.splice(index, 1);
   }

@@ -16,16 +16,17 @@
             ref="childFormRef"
             :rules="constructTeamRule"
             :allowEdit="allowEdit"
+            :lisTeamManagers="managers"
             :teamInfo="teamInfo"
             @searchManager="handleSearch"
         />
         <el-tabs v-model="activeTab">
-          <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="tasks">
+          <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="members">
             <ItemList
                 ref="tableHumanFormRef"
                 :is-human="true"
                 :allowEdit="allowEdit"
-                :members="teamInfo.members"
+                :members="teamInfo.teamMemberIds"
                 :selectData="employees"
                 @search="handleSearch"
                 :optionKeys="{id: 'id', value: 'username'}"
@@ -46,20 +47,10 @@
 import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import TeamInfoForm from "@/pages/resource/human-management/item/modal/TeamInfoForm.vue";
-import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
-import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
-import {
-  HUMAN_RESOURCE,
-  HUMAN_TYPE,
-  MACHINE_RESOURCE,
-  MACHINE_TYPE,
-  MATERIAL_RESOURCE,
-  MATERIAL_TYPE
-} from "@/constants/resource.js";
+import ItemList from "@/pages/resource/human-management/item/modal/ItemList.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {useI18n} from "vue-i18n";
 import {getConstructionTeamRule} from "@/rules/construct-team/index.js";
-import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
 
 const props = defineProps({
   teamInfo: {type: Object, default: () => ({})},
@@ -71,12 +62,12 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "submit", "search"]);
 const {t} = useI18n();
-const activeTab = ref("member");
+const activeTab = ref("members");
 const childFormRef = ref(null);
 const constructTeamRule = getConstructionTeamRule();
 
 const closeModal = () => {
-  activeTab.value = "tasks"
+  activeTab.value = "members"
   emit("close");
 };
 
@@ -98,7 +89,7 @@ const handleSubmit = async () => {
 
   emit("submit", props.teamInfo);
   emit("close");
-  activeTab.value = "tasks"
+  activeTab.value = "members"
 };
 
 </script>

@@ -2,6 +2,15 @@
   <div class="mobilization mobilization-list">
     <div class="mobilization-header">
       <h3 class="page__ttl">{{ $t("construct_team.title") }}</h3>
+      <div class="customer-btn-box customer-import-box">
+        <el-row
+            class="mb-4"
+        >
+          <el-button v-if="allowCreate" class="btn btn-save" @click="handleOpenModalTeam"
+          >{{ $t("customer.add_new") }}
+          </el-button>
+        </el-row>
+      </div>
     </div>
 
     <div class="mobilization-body">
@@ -99,7 +108,7 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useUserStore} from "@/store/user.js";
-import {CONSTRUCTION_EMPLOYEE, CONSTRUCTION_MANAGER} from "@/constants/roles.js";
+import {CONSTRUCTION_EMPLOYEE, CONSTRUCTION_MANAGER, RESOURCE_MANAGER} from "@/constants/roles.js";
 import ConstructTeamModal from "@/pages/resource/human-management/item/modal/ConstructTeamModal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 
@@ -135,7 +144,8 @@ const searchForms = ref({
 // Local state to store cloned and filtered lists
 const managersList = ref([]);
 const employeesList = ref([]);
-
+// const allowCreate = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER);
+const allowCreate = computed(() => true);
 // Deep copy and split when store list updates
 watch(
     () => listUsers.value,
@@ -144,7 +154,7 @@ watch(
       const cloned = JSON.parse(JSON.stringify(newVal));
 
       managersList.value = cloned.filter(user => user.role === CONSTRUCTION_MANAGER);
-      employeesList.value = cloned.filter(user => user.role !== CONSTRUCTION_EMPLOYEE && user.teamId === null); // Or use EMPLOYEE constant
+      employeesList.value = cloned.filter(user => user.role === CONSTRUCTION_EMPLOYEE); // Or use EMPLOYEE constant
     },
     { immediate: true }
 );
@@ -188,6 +198,10 @@ const handleSearchUsers = (data) => {
   }, false)
 };
 
+const handleOpenModalTeam = () => {
+  isShowModalTeam.value = true;
+}
+
 const handleSave = (data) => {
   saveHumanResources(data);
 };
@@ -201,8 +215,8 @@ onMounted(() => {
   getListHumanResources(searchForms.value);
   getListUsers({
     keyWord: "",
-    role: CONSTRUCTION_MANAGER,
     pageIndex: 1,
+    pageSize: 30,
   }, false)
 });
 
