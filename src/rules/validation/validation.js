@@ -77,7 +77,7 @@ export function validateChooseTypeRelation(rule, value, callback, selectedRow, p
 }
 
 const validateRelationTypeChange = (depIndex, selectedRow, planningList) => {
-  const {index: selectedIndex, startDate: selectedStart, endDate: selectedEnd, itemRelations} = selectedRow;
+  const {index: selectedIndex, startDate: startAbove, endDate: endAbove, itemRelations} = selectedRow;
 
   // Get the related task's index and find the related task
   const relatedTask = planningList.planItems.find(item => item.index === depIndex);
@@ -90,9 +90,9 @@ const validateRelationTypeChange = (depIndex, selectedRow, planningList) => {
   }
 
   if (relatedTask) {
-    const {startDate: relatedStart, endDate: relatedEnd} = relatedTask;
+    const {startDate: startUnder, endDate: endUnder} = relatedTask;
     // Check if the new relation type satisfies the date constraints
-    const isValid = checkDateRelation(relatedStart, relatedEnd, selectedStart, selectedEnd, itemRelations[depIndex]);
+    const isValid = checkDateRelation(startAbove, endAbove, startUnder, endUnder, itemRelations[depIndex]);
     if (!isValid) {
       return {
         valid: false,
@@ -123,7 +123,7 @@ const generateErrorMessage = (relatedTaskIndex, relationType, currentTaskIndex) 
 };
 
 const validateTaskDateRelation = (selectedRow, planningList) => {
-  const {index: selectedIndex, startDate: selectedStart, endDate: selectedEnd, itemRelations} = selectedRow;
+  const {index: selectedIndex, startDate: startAbove, endDate: endAbove, itemRelations} = selectedRow;
 
   // Check if there are relations for this task
   if (itemRelations) {
@@ -131,8 +131,8 @@ const validateTaskDateRelation = (selectedRow, planningList) => {
       let relationType = itemRelations[key];
       const relatedTaskIndex = key;
       const relatedTask = planningList.planItems.find(item => item.index === key);
-      const {startDate: relatedStart, endDate: relatedEnd} = relatedTask;
-      const isValid = checkDateRelation(selectedStart, selectedEnd, relatedStart, relatedEnd, relationType);
+      const {startDate: startUnder, endDate: endUnder} = relatedTask;
+      const isValid = checkDateRelation(startAbove, endAbove, startUnder, endUnder, relationType);
       if (!isValid) {
         return {
           valid: false,
@@ -148,7 +148,7 @@ const validateTaskDateRelation = (selectedRow, planningList) => {
     if (itemRelations && itemRelations[selectedIndex]) {
       const relationType = itemRelations[selectedIndex];
 
-      const isValid = checkDateRelation(task.startDate, task.endDate, selectedStart, selectedEnd, relationType);
+      const isValid = checkDateRelation(task.startDate, task.endDate, startAbove, endAbove, relationType);
       if (!isValid) {
         return {
           valid: false,
@@ -163,16 +163,16 @@ const validateTaskDateRelation = (selectedRow, planningList) => {
 };
 
 // Check if the date relation satisfies the given relation type
-const checkDateRelation = (start1, end1, start2, end2, relationType) => {
+const checkDateRelation = (startAbove, endAbove, startUnder, endUnder, relationType) => {
   switch (relationType) {
     case 'SS': // Start-to-Start
-      return new Date(start1) >= new Date(start2);
+      return new Date(startUnder) >= new Date(startAbove);
     case 'FF': // Finish-to-Finish
-      return new Date(end1) >= new Date(end2);
+      return new Date(endUnder) >= new Date(endAbove);
     case 'SF': // Start-to-Finish
-      return new Date(end1) >= new Date(start2);
+      return new Date(endUnder) >= new Date(startAbove);
     case 'FS': // Finish-to-Start
-      return new Date(end1) >= new Date(start2);
+      return new Date(startUnder) >= new Date(endAbove);
     default:
       return false; // Invalid relation type
   }
