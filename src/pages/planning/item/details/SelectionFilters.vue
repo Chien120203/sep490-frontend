@@ -25,6 +25,35 @@
           </el-form-item>
         </div>
       </div>
+      <div class="form-container">
+        <div>
+          <el-form-item label-class="custom-label">
+            <template #label> {{$t('planning.form.ctr_start_date')}} </template>
+            <el-date-picker
+                style="width: 100%"
+                class="custom-input"
+                v-model="contractDetails.startDate"
+                type="date"
+                :disabled="true"
+                placeholder="Select Date"
+            />
+          </el-form-item>
+        </div>
+
+        <div>
+          <el-form-item label-class="custom-label">
+            <template #label> {{$t('planning.form.ctr_end_date')}} </template>
+            <el-date-picker
+                style="width: 100%"
+                class="custom-input"
+                v-model="contractDetails.endDate"
+                type="date"
+                :disabled="true"
+                placeholder="Select Date"
+            />
+          </el-form-item>
+        </div>
+      </div>
     </el-form>
   </div>
 </template>
@@ -35,6 +64,10 @@ import {ref, defineProps, defineEmits, computed, watch} from "vue";
 const props = defineProps({
   followers: Array,
   planDetails: {
+    type: Object,
+    default: () => {},
+  },
+  contractDetails: {
     type: Object,
     default: () => {},
   },

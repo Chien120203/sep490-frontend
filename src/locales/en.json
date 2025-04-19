@@ -820,7 +820,9 @@
     },
     "form": {
       "name": "Plan Name",
-      "inspector": "Reviewers"
+      "inspector": "Reviewers",
+      "ctr_start_date": "Contract Start Date",
+      "ctr_end_date": "Contract End Date"
     },
     "modal": {
       "work_name": "Work Name",
@@ -1224,6 +1226,8 @@
   "E-CM-032": "Start date must be after its parent start date",
   "E-CM-033": "End date must be before its parent end date",
   "E-CM-034": "Phone Number is invalid",
+  "E-CM-035": "Start date must be before its parent end date",
+  "E-CM-036": "Selected date must be between contract start and end date",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",

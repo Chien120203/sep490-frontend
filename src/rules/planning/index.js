@@ -2,20 +2,29 @@ import {useI18n} from "vue-i18n";
 import {
   MAX_CHARACTER, MAX_NUMBER, MAX_PRICE, MIN_NUMBER, MIN_PRICE,
 } from "@/constants/application.js";
-import {validateChooseDateRelation, validateMinMax, validateStartBeforeEnd, validateChooseTypeRelation} from "@/rules/validation/validation.js";
+import {
+  validateChooseDateRelation,
+  validateMinMax,
+  validateStartBeforeEnd,
+  validateChooseTypeRelation,
+  validateDateBetween
+} from "@/rules/validation/validation.js";
 import {usePlanningStore} from "@/store/planning.js";
 import {MAX_TAX, MIN_TAX} from "@/constants/contract.js";
+import {useContractStore} from "@/store/contract.js";
 
 export const getPlanningRules = () => {
   const planningStore = usePlanningStore();
+  const contractStore = useContractStore();
   const { planningDetails, planSelectedRow } = planningStore;
+  const { contractDetails } = contractStore;
   const {t} = useI18n();
   const getSelectedRow = (rowIndex) => {
     return planningDetails.value.planItems.find(item => item.index === rowIndex);
   }
-  const getParentRow = (index, byId = false) => {
+  const getParentRow = (index) => {
     if(!index) return null;
-    let currentRow = byId ? planningDetails.value.planItems[index] : planningDetails.value.planItems.find(item => item.index === index);
+    let currentRow = planningDetails.value.planItems.find(item => item.index === index);
     if(!currentRow.parentIndex) return null;
     return planningDetails.value.planItems.find(item => item.index === currentRow.parentIndex) || null;
   }
@@ -88,7 +97,17 @@ export const getPlanningRules = () => {
       },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, getParentRow(planSelectedRow.value.index)?.startDate || getParentRow(rule.field.split(".")[1], true)?.startDate, value, "E-CM-032"),
+          validateStartBeforeEnd(rule, value, callback, getParentRow(planSelectedRow.value.index)?.startDate || getParentRow(rule.rowIndex)?.startDate, value, "E-CM-032"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback,  value, getParentRow(planSelectedRow.value.index)?.endDate || getParentRow(rule.rowIndex)?.endDate, "E-CM-035"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateDateBetween(rule, value, callback, contractDetails.value?.startDate, contractDetails.value?.endDate, "E-CM-036"),
         trigger: "blur",
       },
     ],
@@ -111,7 +130,12 @@ export const getPlanningRules = () => {
       },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, value, getParentRow(planSelectedRow.value.index)?.endDate || getParentRow(rule.field.split(".")[1], true)?.endDate, "E-CM-033"),
+          validateStartBeforeEnd(rule, value, callback, value, getParentRow(planSelectedRow.value.index)?.endDate || getParentRow(rule.rowIndex)?.endDate, "E-CM-033"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateDateBetween(rule, value, callback, contractDetails.value?.startDate, contractDetails.value?.endDate, "E-CM-036"),
         trigger: "blur",
       },
     ],

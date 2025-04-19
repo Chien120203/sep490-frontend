@@ -34,6 +34,28 @@ export function validateStartBeforeEnd(rule, value, callback, startDate, endDate
   }
 }
 
+export function validateDateBetween(rule, value, callback, startDate, endDate, message) {
+  if (!startDate || !endDate || !value) {
+    callback();
+    return;
+  }
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const selectDate = new Date(value);
+
+  // Normalize both dates to midnight (00:00:00)
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
+  selectDate.setHours(0, 0, 0, 0);
+
+  if (selectDate < start || selectDate > end) {
+    callback(new Error(i18n.global.t(message))); // i18n message key
+  } else {
+    callback();
+  }
+}
+
 
 export function validateChooseDateRelation(rule, value, callback, selectedRow, planList) {
 

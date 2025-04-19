@@ -36,6 +36,7 @@
               :allowEdit="allowEdit"
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
+              :contractDetails="contractDetails.value"
               :followers="listManagers"
           />
           <PlanningDetails
@@ -234,8 +235,8 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
+  await getContractDetails(projectId.value);
   if (!route.params.id) {
-    await getContractDetails(projectId.value);
     planningDetails.value.planItems = contractDetails.value.contractDetails.map(
         ({contractId, deleted, workCode, ...rest}) => ({...rest})
     );
@@ -310,7 +311,7 @@ const submitForm = async () => {
     planName: planningDetails.value.planName,
     projectId: planningDetails.value.projectId,
     planItems: planningDetails.value.planItems,
-    reviewers: [...planningDetails.value.reviewers]
+    reviewers: [45, 40, 42]
   };
   const method = !!route.params.id ? "update" : "create";
   const forms = [
