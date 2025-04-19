@@ -50,7 +50,7 @@
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.expireDate ? scope.row.expireDate : "-" }}
+        <span class="data-table">{{ formatDate(scope.row.expireDate ? scope.row.expireDate : "-" )}}
         </span>
         </template>
       </el-table-column>
@@ -61,7 +61,7 @@
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ scope.row.productionDate ? scope.row.productionDate : "-" }}
+        <span class="data-table">{{ formatDate(scope.row.productionDate ? scope.row.productionDate : "-" )}}
         </span>
         </template>
       </el-table-column>
@@ -97,6 +97,7 @@
 <script>
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import {mixinMethods} from "@/utils/variables.js";
 
 export default {
   name: 'MaterialTable',
@@ -108,7 +109,12 @@ export default {
     },
   },
   setup(props, {emit}) {
-    return {};
+    const formatDate = (date) => {
+      return mixinMethods.showDateTime(date);
+    }
+    return {
+      formatDate
+    };
   },
 };
 </script>
