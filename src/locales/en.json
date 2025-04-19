@@ -822,7 +822,8 @@
       "name": "Plan Name",
       "inspector": "Reviewers",
       "ctr_start_date": "Contract Start Date",
-      "ctr_end_date": "Contract End Date"
+      "ctr_end_date": "Contract End Date",
+      "budget": "Project Budget"
     },
     "modal": {
       "work_name": "Work Name",

@@ -45,7 +45,7 @@
         <el-table-column prop="unit" label="Đơn vị">
           <template #default="scope">
             <el-form-item :prop="`listAddedValues[${scope.$index}].unit`">
-              <el-input v-model="scope.row.unit" @blur="validateForm" />
+              <el-input v-model="scope.row.unit" @blur="validateForm" disabled/>
               <label class="error-feedback" v-if="validationErrors[`unit-${scope.$index}`]">
                 {{ validationErrors[`unit-${scope.$index}`] }}
               </label>
@@ -134,8 +134,9 @@ const handleSelectItem = (id) => {
       resourceId: id,
       name: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.[props.optionKeys.value],
       resourceType: props.resourceType,
-      unit: "",
+      unit: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.unit || "-",
       quantity: 1,
+      description: "des",
       type: REQUEST_MOBILIZATION
     });
     rules.value.push(itemRules);

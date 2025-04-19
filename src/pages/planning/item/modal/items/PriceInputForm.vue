@@ -12,6 +12,7 @@
                 style="width: 80%"
                 class="custom-input"
                 v-model="selectedRow.startDate"
+                :value-format="DATE_FORMAT"
                 type="date"
                 :disabled="!allowEdit"
                 placeholder="Select Date"
@@ -23,6 +24,7 @@
                 style="width: 80%"
                 class="custom-input"
                 v-model="selectedRow.endDate"
+                :value-format="DATE_FORMAT"
                 type="date"
                 :disabled="!allowEdit"
                 placeholder="Select Date"
@@ -86,6 +88,7 @@
 <script setup>
 import { defineProps, reactive, ref, watch } from "vue";
 import { mixinMethods } from "@/utils/variables.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
   selectedRow: { type: Object, default: () => ({}) },

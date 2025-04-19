@@ -85,20 +85,15 @@ const addSubItem = (parentItem) => {
 
 const hasChildren = (parent) => listItems.value.some(child => child.parentIndex === parent.index && !child.deleted);
 const isParent = (item) => {
- if(!props.allowEdit) return true;
- else return hasChildren(item);
+  if (!props.allowEdit) return true;
+  else return hasChildren(item);
 };
 
 // Function to delete an item
 const deleteItem = (itemToDelete) => {
-  if (props.isUpdate) {
-    itemToDelete.deleted = true; // Mark as deleted
-  } else {
-    listItems.value = listItems.value.filter(
-        (item) => item.index !== itemToDelete.index && item.parentIndex !== itemToDelete.index
-    );
-  }
-
+  listItems.value = listItems.value.filter(
+      (item) => item.index !== itemToDelete.index && item.parentIndex !== itemToDelete.index
+  );
   recalculateTotal();
   updateItems();
   sortItems(); // Sort items after deletion
@@ -224,7 +219,8 @@ const sortItems = () => {
 
         <el-table-column :label="$t('planning.modal.start_date')" resizable min-width="220">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listItems.${$index}.startDate`" :rules="rules.startDate.map(rule => ({ ...rule, rowIndex: row.index }))">
+            <el-form-item :prop="`listItems.${$index}.startDate`"
+                          :rules="rules.startDate.map(rule => ({ ...rule, rowIndex: row.index }))">
               <el-date-picker
                   :disabled="!allowEdit"
                   class="custom-input"
@@ -239,7 +235,8 @@ const sortItems = () => {
 
         <el-table-column :label="$t('planning.modal.end_date')" resizable min-width="220">
           <template #default="{ row, $index }">
-            <el-form-item :prop="`listItems.${$index}.endDate`" :rules="rules.endDate.map(rule => ({ ...rule, rowIndex: row.index }))">
+            <el-form-item :prop="`listItems.${$index}.endDate`"
+                          :rules="rules.endDate.map(rule => ({ ...rule, rowIndex: row.index }))">
               <el-date-picker
                   :disabled="!allowEdit"
                   class="custom-input"

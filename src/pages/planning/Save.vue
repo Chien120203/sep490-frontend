@@ -274,6 +274,7 @@ const handleEditPlanDetails = (row) => {
 
 const handleCloseModal = () => {
   selectedRow.value = {};
+  planSelectedRow.value = {};
   isShowModalItemDtls.value = false;
 }
 
@@ -311,7 +312,6 @@ const submitForm = async () => {
     planName: planningDetails.value.planName,
     projectId: planningDetails.value.projectId,
     planItems: planningDetails.value.planItems,
-    reviewers: [45, 40, 42]
   };
   const method = !!route.params.id ? "update" : "create";
   const forms = [

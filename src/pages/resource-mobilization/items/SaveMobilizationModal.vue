@@ -140,22 +140,11 @@ watch(() => props.data.resourceMobilizationDetails, (data) => {
 }, { deep: true });
 
 const handleSubmit = () => {
-  let listRequests = [];
-  if (props.data.requestType === REQUEST_TYPE_SUPPLY_MORE) {
-    // Exclude the `name` field
-    listRequests = [
-      ...listSelectedUsers.value.map(({ name, ...rest }) => rest),
-      ...listSelectedVehicles.value.map(({ name, ...rest }) => rest),
-      ...listSelectedMaterials.value.map(({ name, ...rest }) => rest),
-    ];
-  } else {
-    // Include the `name` field
-    listRequests = [
-      ...listSelectedUsers.value,
-      ...listSelectedVehicles.value,
-      ...listSelectedMaterials.value,
-    ];
-  }
+  let listRequests = [
+    ...listSelectedUsers.value,
+    ...listSelectedVehicles.value,
+    ...listSelectedMaterials.value,
+  ];
   emit("submit", listRequests);
 };
 </script>

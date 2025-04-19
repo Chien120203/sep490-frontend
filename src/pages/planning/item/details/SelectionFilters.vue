@@ -8,50 +8,52 @@
     >
       <div class="form-container">
         <div>
-          <!-- Tên kế hoạch -->
-          <el-form-item prop="planName" label-class="custom-label">
-            <template #label> {{$t('planning.form.name')}} </template>
-            <el-input :disabled="!allowEdit" required v-model="planDetails.planName" />
-          </el-form-item>
-        </div>
+          <div>
+            <!-- Tên kế hoạch -->
+            <el-form-item prop="planName" label-class="custom-label">
+              <template #label> {{$t('planning.form.name')}} </template>
+              <el-input :disabled="!allowEdit" required v-model="planDetails.planName" />
+            </el-form-item>
+          </div>
 
-        <div>
-          <!-- Người theo dõi -->
-          <el-form-item prop="reviewers" label-class="custom-label">
-            <template #label> {{$t('planning.form.inspector')}} </template>
-            <el-select disabled v-model="planDetails.reviewers" multiple>
-              <el-option v-for="user in followers" :key="user.id" :label="user.username" :value="user.id"></el-option>
-            </el-select>
-          </el-form-item>
+          <div>
+            <!-- Người theo dõi -->
+            <el-form-item prop="reviewers" label-class="custom-label">
+              <template #label> {{$t('planning.form.inspector')}} </template>
+              <el-select disabled v-model="planDetails.reviewers" multiple>
+                <el-option v-for="user in followers" :key="user.id" :label="user.username" :value="user.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </div>
         </div>
-      </div>
-      <div class="form-container">
         <div>
-          <el-form-item label-class="custom-label">
-            <template #label> {{$t('planning.form.ctr_start_date')}} </template>
-            <el-date-picker
-                style="width: 100%"
-                class="custom-input"
-                v-model="contractDetails.startDate"
-                type="date"
-                :disabled="true"
-                placeholder="Select Date"
-            />
-          </el-form-item>
-        </div>
+          <div>
+            <el-form-item label-class="custom-label">
+              <template #label> {{$t('planning.form.ctr_start_date')}} </template>
+              <el-date-picker
+                  style="width: 100%"
+                  class="custom-input"
+                  v-model="contractDetails.startDate"
+                  type="date"
+                  :disabled="true"
+                  placeholder="Select Date"
+              />
+            </el-form-item>
+          </div>
 
-        <div>
-          <el-form-item label-class="custom-label">
-            <template #label> {{$t('planning.form.ctr_end_date')}} </template>
-            <el-date-picker
-                style="width: 100%"
-                class="custom-input"
-                v-model="contractDetails.endDate"
-                type="date"
-                :disabled="true"
-                placeholder="Select Date"
-            />
-          </el-form-item>
+          <div>
+            <el-form-item label-class="custom-label">
+              <template #label> {{$t('planning.form.ctr_end_date')}} </template>
+              <el-date-picker
+                  style="width: 100%"
+                  class="custom-input"
+                  v-model="contractDetails.endDate"
+                  type="date"
+                  :disabled="true"
+                  placeholder="Select Date"
+              />
+            </el-form-item>
+          </div>
         </div>
       </div>
     </el-form>

@@ -31,10 +31,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="unit" :label="$t('planning.items.unit')">
+        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="unit" :label="$t('planning.items.unit')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
-              <el-input :disabled="!allowEdit" v-model="listAddedValues[$index].unit" />
+              <el-input :disabled="true" v-model="listAddedValues[$index].unit" />
             </el-form-item>
           </template>
         </el-table-column>
@@ -139,12 +139,14 @@ const handleSearch = (value, role) => {
 }
 const handleSelectItem = (id) => {
   const exists = listAddedValues.value.some(entry => entry.resourceId === id);
+  const resource = props.selectData.find(item => item.id === id);
   selectedValue.value = id;
   if (!exists) {
     listAddedValues.value.push({
       resourceId: id,
       resourceType: props.resourceType,
-      unit: "",
+      workCode: "",
+      unit: props.resourceType === MATERIAL_TYPE ? (resource?.unit || "") : "",
       quantity: 1,
       unitPrice: 0
     });
@@ -152,11 +154,13 @@ const handleSelectItem = (id) => {
 };
 
 const getResourceName = (id) => {
-  return props.selectData.find(item => item.id === id)[props.optionKeys.value] || "-";
+  const resource = props.selectData.find(item => item.id === id) || null;
+  return resource ? resource[props.optionKeys.value] : "-";
 }
 
 const getInventory = (id) => {
-  return props.selectData.find(item => item.id === id).inventory;
+  const resource = props.selectData.find(item => item.id === id) || null;
+  return resource.inventory || "-";
 }
 
 const handleChangeValue = (quantity, resourceId) => {
