@@ -1,6 +1,6 @@
 <template>
   <el-table :data="data" style="width: 100%;" class="el-tbl-custom change-request-tbl">
-    <el-table-column type="index" label="$t('change_request.table.header.no')" align="center" min-width="50" />
+    <el-table-column type="index" :label="$t('change_request.table.header.no')" align="center" min-width="50" />
 
     <el-table-column min-width="150">
       <template #header>

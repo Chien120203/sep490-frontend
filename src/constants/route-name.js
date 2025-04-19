@@ -69,6 +69,9 @@ const PAGE_NAME = {
   RESOURCE_ALLOCATION: {
     LIST: "resource-allocation-list",
   },
+  PROGRESS_CHANGE: {
+    LIST: "progress-change-list",
+  },
   INVENTORY: {
     LIST: "inventory-list",
   }

@@ -11,6 +11,8 @@ export const useChangeRequestStore = defineStore(
     const {t} = useI18n();
     const validation = reactive({value: {}});
     const router = useRouter();
+    const totalItems = reactive({value: 0});
+    const currentPage = reactive({value: 0});
     const isShowModalConfirm = reactive({value: false});
     const isShowModalCreate = reactive({value: false});
     const listChangeRequests = reactive({
@@ -162,6 +164,8 @@ export const useChangeRequestStore = defineStore(
       changeRequestDetails,
       isShowModalConfirm,
       isShowModalCreate,
+      currentPage,
+      totalItems,
       saveChangeRequest,
       getListProjectLogs
     };

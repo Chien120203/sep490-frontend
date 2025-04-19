@@ -76,6 +76,7 @@ import IconHuman from "@/svg/IconHuman.vue";
 import IconLog from "@/svg/IconLog.vue";
 import IconInventory from "@/svg/IconInventory.vue";
 import IconInspection from "@/svg/IconInspection.vue";
+import IconProgressChange from "@/svg/IconProgressChange.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
@@ -95,6 +96,7 @@ export default {
     IconContract,
     ProjectIcon,
     IconPlanning,
+    IconProgressChange,
     IconProgress,
     IconLog,
     IconRequestMobilization,
@@ -173,7 +175,13 @@ export default {
             function_page_name: PAGE_NAME.RESOURCE_ALLOCATION.LIST,
             function_icon: "IconRequestAllocation",
             isShow: isShowProjectSideBar.value,
-          }
+          },
+          {
+            function_name: t("side_bar.label.progress_change"),
+            function_page_name: PAGE_NAME.PROGRESS_CHANGE.LIST,
+            function_icon: "IconProgressChange",
+            isShow: isShowProjectSideBar.value, // set later
+          },
         ],
       },
       {

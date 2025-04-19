@@ -47,6 +47,10 @@ const PAGES = {
   // mobilization
   MOBILIZATION: "/mobilization",
 
+  //progress
+  PROGRESS_CHANGE: "/progress-change",
+  PROGRESS_CHANGE_LIST: "/progress-change/list",
+
   //resource
   RESOURCE: "/resource",
 
