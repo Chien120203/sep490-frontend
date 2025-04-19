@@ -45,8 +45,8 @@
             <el-input
                 :placeholder="$t('common.input_keyword')"
                 @keyup.enter="submitForm"
-                v-model="searchForms.searchValue"
-                prop="searchValue"
+                v-model="searchForms.keyWord"
+                prop="keyWord"
             >
               <template #append>
                 <span @click="handleSearchForm" class="btn-setting">
@@ -243,7 +243,7 @@ export default {
     };
 
     const handleClear = () => {
-      searchForms.value.searchValue = "";
+      searchForms.value.keyWord = "";
       searchForms.value.status = null;
       searchForms.value.customerId = null;
     };

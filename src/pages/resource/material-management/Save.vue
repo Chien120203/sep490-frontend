@@ -127,16 +127,6 @@
                 {{ $t(validation.value.description) }}
               </label>
             </el-form-item>
-
-            <el-form-item prop="attachments" :label="$t('resource.material.details.attachments')">
-              <FileUpload
-                  :existingFiles="materialResourcesDetails.value.attachment"
-                  :allowedTypes="'.jpg,.png,.pdf,.docx'"
-                  :fileLimit="3"
-                  class="input-wd-96"
-                  @file-selected="handleFileUpload"
-              />
-            </el-form-item>
           </div>
         </el-form>
       </div>
@@ -151,7 +141,7 @@ import IconBackMain from "@/svg/IconBackMain.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import FileUpload from "@/components/common/FileUpload.vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
-import {MATERIAL_RULES} from "@/rules/material-resource/index.js";
+import {getMaterialRules} from "@/rules/material-resource/index.js";
 import {useI18n} from "vue-i18n";
 import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {DATE_FORMAT, GENDERS} from "@/constants/application.js";
@@ -189,6 +179,8 @@ export default {
     };
 
     const ruleFormRef = ref(null);
+
+    const MATERIAL_RULES = getMaterialRules();
 
     const submitForm = () => {
       ruleFormRef.value.validate((valid) => {

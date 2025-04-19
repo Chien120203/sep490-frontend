@@ -20,8 +20,8 @@
             <el-input
                 :placeholder="$t('common.input_keyword')"
                 @keyup.enter="submitForm"
-                v-model="searchForms.search"
-                prop="search"
+                v-model="searchForms.keyword"
+                prop="keyword"
             >
             </el-input>
           </div>
@@ -89,7 +89,7 @@ export default {
   },
   setup() {
     const searchForms = ref({
-      search: "",
+      keyword: "",
       pageIndex: 1,
     });
     const delete_id = ref();
@@ -115,7 +115,7 @@ export default {
     });
 
     const handleClear = () => {
-      searchForms.value.search = "";
+      searchForms.value.keyword = "";
     };
 
     const submitForm = () => {

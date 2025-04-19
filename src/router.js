@@ -360,16 +360,6 @@ const routes = [
         path: PAGES.HUMAN_RESOURCE_LIST,
         component: HumanResourceList,
       },
-      {
-        name: PAGE_NAME.RESOURCE.HUMAN.DETAILS,
-        path: PAGES.HUMAN_RESOURCE_DETAILS,
-        component: HumanResourcesSave,
-      },
-      {
-        name: PAGE_NAME.RESOURCE.HUMAN.CREATE,
-        path: PAGES.HUMAN_RESOURCE_CREATE,
-        component: HumanResourcesSave,
-      },
     ]
   },
   {
