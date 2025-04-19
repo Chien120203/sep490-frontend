@@ -8,11 +8,12 @@ export const useMobilizationStore = defineStore(
   "mobilization",
   () => {
     const {t} = useI18n();
-    const validation = reactive({ value: {} });
-    const totalItems = reactive({ value: 0 });
-    const currentPage = reactive({ value: 0 });
-    const listMobilizations = reactive({ value: [] });
-    const mobilizationDetails = reactive({value: {
+    const validation = reactive({value: {}});
+    const totalItems = reactive({value: 0});
+    const currentPage = reactive({value: 0});
+    const listMobilizations = reactive({value: []});
+    const mobilizationDetails = reactive({
+      value: {
         id: null,
         requestCode: "",
         projectId: 0,
@@ -24,7 +25,8 @@ export const useMobilizationStore = defineStore(
         status: 0,
         attachments: "",
         requestDate: ""
-      }});
+      }
+    });
 
     const setMobilizationDefault = () => {
       mobilizationDetails.value = {
@@ -43,7 +45,7 @@ export const useMobilizationStore = defineStore(
     }
 
     const getListMobilizations = async (params, isLoading = true) => {
-      if(isLoading) mixinMethods.startLoading();
+      if (isLoading) mixinMethods.startLoading();
       await services.MobilizationAPI.list(
         params,
         (response) => {
@@ -65,7 +67,7 @@ export const useMobilizationStore = defineStore(
     };
 
     const getMobilizationDetails = async (id, isLoading = true) => {
-      if(isLoading) mixinMethods.startLoading();
+      if (isLoading) mixinMethods.startLoading();
       await services.MobilizationAPI.details(
         id,
         {},
@@ -86,17 +88,13 @@ export const useMobilizationStore = defineStore(
       await services.MobilizationAPI.save(
         params,
         (response) => {
-          if(response.success) {
-            mobilizationDetails.value = response.data;
-            listMobilizations.value.push(response.data);
-            mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
-          }else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
-          }
+          mobilizationDetails.value = response.data;
+          listMobilizations.value.push(response.data);
+          mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
           mixinMethods.endLoading();
         }
@@ -109,12 +107,8 @@ export const useMobilizationStore = defineStore(
       await services.MobilizationAPI.deleteMobilization(
         id,
         (response) => {
-          if(response.success) {
-            listMobilizations.value = listMobilizations.value.filter(mobilize => mobilize.id !== id);
-            mixinMethods.notifySuccess(t("response.message.delete_mobilize_success"));
-          } else {
-            mixinMethods.notifyError(t("response.message.delete_mobilize_failed"));
-          }
+          listMobilizations.value = listMobilizations.value.filter(mobilize => mobilize.id !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_mobilize_success"));
           mixinMethods.endLoading();
         },
         () => {
@@ -130,16 +124,12 @@ export const useMobilizationStore = defineStore(
       await services.MobilizationAPI[method](
         id,
         (response) => {
-          if(response.success) {
-            // mobilizationDetails.value = response.data;
-            mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
-          }else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
-          }
+          // mobilizationDetails.value = response.data;
+          mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
           mixinMethods.endLoading();
         },
         () => {
+          validation.value = mixinMethods.handleErrorResponse(response);
           mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
           mixinMethods.endLoading();
         }

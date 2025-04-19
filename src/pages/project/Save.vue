@@ -355,7 +355,7 @@ export default {
 
     onMounted(async () => {
       await getListCustomers({search: "", pageIndex: 1}, false);
-      await getListUsers({keyWord: "", pageIndex: 1}, false);
+      await getListUsers({keyWord: "", pageIndex: 1, pageSize: 50}, false);
       if (route.params.id) {
         await getProjectDetails(route.params.id);
         projectDetails.value.technicalManager = getUserIdByRole(projectDetails.value.viewerUserIds, TECHNICAL_MANAGER)?.id;

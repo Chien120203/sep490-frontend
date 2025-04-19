@@ -35,19 +35,13 @@ export const useAllocationStore = defineStore(
       await services.AllocationAPI.list(
         params,
         (response) => {
-          if (!response.success) {
-            mixinMethods.notifyError(t("response.message.get_allocation_failed"));
-            mixinMethods.endLoading();
-            return;
+          if (currentPage.value === 1) {
+            listAllocations.value = response.data;
           } else {
-            if (currentPage.value === 1) {
-              listAllocations.value = response.data;
-            } else {
-              listAllocations.value = [...listAllocations.value, ...response.data];
-            }
-            totalItems.value = response.meta.total;
-            currentPage.value = response.meta.index;
+            listAllocations.value = [...listAllocations.value, ...response.data];
           }
+          totalItems.value = response.meta.total;
+          currentPage.value = response.meta.index;
           mixinMethods.endLoading();
         },
         (error) => {

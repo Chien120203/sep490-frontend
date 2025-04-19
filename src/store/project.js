@@ -10,15 +10,15 @@ export const useProjectStore = defineStore(
   "project",
   () => {
     const {t} = useI18n();
-    const validation = reactive({ value: {} });
+    const validation = reactive({value: {}});
     const router = useRouter();
-    const isShowModalConfirm = reactive({ value: false });
-    const isShowModalCreate = reactive({ value: false });
-    const totalItems = reactive({ value: 0 });
-    const currentPage = reactive({ value: 1 });
-    const listProjects = reactive({ value: [] });
+    const isShowModalConfirm = reactive({value: false});
+    const isShowModalCreate = reactive({value: false});
+    const totalItems = reactive({value: 0});
+    const currentPage = reactive({value: 1});
+    const listProjects = reactive({value: []});
     const projectDetails = reactive({
-      value:{
+      value: {
         id: 0,
         projectCode: "",
         projectName: "",
@@ -61,7 +61,7 @@ export const useProjectStore = defineStore(
     });
 
     const getListProjects = async (params, isLoading = true) => {
-      if(isLoading) mixinMethods.startLoading();
+      if (isLoading) mixinMethods.startLoading();
       await services.ProjectAPI.list(
         params,
         (response) => {
@@ -86,7 +86,7 @@ export const useProjectStore = defineStore(
       await services.ProjectAPI.getChart(
         {},
         (response) => {
-          const { total, ...filteredData } = response.data;
+          const {total, ...filteredData} = response.data;
           chartData.datasets[0].data = Object.values(filteredData);
         },
         (error) => {
@@ -100,18 +100,14 @@ export const useProjectStore = defineStore(
       await services.ProjectAPI.save(
         formData,
         (response) => {
-          if(response.success) {
-            projectDetails.value = {...response.data, customerId: response.data.customer.id};
-            validation.value = [];
-            router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: response.data.id}});
-            mixinMethods.notifySuccess(t("response.message.save_project_success"));
-          }else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_project_failed"));
-          }
+          projectDetails.value = {...response.data, customerId: response.data.customer.id};
+          validation.value = [];
+          router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: response.data.id}});
+          mixinMethods.notifySuccess(t("response.message.save_project_success"));
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_project_failed"));
           mixinMethods.endLoading();
         }
@@ -124,7 +120,11 @@ export const useProjectStore = defineStore(
         id,
         {},
         (response) => {
-          projectDetails.value = {...response.data, customerCode: response.data?.customer.customerCode, customerId: response.data?.customer.id};
+          projectDetails.value = {
+            ...response.data,
+            customerCode: response.data?.customer.customerCode,
+            customerId: response.data?.customer.id
+          };
 
           mixinMethods.endLoading();
         },
@@ -140,15 +140,12 @@ export const useProjectStore = defineStore(
       await services.ProjectAPI.deleteProject(
         id,
         (response) => {
-          if(response.success) {
-            listProjects.value = listProjects.value.filter(project => project.id !== id);
-            mixinMethods.notifySuccess(t("response.message.delete_project_success"));
-          } else {
-            mixinMethods.notifyError(t("response.message.delete_project_failed"));
-          }
+          listProjects.value = listProjects.value.filter(project => project.id !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_project_success"));
           mixinMethods.endLoading();
         },
         () => {
+          mixinMethods.notifyError(t("response.message.delete_project_failed"));
           mixinMethods.endLoading();
         }
       );

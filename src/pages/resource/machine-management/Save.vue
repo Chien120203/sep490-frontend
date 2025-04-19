@@ -191,10 +191,6 @@ export default {
       saveMachineResources,
       clearMachineResourcesDetails
     } = machineResourcesStore;
-    const {
-      getListUsers,
-        getUserIdByRole
-    } = useUserStore();
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();

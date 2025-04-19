@@ -243,7 +243,7 @@ onMounted(async () => {
   } else {
     await getPlanningDetails(route.params.id);
   }
-  await getListUsers({keyWord: "", pageIndex: 1}, false);
+  await getListUsers({keyWord: "", pageIndex: 1, pageSize: 50}, false);
   await getListHumanResources({pageIndex: 1}, false);
   await getListMachineResources({pageIndex: 1}, false);
   await getListMaterialResources({pageIndex: 1}, false);

@@ -13,7 +13,8 @@ export const usePlanningStore = defineStore(
     const totalItems = reactive({value: 0});
     const currentPage = reactive({value: 0});
     const listPlannings = reactive({value: []});
-    const planSelectedRow = reactive({value: {
+    const planSelectedRow = reactive({
+      value: {
         createdAt: "",
         updatedAt: "",
         creator: "",
@@ -29,7 +30,8 @@ export const usePlanningStore = defineStore(
         total: 0,
         unit: "",
         unitPrice: 0,
-      }});
+      }
+    });
     const planningDetails = reactive({
       value: {
         planName: "",
@@ -65,7 +67,8 @@ export const usePlanningStore = defineStore(
         }
       ]
     });
-    const taskPlanDetails = reactive({value: {
+    const taskPlanDetails = reactive({
+      value: {
         id: 1,
         planName: "April Maintenance Plan",
         projectId: 101,
@@ -99,7 +102,8 @@ export const usePlanningStore = defineStore(
             role: "Quality Assurance"
           }
         ]
-      }})
+      }
+    })
 
     const getListPlannings = async (params, isLoading = true) => {
       if (isLoading) mixinMethods.startLoading();
@@ -130,7 +134,10 @@ export const usePlanningStore = defineStore(
         id,
         {},
         (response) => {
-          planningDetails.value = {...response.data, reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]};
+          planningDetails.value = {
+            ...response.data,
+            reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]
+          };
           // approveStatuses.value = [...response.data.reviewers, {isBODApprove: response.data.isApproved}];
           mixinMethods.endLoading();
         },
@@ -146,17 +153,16 @@ export const usePlanningStore = defineStore(
       await services.PlanningAPI[method](
         params,
         (response) => {
-          if (response.success) {
-            planningDetails.value = {...response.data, reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]};
-            validation.value = [];
-            mixinMethods.notifySuccess(t("response.message.save_project_success"));
-          } else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_project_failed"));
-          }
+          planningDetails.value = {
+            ...response.data,
+            reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]
+          };
+          validation.value = [];
+          mixinMethods.notifySuccess(t("response.message.save_project_success"));
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_project_failed"));
           mixinMethods.endLoading();
         }
@@ -167,7 +173,7 @@ export const usePlanningStore = defineStore(
       mixinMethods.startLoading();
       let currentEmail = localStorage.getItem('email');
       let userId = approveStatuses.value.find(item => item.email === currentEmail)?.id;
-      if(!userId) {
+      if (!userId) {
         mixinMethods.notifyError(t("response.message.save_project_failed"));
         await mixinMethods.endLoading();
         return;
@@ -180,15 +186,11 @@ export const usePlanningStore = defineStore(
           rejectReason: "abc"
         },
         (response) => {
-          if (response.success) {
-            mixinMethods.notifySuccess(t("response.message.save_project_success"));
-          } else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_project_failed"));
-          }
+          mixinMethods.notifySuccess(t("response.message.save_project_success"));
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_project_failed"));
           mixinMethods.endLoading();
         }
@@ -200,15 +202,12 @@ export const usePlanningStore = defineStore(
       await services.PlanningAPI.deletePlan(
         id,
         (response) => {
-          if(response.success) {
-            listPlannings.value = listPlannings.value.filter(customer => customer.id !== id);
-            mixinMethods.notifySuccess(t("response.message.delete_plan_success"));
-          } else {
-            mixinMethods.notifyError(t("response.message.delete_plan_failed"));
-          }
+          listPlannings.value = listPlannings.value.filter(customer => customer.id !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_plan_success"));
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
+          mixinMethods.notifyError(t("response.message.delete_plan_failed"));
           mixinMethods.endLoading();
         }
       );

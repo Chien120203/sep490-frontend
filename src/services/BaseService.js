@@ -16,10 +16,11 @@ const initializeService = (axiosInstance, prefixValue, routerValue) => {
 
 // Processes the response, returning the 'data' property if it exists
 const processResponse = (response) => {
-    // if (response?.data.code === HTTP_FORBIDDEN) {
-    //   router.push({name: PAGE_NAME.FORBIDDEN});
-    //   return;
-    // }
+    if (response?.data.code !== 200) {
+        const error = new Error('API Error');
+        error.response = response; // Attach full response for later use
+        throw error;
+    }
     return response.data;
 };
 

@@ -76,7 +76,8 @@ export const useHumanResourcesStore = defineStore(
           }
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_human_failed"));
           mixinMethods.endLoading();
         }

@@ -9,11 +9,11 @@ export const useCustomerStore = defineStore(
   "customer",
   () => {
     const {t} = useI18n();
-    const validation = reactive({ value: {} });
-    const isShowModalConfirm = reactive({ value: false });
-    const totalItems = reactive({ value: 0 });
-    const currentPage = reactive({ value: 0 });
-    const listCustomers = reactive({ value: [] });
+    const validation = reactive({value: {}});
+    const isShowModalConfirm = reactive({value: false});
+    const totalItems = reactive({value: 0});
+    const currentPage = reactive({value: 0});
+    const listCustomers = reactive({value: []});
     const customerDetails = reactive({
       value: {
         id: 0,
@@ -32,7 +32,7 @@ export const useCustomerStore = defineStore(
     });
 
     const getListCustomers = async (params, isLoading = true) => {
-      if(isLoading) mixinMethods.startLoading();
+      if (isLoading) mixinMethods.startLoading();
       await services.CustomerAPI.list(
         params,
         (response) => {
@@ -75,17 +75,13 @@ export const useCustomerStore = defineStore(
       await services.CustomerAPI[method](
         params,
         (response) => {
-          if(response.success) {
-            customerDetails.value = response.data;
-            mixinMethods.notifySuccess(t("response.message.save_customer_success"));
-            validation.value = {};
-          }else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_customer_failed"));
-          }
+          customerDetails.value = response.data;
+          mixinMethods.notifySuccess(t("response.message.save_customer_success"));
+          validation.value = {};
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_customer_failed"));
           mixinMethods.endLoading();
         }
@@ -97,15 +93,12 @@ export const useCustomerStore = defineStore(
       await services.CustomerAPI.deleteCustomer(
         id,
         (response) => {
-          if(response.success) {
-            listCustomers.value = listCustomers.value.filter(customer => customer.id !== id);
-            mixinMethods.notifySuccess(t("response.message.delete_customer_success"));
-          } else {
-            mixinMethods.notifyError(t("response.message.delete_customer_failed"));
-          }
+          listCustomers.value = listCustomers.value.filter(customer => customer.id !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_customer_success"));
           mixinMethods.endLoading();
         },
         () => {
+          mixinMethods.notifyError(t("response.message.delete_customer_failed"));
           mixinMethods.endLoading();
         }
       );

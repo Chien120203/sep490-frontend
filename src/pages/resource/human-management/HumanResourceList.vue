@@ -195,6 +195,7 @@ const handleSearchUsers = (data) => {
     keyWord: data.value,
     role: data.role,
     pageIndex: 1,
+    pageSize: 50
   }, false)
 };
 
@@ -216,7 +217,7 @@ onMounted(() => {
   getListUsers({
     keyWord: "",
     pageIndex: 1,
-    pageSize: 30,
+    pageSize: 50,
   }, false)
 });
 

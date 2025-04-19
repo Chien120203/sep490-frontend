@@ -55,7 +55,6 @@ export const useSiteSurveyStore = defineStore(
                     mixinMethods.endLoading();
                 },
                 (error) => {
-                    mixinMethods.notifyError(t("response.message.get_survey_dtls_failed"));
                     mixinMethods.endLoading();
                 }
             );
