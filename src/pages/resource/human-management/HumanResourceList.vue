@@ -92,8 +92,8 @@
         :isShowModal="isShowModalConfirm.value"
         @close-modal="() => isShowModalConfirm.value = false"
         @confirmAction="handleConfirm"
-        :message="$t('human.modal_confirm.message')"
-        :title="$t('human.modal_confirm.title')"
+        :message="$t('resource.human.modal_confirm.message')"
+        :title="$t('resource.human.modal_confirm.title')"
     />
   </div>
 </template>

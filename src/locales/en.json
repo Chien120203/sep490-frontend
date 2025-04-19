@@ -577,7 +577,10 @@
       }
     },
     "human": {
-      "title": "Human Resource Management",
+      "modal_confirm": {
+        "message": "Do you want to delete this team?",
+        "title": "Delete construction team"
+      },
       "add_new": "Add New",
       "keyword": "Keyword",
       "search": "Search",
@@ -612,10 +615,6 @@
           "status": "Status",
           "action": "Action"
         }
-      },
-      "modal_confirm": {
-        "message": "Do you want to delete this team?",
-        "title": "Delete construction team"
       },
       "error": {
         "modal_error": ""

@@ -1,4 +1,4 @@
-import {del, get, post, postFormData, put, putFormData} from '@/services/BaseService';
+import {del, get, post} from '@/services/BaseService';
 import API_CODE from '@/utils/api_code';
 
 const details = async (id, params, success, error) => {
@@ -9,8 +9,8 @@ const list = async (params, success, error) => {
     await get(API_CODE.API_MATERIAL_002, success, error, params);
 };
 
-const save = async (formData, success, error) => {
-    await postFormData(API_CODE.API_MATERIAL_003, formData, success, error);
+const save = async (data, success, error) => {
+    await post(API_CODE.API_MATERIAL_003, data, success, error);
 };
 
 const deleteMaterial = async (id, success, error) => {
