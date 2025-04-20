@@ -7,7 +7,7 @@
       @close="closeModal"
   >
     <template #header>
-      <h4 class="modal-title">{{ $t('planning.modal_title') }}</h4>
+      <h4 class="modal-title">{{ $t('resource.human.modal_title') }}</h4>
     </template>
 
     <template #body>
@@ -21,7 +21,7 @@
             @searchManager="handleSearch"
         />
         <el-tabs v-model="activeTab">
-          <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="members">
+          <el-tab-pane :label="$t('resource.human.members')" name="members">
             <ItemList
                 ref="tableHumanFormRef"
                 :is-human="true"

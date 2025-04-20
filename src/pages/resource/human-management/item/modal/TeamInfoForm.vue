@@ -3,11 +3,11 @@
     <el-form label-width="30%" :model="teamInfo" ref="ruleFormRef" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('planning.modal.work_name')">
+          <el-form-item :label="$t('resource.human.details.teamName')">
             <el-input :disabled="!allowEdit" v-model="teamInfo.teamName" class="custom-input" />
           </el-form-item>
 
-          <el-form-item prop="startDate" :label="$t('planning.modal.start_date')">
+          <el-form-item prop="startDate" :label="$t('resource.human.details.teamManager')">
             <SingleOptionSelect
                 v-model="teamInfo.teamManager"
                 :isDisabled="!allowEdit"
@@ -15,15 +15,14 @@
                 :listData="lisTeamManagers"
                 :role="CONSTRUCTION_MANAGER"
                 :isRemote="true"
-                class="input-wd-96"
+                class="custom-input input-wd-96"
                 @remoteSearch="handleSearchManager"
             />
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-
-          <el-form-item :label="$t('planning.team.description')">
+          <el-form-item :label="$t('resource.human.details.description')">
             <el-input
                 type="textarea"
                 v-model="teamInfo.description"
@@ -78,7 +77,7 @@ defineExpose({
 }
 
 .custom-input {
-  width: 80%;
+  width: 100% !important;
 }
 
 :deep(.el-form-item__label) {

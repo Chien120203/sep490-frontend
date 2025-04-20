@@ -18,7 +18,7 @@
       <div class="mobilization-search">
         <div class="mobilization-search-box col-md-9 col-lg-9">
           <p class="mobilization-search__ttl">
-            {{ $t("mobilization.keyword") }}
+            {{ $t("common.keyword") }}
           </p>
           <div class="mb-0 ruleform">
             <el-input

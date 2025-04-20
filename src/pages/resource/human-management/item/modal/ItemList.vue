@@ -24,7 +24,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="name" :label="$t('planning.items.name')">
+        <el-table-column prop="name" :label="$t('resource.human.details.userName')">
           <template #default="{ row }">
             <el-form-item>
               {{getUserAttr(row, 'username')}}
@@ -32,7 +32,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="name" :label="$t('planning.items.name')">
+        <el-table-column prop="name" :label="$t('resource.human.details.fullName')">
           <template #default="{ row }">
             <el-form-item>
               {{getUserAttr(row, 'fullName')}}
@@ -40,7 +40,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="name" :label="$t('planning.items.name')">
+        <el-table-column prop="name" :label="$t('resource.human.details.phoneNumber')">
           <template #default="{ row }">
             <el-form-item>
               {{getUserAttr(row, 'phone')}}
