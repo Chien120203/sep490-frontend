@@ -3,7 +3,7 @@
     <el-form label-position="top" :model="logDetails" ref="ruleFormRef" :rules="rules">
       <el-form-item label="Ảnh thi công">
         <ImageUpload
-            :existingFiles="logDetails.images"
+            :existingFiles="logDetails.Images"
             @file-selected="handleSelectFiles"
             @file-removed="handleRemoveFile"
         />

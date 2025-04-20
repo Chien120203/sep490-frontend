@@ -212,7 +212,7 @@ export const useConstructLog = defineStore(
     const constructLogDetails = reactive({
       value: {
         id: 0,
-        logCode: "casddca",
+        logCode: "",
         logName: "",
         logDate: "",
         projectId: 0,
@@ -227,7 +227,7 @@ export const useConstructLog = defineStore(
         progress: "",
         problem: "",
         advice: "",
-        images: [],
+        Images: [],
         attachmentFiles: [],
         note: "",
       }

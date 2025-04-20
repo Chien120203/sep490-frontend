@@ -23,6 +23,7 @@
           <ConstructLogWorkDetails
               ref="formLogDetailsRef"
               :rules="constructLogRules"
+              :progressDtls="progressDetails.value"
               :logDetails="constructLogDetails.value"
               @remove-resource="handleRemoveResource"
               @remove-task="handleRemoveTask"
@@ -45,17 +46,19 @@ import {onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {mixinMethods} from "@/utils/variables";
 import ConstructLogWorkDetails from "@/pages/construction-log/items/ConstructLogWorkDetails.vue";
 import ConstructionLogInfor from "@/pages/construction-log/items/ConstructionLogInfor.vue";
 import {useConstructLog} from "@/store/construct-log.js";
 import {getConstructLogRules} from "@/rules/construct-log/index.js";
 import {useI18n} from "vue-i18n";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {useInventoryStore} from "@/store/inventory.js";
+import {useProgressStore} from "@/store/progress.js";
 
 const constructLogRules = getConstructLogRules();
 const constructLogStore = useConstructLog();
 const persistenceStore = usePersistenceStore();
+const progressStore = useProgressStore();
 
 const {
   projectId
@@ -64,12 +67,17 @@ const {
   constructLogDetails,
   saveConstructLog
 } = constructLogStore;
+const {
+  progressDetails,
+  getProgressDetails
+} = progressStore;
 
 const {t} = useI18n();
 const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
+  await getProgressDetails(projectId.value, false);
 });
 
 onUnmounted(() => {

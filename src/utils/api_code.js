@@ -67,7 +67,7 @@ const API_CODE = {
     API_MATERIAL_002: '/material/search',
     API_MATERIAL_003: '/material/save',
     API_MATERIAL_004: '/material/delete',
-  
+
     //Human Resource
     API_HUMAN_001: '/teams/detail',
     API_HUMAN_002: '/teams/search',
@@ -96,6 +96,9 @@ const API_CODE = {
 
   //Construction Log
   API_CONSTRUCT_LOG_001: '/construction-log/save',
+
+    //Progress
+    API_PROGRESS_001: '/construction-progress/get-by-project',
 
 };
 
