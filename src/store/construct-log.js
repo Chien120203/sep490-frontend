@@ -236,7 +236,7 @@ export const useConstructLog = defineStore(
       value: {
         workAmount: [
           // April 1 - 30
-          ...Array.from({ length: 30 }, (_, i) => {
+          ...Array.from({length: 30}, (_, i) => {
             const day = i + 1;
             return {
               logDate: `2025-04-${day.toString().padStart(2, "0")}`,
@@ -246,7 +246,7 @@ export const useConstructLog = defineStore(
         ],
         resources: [
           // Machines (resourceId: 1)
-          ...Array.from({ length: 30 }, (_, i) => ({
+          ...Array.from({length: 30}, (_, i) => ({
             logDate: `2025-04-${(i + 1).toString().padStart(2, "0")}`,
             resourceId: 1,
             resourceType: 2,
@@ -255,7 +255,7 @@ export const useConstructLog = defineStore(
           })),
 
           // Humans (resourceId: 2)
-          ...Array.from({ length: 30 }, (_, i) => ({
+          ...Array.from({length: 30}, (_, i) => ({
             logDate: `2025-04-${(i + 1).toString().padStart(2, "0")}`,
             resourceId: 2,
             resourceType: 1,
@@ -264,7 +264,7 @@ export const useConstructLog = defineStore(
           })),
 
           // Materials (resourceId: 3)
-          ...Array.from({ length: 30 }, (_, i) => ({
+          ...Array.from({length: 30}, (_, i) => ({
             logDate: `2025-04-${(i + 1).toString().padStart(2, "0")}`,
             resourceId: 3,
             resourceType: 3,
@@ -622,12 +622,12 @@ export const useConstructLog = defineStore(
       await services.ConstructLogAPI.save(
         formData,
         (response) => {
-          if(response.code === 200) {
-            constructLogDetails.value = {...response.data, projectId: response.data?.project.id, images: response.data.images || []};
-            mixinMethods.notifySuccess(t("response.message.save_contract_success"));
-          } else {
-            mixinMethods.notifyError(t("response.message.save_contract_failed"));
-          }
+          constructLogDetails.value = {
+            ...response.data,
+            projectId: response.data?.project.id,
+            images: response.data.images || []
+          };
+          mixinMethods.notifySuccess(t("response.message.save_contract_success"));
           mixinMethods.endLoading();
         },
         (error) => {
