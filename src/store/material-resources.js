@@ -29,6 +29,7 @@ export const useMaterialResourcesStore = defineStore(
         expireDate: "",
         productionDate: "",
         description: "",
+          isFlag: ""
       }
     });
 
@@ -120,6 +121,7 @@ export const useMaterialResourcesStore = defineStore(
         expireDate: "",
         productionDate: "",
         description: "",
+          isFlag: ""
       };
     };
 

@@ -568,7 +568,8 @@
           "expireDate": "Expire Date",
           "productionDate": "Production Date",
           "status": "Status",
-          "action": "Action"
+          "action": "Action",
+          "isFlag": "Flag"
         }
       },
       "modal_confirm": {

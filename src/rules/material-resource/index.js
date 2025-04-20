@@ -11,10 +11,11 @@ import {
 } from "@/constants/application.js";
 import { validateMinMax } from "@/rules/validation/validation.js";
 import { useContractStore } from "@/store/contract.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
 
 export const getMaterialRules = () => {
-    const contractStore = useContractStore();
-    const { contractDetails } = contractStore;
+    const materialStore = useMaterialResourcesStore();
+    const { materialDetails } = materialStore;
     const { t } = useI18n();
 
     return {

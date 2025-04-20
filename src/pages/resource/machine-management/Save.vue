@@ -173,7 +173,7 @@ import IconBackMain from "@/svg/IconBackMain.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import FileUpload from "@/components/common/FileUpload.vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
-import {MACHINE_RULES} from "@/rules/machine-resource/index.js";
+import {getMachineRules} from "@/rules/machine-resource/index.js";
 import {useI18n} from "vue-i18n";
 import {useMachineResourcesStore} from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
@@ -211,6 +211,8 @@ export default {
     };
 
     const ruleFormRef = ref(null);
+
+    const MACHINE_RULES = getMachineRules();
 
     const submitForm = () => {
       ruleFormRef.value.validate((valid) => {

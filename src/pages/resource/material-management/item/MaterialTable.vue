@@ -66,6 +66,17 @@
         </template>
       </el-table-column>
 
+      <el-table-column min-width="130">
+        <template #header>
+          <p v-html="$t('resource.material.table.header.isFlag')"></p>
+        </template>
+
+        <template #default="scope">
+        <span class="data-table">{{ scope.row.isFlag ? scope.row.isFlag : "-" }}
+        </span>
+        </template>
+      </el-table-column>
+
       <el-table-column min-width="90">
         <template #header>
           <p v-html="$t('resource.material.table.header.action')"></p>
