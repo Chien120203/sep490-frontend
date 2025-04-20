@@ -97,8 +97,8 @@
         :title="$t('resource.human.modal_confirm.title')"
     />
     <ModalConfirm
-        :isShowModal="isShowModalConfirmDelMember.value"
-        @close-modal="() => isShowModalConfirmDelMember.value = false"
+        :isShowModal="isShowModalConfirmDelMember"
+        @close-modal="() => isShowModalConfirmDelMember = false"
         @confirmAction="handleConfirmRemove"
         :message="$t('resource.human.modal_confirm.msg_member')"
         :title="$t('resource.human.modal_confirm.title_member')"
@@ -202,6 +202,7 @@ const handleConfirmRemove = () => {
     handleRemoveMember(delete_mem_id.value);
   }
   humanResourcesDetails.value.teamMemberIds = humanResourcesDetails.value.teamMemberIds.filter(memId => memId !== delete_mem_id.value);
+  isShowModalConfirmDelMember.value = false;
 }
 
 const handleGetTeamDetails = (teamId) => {

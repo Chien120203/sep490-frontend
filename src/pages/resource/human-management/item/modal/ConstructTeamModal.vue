@@ -61,7 +61,7 @@ const props = defineProps({
   employees: {type: Array, default: () => []},
 });
 
-const emit = defineEmits(["close", "submit", "search"]);
+const emit = defineEmits(["close", "submit", "search", "remove"]);
 const {t} = useI18n();
 const activeTab = ref("members");
 const childFormRef = ref(null);
