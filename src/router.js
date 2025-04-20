@@ -50,7 +50,8 @@ import InventoryList from "@/pages/inventory/InventoryList.vue";
 import InspectionReport from "@/pages/inspection-report/Index.vue";
 import InspectionReportList from "@/pages/inspection-report/InspectionReportList.vue";
 import InspectionReportSave from "@/pages/inspection-report/Save.vue";
-
+import ProgressChange from "@/pages/change-request/Index.vue";
+import ProgressChangeList from "@/pages/change-request/ChangeRequestList.vue"
 
 const routes = [
   {
@@ -159,6 +160,21 @@ const routes = [
         path: PAGES.MOBILIZATION,
         name: PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
         component: MobilizationList,
+      }
+    ]
+  },
+  {
+    name: PAGE_NAME.PROGRESS_CHANGE,
+    path: PAGES.PROGRESS_CHANGE,
+    component: ProgressChange,
+    meta: {
+      middleware: [AUTHENTICATION_MIDDLEWARE],
+    },
+    children: [
+      {
+        path: PAGES.PROGRESS_CHANGE_LIST,
+        name: PAGE_NAME.PROGRESS_CHANGE.LIST,
+        component: ProgressChangeList,
       }
     ]
   },

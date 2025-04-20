@@ -136,6 +136,7 @@
     "note": "Note",
     "select_date": "Select date",
     "approve": "Approve",
+    "wait": "Wait for Approval",
     "remain": "Remain",
     "reject": "Reject",
     "review": "Review",
@@ -1087,12 +1088,13 @@
       "planning": "Planning",
       "progress": "Progress",
       "construct_log": "Construction Log",
-      "change_request": "Change Request",
+      "change_request": "Request",
+      "progress_change": "Progress Change",
       "resource_mobilization": "Mobilization",
       "resource_allocation": "Allocation",
       "project": "Project",
       "inventory": "Inventory",
-      "inspector_report": "Inspector Report",
+      "inspector_report": "Acceptance",
       "resource": {
         "title": "Resource",
         "machine": "Machine Resource",
@@ -1180,6 +1182,36 @@
   "construct_team": {
     "title": "Construction Team",
     "manager": "Construction Manager"
+  },
+  "change_request": {
+    "title": "Change Request",
+    "add_new": "Add New",
+    "type": {
+      "add_new": "Add New",
+      "update": "Modification"
+    },
+    "table": {
+      "header": {
+        "name": "Name",
+        "request_type": "Request Type",
+        "request_date": "Request Date",
+        "creator": "Creator",
+        "no": "No",
+        "action": "Action",
+        "status": "Status"
+      }
+    },
+    "modal": {
+      "request_name": "Request Name",
+      "request_date": "Request Date",
+      "parent_index": "Parent Index",
+      "work_name": "Work Name",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "unit_price": "Unit Price",
+      "start_date": "Plan Start Date",
+      "end_date": "Plan End Date"
+    }
   },
   "inspection": {
     "title": "Inspection Report",

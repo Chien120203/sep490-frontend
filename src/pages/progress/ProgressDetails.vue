@@ -9,6 +9,12 @@ import ProgressDetailsModal from "@/pages/progress/items/modal/ProgressDetailsMo
 import {useProgressStore} from "@/store/progress.js";
 import {useConstructLog} from "@/store/construct-log.js";
 import {usePlanningStore} from "@/store/planning.js";
+import ChangeRequestModal from "@/pages/change-request/item/modal/ChangeRequestModal.vue";
+import {useHumanResourcesStore} from "@/store/human-resources.js";
+import {useMachineResourcesStore} from "@/store/machine-resources.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
+import {useChangeRequestStore} from "@/store/change-request.js";
+import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 
 const router = useRouter();
 const persistenceStore = usePersistenceStore();
@@ -31,6 +37,18 @@ const {
 
 const progressItem = ref(null);
 const isShowModal = ref(false);
+const isShowModalSave = ref(false);
+const humanStore = useHumanResourcesStore();
+const machineStore = useMachineResourcesStore();
+const changeRequestStore = useChangeRequestStore();
+const materialStore = useMaterialResourcesStore();
+const {listHumanResources, getListHumanResources} = humanStore;
+const {listMachineResources, getListMachineResources} = machineStore;
+const {listMaterialResources, getListMaterialResources} = materialStore;
+const {
+  changeRequestDetails,
+  saveChangeRequest
+} =changeRequestStore;
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
@@ -58,8 +76,28 @@ const handleAddAllocation = () => {
 
 }
 
-const handleAddTask = () => {
+const handleAddTask = async () => {
+  await getListHumanResources({pageIndex: 1}, false);
+  await getListMachineResources({pageIndex: 1}, false);
+  await getListMaterialResources({pageIndex: 1}, false);
+  isShowModalSave.value = true;
+}
 
+const handleDisplayModalSave = (show = false) => {
+  isShowModalSave.value = show;
+}
+
+const handleSearch = (data) => {
+  switch (data.type) {
+    case MACHINE_TYPE:
+      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
+      break;
+    case HUMAN_TYPE:
+      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
+      break;
+    case MATERIAL_TYPE:
+      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
+  }
 }
 
 const handleCloseModal = () => {
@@ -94,6 +132,16 @@ const handleCloseModal = () => {
         :taskPlan="taskPlanDetails.value"
         :show="isShowModal"
         @close="handleCloseModal"
+    />
+    <ChangeRequestModal
+        :show="isShowModalSave"
+        :materials="listMaterialResources.value"
+        :vehicles="listMachineResources.value"
+        :users="listHumanResources.value"
+        :data="changeRequestDetails.value"
+        @close="handleDisplayModalSave"
+        @search="handleSearch"
+        @submit="saveChangeRequest"
     />
   </div>
 </template>
