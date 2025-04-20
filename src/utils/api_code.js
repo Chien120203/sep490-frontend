@@ -44,6 +44,7 @@ const API_CODE = {
     API_PLANNING_004: '/plans/update',
     API_PLANNING_005: '/plans',
     API_PLANNING_006: '/plans/approve',
+    API_PLANNING_007: '/plans/reject',
 
     //Mobilization
     API_MOBILIZE_001: '/resourcereq/mobilization/list',

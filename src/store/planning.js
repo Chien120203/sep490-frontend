@@ -3,6 +3,7 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import {EXECUTIVE_BOARD} from "@/constants/roles.js";
 
 export const usePlanningStore = defineStore(
   "planning",
@@ -41,32 +42,32 @@ export const usePlanningStore = defineStore(
         reviewers: []
       }
     });
-    // const approveStatuses = reactive({value: []});
-    const approveStatuses = reactive({
-      value: [
-        {
-          id: 4,
-          name: "Technical Manager",
-          role: "Technical Manager",
-          email: "longrpk200315@gmail.com",
-          isApproved: ""
-        },
-        {
-          id: 6,
-          name: "Executive Board",
-          role: "Executive Board",
-          email: "longrpk200317@gmail.com",
-          isApproved: ""
-        },
-        {
-          id: 8,
-          name: "Resource Manager",
-          role: "Resource Manager",
-          email: "longrpk200319@gmail.com",
-          isApproved: ""
-        }
-      ]
-    });
+    const approveStatuses = reactive({value: []});
+    // const approveStatuses = reactive({
+    //   value: [
+    //     {
+    //       id: 4,
+    //       name: "Technical Manager",
+    //       role: "Technical Manager",
+    //       email: "longrpk200315@gmail.com",
+    //       isApproved: ""
+    //     },
+    //     {
+    //       id: 6,
+    //       name: "Executive Board",
+    //       role: "Executive Board",
+    //       email: "longrpk200317@gmail.com",
+    //       isApproved: ""
+    //     },
+    //     {
+    //       id: 8,
+    //       name: "Resource Manager",
+    //       role: "Resource Manager",
+    //       email: "longrpk200319@gmail.com",
+    //       isApproved: ""
+    //     }
+    //   ]
+    // });
     const taskPlanDetails = reactive({
       value: {
         id: 1,
@@ -103,7 +104,7 @@ export const usePlanningStore = defineStore(
           }
         ]
       }
-    })
+    });
 
     const getListPlannings = async (params, isLoading = true) => {
       if (isLoading) mixinMethods.startLoading();
@@ -137,7 +138,7 @@ export const usePlanningStore = defineStore(
           planningDetails.value = {
             ...response.data
           };
-          // approveStatuses.value = response.data.reviewers;
+          approveStatuses.value = response.data.reviewers;
           mixinMethods.endLoading();
         },
         () => {
@@ -196,6 +197,40 @@ export const usePlanningStore = defineStore(
       );
     };
 
+    const rejectPlanning = async () => {
+      mixinMethods.startLoading();
+      let currentEmail = localStorage.getItem('email');
+      let userId = approveStatuses.value.find(item => item.email === currentEmail)?.id;
+      if (!userId) {
+        mixinMethods.notifyError(t("response.message.save_project_failed"));
+        await mixinMethods.endLoading();
+        return;
+      }
+      await services.PlanningAPI.reject(
+        {
+          actionBy: userId,
+          planId: planningDetails.value.id,
+          isApproved: true,
+          rejectReason: "abc"
+        },
+        (response) => {
+          const currentEmail = localStorage.getItem("email");
+          approveStatuses.value.find(p => {
+            if (p.role === EXECUTIVE_BOARD && p.email === currentEmail) {
+              return p.isApproved = false;
+            }
+          })
+          mixinMethods.notifySuccess(t("response.message.save_project_success"));
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+          mixinMethods.notifyError(t("response.message.save_project_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
     const handleDeletePlan = async (id) => {
       mixinMethods.startLoading();
       await services.PlanningAPI.deletePlan(
@@ -233,6 +268,7 @@ export const usePlanningStore = defineStore(
       isShowModalConfirm,
       taskPlanDetails,
       approvePlanning,
+      rejectPlanning,
       clearPlanningDetails,
       handleDeletePlan,
       getListPlannings,

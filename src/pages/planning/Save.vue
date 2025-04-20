@@ -167,14 +167,22 @@ const {
   planSelectedRow,
   approveStatuses,
   approvePlanning,
+  rejectPlanning,
   clearPlanningDetails,
   getPlanningDetails,
   savePlanning,
 } = planningStore;
 const currentEmail = localStorage.getItem("email");
 const currentRole = localStorage.getItem("role");
-const allowReject = computed(() =>  approveStatuses.value.find(p => (p.role === EXECUTIVE_BOARD && p.email === currentEmail))?.isApproved === "");
-const allowApprove = computed(() => approveStatuses.value.find(p => p.email === currentEmail)?.isApproved === "");
+const allowReject = computed(() => {
+  const status = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD && p.email === currentEmail);
+  return status?.isApproved === null || status?.isApproved === false;
+});
+
+const allowApprove = computed(() => {
+  const status = approveStatuses.value.find(p => p.email === currentEmail);
+  return status?.isApproved === null  || status?.isApproved === false;
+});
 const allowEdit = computed(() => {
   const isCreate = !route.params.id;
 
@@ -192,11 +200,11 @@ const allowEdit = computed(() => {
   }
 
   if (currentRole === CONSTRUCTION_MANAGER || currentRole === RESOURCE_MANAGER) {
-    return statusMap[RESOURCE_MANAGER] === "" && statusMap[TECHNICAL_MANAGER] === "";
+    return statusMap[RESOURCE_MANAGER] === null && statusMap[TECHNICAL_MANAGER] === null;
   }
 
   if (currentRole === TECHNICAL_MANAGER) {
-    return statusMap[TECHNICAL_MANAGER] === "";
+    return statusMap[TECHNICAL_MANAGER] === null;
   }
 
   return false;
@@ -208,7 +216,7 @@ const statuses = computed(() => {
   const resourceApprove = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved;
   const techApprove = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved;
   const bodApprove = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD)?.isApproved;
-  const bodStatus = bodApprove === "" ? "process" : (bodApprove === true ? "success" : "fail");
+  const bodStatus = bodApprove === null ? "process" : (bodApprove === true ? "success" : "error");
 
   return [
     { title: "Khởi tạo", description: "", status: "success" },
@@ -245,8 +253,16 @@ onMounted(async () => {
 });
 
 const handleApprove = () => {
+  allowReject.value = false;
+  allowApprove.value = false;
   approvePlanning();
-}
+};
+
+const handleReject = () => {
+  allowReject.value = false;
+  allowApprove.value = false;
+  rejectPlanning();
+};
 
 onUnmounted(() => {
   clearPlanningDetails();

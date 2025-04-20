@@ -874,6 +874,11 @@
     },
     "status": {
       "wait_approved": "Wait for approval",
+      "re_planning": "Re Planning",
+      "bod_approved": "Executive Approved",
+      "tech_approved": "Technical Approved",
+      "resource_approved": "Resource Approved",
+      "draft": "Draft",
       "rejected": "Rejected",
       "approved": "Approved"
     }
