@@ -94,15 +94,11 @@
 <script setup>
 import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw} from "vue";
 import Modal from "@/components/common/Modal.vue";
-import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
 import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
 import {
-  HUMAN_RESOURCE,
   HUMAN_TYPE,
-  MACHINE_RESOURCE,
   MACHINE_TYPE,
-  MATERIAL_RESOURCE,
   MATERIAL_TYPE
 } from "@/constants/resource.js";
 import {mixinMethods} from "@/utils/variables.js";
