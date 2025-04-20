@@ -98,11 +98,8 @@ import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
 import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
 import {
-  HUMAN_RESOURCE,
   HUMAN_TYPE,
-  MACHINE_RESOURCE,
   MACHINE_TYPE,
-  MATERIAL_RESOURCE,
   MATERIAL_TYPE
 } from "@/constants/resource.js";
 import {mixinMethods} from "@/utils/variables.js";
@@ -150,9 +147,9 @@ const getListResourceByType = (list, type) => {
   return list.filter(item => item.resourceType === type);
 };
 
-const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_RESOURCE));
-const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_RESOURCE));
-const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_RESOURCE));
+const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_TYPE));
+const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_TYPE));
+const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_TYPE));
 const calculateTotal = () => {
   const machine = listSelectedMachines.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
   const labor = listSelectedUsers.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;

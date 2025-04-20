@@ -89,12 +89,25 @@ export const useHumanResourcesStore = defineStore(
       await services.HumanResourceAPI.deleteHuman(
         id,
         (response) => {
-          if(response.success) {
             listHumanResources.value = listHumanResources.value.filter(humanResources => humanResources.id !== id);
             mixinMethods.notifySuccess(t("response.message.delete_human_success"));
-          } else {
-              mixinMethods.notifyError(t("response.message.delete_human_failed"));
-          }
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.delete_human_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+      isShowModalConfirm.value = false;
+    }
+
+    const handleRemoveMember = async (id) => {
+      mixinMethods.startLoading();
+      await services.HumanResourceAPI.removeMember(
+        id,
+        (response) => {
+          humanResourcesDetails.value.teamMemberIds = humanResourcesDetails.value.teamMemberIds.filter(memId => memId !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_human_success"));
           mixinMethods.endLoading();
         },
         () => {
@@ -123,6 +136,7 @@ export const useHumanResourcesStore = defineStore(
       currentPage,
       humanResourcesDetails,
       isShowModalConfirm,
+      handleRemoveMember,
       clearHumanResourcesDetails,
       saveHumanResources,
       getHumanResourcesDetails,

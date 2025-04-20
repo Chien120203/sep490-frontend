@@ -29,6 +29,7 @@
                 :members="teamInfo.teamMemberIds"
                 :selectData="employees"
                 @search="handleSearch"
+                @remove="handleRemoveMember"
                 :optionKeys="{id: 'id', value: 'username'}"
             />
           </el-tab-pane>
@@ -73,6 +74,10 @@ const closeModal = () => {
 
 const handleSearch = (data) => {
   emit("search", data)
+}
+
+const handleRemoveMember = (id) => {
+  emit("remove", id)
 }
 
 const handleSubmit = async () => {

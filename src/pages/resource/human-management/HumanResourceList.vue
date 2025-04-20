@@ -85,6 +85,7 @@
         :managers="managersList"
         :employees="employeesList"
         @search="handleSearchUsers"
+        @remove="handleRemoveTeamMember"
         @close="() => isShowModalTeam = false"
         @submit="handleSave"
     />
@@ -94,6 +95,13 @@
         @confirmAction="handleConfirm"
         :message="$t('resource.human.modal_confirm.message')"
         :title="$t('resource.human.modal_confirm.title')"
+    />
+    <ModalConfirm
+        :isShowModal="isShowModalConfirmDelMember.value"
+        @close-modal="() => isShowModalConfirmDelMember.value = false"
+        @confirmAction="handleConfirmRemove"
+        :message="$t('resource.human.modal_confirm.msg_member')"
+        :title="$t('resource.human.modal_confirm.title_member')"
     />
   </div>
 </template>
@@ -124,6 +132,7 @@ const {
   isShowModalConfirm,
   saveHumanResources,
   getHumanResourcesDetails,
+  handleRemoveMember,
   getListHumanResources,
   handleDeleteHumanResources
 } = humanResourceStore;
@@ -160,8 +169,10 @@ watch(
 );
 const isShowBoxSearch = ref(false);
 const isShowModalTeam = ref(false);
+const isShowModalConfirmDelMember = ref(false);
 const allowEdit = ref(true);
 const delete_id = ref();
+const delete_mem_id = ref();
 const handleSearchForm = () => {
   isShowBoxSearch.value = !isShowBoxSearch.value;
 };
@@ -180,6 +191,18 @@ const handleLoadMore = () => {
   searchForms.value.pageIndex++;
   getListHumanResources(searchForms.value);
 };
+
+const handleRemoveTeamMember = (id) => {
+  delete_mem_id.value = id;
+  isShowModalConfirmDelMember.value = true;
+};
+
+const handleConfirmRemove = () => {
+  if(humanResourcesDetails.value.id !== 0) {
+    handleRemoveMember(delete_mem_id.value);
+  }
+  humanResourcesDetails.value.teamMemberIds = humanResourcesDetails.value.teamMemberIds.filter(memId => memId !== delete_mem_id.value);
+}
 
 const handleGetTeamDetails = (teamId) => {
   getHumanResourcesDetails(teamId);

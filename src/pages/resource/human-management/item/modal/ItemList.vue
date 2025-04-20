@@ -96,7 +96,7 @@ defineExpose({
   ruleFormRef,
 });
 
-const emit = defineEmits(["search", "update-value"]);
+const emit = defineEmits(["search", "update-value", "remove"]);
 
 const listAddedValues = computed(() => props.members);
 
@@ -120,10 +120,7 @@ const getUserAttr = (id, attr) => {
 }
 
 const handleRemoveResource = (id) => {
-  const index = props.members.findIndex(m => m === id);
-  if (index !== -1) {
-    props.members.splice(index, 1);
-  }
+  emit('remove', id);
 };
 </script>
 
