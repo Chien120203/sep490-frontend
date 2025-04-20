@@ -75,7 +75,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 
 export default {
-  name: 'MaterialTable',
+  name: 'ConstructionTeamTable',
   components: {IconTrash, IconEdit},
   props: {
     data: {

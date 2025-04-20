@@ -141,7 +141,7 @@ export const useHumanResourcesStore = defineStore(
       saveHumanResources,
       getHumanResourcesDetails,
       getListHumanResources,
-      handleDeleteHumanResources
+      handleDeleteHumanResources,
     };
   }
 );
