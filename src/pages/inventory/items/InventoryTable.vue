@@ -25,7 +25,7 @@
         <p>Resource Type</p>
       </template>
       <template #default="scope">
-        <span class="data-table">{{ scope.row.resourceType }}</span>
+        <span class="data-table">{{ $t(getResourceType(scope.row.resourceType)) }}</span>
       </template>
     </el-table-column>
 
@@ -46,15 +46,6 @@
         <span class="data-table">{{ scope.row.quantity }}</span>
       </template>
     </el-table-column>
-
-    <el-table-column min-width="120">
-      <template #header>
-        <p>Description</p>
-      </template>
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.description }}</span>
-      </template>
-    </el-table-column>
   </el-table>
 </template>
 
@@ -62,6 +53,7 @@
 import { mixinMethods } from "@/utils/variables.js";
 import { DATE_FORMAT } from "@/constants/application.js";
 import { defineProps } from 'vue';
+import {LIST_RESOURCE_TYPES} from "@/constants/resource.js";
 
 const props = defineProps({
   data: {
@@ -73,6 +65,10 @@ const props = defineProps({
 const formatDate = (inputDate) => {
   return mixinMethods.showDateTime(inputDate, DATE_FORMAT);
 };
+
+const getResourceType = (type) => {
+  return LIST_RESOURCE_TYPES.find(item => item.value === type).label
+}
 </script>
 
 <style lang="scss" scoped>

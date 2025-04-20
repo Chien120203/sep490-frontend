@@ -64,7 +64,7 @@ watch(
 )
 
 onMounted(() => {
-  getProgressDetails();
+  getProgressDetails(projectId.value, true);
 });
 
 const handleEditProgressItem = (item) => {

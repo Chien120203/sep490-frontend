@@ -215,24 +215,9 @@ export const useConstructLog = defineStore(
         logCode: "",
         logName: "",
         logDate: "",
-        resources: [
-          // {
-          //   id: 0,
-          //   taskIndex: 0,
-          //   resourceType: 0,
-          //   quantity: 0,
-          //   resourceId: 0,
-          //   startTime: "",
-          //   endTime: "",
-          // }
-        ],
-        workAmount: [
-          // {
-          //   id: 0,
-          //   taskIndex: 0,
-          //   workAmount: 0,
-          // }
-        ],
+        projectId: 0,
+        resources: [],
+        workAmount: [],
         weather: [
           {type: "Điều kiện", values: ["", "", "", ""]},
           {type: "Nhiệt độ", values: ["", "", "", ""]},
@@ -242,8 +227,8 @@ export const useConstructLog = defineStore(
         progress: "",
         problem: "",
         advice: "",
-        images: [],
-        attachments: [],
+        Images: [],
+        attachmentFiles: [],
         note: "",
       }
     });
@@ -251,7 +236,7 @@ export const useConstructLog = defineStore(
       value: {
         workAmount: [
           // April 1 - 30
-          ...Array.from({ length: 30 }, (_, i) => {
+          ...Array.from({length: 30}, (_, i) => {
             const day = i + 1;
             return {
               logDate: `2025-04-${day.toString().padStart(2, "0")}`,
@@ -261,7 +246,7 @@ export const useConstructLog = defineStore(
         ],
         resources: [
           // Machines (resourceId: 1)
-          ...Array.from({ length: 30 }, (_, i) => ({
+          ...Array.from({length: 30}, (_, i) => ({
             logDate: `2025-04-${(i + 1).toString().padStart(2, "0")}`,
             resourceId: 1,
             resourceType: 2,
@@ -270,7 +255,7 @@ export const useConstructLog = defineStore(
           })),
 
           // Humans (resourceId: 2)
-          ...Array.from({ length: 30 }, (_, i) => ({
+          ...Array.from({length: 30}, (_, i) => ({
             logDate: `2025-04-${(i + 1).toString().padStart(2, "0")}`,
             resourceId: 2,
             resourceType: 1,
@@ -279,7 +264,7 @@ export const useConstructLog = defineStore(
           })),
 
           // Materials (resourceId: 3)
-          ...Array.from({ length: 30 }, (_, i) => ({
+          ...Array.from({length: 30}, (_, i) => ({
             logDate: `2025-04-${(i + 1).toString().padStart(2, "0")}`,
             resourceId: 3,
             resourceType: 3,
@@ -631,6 +616,27 @@ export const useConstructLog = defineStore(
       );
     };
 
+    const saveConstructLog = async (params) => {
+      mixinMethods.startLoading();
+      const formData = mixinMethods.createFormData(params, []);
+      await services.ConstructLogAPI.save(
+        formData,
+        (response) => {
+          constructLogDetails.value = {
+            ...response.data,
+            projectId: response.data?.project.id,
+            images: response.data.images || []
+          };
+          mixinMethods.notifySuccess(t("response.message.save_contract_success"));
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.save_contract_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    }
+
     return {
       validation,
       listConstructLog,
@@ -639,7 +645,8 @@ export const useConstructLog = defineStore(
       constructLogDetails,
       isShowModalConfirm,
       isShowModalCreate,
-      getListProjectLogs
+      getListProjectLogs,
+      saveConstructLog
     };
   }
 );

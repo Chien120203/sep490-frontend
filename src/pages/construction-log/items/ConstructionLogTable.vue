@@ -1,7 +1,6 @@
 <template>
   <el-calendar ref="calendar" :range="[new Date(plusOneMonth(dateRange.startDate)), new Date(plusOneMonth(dateRange.endDate))]">
     <template #header="{ date }">
-      <span>{{title}}</span>
       <span>{{ date }}</span>
       <el-button-group>
         <el-button size="small" @click="selectDate('prev-year')">
@@ -36,10 +35,6 @@ import dayjs from "dayjs";
 
 const props = defineProps(
     {
-      title: {
-        type: String,
-        default: ""
-      },
       listLog: {
         type: Array,
         default: () => []

@@ -4,7 +4,7 @@ export const MACHINE_TYPE = 2;
 export const MATERIAL_TYPE = 3;
 
 export const LIST_RESOURCE_TYPES = [
-  {VALUE: HUMAN_TYPE, label: "inventory.type.team"},
-  {VALUE: MACHINE_TYPE, label: "inventory.type.machine"},
-  {VALUE: MATERIAL_TYPE, label: "inventory.type.material"},
+  {value: HUMAN_TYPE, label: "inventory.type.team"},
+  {value: MACHINE_TYPE, label: "inventory.type.machine"},
+  {value: MATERIAL_TYPE, label: "inventory.type.material"},
 ]
