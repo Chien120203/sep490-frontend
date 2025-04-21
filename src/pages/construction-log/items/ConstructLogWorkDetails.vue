@@ -127,7 +127,7 @@ const props = defineProps({
   }
 });
 const listWorkAmount = computed(() => props.logDetails.workAmount.reduce((acc, item) => {
-  acc[item.index] = item
+  acc[item.taskIndex] = item
   return acc
 }, {}));
 const activeCollapseItems = ref(["1", "2", "3"]);
@@ -155,7 +155,7 @@ defineExpose({
 const handleSelectTask = (id) => {
   selectedRow.value = id;
   const selectedTask = props.progressDtls.progressItems.find(task => task.index === id);
-  props.logDetails.workAmount.push({index: id, workAmount: 0});
+  props.logDetails.workAmount.push({taskIndex: id, workAmount: 0});
   if (selectedTask) {
     if (!groupedByTasks.value[selectedTask.index]) {
       // Add selected task to grouped tasks if it doesn't exist yet
@@ -164,11 +164,14 @@ const handleSelectTask = (id) => {
   }
 };
 
-const getListResourcesByType = (task, type) => {
-  return task.details
-      .filter(item => item.resource.type === type)
-      .map(item => item.resource);
-}
+const getListResourcesByType = (task, type) =>
+    task.details
+        .filter(({ resource }) => resource.type === type)
+        .map(({ unit, quantity, resource }) => ({
+          unit,
+          plannedQuantity: quantity,
+          ...resource,
+        }));
 
 // Handle Task Deletion
 const handleDeleteLog = (index) => {

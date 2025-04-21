@@ -60,9 +60,17 @@
           </template>
         </el-table-column>
 
+        <el-table-column prop="quantity" label="Định mức">
+          <template #default="scope">
+            <el-form-item >
+              {{ getResource(scope.row.resourceId).plannedQuantity || "-" }}
+            </el-form-item>
+          </template>
+        </el-table-column>
+
         <el-table-column prop="unit" label="Đơn vị" width="160">
-          <template #default="{row, $index}">
-            {{ getResource(row.unit).unit || "-" }}
+          <template #default="scope">
+            {{ getResource(scope.row.resourceId).unit || "-" }}
           </template>
         </el-table-column>
 

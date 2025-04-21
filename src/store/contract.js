@@ -29,8 +29,8 @@ export const useContractStore = defineStore(
       }
     });
 
-    const getContractDetails = async (id) => {
-      mixinMethods.startLoading();
+    const getContractDetails = async (id, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
       await services.ContractAPI.details(
         id,
         {},

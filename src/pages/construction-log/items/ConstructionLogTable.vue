@@ -1,7 +1,7 @@
 <template>
-  <el-calendar ref="calendar" :range="[new Date(plusOneMonth(dateRange.startDate)), new Date(plusOneMonth(dateRange.endDate))]">
+  <el-calendar ref="calendar" :range="[dateRange.fromDate, dateRange.toDate]">
     <template #header="{ date }">
-      <span>{{ date }}</span>
+      <span>{{ dayjs(dateRange.fromDate).format('MMMM YYYY') }}</span>
       <el-button-group>
         <el-button size="small" @click="selectDate('prev-year')">
           Previous Year
@@ -45,20 +45,52 @@ const props = defineProps(
       }
     }
 );
-const emit = defineEmits(["choose-date"])
+const emit = defineEmits(["choose-date", "change-date"])
 
 const calendar = ref();
 
-const selectDate = (val) => {
-  if (!calendar.value) return calendar.value.selectDate(val)
-}
+const selectDate = (value) => {
+  const from = dayjs(props.dateRange.fromDate);
+  const to = dayjs(props.dateRange.toDate);
+
+  let newFrom = from;
+  let newTo = to;
+
+  switch (value) {
+    case 'prev-year':
+      newFrom = from.subtract(1, 'year');
+      newTo = to.subtract(1, 'year');
+      break;
+    case 'next-year':
+      newFrom = from.add(1, 'year');
+      newTo = to.add(1, 'year');
+      break;
+    case 'prev-month':
+      newFrom = from.subtract(1, 'month');
+      newTo = to.subtract(1, 'month');
+      break;
+    case 'next-month':
+      newFrom = from.add(1, 'month');
+      newTo = to.add(1, 'month');
+      break;
+    case 'today':
+      newFrom = dayjs().startOf('month');
+      newTo = dayjs().endOf('month');
+      break;
+    default:
+      break;
+  }
+
+  // Now update the props.dateRange values (if mutable)
+  props.dateRange.fromDate = newFrom.format('YYYY-MM-DD');
+  props.dateRange.toDate = newTo.format('YYYY-MM-DD');
+
+  // Emit if needed
+  emit('change-date');
+};
 
 const handleDateClick = (date) => {
   emit('choose-date', date);
-}
-
-const plusOneMonth = (dateStr) => {
-  return dayjs(dateStr).format('YYYY-MM-DD')
 }
 
 const getLogName = (data) => {

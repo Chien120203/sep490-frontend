@@ -11,7 +11,7 @@
         </div>
 
         <div v-if="selectedTab === 'statistic'">
-          <StatisticTable :taskDetails="task" :taskPlan="taskPlan" :listLogsByTask="listLogsByTask" />
+          <StatisticTable :taskPlan="taskPlan" :listLogsByTask="listLogsByTask" />
         </div>
 
         <div v-if="selectedTab === 'log'">
@@ -86,6 +86,8 @@ const searchForm = ref({
   endDate: "2025-04-30"
 });
 const selectedTab = ref("statistic"); // Default tab
+
+//mock data
 const listTabs =ref([
   {
     name: "statistic",
@@ -206,6 +208,7 @@ const dataUsers = ref([
     phone: "0977331122"
   }
 ]);
+
 const title = ref('');
 const message = ref('');
 const isShowModalConfirm = ref(false);

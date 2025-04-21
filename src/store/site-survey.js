@@ -42,8 +42,8 @@ export const useSiteSurveyStore = defineStore(
       }
     });
 
-    const getSurveyDetails = async (id) => {
-      mixinMethods.startLoading();
+    const getSurveyDetails = async (id, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
       await services.SiteSurveyAPI.details(
         {projectId: id},
         (response) => {

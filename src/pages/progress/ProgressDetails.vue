@@ -19,7 +19,7 @@ import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 const router = useRouter();
 const persistenceStore = usePersistenceStore();
 const progressStore = useProgressStore();
-const constructStore = useConstructLog();
+const constructLogStore = useConstructLog();
 const planningStore = usePlanningStore();
 const {
   progressDetails,
@@ -29,8 +29,9 @@ const {
   taskPlanDetails
 } = planningStore;
 const {
-  listLogsByTask
-} = constructStore;
+  listLogsByTask,
+  getListLogsByTask
+} = constructLogStore;
 const {
   projectId
 } = persistenceStore;
@@ -69,6 +70,7 @@ onMounted(() => {
 
 const handleEditProgressItem = (item) => {
   isShowModal.value = true;
+  getListLogsByTask(projectId.value, item[0]?.taskData.index);
   progressItem.value = item[0]?.taskData;
 }
 

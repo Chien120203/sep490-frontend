@@ -65,7 +65,8 @@ const {
 } = persistenceStore;
 const {
   constructLogDetails,
-  saveConstructLog
+  saveConstructLog,
+  getConstructLogDetails
 } = constructLogStore;
 const {
   progressDetails,
@@ -78,6 +79,8 @@ const router = useRouter();
 
 onMounted(async () => {
   await getProgressDetails(projectId.value, false);
+  if(route.params.date && !route.params.id) constructLogDetails.value.logDate = route.params.date;
+  if(route.params.id) await getConstructLogDetails(route.params.id);
 });
 
 onUnmounted(() => {

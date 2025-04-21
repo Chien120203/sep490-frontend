@@ -15,6 +15,7 @@
             :dateRange="searchForm"
             :listLog="listConstructLog.value"
             @choose-date="handleChooseDate"
+            @change-date="handleChangeDate"
         />
       </div>
     </div>
@@ -27,15 +28,10 @@ import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
-import {useCustomerStore} from "@/store/customer.js";
-import {useUserStore} from "@/store/user.js";
-import {mixinMethods} from "@/utils/variables";
-import {useContractStore} from "@/store/contract.js";
 import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {useConstructLog} from "@/store/construct-log.js";
-
-const isShowModalItemDtls = ref(false);
+import dayjs from 'dayjs';
 
 // Store Data
 const constructLog = useConstructLog();
@@ -55,29 +51,39 @@ const {
 
 const route = useRoute();
 const router = useRouter();
-const now = new Date();
-const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+const now = dayjs();
+
+const fromDate = now.startOf('month').format('YYYY-MM-DD');
+const toDate = now.endOf('month').format('YYYY-MM-DD');
 
 const searchForm = ref({
-  startDate: firstDay.toISOString().split('T')[0],
-  endDate: lastDay.toISOString().split('T')[0]
+  projectId: projectId.value,
+  fromDate: fromDate,
+  toDate: toDate,
+  pageSize: 100
 });
 onMounted(async () => {
-  // await getListProjectLogs(searchForm.value);
+  await getListProjectLogs(searchForm.value);
 });
 
 onUnmounted(() => {
 });
+
+const handleChangeDate = () => {
+  getListProjectLogs(searchForm.value);
+}
 
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
 
 const handleChooseDate = (date) => {
+  if(date.day > dayjs()) {
+    return;
+  }
   let constructLog = listConstructLog.value.find(log => log.date === date.day);
   if(!constructLog) {
-    router.push({name: PAGE_NAME.CONSTRUCT_LOG.CREATE});
+    router.push({name: PAGE_NAME.CONSTRUCT_LOG.CREATE, params:{date: date.day}});
   } else router.push({
     name: PAGE_NAME.CONSTRUCT_LOG.DETAILS,
     params: { id: constructLog.id }

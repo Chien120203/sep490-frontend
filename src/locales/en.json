@@ -798,6 +798,13 @@
     },
     "details": {
       "title": "Project Progress"
+    },
+    "status": {
+      "not_started": "Not start",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "paused": "Paused",
+      "canceled": "Canceled"
     }
   },
   "planning": {

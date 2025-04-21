@@ -176,12 +176,6 @@ export default {
             function_icon: "IconRequestAllocation",
             isShow: isShowProjectSideBar.value,
           },
-          {
-            function_name: t("side_bar.label.progress_change"),
-            function_page_name: PAGE_NAME.PROGRESS_CHANGE.LIST,
-            function_icon: "IconProgressChange",
-            isShow: isShowProjectSideBar.value, // set later
-          },
         ],
       },
       {

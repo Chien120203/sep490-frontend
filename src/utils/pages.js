@@ -42,7 +42,7 @@ const PAGES = {
   //construction log
   CONSTRUCT_LOG: "/construct-log",
   CONSTRUCT_LOG_DETAILS: "/construct-log/details/:id",
-  CONSTRUCT_LOG_CREATE: "/construct-log/create",
+  CONSTRUCT_LOG_CREATE: "/construct-log/create/:date",
 
   // mobilization
   MOBILIZATION: "/mobilization",

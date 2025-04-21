@@ -9,5 +9,6 @@ export const PROGRESS_STATUS = [
   'progress.status.not_started',
   'progress.status.in_progress',
   'progress.status.completed',
-  'progress.status.behind_schedule',
+  'progress.status.paused',
+  'progress.status.canceled',
 ]

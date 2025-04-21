@@ -215,8 +215,8 @@ export default {
       projectId.value = route.params.id;
       await getProjectDetails(route.params.id);
       projectStatus.value = projectDetails.value.status;
-      await getContractDetails(projectId.value);
-      await getSurveyDetails(route.params.id);
+      await getContractDetails(projectId.value, false);
+      await getSurveyDetails(route.params.id, false);
     });
 
     const getSiteSurveyDetails = () => {

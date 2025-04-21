@@ -199,7 +199,7 @@ const handleErrorResponse = (error) => {
   }, {});
 };
 
-const createFormData = (params, skipArray = []) => {
+const createFormData = (params, skipArray = [], combineArray = []) => {
   const formData = new FormData();
 
   Object.keys(params).forEach((key) => {
@@ -215,8 +215,8 @@ const createFormData = (params, skipArray = []) => {
           formData.append(key, item);
         });
       } else {
-        // If it's a regular array, convert items to JSON
-        value.forEach(item => {
+        if(combineArray.includes(key)) formData.append(key, JSON.stringify(value));
+        else value.forEach(item => {
           formData.append(key, JSON.stringify(item));
         });
       }
