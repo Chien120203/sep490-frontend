@@ -6,7 +6,7 @@
           <h3 class="page__ttl">
             <span class="btn-back" @click="handleBack"><IconBackMain/></span>
             {{
-              $t('construct_log.edit.title')
+              $t('inspection.edit.title')
             }}
           </h3>
         </div>

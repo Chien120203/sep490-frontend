@@ -1222,6 +1222,9 @@
   },
   "inspection": {
     "title": "Inspection Report",
+    "edit" : {
+      "title": "Inspection Report Details"
+    },
     "table": {
       "header": {
         "projectCode": "Project Code",
