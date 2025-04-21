@@ -29,6 +29,18 @@
         <el-date-picker style="width: 100%" v-model="logDetails.logDate" :format="DATE_FORMAT" :value-format="DATE_FORMAT" type="date" placeholder="Chọn ngày"/>
       </el-form-item>
 
+      <el-form-item label="Trạng thái" required prop="status">
+        <el-select v-model="logDetails.status">
+          <el-option
+              v-for="(label, index) in LIST_LOG_STATUSES"
+              :key="index"
+              :label="$t(label)"
+              :value="index"
+          >
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="Thời tiết">
         <el-table :data="logDetails.weather" border style="width: 100%">
           <el-table-column prop="time" label="" width="100">
@@ -85,8 +97,9 @@
 import {ref} from "vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
 import FileUpload from "@/components/common/FileUpload.vue";
-import {BAD_CONDITION, GOOD_CONDITION, MEDIUM_CONDITION} from "@/constants/construct-log.js";
+import {BAD_CONDITION, GOOD_CONDITION, LIST_LOG_STATUSES, MEDIUM_CONDITION} from "@/constants/construct-log.js";
 import {DATE_FORMAT} from "@/constants/application.js";
+import {ALLOCATION_REQUEST_TYPES} from "@/constants/allocation.js";
 
 const props = defineProps({
   logDetails: {

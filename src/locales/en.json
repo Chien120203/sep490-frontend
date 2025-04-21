@@ -1116,6 +1116,11 @@
     },
     "edit": {
       "title": "Construction Log Details"
+    },
+    "status": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "wait_approve": "Wait for Approval"
     }
   },
   "mobilization": {
