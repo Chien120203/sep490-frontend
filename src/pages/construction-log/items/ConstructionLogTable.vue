@@ -23,7 +23,16 @@
         <p :class="data.isSelected ? 'is-selected' : ''">
           {{ data.day.split('-').slice(2).join('') }}
         </p>
-        <el-tag v-if="getLogName(data.day)" type="primary">{{getLogName(data.day)}}</el-tag>
+        <div style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
+          <el-tag
+              v-for="(log, idx) in getLogsByDate(data.day).slice(0, 3)"
+              :key="idx"
+              type="primary"
+          >
+            {{ log.logName }}
+          </el-tag>
+          <span v-if="getLogsByDate(data.day).length > 3">...</span>
+        </div>
       </div>
     </template>
   </el-calendar>
@@ -32,6 +41,7 @@
 <script setup>
 import { ref } from 'vue'
 import dayjs from "dayjs";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps(
     {
@@ -82,8 +92,8 @@ const selectDate = (value) => {
   }
 
   // Now update the props.dateRange values (if mutable)
-  props.dateRange.fromDate = newFrom.format('YYYY-MM-DD');
-  props.dateRange.toDate = newTo.format('YYYY-MM-DD');
+  props.dateRange.fromDate = newFrom.format(DATE_FORMAT);
+  props.dateRange.toDate = newTo.format(DATE_FORMAT);
 
   // Emit if needed
   emit('change-date');
@@ -94,7 +104,11 @@ const handleDateClick = (date) => {
 }
 
 const getLogName = (data) => {
-  return props.listLog.find(log => log.logDate === data)?.logName || ""
+  return props.listLog.find(log => dayjs(log.logDate).format(DATE_FORMAT) === data)?.logName || ""
+}
+
+const getLogsByDate = (date) => {
+  return props.listLog.filter(log => dayjs(log.logDate).format(DATE_FORMAT) === date) || [];
 }
 </script>
 <style scoped>

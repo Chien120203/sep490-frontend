@@ -14,7 +14,7 @@
         <ModalItemInformation :task="progressDetails"/>
       </div>
       <div style="display: flex">
-        <ModalItemProgressDetails :task="progressDetails" :taskPlan="taskPlan" :listLogsByTask="listLogsByTask" style="width: 100%"/>
+        <ModalItemProgressDetails :task="progressDetails" :listLogsByTask="listLogsByTask" style="width: 100%"/>
       </div>
     </template>
   </Modal>
@@ -31,9 +31,6 @@ const {t} = useI18n();
 const props = defineProps({
   show: {type: Boolean, default: false},
   progressDetails: {
-    type: Object, default: () => {}
-  },
-  taskPlan: {
     type: Object, default: () => {}
   },
   listLogsByTask: {
@@ -53,6 +50,7 @@ const handleSubmit = () => {
 <style scoped>
 .modal-title {
   display: flex;
+  margin: 0;
   justify-content: center;
   align-items: center;
 }

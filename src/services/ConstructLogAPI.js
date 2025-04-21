@@ -10,7 +10,7 @@ const details = async (id, params, success, error) => {
 };
 
 const listLogsByTask = async (projectId, taskIndex, params, success, error) => {
-  await get(API_CODE.API_CONSTRUCT_LOG_003 + '/' + projectId + '/task/' + taskIndex, success, error, params);
+  await get(API_CODE.API_CONSTRUCT_LOG_004 + '/' + projectId + '/task/' + taskIndex, success, error, params);
 };
 
 const save = async (formData, success, error) => {

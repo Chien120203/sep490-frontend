@@ -106,7 +106,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";

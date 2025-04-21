@@ -97,8 +97,8 @@ const API_CODE = {
   //Construction Log
   API_CONSTRUCT_LOG_001: '/construction-log/save',
   API_CONSTRUCT_LOG_002: '/construction-log/list',
-  API_CONSTRUCT_LOG_003: '/construction-log/',
-  API_CONSTRUCT_LOG_004: '/construction-log/project/',
+  API_CONSTRUCT_LOG_003: '/construction-log',
+  API_CONSTRUCT_LOG_004: '/construction-log/project',
 
     //Progress
     API_PROGRESS_001: '/construction-progress/get-by-project',

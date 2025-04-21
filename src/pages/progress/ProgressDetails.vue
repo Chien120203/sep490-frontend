@@ -20,14 +20,11 @@ const router = useRouter();
 const persistenceStore = usePersistenceStore();
 const progressStore = useProgressStore();
 const constructLogStore = useConstructLog();
-const planningStore = usePlanningStore();
 const {
   progressDetails,
   getProgressDetails
 } = progressStore;
-const {
-  taskPlanDetails
-} = planningStore;
+
 const {
   listLogsByTask,
   getListLogsByTask
@@ -131,7 +128,6 @@ const handleCloseModal = () => {
     <ProgressDetailsModal
         :progressDetails="progressItem"
         :listLogsByTask="listLogsByTask.value"
-        :taskPlan="taskPlanDetails.value"
         :show="isShowModal"
         @close="handleCloseModal"
     />

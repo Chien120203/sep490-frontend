@@ -69,6 +69,28 @@ const notifyError = (messages, useHTML = false, notify = null) => {
   });
 };
 
+const notifyWarning = (messages, useHTML = false, notify = null) => {
+  let message = "";
+
+  if (useHTML && Array.isArray(messages)) {
+    messages.forEach((item) => (message += `<p>${item}</p>`));
+  } else if (useHTML && typeof messages === "object") {
+    for (let key in messages) message += `<p>${messages[key]}</p>`;
+  } else {
+    message = messages;
+  }
+
+  const notifyObj = notify ?? ElNotification;
+  notifyObj.warning({
+    message,
+    duration: 2000,
+    position: "top-right",
+    dangerouslyUseHTMLString: useHTML,
+    showClose: false,
+  });
+};
+
+
 const notifySuccess = (messages, useHTML = false, notify = null) => {
   let message = "";
 
@@ -282,6 +304,7 @@ export const mixins = {
   createFormData,
   endLoading,
   checkEmptyWithOutZero,
+  notifyWarning,
   checkEmpty,
   formatCurrency,
   formatNumberVietnam,

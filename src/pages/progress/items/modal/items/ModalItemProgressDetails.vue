@@ -11,7 +11,7 @@
         </div>
 
         <div v-if="selectedTab === 'statistic'">
-          <StatisticTable :taskPlan="taskPlan" :listLogsByTask="listLogsByTask" />
+          <StatisticTable :task="task" :listLogsByTask="listLogsByTask" />
         </div>
 
         <div v-if="selectedTab === 'log'">
@@ -71,10 +71,6 @@ const props = defineProps({
   listLogsByTask: {
     type: Array,
     default: () => []
-  },
-  taskPlan: {
-    type: Object,
-    default: () => {}
   },
   task: {
     type: Object,
