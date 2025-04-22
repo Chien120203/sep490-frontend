@@ -76,7 +76,7 @@ export const useMobilizationStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          mixinMethods.notifyError(t("response.message.get_mobilization_failed"));
+          mixinMethods.notifyError(t("response.message.get_mobilization_dtls_failed"));
           mixinMethods.endLoading();
         }
       );
@@ -125,12 +125,12 @@ export const useMobilizationStore = defineStore(
         id,
         (response) => {
           // mobilizationDetails.value = response.data;
-          mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
+          mixinMethods.notifySuccess(t("response.message.update_mobilization_status_success"));
           mixinMethods.endLoading();
         },
         () => {
           validation.value = mixinMethods.handleErrorResponse(response);
-          mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
+          mixinMethods.notifyError(t("response.message.update_mobilization_status_failed"));
           mixinMethods.endLoading();
         }
       );

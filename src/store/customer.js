@@ -3,7 +3,6 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
-import customerList from "@/pages/customer/CustomerList.vue";
 
 export const useCustomerStore = defineStore(
   "customer",

@@ -158,12 +158,12 @@ export const usePlanningStore = defineStore(
             reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]
           };
           validation.value = [];
-          mixinMethods.notifySuccess(t("response.message.save_project_success"));
+          mixinMethods.notifySuccess(t("response.message.save_planning_success"));
           mixinMethods.endLoading();
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
-          mixinMethods.notifyError(t("response.message.save_project_failed"));
+          mixinMethods.notifyError(t("response.message.save_planning_failed"));
           mixinMethods.endLoading();
         }
       );
@@ -174,7 +174,7 @@ export const usePlanningStore = defineStore(
       let currentEmail = localStorage.getItem('email');
       let userId = approveStatuses.value.find(item => item.email === currentEmail)?.id;
       if (!userId) {
-        mixinMethods.notifyError(t("response.message.save_project_failed"));
+        mixinMethods.notifyError(t("response.message.approve_planning_failed"));
         await mixinMethods.endLoading();
         return;
       }
@@ -186,12 +186,12 @@ export const usePlanningStore = defineStore(
           rejectReason: "abc"
         },
         (response) => {
-          mixinMethods.notifySuccess(t("response.message.save_project_success"));
+          mixinMethods.notifySuccess(t("response.message.approve_planning_success"));
           mixinMethods.endLoading();
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
-          mixinMethods.notifyError(t("response.message.save_project_failed"));
+          mixinMethods.notifyError(t("response.message.approve_planning_failed"));
           mixinMethods.endLoading();
         }
       );
@@ -202,7 +202,7 @@ export const usePlanningStore = defineStore(
       let currentEmail = localStorage.getItem('email');
       let userId = approveStatuses.value.find(item => item.email === currentEmail)?.id;
       if (!userId) {
-        mixinMethods.notifyError(t("response.message.save_project_failed"));
+        mixinMethods.notifyError(t("response.message.reject_planning_failed"));
         await mixinMethods.endLoading();
         return;
       }
@@ -220,12 +220,12 @@ export const usePlanningStore = defineStore(
               return p.isApproved = false;
             }
           })
-          mixinMethods.notifySuccess(t("response.message.save_project_success"));
+          mixinMethods.notifySuccess(t("response.message.reject_planning_success"));
           mixinMethods.endLoading();
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
-          mixinMethods.notifyError(t("response.message.save_project_failed"));
+          mixinMethods.notifyError(t("response.message.reject_planning_failed"));
           mixinMethods.endLoading();
         }
       );

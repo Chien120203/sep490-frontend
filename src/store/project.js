@@ -129,7 +129,7 @@ export const useProjectStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          mixinMethods.notifyError(t("response.message.get_projects_failed"));
+          mixinMethods.notifyError(t("response.message.get_project_details_failed"));
           mixinMethods.endLoading();
         }
       );

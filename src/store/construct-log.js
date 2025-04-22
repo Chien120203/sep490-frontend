@@ -95,6 +95,8 @@ export const useConstructLog = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
+            validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+            mixinMethods.notifyError(t("response.message.get_construct_log_failed"));
           mixinMethods.endLoading();
         }
       );
@@ -110,6 +112,8 @@ export const useConstructLog = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
+            validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+            mixinMethods.notifyError(t("response.message.get_construct_log_dtls_failed"));
           mixinMethods.endLoading();
         }
       );
@@ -126,6 +130,8 @@ export const useConstructLog = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
+            validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+            mixinMethods.notifyError(t("response.message.get_logs_by_task_failed"))
           mixinMethods.endLoading();
         }
       );
@@ -142,11 +148,11 @@ export const useConstructLog = defineStore(
             projectId: response.data?.project.id,
             images: response.data.images || []
           };
-          mixinMethods.notifySuccess(t("response.message.save_contract_success"));
+          mixinMethods.notifySuccess(t("response.message.save_construct_log_success"));
           mixinMethods.endLoading();
         },
         (error) => {
-          mixinMethods.notifyError(t("response.message.save_contract_failed"));
+          mixinMethods.notifyError(t("response.message.save_construct_log_failed"));
           mixinMethods.endLoading();
         }
       );
