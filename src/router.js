@@ -40,7 +40,6 @@ import MaterialResources from "@/pages/resource/material-management/Index.vue";
 import MaterialResourcesSave from "@/pages/resource/material-management/Save.vue";
 import MaterialResourceList from "@/pages/resource/material-management/MaterialResourceList.vue";
 import HumanResources from "@/pages/resource/human-management/Index.vue";
-import HumanResourcesSave from "@/pages/resource/human-management/Save.vue";
 import HumanResourceList from "@/pages/resource/human-management/HumanResourceList.vue";
 import UserProfile from "@/pages/profile/UserProfile.vue";
 import Allocation from "@/pages/resource-allocation/Index.vue";
