@@ -29,6 +29,28 @@ export const useContractStore = defineStore(
       }
     });
 
+      const getListContracts = async (params, isLoading = true) => {
+          if (isLoading) mixinMethods.startLoading();
+          await services.ContractAPI.list(
+              params,
+              (response) => {
+                  if (currentPage.value === 1) {
+                      listContracts.value = response.data;
+                  } else {
+                      listContracts.value = [...listContracts.value, ...response.data];
+                  }
+                  totalItems.value = response.meta.total;
+                  currentPage.value = response.meta.index;
+                  mixinMethods.endLoading();
+              },
+              (error) => {
+                  validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+                  mixinMethods.notifyError(t("response.message.get_contracts_failed"));
+                  mixinMethods.endLoading();
+              }
+          );
+      }
+
     const getContractDetails = async (id, isLoading = true) => {
       if(isLoading) mixinMethods.startLoading();
       await services.ContractAPI.details(
@@ -39,6 +61,8 @@ export const useContractStore = defineStore(
             mixinMethods.endLoading();
         },
         (error) => {
+            validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+            mixinMethods.notifyError(t("response.message.get_contract_dtls_failed"));
           clearContractDetails();
           mixinMethods.endLoading();
         }
@@ -90,6 +114,7 @@ export const useContractStore = defineStore(
       getContractDetails,
       clearContractDetails,
       saveContract,
+        getListContracts
     };
   }
 );
