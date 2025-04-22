@@ -7,60 +7,34 @@
         :rules="rules"
     >
       <!-- Verification code -->
-      <el-form-item label="Mã kiểm tra" prop="inspect_code" required>
-        <el-input v-model="inspectionReportDetails.inspect_code" placeholder="Nhập mã kiểm tra" />
+      <el-form-item label="Mã kiểm tra" prop="inspectCode" required>
+        <el-input v-model="inspectionReportDetails.inspectCode" placeholder="Nhập mã kiểm tra" />
       </el-form-item>
 
       <!-- Inspector -->
-      <el-form-item label="Người kiểm tra" prop="inspector" required>
-        <el-select v-model="inspectionReportDetails.inspector" placeholder="Chọn người kiểm tra" style="width: 100%">
-          <el-option label="Nguyễn Văn A" value="Nguyễn Văn A" />
-          <el-option label="Nguyễn Văn B" value="Nguyễn Văn B" />
-          <el-option label="Nguyễn Văn C" value="Nguyễn Văn C" />
-        </el-select>
+      <el-form-item label="Người kiểm tra" prop="inspectorId" required>
+        <el-input v-model="userName" disabled/>
       </el-form-item>
 
       <!-- Inspection dates -->
       <div class="form-row">
-        <el-form-item label="Ngày bắt đầu kiểm tra" prop="inspect_start_date" required class="date-field">
+        <el-form-item label="Ngày bắt đầu kiểm tra" prop="inspectStartDate" required class="date-field">
           <el-date-picker
-              v-model="inspectionReportDetails.inspect_start_date"
-              type="date"
+              v-model="inspectionReportDetails.inspectStartDate"
+              :format="DATE_FORMAT"
+              :value-format="DATE_FORMAT"
               placeholder="mm/dd/yyyy"
-              format="MM/DD/YYYY"
-              value-format="YYYY-MM-DD"
               style="width: 100%"
           />
         </el-form-item>
-
-        <el-form-item label="Ngày kết thúc kiểm tra" prop="inspect_end_date" required class="date-field">
+        <el-form-item label="Ngày kết thúc kiểm tra" prop="inspectEndDate" required class="date-field">
           <el-date-picker
-              v-model="inspectionReportDetails.inspect_end_date"
-              type="date"
+              v-model="inspectionReportDetails.inspectEndDate"
+              :format="DATE_FORMAT"
+              :value-format="DATE_FORMAT"
               placeholder="mm/dd/yyyy"
-              format="MM/DD/YYYY"
-              value-format="YYYY-MM-DD"
               style="width: 100%"
           />
-        </el-form-item>
-      </div>
-
-      <!-- Progress and Plan -->
-      <div class="form-row">
-        <el-form-item label="Tiến độ" prop="progress_id" class="half-width">
-          <el-select v-model="inspectionReportDetails.progress_id" placeholder="Chọn tiến độ" style="width: 100%">
-            <el-option label="Giai đoạn 1" value="1" />
-            <el-option label="Giai đoạn 2" value="2" />
-            <el-option label="Giai đoạn 3" value="3" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="Kế hoạch" prop="plan_id" class="half-width">
-          <el-select v-model="inspectionReportDetails.plan_id" placeholder="Chọn kế hoạch" style="width: 100%">
-            <el-option label="Kế hoạch A" value="1" />
-            <el-option label="Kế hoạch B" value="2" />
-            <el-option label="Kế hoạch C" value="3" />
-          </el-select>
         </el-form-item>
       </div>
 
@@ -70,26 +44,41 @@
       </el-form-item>
 
       <!-- Decision -->
-      <el-form-item label="Quyết định kiểm tra" prop="inspection_decision" required>
-        <el-radio-group v-model="inspectionReportDetails.inspection_decision">
+      <el-form-item label="Quyết định kiểm tra" prop="inspectionDecision" required>
+        <el-radio-group v-model="inspectionReportDetails.inspectionDecision">
           <el-radio :label="1">Đạt yêu cầu</el-radio>
           <el-radio :label="2">Đạt có điều kiện</el-radio>
           <el-radio :label="3">Không đạt yêu cầu</el-radio>
         </el-radio-group>
       </el-form-item>
 
+      <!-- Status -->
+      <el-form-item label="Trạng thái" prop="status" required>
+        <el-radio-group v-model="inspectionReportDetails.status">
+          <el-radio :label="1">Duyệt</el-radio>
+          <el-radio :label="2">Từ chối</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
       <!-- Quality notes -->
       <el-form-item label="Ghi chú chất lượng">
-        <el-input type="textarea" v-model="inspectionReportDetails.quality_note" rows="3" />
+        <el-input type="textarea" v-model="inspectionReportDetails.qualityNote" rows="3" />
+      </el-form-item>
+
+      <!-- Other notes -->
+      <el-form-item label="Ghi chú khác">
+        <el-input type="textarea" v-model="inspectionReportDetails.otherNote" rows="3" />
       </el-form-item>
 
       <!-- Attachments -->
       <el-form-item prop="attachment" label="Tệp đính kèm">
         <FileUpload
+            :existingFiles="inspectionReportDetails.attachment"
             :allowedTypes="'.jpg,.png,.pdf,.docx'"
             :fileLimit="3"
             class="input-wd-96"
-            @file-selected="handleFileUpload"
+            @file-selected="handleSelectAttachments"
+            @file-removed="handleRemoveAttachments"
         />
       </el-form-item>
 
@@ -103,34 +92,36 @@
 
 <script setup>
 import { ref } from "vue";
-import { useInspectionReportStore } from "@/store/inspection.js";
 import FileUpload from "@/components/common/FileUpload.vue";
+import {DATE_FORMAT} from "@/constants/application.js";
 
-const store = useInspectionReportStore();
-
-const inspectionReportDetails = store.inspectionReportDetails;
-const rules = ref({
-  inspect_code: [{ required: true, message: "Vui lòng nhập mã kiểm tra", trigger: "blur" }],
-  inspector: [{ required: true, message: "Vui lòng chọn người kiểm tra", trigger: "change" }],
-  inspect_start_date: [{ required: true, message: "Vui lòng chọn ngày bắt đầu", trigger: "change" }],
-  inspect_end_date: [{ required: true, message: "Vui lòng chọn ngày kết thúc", trigger: "change" }],
-  location: [{ required: true, message: "Vui lòng nhập vị trí", trigger: "blur" }],
-  inspection_decision: [{ required: true, message: "Vui lòng chọn quyết định", trigger: "change" }]
+const props = defineProps({
+  inspectionReportDetails: {
+    type: Object,
+    default: () => {
+    }
+  },
+  rules: {
+    type: Object,
+    default: () => {
+    }
+  }
+});
+const ruleFormRef = ref(null);
+defineExpose({
+  ruleFormRef,
 });
 
-const ruleFormRef = ref(null);
+const handleSelectAttachments = (listFiles) => {
+  props.inspectionReportDetails.attachment = listFiles || [];
+}
 
-const handleFileUpload = (file) => {
-  inspectionReportDetails.attachment.push(file);
-};
+const handleRemoveAttachments = (file) => {
+  props.inspectionReportDetails.attachment = props.inspectionReportDetails.attachment.filter((f) => f.uid !== file.uid);
+}
 
-const saveInspectionReport = () => {
-  store.saveInspectionReport(inspectionReportDetails, "save");
-};
+const userName = localStorage.getItem("username");
 
-const clearForm = () => {
-  store.clearInspectionReportDetails();
-};
 </script>
 
 <style scoped>

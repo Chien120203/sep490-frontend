@@ -89,10 +89,13 @@ const API_CODE = {
     API_INVENTORY_001: '/resourcereq/inventory/list',
 
     //Inspection Report
-    API_INSPECTION_001: '/inspection/list',
-    API_INSPECTION_002: '/inspection/detail',
-    API_INSPECTION_003: '/inspection/save',
-    API_INSPECTION_004: '/inspection/delete',
+    API_INSPECTION_001: '/inspection-report/list',
+    API_INSPECTION_002: '/inspection-report',
+    API_INSPECTION_003: '/inspection-report/save',
+    API_INSPECTION_004: '/inspection-report/',
+    API_INSPECTION_005: '/inspection-report/project/',
+    API_INSPECTION_006: '/inspection-report/',
+    API_INSPECTION_007: '/inspection-report/reject',
 
   //Construction Log
   API_CONSTRUCT_LOG_001: '/construction-log/save',

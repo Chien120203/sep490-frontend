@@ -27,30 +27,30 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.inspect_code ?? "-" }} </span>
+        <span class="data-table">{{ scope.row.inspectCode ?? "-" }} </span>
       </template>
     </el-table-column>
 
     <el-table-column min-width="150">
       <template #header>
-        <p v-html="$t('inspection.table.header.inspectionName')"></p>
+        <p v-html="$t('inspection.table.header.inspectorName')"></p>
       </template>
 
       <template #default="scope">
         <span class="data-table">
-          {{ scope.row.inspectionName ? scope.row.inspectionName : "-" }}
+          {{ scope.row.inspectorName ? scope.row.inspectorName : "-" }}
         </span>
       </template>
     </el-table-column>
 
     <el-table-column min-width="90">
       <template #header>
-        <p v-html="$t('inspection.table.header.date')"></p>
+        <p v-html="$t('inspection.table.header.location')"></p>
       </template>
 
       <template #default="scope">
         <span class="data-table">
-          {{ scope.row.date ? scope.row.date : "-" }}
+          {{ scope.row.location ? scope.row.location : "-" }}
         </span>
       </template>
     </el-table-column>
@@ -98,6 +98,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 
 export default {
+  name: "InspectionReportTable",
   components: {
     IconEdit,
     IconTrash,

@@ -21,18 +21,17 @@
       <div class="log-container">
         <div class="log-details">
           <InspectionReportDetails
-              ref="formLogDetailsRef"
-              :rules="constructLogRules"
-              :logDetails="constructLogDetails.value"
-              @remove-resource="handleRemoveResource"
-              @remove-task="handleRemoveTask"
+              ref="formInspectionReportDetailsRef"
+              :rules="inspectionRules"
+              :progressDtls="progressDetails.value"
+              :inspectionReportDetails="inspectionReportDetails.value"
           />
         </div>
         <div class="log-infor">
           <InspectionReportInfo
-              ref="formLogInfoRef"
-              :rules="constructLogRules"
-              :logDetails="constructLogDetails.value"
+              ref="formInspectionReportRef"
+              :rules="inspectionRules"
+              :inspectionReportDetails="inspectionReportDetails.value"
           />
         </div>
       </div>
@@ -46,70 +45,55 @@ import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {mixinMethods} from "@/utils/variables";
-import {useConstructLog} from "@/store/construct-log.js";
-import {getConstructLogRules} from "@/rules/construct-log/index.js";
 import {useI18n} from "vue-i18n";
 import InspectionReportDetails from "@/pages/inspection-report/item/InspectionReportDetails.vue";
 import InspectionReportInfo from "@/pages/inspection-report/item/InspectionReportInfo.vue";
+import {useInspectionReportStore} from "@/store/inspection.js";
+import {getInspectionRules} from "@/rules/inspection-report/index.js";
+import {usePersistenceStore} from "@/store/persistence.js";
+import {useProgressStore} from "@/store/progress.js";
 
-const constructLogRules = getConstructLogRules();
-const constructLogStore = useConstructLog();
+const inspectionRules = getInspectionRules();
+const inspectionStore = useInspectionReportStore();
+const persistenceStore = usePersistenceStore();
+const progressStore = useProgressStore();
 
 const {
-  constructLogDetails
-} = constructLogStore;
+  inspectionReportDetails,
+  saveInspectionReport,
+  getInspectionReportDetails
+} = inspectionStore;
+const {
+  projectId
+} = persistenceStore;
+const {
+  progressDetails,
+  getProgressDetails
+} = progressStore;
 
 const {t} = useI18n();
 const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
+  await getProgressDetails(projectId.value, false);
+  if(route.params.date && !route.params.id) inspectionReportDetails.value.logDate = route.params.date;
+  if(route.params.id) await getInspectionReportDetails(route.params.id);
 });
 
 onUnmounted(() => {
 });
 
-const handleRemoveResource = (data) => {
-  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource =>
-      !(
-          resource.taskIndex === data.taskIndex &&
-          resource.resourceId === data.resourceId &&
-          resource.resourceType === data.resourceType
-      )
-  );
-};
-
-const handleRemoveTask = (taskIndex) => {
-  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource => resource.taskIndex !== taskIndex);
-  constructLogDetails.value.workAmount = constructLogDetails.value.workAmount.filter(work => work.taskIndex !== taskIndex);
-}
-
-
 const handleBack = () => {
   router.push({name: PAGE_NAME.INSPECTION_REPORT.LIST});
 };
 
-const formLogDetailsRef = ref(null);
-const formLogInfoRef = ref(null);
+const formInspectionReportDetailsRef = ref(null);
+const formInspectionReportRef = ref(null);
 
-const submitForm = () => {
-  const formRefs = [
-    ...formLogDetailsRef.value?.machineForm,
-    ...formLogDetailsRef.value?.materialForm,
-    ...formLogDetailsRef.value?.humanForm,
-    ...formLogDetailsRef.value?.workAmountForm,
-    formLogInfoRef.value
-  ];
-  console.log(constructLogDetails.value)
-  for (const form of formRefs) {
-    if (form?.ruleFormRef) { // Access ruleFormRef
-      const isValid = mixinMethods.validateForm(form.ruleFormRef);
-      if (!isValid) {
-        mixinMethods.notifyError(t('E-LOG-001'));
-        return;
-      }
-    }
-  }
+const submitForm = async () => {
+  inspectionReportDetails.value.projectId = projectId.value;
+  await saveInspectionReport(inspectionReportDetails.value);
 }
 </script>
 <style scoped>

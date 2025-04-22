@@ -1101,7 +1101,7 @@
       "resource_allocation": "Allocation",
       "project": "Project",
       "inventory": "Inventory",
-      "inspector_report": "Acceptance",
+      "inspector_report": "Inspection Report",
       "resource": {
         "title": "Resource",
         "machine": "Machine Resource",
@@ -1235,6 +1235,8 @@
         "projectCode": "Project Code",
         "inspectionCode": "Inspection Report Code",
         "inspectionName": "Inspection Report Name",
+        "inspectorName": "Inspector Name",
+        "location": "Location",
         "date": "Date",
         "startDate": "Start Date",
         "endDate": "End Date",
