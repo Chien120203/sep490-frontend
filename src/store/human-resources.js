@@ -69,9 +69,8 @@ export const useHumanResourcesStore = defineStore(
           if (response.success) {
             humanResourcesDetails.value = response.data;
             mixinMethods.notifySuccess(t("response.message.save_human_success"));
-            mixinMethods.endLoading();
           } else {
-            validation.value = mixinMethods.handleErrorResponse(response);
+            validation.value = mixinMethods.handleErrorResponse(response.responseCode || response);
             mixinMethods.notifyError(t("response.message.save_human_failed"));
           }
           mixinMethods.endLoading();
@@ -107,11 +106,11 @@ export const useHumanResourcesStore = defineStore(
         id,
         (response) => {
           humanResourcesDetails.value.teamMemberIds = humanResourcesDetails.value.teamMemberIds.filter(memId => memId !== id);
-          mixinMethods.notifySuccess(t("response.message.delete_human_success"));
+          mixinMethods.notifySuccess(t("response.message.remove_member_success"));
           mixinMethods.endLoading();
         },
         () => {
-          mixinMethods.notifyError(t("response.message.delete_human_failed"));
+          mixinMethods.notifyError(t("response.message.remove_member_failed"));
           mixinMethods.endLoading();
         }
       );

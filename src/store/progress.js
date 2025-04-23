@@ -9,79 +9,6 @@ export const useProgressStore = defineStore(
   () => {
     const {t} = useI18n();
     const validation = reactive({value: {}});
-    // const progressDetails = reactive({
-    //   value: {
-    //     id: 20,
-    //     projectId: 5,
-    //     planId: 20,
-    //     progressItems: [
-    //       {
-    //         id: 1,
-    //         workCode: "EW05-016",
-    //         index: "1",
-    //         parentIndex: null,
-    //         workName: "Work 1",
-    //         unit: "m2",
-    //         quantity: 10,
-    //         unitPrice: 222,
-    //         totalPrice: 2220,
-    //         progress: 20,
-    //         status: 1,
-    //         planStartDate: "2025-04-09T17:00:00",
-    //         planEndDate: "2025-04-17T17:00:00",
-    //         actualStartDate: "2025-04-09T17:00:00",
-    //         actualEndDate: "2025-04-17T17:00:00",
-    //         itemRelations: {
-    //           "2": "FS"
-    //         },
-    //         details: [],
-    //         teams: []
-    //       },
-    //       {
-    //         id: 2,
-    //         workCode: "EW05-1-002",
-    //         index: "1.1",
-    //         parentIndex: "1",
-    //         workName: "Work 1.1",
-    //         unit: "m2",
-    //         progress: 20,
-    //         quantity: 22,
-    //         status: 1,
-    //         unitPrice: 333,
-    //         totalPrice: 7326,
-    //         planStartDate: "2025-04-15T17:00:00",
-    //         planEndDate: "2025-04-17T17:00:00",
-    //         actualStartDate: "2025-04-15T17:00:00",
-    //         actualEndDate: "2025-04-17T17:00:00",
-    //         itemRelations: {
-    //           "2": "FS"
-    //         },
-    //         details: [],
-    //         teams: []
-    //       },
-    //       {
-    //         id: 3,
-    //         workCode: "EW05-017",
-    //         index: "2",
-    //         parentIndex: null,
-    //         workName: "Work 2",
-    //         unit: "m2",
-    //         progress: 20,
-    //         status: 1,
-    //         quantity: 12,
-    //         unitPrice: 1231,
-    //         totalPrice: 14772,
-    //         planStartDate: "2025-04-17T17:00:00",
-    //         planEndDate: "2025-04-25T17:00:00",
-    //         actualStartDate: "2025-04-17T17:00:00",
-    //         actualEndDate: "2025-04-25T17:00:00",
-    //         itemRelations: {},
-    //         details: [],
-    //         teams: []
-    //       },
-    //     ]
-    //   }
-    // });
     const progressDetails = reactive({
       value: {}
     });
@@ -97,7 +24,7 @@ export const useProgressStore = defineStore(
           mixinMethods.endLoading();
         },
         (error) => {
-          mixinMethods.notifyError(t("response.message.get_list_inventory_failed"));
+          mixinMethods.notifyError(t("response.message.get_progress_dtls_failed"));
           mixinMethods.endLoading();
         }
       );

@@ -61,7 +61,7 @@ export const useAuthStore = defineStore(
       localStorage.removeItem("email");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("isVerify");
-
+        mixinMethods.notifySuccess(t("response.message.logout_success"));
       router.push({name: PAGE_NAME.LOGIN});
     };
 
