@@ -3,6 +3,7 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import {AllocationAPI} from "@/services/AllocationAPI.js";
 
 export const useAllocationStore = defineStore(
   "allocation",
@@ -114,7 +115,7 @@ export const useAllocationStore = defineStore(
 
     const handleChangeRequestStatus = async (id, method) => {
       mixinMethods.startLoading();
-      await services.MobilizationAPI[method](
+      await services.AllocationAPI[method](
         id,
         (response) => {
           if(response.success) {

@@ -147,9 +147,9 @@ const getListResourceByType = (list, type) => {
   return list.filter(item => item.resourceType === type);
 };
 
-const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_RESOURCE));
-const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_RESOURCE));
-const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_RESOURCE));
+const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_TYPE));
+const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_TYPE));
+const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_TYPE));
 const calculateTotal = () => {
   const machine = listSelectedMachines.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
   const labor = listSelectedUsers.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;

@@ -144,7 +144,7 @@ const hasChildren = computed(() => props.tasks.some(child => child.parentIndex =
 
 const getListResourceByType = (list, type) => {
   if (!Array.isArray(list)) return [];
-  return list.filter(item => item.type === type);
+  return list.filter(item => item.resourceType === type);
 };
 
 const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_TYPE));
