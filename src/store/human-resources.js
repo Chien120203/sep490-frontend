@@ -17,7 +17,7 @@ export const useHumanResourcesStore = defineStore(
       value: {
         id: 0,
         teamName: "",
-        teamManager: "",
+        teamManager: 0,
         description: "",
         teamMemberIds: [],
       }
@@ -68,6 +68,7 @@ export const useHumanResourcesStore = defineStore(
         (response) => {
           if (response.success) {
             humanResourcesDetails.value = response.data;
+              listHumanResources.value.push(response.data);
             mixinMethods.notifySuccess(t("response.message.save_human_success"));
           } else {
             validation.value = mixinMethods.handleErrorResponse(response.responseCode || response);
@@ -121,7 +122,7 @@ export const useHumanResourcesStore = defineStore(
       humanResourcesDetails.value = {
         id: 0,
         teamName: "",
-        teamManager: "",
+        teamManager: 0,
         description: "",
         manager: null,
         teamMemberIds: [],

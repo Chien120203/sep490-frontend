@@ -86,17 +86,20 @@ const handleSubmit = async () => {
   });
 
   if (!isValid) {
-    mixinMethods.notifyError(
-        t("response.message.save_human_failed")
-    );
+    mixinMethods.notifyError(t("response.message.save_human_failed"));
     return;
   }
 
-  emit("submit", props.teamInfo);
-  emit("close");
-  activeTab.value = "members"
-};
+  const submitData = {
+    ...props.teamInfo,
+    teamManager: props.teamInfo.teamManager?.id || props.teamInfo.teamManager
+  };
 
+  console.log("Data sent to saveHumanResources:", submitData);
+  emit("submit", submitData);
+  emit("close");
+  activeTab.value = "members";
+};
 </script>
 
 <style scoped>
