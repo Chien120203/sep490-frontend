@@ -9,8 +9,8 @@ const list = async (params, success, error) => {
     await get(API_CODE.API_HUMAN_002, success, error, params);
 };
 
-const save = async (formData, success, error) => {
-    await post(API_CODE.API_HUMAN_003, formData, success, error);
+const save = async (params, success, error) => {
+    await post(API_CODE.API_HUMAN_003, params, success, error);
 };
 
 const deleteHuman = async (id, success, error) => {
