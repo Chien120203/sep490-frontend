@@ -114,7 +114,7 @@ const props = defineProps({
   isHuman: { type: Boolean, default: false },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
-  resourceType: { type: String, default: '' },
+  resourceType: { type: [String, Number], default: '' },
   rules: {
     type: Object,
     default: () => {}

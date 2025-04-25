@@ -60,7 +60,6 @@ import {useI18n} from "vue-i18n";
 import Modal from "@/components/common/Modal.vue";
 import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemInformation.vue";
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
-import ModalItemEmployee from "@/pages/progress/items/modal/items/ModalItemEmployee.vue";
 import {DATE_FORMAT} from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import FileUpload from "@/components/common/FileUpload.vue";

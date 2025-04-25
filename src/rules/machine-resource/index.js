@@ -171,7 +171,7 @@ export const getMachineRules = () => {
                 trigger: "blur",
             },
             {
-                type: "number",
+                pattern: /^\d+$/,
                 message: t("E-MACH-013"), // Phải là số hợp lệ
                 trigger: "blur",
             },

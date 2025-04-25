@@ -26,46 +26,68 @@
         <div v-if="selectedTab === 'dependency'">
           <DependencyTaskTable
               ref="dependentFormRef"
+              :allowEdit="allowEdit"
               :rules="PLANNING_RULES"
-              :tasks="tasks"
-              :selectedRow="selectedRow"
+              :tasks="listTasks"
+              :selectedRow="task"
+          />
+        </div>
+
+        <div v-if="selectedTab === 'material'">
+          <ItemList
+              ref="tableMaterialFormRef"
+              :rules="PLANNING_RULES"
+              :allowEdit="false"
+              :selectedRow="task"
+              :selectData="listSelectedMaterials"
+              :resourceType="MATERIAL_TYPE"
+              :tableData="listSelectedMaterials"
+              :optionKeys="materialOptions"
           />
         </div>
 
         <div v-if="selectedTab === 'employee'">
-          <div class="add-new-dependency-container">
-            <el-button class="btn btn-save" @click="handleDisplayDependencyModal">
-              {{ $t("customer.add_new") }}
-            </el-button>
-          </div>
-          <EmployeeTable
-            :listUsers="dataUsers"
-            @details="handleGetEmployeeDtls"
-            @delete="handleDisplayDeleteEmployeeModal"
+          <ItemList
+              ref="tableHumanFormRef"
+              :rules="PLANNING_RULES"
+              :is-human="true"
+              :allowEdit="false"
+              :selectedRow="task"
+              :selectData="listSelectedUsers"
+              :resourceType="HUMAN_TYPE"
+              :tableData="listSelectedUsers"
+              :optionKeys="userOptions"
+          />
+        </div>
+
+        <div v-if="selectedTab === 'machine'">
+          <ItemList
+              ref="tableMachineFormRef" :rules="PLANNING_RULES"
+              :allowEdit="false"
+              :selectData="listSelectedMachines"
+              :selectedRow="task"
+              :resourceType="MACHINE_TYPE"
+              :tableData="listSelectedMachines"
+              :optionKeys="vehicleOptions"
           />
         </div>
       </div>
     </div>
-    <ModalConfirm
-        :isShowModal="isShowModalConfirm"
-        @close-modal="handleDisplayDeleteDepModal(false)"
-        @confirmAction="handleConfirmDeleteDep"
-        :message="message"
-        :title="title"
-    />
   </div>
 </template>
 
 <script setup>
-import {defineProps, onMounted, onUnmounted, ref} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import {computed, defineProps, onMounted, onUnmounted, ref} from "vue";
 import TitleNavigation from "@/components/common/TitleNavigation.vue";
 import StatisticTable from "@/pages/progress/items/modal/items/progress-details/StatisticTable.vue";
 import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
 import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
-import EmployeeTable from "@/pages/progress/items/modal/items/progress-details/EmployeeTable.vue";
+import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
+import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 import {getPlanningRules} from "@/rules/planning/index.js";
-import ModalConfirm from "@/components/common/ModalConfirm.vue";
+import {TECHNICAL_MANAGER} from "@/constants/roles.js";
+import dayjs from "dayjs";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 const props = defineProps({
   listLogsByTask: {
@@ -75,11 +97,25 @@ const props = defineProps({
   task: {
     type: Object,
     default: () => {}
+  },
+  listTasks: {
+    type: Array,
+    default: () => []
   }
 });
+const now = dayjs();
+
+const fromDate = now.startOf('month').format('YYYY-MM-DD');
+const toDate = now.endOf('month').format('YYYY-MM-DD');
+const persistenceStore = usePersistenceStore();
+const {
+  projectId
+} = persistenceStore;
 const searchForm = ref({
-  startDate: "2025-04-01",
-  endDate: "2025-04-30"
+  projectId: projectId.value,
+  taskIndex: props.task.index,
+  fromDate: fromDate,
+  toDate: toDate
 });
 const selectedTab = ref("statistic"); // Default tab
 
@@ -100,127 +136,36 @@ const listTabs =ref([
   {
     name: "employee",
     label: "Danh sách người thực hiện",
+  },
+  {
+    name: "material",
+    label: "Danh sách tài nguyên",
+  },
+  {
+    name: "machine",
+    label: "Danh sách phương tiện",
   }
 ]);
-const dataUsers = ref([
-  {
-    id: 1,
-    username: "hungdung10",
-    fullName: "Đỗ Hùng Dũng",
-    email: "hungdung10@example.com",
-    dob: "1993-09-08",
-    gender: "male",
-    role: "BAN CHỈ HUY",
-    phone: "0987654321"
-  },
-  {
-    id: 2,
-    username: "quanghai19",
-    fullName: "Nguyễn Quang Hải",
-    email: "quanghai19@example.com",
-    dob: "1997-04-12",
-    gender: "male",
-    role: "KỸ SƯ GIÁM SÁT",
-    phone: "0971122334"
-  },
-  {
-    id: 3,
-    username: "dinhtrong04",
-    fullName: "Trần Đình Trọng",
-    email: "dinhtrong04@example.com",
-    dob: "1997-04-25",
-    gender: "male",
-    role: "KỸ SƯ HIỆN TRƯỜNG",
-    phone: "0965566778"
-  },
-  {
-    id: 4,
-    username: "xuantruong06",
-    fullName: "Lương Xuân Trường",
-    email: "xuantruong06@example.com",
-    dob: "1995-04-28",
-    gender: "male",
-    role: "GIÁM SÁT AN TOÀN",
-    phone: "0983344556"
-  },
-  {
-    id: 5,
-    username: "duchuy08",
-    fullName: "Phạm Đức Huy",
-    email: "duchuy08@example.com",
-    dob: "1995-01-20",
-    gender: "male",
-    role: "CÔNG NHÂN",
-    phone: "0977889912"
-  },
-  {
-    id: 6,
-    username: "tiendung01",
-    fullName: "Bùi Tiến Dũng",
-    email: "tiendung01@example.com",
-    dob: "1997-02-28",
-    gender: "male",
-    role: "LÁI MÁY XÚC",
-    phone: "0988997766"
-  },
-  {
-    id: 7,
-    username: "vanthanh17",
-    fullName: "Vũ Văn Thanh",
-    email: "vanthanh17@example.com",
-    dob: "1996-09-14",
-    gender: "male",
-    role: "KẾ TOÁN DỰ ÁN",
-    phone: "0966554433"
-  },
-  {
-    id: 8,
-    username: "vantoan09",
-    fullName: "Nguyễn Văn Toàn",
-    email: "vantoan09@example.com",
-    dob: "1996-04-12",
-    gender: "male",
-    role: "THỢ CƠ KHÍ",
-    phone: "0977554422"
-  },
-  {
-    id: 9,
-    username: "ducchinh22",
-    fullName: "Hà Đức Chinh",
-    email: "ducchinh22@example.com",
-    dob: "1997-09-22",
-    gender: "male",
-    role: "THỢ ĐIỆN",
-    phone: "0988332211"
-  },
-  {
-    id: 10,
-    username: "ngochai03",
-    fullName: "Quế Ngọc Hải",
-    email: "ngochai03@example.com",
-    dob: "1993-05-15",
-    gender: "male",
-    role: "KỸ SƯ XÂY DỰNG",
-    phone: "0977331122"
-  }
-]);
-
+const materialOptions = ref({id: "id", value: "materialName"});
+const userOptions = ref({id: "id", value: "teamName"});
+const vehicleOptions = ref({id: "id", value: "chassisNumber"});
 const title = ref('');
-const message = ref('');
-const isShowModalConfirm = ref(false);
-
 const PLANNING_RULES = getPlanningRules();
 
-const route = useRoute();
-const router = useRouter();
+const getListResourceByType = (list, type) => {
+  if (!Array.isArray(list)) return [];
+  return list.filter(item => item.resourceType === type);
+};
+const allowEdit = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
+const listSelectedMachines = computed(() => getListResourceByType(props.task?.details, MACHINE_TYPE));
+const listSelectedMaterials = computed(() => getListResourceByType(props.task?.details, MATERIAL_TYPE));
+const listSelectedUsers = computed(() => getListResourceByType(props.task?.details, HUMAN_TYPE));
 
 onMounted(async () => {
 });
 
 onUnmounted(() => {
 });
-
-const ruleFormRef = ref(null);
 
 const handleChooseDate = (date) => {
   const logUrl = `/construct-log/details?date=${date.day}`
@@ -233,25 +178,10 @@ const handleTabChange = (tab) => {
 
   }
 };
-
-const handleDisplayDeleteEmployeeModal = (isDisplay = true) => {
-  title.value = "Delete Employee";
-  message.value = "Do you really want to delete Employee?";
-  isShowModalConfirm.value = isDisplay;
-}
-
-const handleGetEmployeeDtls = () => {
-
-}
 </script>
 
 <style scoped>
 .progress-details-nav {
   padding: 20px 0;
-}
-.add-new-dependency-container {
-  display: flex;
-  justify-content: end;
-  margin-bottom: 20px;
 }
 </style>

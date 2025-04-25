@@ -126,6 +126,7 @@ const handleCloseModal = () => {
       </div>
     </div>
     <ProgressDetailsModal
+        :progressItems="progressDetails.value.progressItems"
         :progressDetails="progressItem"
         :listLogsByTask="listLogsByTask.value"
         :show="isShowModal"

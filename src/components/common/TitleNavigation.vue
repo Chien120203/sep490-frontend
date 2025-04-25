@@ -28,7 +28,7 @@ const props = defineProps(
       }
     }
 );
-const choosedTab = computed(() => props.selectedTab);
+const choosedTab = ref( props.selectedTab);
 const selectTab = (tab) => {
   emit("tabChange", tab);
 };

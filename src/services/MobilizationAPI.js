@@ -22,7 +22,7 @@ const send = async (id, success, error) => {
 };
 
 const approve = async (id, success, error) => {
-  await put(API_CODE.API_MOBILIZE_006 + '/' + id, {comments: "change later"}, success, error);
+  await put(API_CODE.API_MOBILIZE_006 + '/' + id, {Comments: "change later"}, success, error);
 };
 
 
