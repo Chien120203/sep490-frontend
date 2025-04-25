@@ -3,6 +3,9 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import dayjs from "dayjs";
+import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {DRAFT_STATUS} from "@/constants/allocation.js";
 
 export const useMobilizationStore = defineStore(
   "mobilization",
@@ -24,7 +27,7 @@ export const useMobilizationStore = defineStore(
         priorityLevel: 0,
         status: 0,
         attachments: "",
-        requestDate: ""
+        requestDate: dayjs()
       }
     });
 
@@ -40,7 +43,7 @@ export const useMobilizationStore = defineStore(
         priorityLevel: 0,
         status: 0,
         attachments: "",
-        requestDate: ""
+        requestDate: dayjs()
       }
     }
 
@@ -53,6 +56,9 @@ export const useMobilizationStore = defineStore(
             listMobilizations.value = response.data;
           } else {
             listMobilizations.value = [...listMobilizations.value, ...response.data];
+          }
+          if (localStorage.getItem('role') === TECHNICAL_MANAGER || localStorage.getItem('role') === EXECUTIVE_BOARD) {
+            listMobilizations.value = listMobilizations.value.filter((item) => item.status !== DRAFT_STATUS);
           }
           totalItems.value = response.meta.total;
           currentPage.value = response.meta.index;
@@ -128,8 +134,7 @@ export const useMobilizationStore = defineStore(
           mixinMethods.notifySuccess(t("response.message.update_mobilization_status_success"));
           mixinMethods.endLoading();
         },
-        () => {
-          validation.value = mixinMethods.handleErrorResponse(response);
+        (error) => {
           mixinMethods.notifyError(t("response.message.update_mobilization_status_failed"));
           mixinMethods.endLoading();
         }

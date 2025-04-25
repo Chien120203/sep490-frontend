@@ -14,6 +14,7 @@ export const useInventoryStore = defineStore(
     const inventoryData = reactive({
       value: []
     });
+
     const getListInventory = async (params, isLoading = true) => {
       if(isLoading) mixinMethods.startLoading();
       await services.InventoryAPI.list(

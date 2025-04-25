@@ -1126,7 +1126,7 @@
         "title": "Resource",
         "machine": "Machine Resource",
         "material": "Material Resource",
-        "human": "Human Resource"
+        "human": "Construction Team"
       }
     }
   },
@@ -1173,7 +1173,8 @@
       "rejected": "Rejected"
     },
     "type": {
-      "supply_more": "Supply more resource",
+      "supply_more": "Supply to project warehouse",
+      "supply_general": "Supply to general warehouse",
       "add_new": "Add new resource"
     }
   },

@@ -18,6 +18,7 @@
       <div class="profile-image-container">
         <ImageUpload
           :fileLimit="1"
+          :existingFiles="userDetails.value.picProfile"
           @file-selected="handleSelectFiles"
           @file-removed="handleRemoveFile"
         />

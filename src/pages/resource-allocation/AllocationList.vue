@@ -49,6 +49,7 @@
               :data="listAllocations.value"
               @details="handleGetAllocationDtls"
               @delete="handleDisplayModal"
+              @changeStatus="handleChangeStatus"
           />
           <LoadMore
               :listData="listAllocations.value"
@@ -91,6 +92,7 @@ import { useAllocationStore } from "@/store/allocation.js";
 import { useProjectStore } from "@/store/project.js";
 import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {useProgressStore} from "@/store/progress.js";
+import {useI18n} from "vue-i18n";
 
 const persist = usePersistenceStore();
 const allocationStore = useAllocationStore();
@@ -110,21 +112,24 @@ const {
   saveRequest
 } = allocationStore;
 const {
-  progressDetails
+  progressDetails,
+  getProgressDetails
 } = progressStore;
 const { listProjects, getListProjects } = projectStore;
-const listFilteredProjects = computed(() => listProjects.value.filter(project => project.id != projectId.value));
+const listFilteredProjects = computed(() => listProjects.value.filter(project => project.id != projectId.value) || []);
 const isShowModalConfirm = ref(false);
 const isShowModalSave = ref(false);
 const activeTab = ref("project");
 const delete_id = ref(null);
+const changeObject = ref({});
+const title = ref("");
+const {t} = useI18n();
 
 const searchForms = ref({
   fromProjectId: projectId.value,
   requestType: 1,
   pageIndex: 1
 });
-
 const formSearchProject = ref({
   keyWord: "",
   pageIndex: 1
@@ -193,13 +198,14 @@ const handleChangeStatus = (data) => {
   isShowModalConfirm.value = true;
 };
 
-const handleTabChange = () => {
-  if (activeTab.value === "project") {
+const handleTabChange = (tab) => {
+  let selectedTab = tab.props.name;
+  if (selectedTab === "project") {
     searchForms.value.requestType = PROJECT_TO_PROJECT;
-  } else if (activeTab.value === "task") {
+  } else if (selectedTab === "task") {
     searchForms.value.fromProjectId = projectId.value;
     searchForms.value.requestType = TASK_TO_TASK;
-  }else if (activeTab.value === "project-to-task") {
+  }else if (selectedTab === "project-to-task") {
     searchForms.value.fromProjectId = projectId.value;
     searchForms.value.requestType = PROJECT_TO_TASK;
   }
@@ -211,6 +217,7 @@ const handleTabChange = () => {
 onMounted(() => {
   getListAllocations(searchForms.value);
   getListProjects(formSearchProject.value);
+  getProgressDetails(projectId.value, false);
 });
 
 onUnmounted(() => {

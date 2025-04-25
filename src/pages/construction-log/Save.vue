@@ -52,7 +52,6 @@ import {useConstructLog} from "@/store/construct-log.js";
 import {getConstructLogRules} from "@/rules/construct-log/index.js";
 import {useI18n} from "vue-i18n";
 import {usePersistenceStore} from "@/store/persistence.js";
-import {useInventoryStore} from "@/store/inventory.js";
 import {useProgressStore} from "@/store/progress.js";
 
 const constructLogRules = getConstructLogRules();

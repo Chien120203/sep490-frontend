@@ -3,7 +3,9 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
-import {AllocationAPI} from "@/services/AllocationAPI.js";
+import dayjs from "dayjs";
+import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {DRAFT_STATUS} from "@/constants/allocation.js";
 
 export const useAllocationStore = defineStore(
   "allocation",
@@ -18,16 +20,16 @@ export const useAllocationStore = defineStore(
         requestType: 1,
         requestCode: "",
         fromProjectId: 0,
-        toProjectId: 0,
-        fromTask: null,
-        toTask: null,
+        toProjectId: 1,
+        fromTaskId: null,
+        toTaskId: null,
         requestName: "",
         resourceAllocationDetails: [],
         description: "",
         priorityLevel: 0,
         status: 0,
         attachments: "",
-        requestDate: ""
+        requestDate: dayjs()
       }
     });
 
@@ -40,6 +42,9 @@ export const useAllocationStore = defineStore(
             listAllocations.value = response.data;
           } else {
             listAllocations.value = [...listAllocations.value, ...response.data];
+          }
+          if(localStorage.getItem('role') === TECHNICAL_MANAGER || localStorage.getItem('role') === EXECUTIVE_BOARD) {
+            listAllocations.value = listAllocations.value.filter((item) => item.status !== DRAFT_STATUS);
           }
           totalItems.value = response.meta.total;
           currentPage.value = response.meta.index;

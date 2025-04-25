@@ -1,7 +1,7 @@
 <template>
   <div class="item-list">
     <!-- Conditional layout based on requestType -->
-    <div v-if="requestType === REQUEST_TYPE_SUPPLY_MORE">
+    <div v-if="requestType === REQUEST_TYPE_SUPPLY_MORE || requestType === REQUEST_TYPE_SUPPLY_GENERAL_WAREHOUSE">
       <SingleOptionSelect
           :showClearable="true"
           class="select-item"
@@ -28,7 +28,7 @@
         <el-table-column prop="name" label="Tên tài nguyên">
           <template #default="scope">
             <el-form-item :prop="`listAddedValues[${scope.$index}].name`">
-              <template v-if="requestType === REQUEST_TYPE_SUPPLY_MORE">
+              <template v-if="requestType === REQUEST_TYPE_SUPPLY_MORE || requestType === REQUEST_TYPE_SUPPLY_GENERAL_WAREHOUSE">
                 {{ getResourceName(scope.row.resourceId) }}
               </template>
               <template v-else-if="requestType === REQUEST_TYPE_ADD_NEW">
@@ -55,13 +55,22 @@
 
         <!-- Quantity -->
         <el-table-column prop="quantity" label="Số lượng">
-          <template #default="scope">
-            <el-form-item :prop="`listAddedValues[${scope.$index}].quantity`">
-              <el-input v-model.number="scope.row.quantity" @blur="validateForm" />
-              <label class="error-feedback" v-if="validationErrors[`quantity-${scope.$index}`]">
-                {{ validationErrors[`quantity-${scope.$index}`] }}
+          <template #default="{row, $index}">
+            <el-form-item :prop="`listAddedValues[${$index}].quantity`">
+              <el-input v-model.number="row.quantity" @blur="validateForm" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+              <label class="error-feedback" v-if="validationErrors[`quantity-${$index}`]">
+                {{ validationErrors[`quantity-${$index}`] }}
               </label>
             </el-form-item>
+            <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
+              {{ exceedMessages[row.resourceId] }}
+            </p>
+          </template>
+        </el-table-column>
+
+        <el-table-column v-if="resourceType === MATERIAL_TYPE && requestType === REQUEST_TYPE_SUPPLY_MORE" :label="$t('planning.items.inventory')">
+          <template #default="{ row }">
+            {{row.inventory}}
           </template>
         </el-table-column>
 
@@ -87,7 +96,13 @@ import {REQUEST_MOBILIZATION} from "@/constants/change-request.js";
 import { getMobilizationResourceItemRules } from "@/rules/mobilization/index.js";
 import {mixinMethods} from "@/utils/variables";
 import IconTrash from "@/svg/IconTrash.vue";
-import {REQUEST_TYPE_ADD_NEW, REQUEST_TYPE_SUPPLY_MORE} from "@/constants/mobilization.js";
+import {
+  REQUEST_TYPE_ADD_NEW,
+  REQUEST_TYPE_SUPPLY_GENERAL_WAREHOUSE,
+  REQUEST_TYPE_SUPPLY_MORE
+} from "@/constants/mobilization.js";
+import {MATERIAL_TYPE} from "@/constants/resource.js";
+import {useI18n} from "vue-i18n";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
@@ -97,8 +112,10 @@ const props = defineProps({
   resourceType: { type: Number, default: 0 }
 });
 
-const validationErrors = reactive({});
+const {t} = useI18n();
 
+const validationErrors = reactive({});
+const exceedMessages = ref({});
 const ruleFormRef = ref(null);
 
 defineExpose({
@@ -114,7 +131,17 @@ const handleSearch = (value) => {
 }
 const itemRules = getMobilizationResourceItemRules();
 const rules = ref([]);
-// Validate a specific field for a row
+
+const handleChangeValue = (quantity, resourceId) => {
+  if (props.resourceType === MATERIAL_TYPE && props.resourceType === REQUEST_TYPE_SUPPLY_MORE) {
+    let inventory = props.selectData.find(item => item.id === resourceId)?.quantity ?? 0;
+    if (inventory < quantity) {
+      exceedMessages.value[resourceId] = t('E-PLAN-002');
+    } else {
+      exceedMessages.value[resourceId] = '';
+    }
+  }
+};
 
 // Validate form
 const validateForm = () => {
@@ -136,6 +163,7 @@ const handleSelectItem = (id) => {
       resourceType: props.resourceType,
       unit: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.unit || "-",
       quantity: 1,
+      inventory: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.quantity || 0,
       description: "des",
       type: REQUEST_MOBILIZATION
     });

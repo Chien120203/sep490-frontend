@@ -73,9 +73,9 @@
 </template>
 
 <script setup>
-import {defineProps, ref, watch, watchEffect} from "vue";
+import {computed, defineProps, onMounted, ref, watch, watchEffect} from "vue";
 import Modal from "@/components/common/Modal.vue";
-import ItemList from "@/pages/resource-mobilization/items/modal/ItemList.vue";
+import ItemList from "@/pages/resource-allocation/items/modal/ItemList.vue";
 import {
   HUMAN_TYPE,
   MACHINE_TYPE,
@@ -83,7 +83,10 @@ import {
 } from "@/constants/resource.js";
 import AllocateFormInfo from "@/pages/resource-allocation/items/modal/AllocateFormInfo.vue";
 import {getAllocationResourceItemRules} from "@/rules/allocation";
-import {mixinMethods} from "@/utils/variables.js";
+import {useInventoryStore} from "@/store/inventory.js";
+import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
+import {usePersistenceStore} from "@/store/persistence.js";
+import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} from "@/constants/mobilization.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -91,6 +94,15 @@ const props = defineProps({
   progressDetails: {type: Object, default: () => ({})},
   listProjects: {type: Array, default: () => []},
 });
+
+const inventoryStore = useInventoryStore();
+const persist = usePersistenceStore();
+const {
+  inventoryData,
+  getListInventory
+} = inventoryStore;
+const { projectId } = persist;
+
 const getListResourcesByType = (data, type) => {
   if (!data) return [];
   return data.filter(item => item?.resourceType === type);
@@ -100,32 +112,75 @@ const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
 
-const ALLOCATIONFORMITEMS_RULES = getAllocationResourceItemRules();
 
-watch(props.data.resourceAllocationDetails, () => {
-  listSelectedVehicles.value = getListResourcesByType(props.data?.resourceAllocationDetails, MACHINE_TYPE);
-  listSelectedMaterials.value = getListResourcesByType(props.data?.resourceAllocationDetails, MATERIAL_TYPE);
-  listSelectedUsers.value = getListResourcesByType(props.data?.resourceAllocationDetails, HUMAN_TYPE);
+watch(() => props.data.resourceAllocationDetails, (data) => {
+  if (data) {
+    let listUsers = [];
+    let listVehicles = [];
+    let listMaterials = [];
+
+    data.forEach(item => {
+      switch(item.resourceType) {
+        case RESOURCE_TYPE_MATERIALS:
+          listMaterials.push(item);
+          break;
+        case RESOURCE_TYPE_VEHICLES:
+          listVehicles.push(item);
+          break;
+        case RESOURCE_TYPE_USERS:
+          listUsers.push(item);
+          break;
+      }
+    })
+
+    updateListMaterials(listMaterials);
+    updateListUsers(listUsers);
+    updateListVehicles(listVehicles);
+  }
+}, { deep: true });
+
+watch(props.data.requestType, (newVal) => {
+  switch (newVal) {
+    case PROJECT_TO_TASK || PROJECT_TO_PROJECT:
+      getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20});
+      break;
+    case TASK_TO_TASK:
+
+  }
 });
+
+onMounted(() => {
+  getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20});
+})
 
 const materialOptions = ref({id: "id", value: "name"});
 const userOptions = ref({id: "id", value: "name"});
 const vehicleOptions = ref({id: "id", value: "name"});
 const activeTab = ref("materials");
 
-//mock data
-const materials = ref([
-  {id: 1, name: "Cát xây dựng", unit: "kg", rate: 1, coefficient: 1, quantity: 100, unitPrice: 50000},
-  {id: 2, name: "Xi măng", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
-]);
-const listEmployees = ref([
-  {id: 1, name: "Nhân viên 1", unit: "kg", rate: 1, coefficient: 1, quantity: 100, unitPrice: 50000},
-  {id: 2, name: "Nhân viên 2", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
-]);
-const listVehicles = ref([
-  {id: 1, name: "Xe 1", unit: "kg", rate: 1, coefficient: 1, quantity: 100, unitPrice: 50000},
-  {id: 2, name: "Xe 2", unit: "kg", rate: 0.5, coefficient: 1, quantity: 50, unitPrice: 70000},
-]);
+const materials = computed(() => {
+  if (props.data.requestType === PROJECT_TO_TASK || props.data.requestType === PROJECT_TO_PROJECT) {
+    return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE);
+  }
+
+  if (props.data.requestType === TASK_TO_TASK) {
+    let progressItem = props.progressDetails.progressItems.find(item => item.index === props.data.fromTaskId) || {};
+    if(!progressItem) return [];
+    return (progressItem?.details || [])
+        .filter(item => item.resourceType === MATERIAL_TYPE && item.resource)
+        .map(item => ({
+          id: item.resource.id,
+          quantity: item.quantity,
+          unit: item.unit,
+          name: item.resource.name
+        }));
+  }
+
+  return [];
+});
+// const materials = computed(() => inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE));
+const listVehicles = computed(() => inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE));
+const listEmployees = computed(() => inventoryData.value.filter(item => item.resourceType === HUMAN_TYPE));
 
 const updateListMaterials = (listData) => {
   listSelectedMaterials.value = listData;

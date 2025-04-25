@@ -8,7 +8,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item label="Request Code">
-            <el-input v-model="data.requestCode" class="custom-input" />
+            <el-input disabled v-model="data.requestCode" class="custom-input" />
           </el-form-item>
           <el-form-item label="Request Name">
             <el-input v-model="data.requestName" class="custom-input" />
@@ -33,7 +33,7 @@
               <SingleOptionSelect
                   v-model="data.toProjectId"
                   :optionKeys="{ id: 'id', value: 'projectCode' }"
-                  :listData="listProjects"
+                  :listData="listOngoingProjects"
                   :isRemote="true"
                   @remoteSearch="handleSearchProject"
                   :showClearable="true"
@@ -45,7 +45,7 @@
           <el-form-item v-if="data.requestType === PROJECT_TO_TASK" label="Target Task">
             <div class="select-project-container">
               <SingleOptionSelect
-                  v-model="data.toTask"
+                  v-model="data.toTaskId"
                   :optionKeys="{ id: 'index', value: 'workName' }"
                   :listData="progressDetails.progressItems"
                   :isRemote="true"
@@ -88,6 +88,7 @@
           <el-form-item label="Request Date" prop="requestDate">
             <el-date-picker
                 style="width: 96%"
+                disabled
                 :value-format="DATE_FORMAT"
                 v-model="data.requestDate"
                 placeholder="Select Date"
@@ -120,18 +121,21 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import {computed, defineProps} from "vue";
 import { PRIORITIES} from "@/constants/mobilization.js";
 import { DATE_FORMAT } from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import { getAllocationRules } from "@/rules/allocation";
 import {ALLOCATION_REQUEST_TYPES, PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
+import {IN_PROGRESS_STATUS} from "@/constants/project.js";
 
 const props = defineProps({
   data: { type: Object, default: () => ({}) },
   listProjects: { type: Array, default: () => [] },
   progressDetails: { type: Object, default: () => ({}) },
 });
+
+const listOngoingProjects = computed(() => props.listProjects.filter(item => item.status === IN_PROGRESS_STATUS));
 
 const emit = defineEmits(["searchProject",  "searchTask"]);
 const ALLOCATIONFORMINFO_RULES = getAllocationRules();

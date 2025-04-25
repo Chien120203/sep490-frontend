@@ -2,6 +2,7 @@ import PAGE_NAME from "@/constants/route-name.js";
 
 export const RECEIVE_STATUS = 0;
 export const PLANNING_STATUS = 1;
+export const IN_PROGRESS_STATUS = 2;
 export const CLOSED_STATUS = 5;
 
 export const STATUSES = [

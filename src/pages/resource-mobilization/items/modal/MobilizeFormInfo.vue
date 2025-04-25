@@ -19,6 +19,7 @@
                 style="width: 80%;"
                 :value-format="DATE_FORMAT"
                 v-model="data.requestDate"
+                disabled
                 placeholder="Select Date"
                 class="input-wd-96"
             />

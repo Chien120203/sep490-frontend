@@ -70,7 +70,7 @@ export const useUserStore = defineStore(
       await services.UserAPI.details(
         params,
         (response) => {
-          userDetails.value = response.data;
+          userDetails.value = {...response.data, picProfile: [response.data.picProfile]};
           mixinMethods.endLoading();
         },
         (error) => {
@@ -150,7 +150,6 @@ export const useUserStore = defineStore(
 
     const updateUserProfile = async (params) => {
       mixinMethods.startLoading();
-      3
       let data = {
         username: params.username,
         fullName: params.fullName,
