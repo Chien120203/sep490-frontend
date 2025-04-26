@@ -24,12 +24,32 @@
         ></el-table-column>
         <el-table-column
             type="index"
+            min-width="120"
+            :label="$t('common.no')"
+            align="right"
+        ><template #default="scope">
+          <div>
+            {{scope.row.logCode}}
+          </div>
+        </template></el-table-column>
+        <el-table-column
+            type="index"
+            min-width="120"
+            :label="$t('common.no')"
+            align="right"
+        ><template #default="scope">
+          <div>
+            {{scope.row.logName}}
+          </div>
+        </template></el-table-column>
+        <el-table-column
+            type="index"
             min-width="53"
             :label="$t('common.no')"
             align="right"
         ><template #default="scope">
           <div>
-           {{scope.row.logName}}
+           {{scope.row.status}}
           </div>
         </template></el-table-column>
         <el-table-column min-width="90">
