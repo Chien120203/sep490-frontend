@@ -3,6 +3,7 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import {CONSTRUCTION_EMPLOYEE} from "@/constants/roles.js";
 
 export const useHumanResourcesStore = defineStore(
   "humanResources",
@@ -51,7 +52,7 @@ export const useHumanResourcesStore = defineStore(
         id,
         {},
         (response) => {
-          humanResourcesDetails.value = response.data;
+          humanResourcesDetails.value = {...response.data, teamMemberIds: response.data.members.filter(item => item.role === CONSTRUCTION_EMPLOYEE)};
           mixinMethods.endLoading();
         },
         (error) => {

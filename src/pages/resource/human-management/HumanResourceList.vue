@@ -86,7 +86,7 @@
         :employees="employeesList"
         @search="handleSearchUsers"
         @remove="handleRemoveTeamMember"
-        @close="() => isShowModalTeam = false"
+        @close="closeTeamModal"
         @submit="handleSave"
     />
     <ModalConfirm
@@ -134,6 +134,7 @@ const {
   getHumanResourcesDetails,
   handleRemoveMember,
   getListHumanResources,
+  clearHumanResourcesDetails,
   handleDeleteHumanResources
 } = humanResourceStore;
 const {
@@ -192,6 +193,11 @@ const handleLoadMore = () => {
   getListHumanResources(searchForms.value);
 };
 
+const closeTeamModal = () => {
+  isShowModalTeam.value = false;
+  clearHumanResourcesDetails();
+}
+
 const handleRemoveTeamMember = (id) => {
   delete_mem_id.value = id;
   isShowModalConfirmDelMember.value = true;
@@ -207,6 +213,7 @@ const handleConfirmRemove = () => {
 
 const handleGetTeamDetails = (teamId) => {
   getHumanResourcesDetails(teamId);
+  isShowModalTeam.value = true;
 };
 
 const handleDeleteTeam = (userId) => {

@@ -115,9 +115,16 @@ const handleSelectItem = (id) => {
   selectedValue.value = null;
 };
 
-const getUserAttr = (id, attr) => {
-  return props.selectData.find(user => user.id === id)?.[attr] || "-";
+const getUserAttr = (row, attr) => {
+  if (typeof row == 'object') {
+    const user = props.selectData.find(user => user.id === row.id);
+    return user ? user[attr] || "-" : "-";
+  } else {
+    const user = props.selectData.find(user => user.id === row);
+    return user ? user[attr] || "-" : "-";
+  }
 }
+
 
 const handleRemoveResource = (id) => {
   emit('remove', id);

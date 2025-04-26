@@ -79,7 +79,7 @@ const API_CODE = {
     //Allocation
     API_ALLOCATION_001: '/resourcereq/allocation/list',
     API_ALLOCATION_002: '/resourcereq/allocation/save',
-    API_ALLOCATION_003: '/resourcereq/allocation/',
+    API_ALLOCATION_003: '/resourcereq/allocation',
     API_ALLOCATION_004: '/resourcereq/allocation',
     API_ALLOCATION_005: '/resourcereq/allocation/send',
     API_ALLOCATION_006: '/resourcereq/allocation/approve',

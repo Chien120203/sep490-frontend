@@ -46,7 +46,7 @@
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.toTaskId"
-                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :optionKeys="{ id: 'id', value: 'workName' }"
                   :listData="progressDetails.progressItems"
                   :isRemote="true"
                   @remoteSearch="handleSearchTask"
@@ -60,7 +60,7 @@
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.fromTask"
-                  :optionKeys="{ id: 'index', value: 'workName' }"
+                  :optionKeys="{ id: 'idd', value: 'workName' }"
                   :listData="progressDetails.progressItems"
                   :isRemote="true"
                   @remoteSearch="handleSearchTask"
@@ -74,8 +74,8 @@
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.toTask"
-                  :optionKeys="{ id: 'index', value: 'workName' }"
-                  :listData="progressDetails.progressItems.filter(task => task.index !== data.fromTask)"
+                  :optionKeys="{ id: 'id', value: 'workName' }"
+                  :listData="progressDetails.progressItems.filter(task => task.id !== data.fromTaskId)"
                   :isRemote="true"
                   @remoteSearch="handleSearchTask"
                   :showClearable="true"
