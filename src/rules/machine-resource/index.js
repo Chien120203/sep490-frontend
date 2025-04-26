@@ -6,6 +6,7 @@ import {
     MAX_NUMBER,
     LICENSE_PLATE_PATTERN,
 } from "@/constants/application.js";
+import {validateMinMax} from "@/rules/validation/validation.js";
 
 export const getMachineRules = () => {
     const { t } = i18n.global;
@@ -176,9 +177,16 @@ export const getMachineRules = () => {
                 trigger: "blur",
             },
             {
-                min: MIN_NUMBER, // 0
-                max: MAX_NUMBER, // 1000000
-                message: t("E-MACH-020"), // Dung tích phải từ 0 đến 1,000,000
+                validator: (rule, value, callback) =>
+                    validateMinMax(
+                        rule,
+                        value,
+                        callback,
+                        MIN_NUMBER,
+                        MAX_NUMBER,
+                        t("E-CM-015", { min: MIN_NUMBER }),
+                        t("E-CM-018", { max: MAX_NUMBER })
+                    ),
                 trigger: "blur",
             },
         ],

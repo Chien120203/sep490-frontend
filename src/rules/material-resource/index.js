@@ -98,7 +98,7 @@ export const getMaterialRules = () => {
                 trigger: "blur",
             },
             {
-                type: "number",
+                pattern: /^\d+$/,
                 message: t("E-MAT-008"), // Giá bán buôn phải là số hợp lệ
                 trigger: "change",
             },
@@ -123,7 +123,7 @@ export const getMaterialRules = () => {
                 trigger: "blur",
             },
             {
-                type: "number",
+                pattern: /^\d+$/,
                 message: t("E-MAT-011"), // Giá bán lẻ phải là số hợp lệ
                 trigger: "change",
             },
@@ -148,13 +148,8 @@ export const getMaterialRules = () => {
                 trigger: "blur",
             },
             {
-                type: "number",
+                pattern: /^\d+$/,
                 message: t("E-MAT-014"), // Số lượng tồn kho phải là số hợp lệ
-                trigger: "change",
-            },
-            {
-                pattern: /^\d+$/, // Chỉ chấp nhận số nguyên dương
-                message: t("E-MAT-015"), // Số lượng tồn kho phải là số nguyên dương
                 trigger: "change",
             },
             {

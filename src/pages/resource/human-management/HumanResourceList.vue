@@ -154,7 +154,6 @@ const searchForms = ref({
 // Local state to store cloned and filtered lists
 const managersList = ref([]);
 const employeesList = ref([]);
-// const allowCreate = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER);
 const allowCreate = computed(() => true);
 // Deep copy and split when store list updates
 watch(

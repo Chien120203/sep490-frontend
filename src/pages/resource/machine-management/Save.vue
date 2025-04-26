@@ -56,7 +56,14 @@
             </el-form-item>
 
             <el-form-item prop="yearOfManufacture" class="required" :label="$t('resource.machine.details.yearOfManufacture')">
-              <el-input v-model="machineResourcesDetails.value.yearOfManufacture" />
+              <el-date-picker
+                  v-model="machineResourcesDetails.value.yearOfManufacture"
+                  type="year"
+                  format="YYYY"
+                  value-format="YYYY"
+                  :placeholder="$t('resource.machine.details.selectYear')"
+                  class="year-picker"
+              />
               <label class="error-feedback-machine" v-if="validation && validation.value.yearOfManufacture">
                 {{ $t(validation.value.yearOfManufacture) }}
               </label>
@@ -114,21 +121,42 @@
             </el-form-item>
 
             <el-form-item prop="fuelUnit" class="custom-textarea required" :label="$t('resource.machine.details.fuelUnit')">
-              <el-input v-model="machineResourcesDetails.value.fuelUnit" />
+              <el-select v-model="machineResourcesDetails.value.fuelUnit" class="custom-textarea required">
+                <el-option
+                    v-for="unit in fuelUnitOptions"
+                    :key="unit.value"
+                    :label="$t(unit.label)"
+                    :value="unit.value"
+                />
+              </el-select>
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelUnit">
                 {{ $t(validation.value.fuelUnit) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="status" :label="$t('resource.machine.details.status')">
-              <el-input v-model="machineResourcesDetails.value.status" class="custom-textarea required" />
+            <el-form-item prop="status" :label="$t('resource.machine.details.status')" class="required">
+              <el-select v-model="machineResourcesDetails.value.status" class="custom-textarea required">
+                <el-option
+                    v-for="status in statusOptions"
+                    :key="status.value"
+                    :label="$t(status.label)"
+                    :value="status.value"
+                />
+              </el-select>
               <label class="error-feedback-machine" v-if="validation && validation.value.status">
                 {{ $t(validation.value.status) }}
               </label>
             </el-form-item>
 
             <el-form-item prop="driver" :label="$t('resource.machine.details.driver')" class="input-item required">
-              <el-input v-model="machineResourcesDetails.value.driver" type="text" />
+              <el-select v-model="machineResourcesDetails.value.driver">
+                <el-option
+                    v-for="user in constructionEmployees"
+                    :key="user.id"
+                    :label="user.name"
+                    :value="user.id"
+                />
+              </el-select>
               <label class="error-feedback-machine" v-if="validation && validation.value.driver">
                 {{ $t(validation.value.driver) }}
               </label>
@@ -167,23 +195,26 @@
 </template>
 
 <script>
-import {computed, onMounted, onUnmounted, ref} from "vue";
-import {useRoute, useRouter} from "vue-router";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import FileUpload from "@/components/common/FileUpload.vue";
 import ImageUpload from "@/components/common/ImageUpload.vue";
-import {getMachineRules} from "@/rules/machine-resource/index.js";
-import {useI18n} from "vue-i18n";
-import {useMachineResourcesStore} from "@/store/machine-resources.js";
+import { getMachineRules } from "@/rules/machine-resource/index.js";
+import { useI18n } from "vue-i18n";
+import { useMachineResourcesStore } from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
-import {useUserStore} from "@/store/user.js";
+import { useUserStore } from "@/store/user.js";
 
 export default {
-  components: {FileUpload,ImageUpload, IconBackMain, SingleOptionSelect},
+  components: { FileUpload, ImageUpload, IconBackMain, SingleOptionSelect },
   setup() {
-    const {t} = useI18n();
+    const { t } = useI18n();
+    const ruleFormRef = ref(null);
+    const MACHINE_RULES = getMachineRules();
     const machineResourcesStore = useMachineResourcesStore();
+    const userStore = useUserStore();
     const {
       machineResourcesDetails,
       validation,
@@ -191,12 +222,38 @@ export default {
       saveMachineResources,
       clearMachineResourcesDetails
     } = machineResourcesStore;
+    const {
+      listUsers,
+      getListUsers
+    } = userStore;
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
 
+    const constructionEmployees = computed(() => {
+      if (!Array.isArray(listUsers)) {
+        return []; // Return empty array if listUsers is not an array
+      }
+      return listUsers.filter(user => user.role === 'CONSTRUCTION_EMPLOYEE');
+    });
+
+    // Define status options for the select dropdown
+    const statusOptions = [
+      { value: "active", label: "resource.machine.status.active" },
+      { value: "inactive", label: "resource.machine.status.inactive" },
+      { value: "maintenance", label: "resource.machine.status.maintenance" },
+      { value: "out_of_service", label: "resource.machine.status.out_of_service" }
+    ];
+
+    // Define fuel unit options for the select dropdown
+    const fuelUnitOptions = [
+      { value: "liters", label: "resource.machine.fuelUnit.liters" },
+      { value: "gallons", label: "resource.machine.fuelUnit.gallons" },
+      { value: "cubic_meters", label: "resource.machine.fuelUnit.cubic_meters" }
+    ];
+
     onMounted(() => {
-      if(isUpdate.value) {
+      if (isUpdate.value) {
         getMachineResourcesDetails(route.params.id);
       }
     });
@@ -204,15 +261,11 @@ export default {
     onUnmounted(() => {
       validation.value = {};
       clearMachineResourcesDetails();
-    })
+    });
 
     const handleBack = () => {
-      router.push({name: PAGE_NAME.RESOURCE.MACHINE.LIST});
+      router.push({ name: PAGE_NAME.RESOURCE.MACHINE.LIST });
     };
-
-    const ruleFormRef = ref(null);
-
-    const MACHINE_RULES = getMachineRules();
 
     const submitForm = () => {
       ruleFormRef.value.validate((valid) => {
@@ -225,16 +278,15 @@ export default {
 
     const handleFileUpload = (files) => {
       machineResourcesDetails.value.attachment = files;
-    }
+    };
 
     const handleSelectFiles = (listFiles) => {
       machineResourcesDetails.value.image = [listFiles[0].raw];
-    }
+    };
 
     const handleRemoveFile = (file) => {
       machineResourcesDetails.value.image = machineResourcesDetails.value.filter((f) => f.uid !== file.uid);
-    }
-
+    };
 
     return {
       ruleFormRef,
@@ -246,7 +298,10 @@ export default {
       submitForm,
       handleFileUpload,
       handleSelectFiles,
-      handleRemoveFile
+      handleRemoveFile,
+      statusOptions,
+      fuelUnitOptions,
+      constructionEmployees
     };
   },
 };
@@ -258,7 +313,7 @@ export default {
   color: red;
   text-align: left;
   font-size: 12px;
-  margin-top: 5px;
+  margin: 5px;
 }
 
 .btn-cancel {
@@ -309,6 +364,10 @@ export default {
   min-width: 35%;
   max-width: 50%;
 }
+
+.year-picker {
+  width: 100%;
+}
 </style>
 
 <style>
@@ -321,5 +380,9 @@ export default {
   justify-content: space-between;
   font-size: 16px;
   line-height: 21px;
+}
+
+.machine-body .form-search-box .year-picker .el-input__inner {
+  width: 100%;
 }
 </style>
