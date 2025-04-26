@@ -26,7 +26,7 @@
       </el-form-item>
 
       <el-form-item label="Nhật ký ngày" required prop="logDate">
-        <el-date-picker style="width: 100%" v-model="logDetails.logDate" :format="DATE_FORMAT" :value-format="DATE_FORMAT" type="date" placeholder="Chọn ngày"/>
+        <el-date-picker style="width: 100%" disabled v-model="logDetails.logDate" :format="DATE_FORMAT" :value-format="DATE_FORMAT" type="date" placeholder="Chọn ngày"/>
       </el-form-item>
 
       <el-form-item label="Trạng thái" required prop="status">
