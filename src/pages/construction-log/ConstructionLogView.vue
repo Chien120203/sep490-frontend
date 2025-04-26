@@ -105,7 +105,7 @@ const handleChooseDate = (date) => {
     mixinMethods.notifyWarning("Cannot create log in the future");
     return;
   }
-  constructLogs.value = listConstructLog.value.filter(log => dayjs(log.date).format(DATE_FORMAT) === date.day);
+  constructLogs.value = listConstructLog.value.filter(log => dayjs(log.logDate).format(DATE_FORMAT) === date.day);
   if(constructLogs.value.length === 0) {
     router.push({name: PAGE_NAME.CONSTRUCT_LOG.CREATE, params:{date: date.day}});
   } else showLogModal.value = true;
