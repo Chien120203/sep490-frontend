@@ -134,7 +134,7 @@ import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import {computed, onMounted, onUnmounted, reactive, ref} from "vue";
 import {NUMBER_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
-import {BUSINESS_EMPLOYEE} from "@/constants/roles.js"
+import {ADMIN, BUSINESS_EMPLOYEE} from "@/constants/roles.js"
 import {useRouter} from "vue-router";
 import {STATUSES} from "@/constants/project.js";
 import ProjectTable from "@/pages/project/item/list/ProjectTable.vue";
@@ -144,6 +144,7 @@ import DonutChart from "./item/list/ProjectChart.vue";
 import FinancialSummary from "./item/list/FinancialSummary.vue";
 import TaskAndCR from "@/pages/project/item/list/TaskAndCR.vue";
 import PAGE_NAME from "@/constants/route-name.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "customer-reqList",
@@ -166,6 +167,7 @@ export default {
       pageIndex: 1,
     });
     const projectStore = useProjectStore();
+    const persist = usePersistenceStore();
     const customerStore = useCustomerStore();
     const isShowBoxSearch = ref(false);
     const role = localStorage.getItem('role');
@@ -183,6 +185,9 @@ export default {
       getProjectChart,
       handleDeleteProject
     } = projectStore;
+    const {
+      projectId
+    } = persist;
     const {
       listCustomers,
       getListCustomers
@@ -230,6 +235,8 @@ export default {
     ]);
 
     onMounted(() => {
+      if(role === ADMIN) router.push({name: PAGE_NAME.USER.LIST});
+      projectId.value = null;
       getListProjects(searchForms.value);
       getListCustomers();
       getProjectChart();

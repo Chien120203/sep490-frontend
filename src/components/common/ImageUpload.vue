@@ -106,7 +106,7 @@ export default {
 
     // Convert Google Drive "view" URL to "thumbnail" URL
     const convertGoogleDriveUrl = (url) => {
-      if (typeof url === "object" && url.url) return url.url;
+      if (typeof url === "object" && url?.url) return url?.url;
       if (typeof url !== "string") return "";
       let match = url.match(/\/d\/(.*?)\/view/);
       if (match && match[1]) {

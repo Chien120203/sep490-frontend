@@ -6,6 +6,7 @@ import {useRouter} from "vue-router";
 import services from "@/plugins/services";
 import PAGE_NAME from "@/constants/route-name.js";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {ADMIN} from "@/constants/roles.js";
 
 export const useAuthStore = defineStore(
   "auth",
@@ -41,8 +42,9 @@ export const useAuthStore = defineStore(
           localStorage.setItem('refreshToken', response.data.refreshToken);
           localStorage.setItem('isVerify', response.data.isVerify);
           validation.value = {};
-
-          router.push({name: PAGE_NAME.HOME});
+          if(localStorage.getItem('role') === ADMIN) {
+            router.push({name: PAGE_NAME.USER.LIST});
+          } else router.push({name: PAGE_NAME.HOME});
 
           mixinMethods.endLoading();
         },

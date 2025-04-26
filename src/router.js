@@ -1,8 +1,24 @@
 import { createWebHistory, createRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
-import {ADMIN, BUSINESS_EMPLOYEE} from "@/constants/roles.js";
-import {ADMIN_MIDDLEWARE, AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE} from "@/constants/middleware.js";
+import {
+  ADMIN,
+  BUSINESS_EMPLOYEE, CONSTRUCTION_EMPLOYEE,
+  CONSTRUCTION_MANAGER, EXECUTIVE_BOARD,
+  QUALITY_ASSURANCE, RESOURCE_MANAGER,
+  TECHNICAL_MANAGER
+} from "@/constants/roles.js";
+import {
+  ADMIN_MIDDLEWARE,
+  AUTHENTICATION_MIDDLEWARE,
+  BUSINESS_EMPLOYEE_MIDDLEWARE, CONSTRUCTION_EMPLOYEE_MIDDLEWARE,
+  CONSTRUCTION_MANAGER_MIDDLEWARE,
+  EXECUTIVE_BOARD_MIDDLEWARE,
+  QUALITY_ASSURANCE_MIDDLEWARE,
+  RESOURCE_MANAGER_MIDDLEWARE,
+  TECHNICAL_MANAGER_MIDDLEWARE,
+  USER_MIDDLEWARE,
+} from "@/constants/middleware.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 
 // import pages
@@ -57,6 +73,9 @@ const routes = [
     name: PAGE_NAME.LOGIN,
     path: PAGES.LOGIN,
     component: Login,
+    meta: {
+      middleware: [],
+    },
   },
   {
     name: PAGE_NAME.HOME,
@@ -79,7 +98,7 @@ const routes = [
     path: PAGES.FORBIDDEN,
     component: Forbidden,
     meta: {
-      middleware: [""],
+      middleware: [],
     },
   },
   {
@@ -87,7 +106,7 @@ const routes = [
     path: PAGES.CUSTOMER,
     component: Customer,
     meta: {
-      middleware: [AUTHENTICATION_MIDDLEWARE, BUSINESS_MIDDLEWARE],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
     children: [
       {
@@ -222,7 +241,7 @@ const routes = [
     path: PAGES.USER,
     component: User,
     meta: {
-      middleware: [AUTHENTICATION_MIDDLEWARE, ADMIN_MIDDLEWARE],
+      middleware: [AUTHENTICATION_MIDDLEWARE],
     },
     children: [
       {
@@ -427,29 +446,45 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0);
 
-  const { middleware } = to.meta || {}; // Safely access meta.middleware
+  const { middleware } = to.meta || {};
   const token = localStorage.getItem("accessToken");
   const role = localStorage.getItem("role");
   const persist = usePersistenceStore();
-  const {loggedIn} = persist;
+  const { loggedIn } = persist;
 
-  // Check if middleware exists and includes 'authentication'
-  if (middleware && middleware.includes(AUTHENTICATION_MIDDLEWARE) && !token) {
+  // Cho phép truy cập vào login/forbidden mà không cần token
+  if ([PAGES.LOGIN, PAGES.FORBIDDEN].includes(to.path)) {
+    return next();
+  }
+
+  // Kiểm tra xác thực
+  if (middleware?.includes(AUTHENTICATION_MIDDLEWARE) && !token) {
     loggedIn.value = false;
     return next(PAGES.LOGIN);
   }
 
-  //middleware for pages
-  if (middleware) {
-    if (
-      middleware.includes(BUSINESS_MIDDLEWARE) && role !== BUSINESS_EMPLOYEE ||
-      middleware.includes(ADMIN_MIDDLEWARE) && role !== ADMIN
-    ) {
-      if (to.path !== PAGES.FORBIDDEN) return next(PAGES.FORBIDDEN);
+  // Kiểm tra phân quyền
+  if (USER_MIDDLEWARE.includes(to.name)) {
+    next();
+  } else {
+    const roleMiddlewareMap = {
+      "Business Employee": BUSINESS_EMPLOYEE_MIDDLEWARE,
+      "Construction Manager": CONSTRUCTION_MANAGER_MIDDLEWARE,
+      "Technical Manager": TECHNICAL_MANAGER_MIDDLEWARE,
+      "Quality Assurance": QUALITY_ASSURANCE_MIDDLEWARE,
+      "Executive Board": EXECUTIVE_BOARD_MIDDLEWARE,
+      "Resource Manager": RESOURCE_MANAGER_MIDDLEWARE,
+      "Construction Employee": CONSTRUCTION_EMPLOYEE_MIDDLEWARE,
+      "Administrator": ADMIN_MIDDLEWARE,
+    };
+    const allowedRoutes = roleMiddlewareMap[role];
+
+    if (allowedRoutes?.includes(to.name)) {
+      next();
+    } else {
+      return next(PAGES.FORBIDDEN);
     }
   }
-
-  next();
 });
 
 export default router;

@@ -6,17 +6,16 @@ export const BUSINESS_EMPLOYEE = "Business Employee";
 export const TECHNICAL_MANAGER = "Technical Manager";
 export const QUALITY_ASSURANCE = "Quality Assurance";
 export const EXECUTIVE_BOARD = "Executive Board";
-export const HEAD_OF_CONSTRUCTION = "Head of Construction Team";
 export const RESOURCE_MANAGER = "Resource Manager";
 
 export const LIST_ROLES = [
-  CONSTRUCTION_MANAGER,
-  BUSINESS_EMPLOYEE,
-  TECHNICAL_MANAGER,
-  QUALITY_ASSURANCE,
-  EXECUTIVE_BOARD,
-  RESOURCE_MANAGER,
-  CONSTRUCTION_EMPLOYEE
+  CONSTRUCTION_MANAGER, // done
+  BUSINESS_EMPLOYEE, // done
+  TECHNICAL_MANAGER, // done
+  QUALITY_ASSURANCE, // done
+  EXECUTIVE_BOARD, // done
+  RESOURCE_MANAGER, // done
+  CONSTRUCTION_EMPLOYEE,
 ]
 
 export const ROLE_LABELS = {

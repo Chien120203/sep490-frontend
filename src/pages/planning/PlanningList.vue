@@ -65,7 +65,7 @@ import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
-import {CONSTRUCTION_MANAGER, HEAD_OF_CONSTRUCTION} from "@/constants/roles.js";
+import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
 import {PLANNING_STATUS} from "@/constants/project.js";
 
 const persistenceStore = usePersistenceStore();

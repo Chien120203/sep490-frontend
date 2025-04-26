@@ -35,14 +35,6 @@
         </template>
       </el-menu>
 
-      <el-menu v-if="listRouterUsers.length">
-        <el-menu-item :class="classActive(route)" v-for="(route, index) in listRouterUsers" :key="index"
-                      :index="route.function_page_name" @click="navigateChangeRoute(route)">
-          <component :is="route.function_icon" class="icon_sidebar"/>
-          <span class="sidebar-text">{{ route.function_name }}</span>
-        </el-menu-item>
-      </el-menu>
-
       <el-menu>
         <el-menu-item :class="classActive(route)" v-for="(route, index) in listRouterOthers" :key="index"
                       :index="route.function_page_name" @click="navigateChangeRoute(route)">
@@ -83,6 +75,17 @@ import {useRoute, useRouter} from "vue-router";
 import PAGES from "@/utils/pages.js";
 import {FRONT_END_URL} from "@/constants/application.js";
 import {PROJECT_SIDEBARS} from "@/constants/project.js";
+import {
+  ADMIN_MIDDLEWARE,
+  BUSINESS_EMPLOYEE_MIDDLEWARE, CONSTRUCTION_EMPLOYEE_MIDDLEWARE,
+  CONSTRUCTION_MANAGER_MIDDLEWARE,
+  EXECUTIVE_BOARD_MIDDLEWARE,
+  QUALITY_ASSURANCE_MIDDLEWARE,
+  RESOURCE_MANAGER_MIDDLEWARE,
+  TECHNICAL_MANAGER_MIDDLEWARE
+} from "@/constants/middleware.js";
+import {ADMIN} from "@/constants/roles.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "Sidebar",
@@ -116,65 +119,105 @@ export default {
     const homePath = ref(`${FRONT_END_URL}${PAGES.HOME}`);
     const isShowComponent = ref(true);
     const currentPath = ref("");
+    const role = computed(() => localStorage.getItem("role"));
+    const persist = usePersistenceStore();
+    const {
+      projectId
+    } = persist;
+    const setIsShowForMenu = (list) => {
+      const roleMiddlewareMap = {
+        "Business Employee": BUSINESS_EMPLOYEE_MIDDLEWARE,
+        "Construction Manager": CONSTRUCTION_MANAGER_MIDDLEWARE,
+        "Technical Manager": TECHNICAL_MANAGER_MIDDLEWARE,
+        "Quality Assurance": QUALITY_ASSURANCE_MIDDLEWARE,
+        "Executive Board": EXECUTIVE_BOARD_MIDDLEWARE,
+        "Resource Manager": RESOURCE_MANAGER_MIDDLEWARE,
+        "Construction Employee": CONSTRUCTION_EMPLOYEE_MIDDLEWARE,
+        "Administrator": ADMIN_MIDDLEWARE,
+      };
 
-    const isShowProjectSideBar = computed(() => {
-      return PROJECT_SIDEBARS.includes(route.name);
-    });
+      const allowedRoutes = roleMiddlewareMap[role.value] || [];
 
-    const listRouter = computed(() => [
+      const processItems = (items) => {
+        return items.map(item => {
+          const newItem = {...item};
+
+
+          newItem.isShow = allowedRoutes.includes(newItem.function_page_name);
+
+          if(role.value !== ADMIN) {
+            newItem.isShow = PROJECT_SIDEBARS.includes(route.name)
+          }
+
+          if (newItem.children) {
+            newItem.children = processItems(newItem.children);
+
+            if (newItem.children.some(child => child.isShow)) {
+              newItem.isShow = true;
+            }
+          }
+
+          return newItem;
+        });
+      };
+
+      return processItems(list);
+    };
+
+    const listRouter = computed(() => setIsShowForMenu([
       {
         function_name: t("side_bar.label.customer"),
         function_page_name: PAGE_NAME.CUSTOMER.LIST,
         function_icon: "IconUserGroup",
-        isShow: !isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       },
       {
         function_name: t("side_bar.label.project"),
         function_page_name: PAGE_NAME.PROJECT.LIST,
         function_icon: "ProjectIcon",
-        isShow: !isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       },
       {
         function_name: t("side_bar.label.planning"),
         function_page_name: PAGE_NAME.PLANNING.LIST,
         function_icon: "IconPlanning",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       },
       {
         function_name: t("side_bar.label.progress"),
         function_page_name: PAGE_NAME.PROGRESS.DETAILS,
         function_icon: "IconProgress",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       },
       {
         function_name: t("side_bar.label.construct_log"),
         function_page_name: PAGE_NAME.CONSTRUCT_LOG.VIEW,
         function_icon: "IconLog",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       },
       {
         function_name: t("side_bar.label.inventory"),
         function_page_name: PAGE_NAME.INVENTORY.LIST,
         function_icon: "IconInventory",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       },
       {
         function_name: t("side_bar.label.change_request"),
         function_page_name: "",
         function_icon: "IconChangeRequest",
-        isShow: isShowProjectSideBar.value,
+        isShow: false,
         children: [
           {
             function_name: t("side_bar.label.resource_mobilization"),
             function_page_name: PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
             function_icon: "IconRequestMobilization",
-            isShow: isShowProjectSideBar.value,
+            isShow: false,
           },
           {
             function_name: t("side_bar.label.resource_allocation"),
             function_page_name: PAGE_NAME.RESOURCE_ALLOCATION.LIST,
             function_icon: "IconRequestAllocation",
-            isShow: isShowProjectSideBar.value,
+            isShow: false,
           },
         ],
       },
@@ -182,25 +225,25 @@ export default {
         function_name: t("side_bar.label.resource.title"),
         function_page_name: "",
         function_icon: "IconResource",
-        isShow: !isShowProjectSideBar.value,
+        isShow: false,
         children: [
           {
             function_name: t("side_bar.label.resource.machine"),
             function_page_name: PAGE_NAME.RESOURCE.MACHINE.LIST,
             function_icon: "IconMachine",
-            isShow: !isShowProjectSideBar.value,
+            isShow: false,
           },
           {
             function_name: t("side_bar.label.resource.material"),
             function_page_name: PAGE_NAME.RESOURCE.MATERIAL.LIST,
             function_icon: "IconMaterial",
-            isShow: !isShowProjectSideBar.value,
+            isShow: false,
           },
           {
             function_name: t("side_bar.label.resource.human"),
             function_page_name: PAGE_NAME.RESOURCE.HUMAN.LIST,
             function_icon: "IconHuman",
-            isShow: !isShowProjectSideBar.value,
+            isShow: false,
           },
         ],
       },
@@ -208,18 +251,15 @@ export default {
         function_name: t("side_bar.label.inspector_report"),
         function_page_name: PAGE_NAME.INSPECTION_REPORT.LIST,
         function_icon: "IconInspection",
-        isShow: isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       },
-    ]);
-
-    const listRouterUsers = computed(() => [
       {
         function_name: t("side_bar.label.user"),
         function_page_name: PAGE_NAME.USER.LIST,
         function_icon: "IconUserGroup",
-        isShow: !isShowProjectSideBar.value, // set later
+        isShow: false, // set later
       }
-    ]);
+    ]));
 
     const listRouterOthers = computed(() => [
       {
@@ -248,7 +288,6 @@ export default {
       currentPath,
       homePath,
       listRouter,
-      listRouterUsers,
       listRouterOthers,
       navigateChangeRoute,
       classActive,
