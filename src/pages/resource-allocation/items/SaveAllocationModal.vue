@@ -82,7 +82,6 @@ import {
   MATERIAL_TYPE
 } from "@/constants/resource.js";
 import AllocateFormInfo from "@/pages/resource-allocation/items/modal/AllocateFormInfo.vue";
-import {getAllocationResourceItemRules} from "@/rules/allocation";
 import {useInventoryStore} from "@/store/inventory.js";
 import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {usePersistenceStore} from "@/store/persistence.js";
@@ -144,8 +143,6 @@ watch(props.data.requestType, (newVal) => {
     case PROJECT_TO_TASK || PROJECT_TO_PROJECT:
       getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20});
       break;
-    case TASK_TO_TASK:
-
   }
 });
 
@@ -159,14 +156,22 @@ const vehicleOptions = ref({id: "id", value: "name"});
 const activeTab = ref("materials");
 
 const materials = computed(() => {
-  if (props.data.requestType === PROJECT_TO_TASK || props.data.requestType === PROJECT_TO_PROJECT) {
-    return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE);
+  const requestType = props.data.requestType;
+  const fromTaskId = props.data.fromTaskId; // directly access it so Vue tracks it
+
+  if (requestType === PROJECT_TO_TASK || requestType === PROJECT_TO_PROJECT) {
+    return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
+      id: item.resourceId,
+      quantity: item.quantity,
+      unit: item.unit,
+      name: item.name
+    }));
   }
 
-  if (props.data.requestType === TASK_TO_TASK) {
-    let progressItem = props.progressDetails.progressItems.find(item => item.index === props.data.fromTaskId) || {};
-    if(!progressItem) return [];
-    return (progressItem?.details || [])
+  if (requestType === TASK_TO_TASK && fromTaskId) {
+    const progressItem = props.progressDetails.progressItems.find(item => item.id === fromTaskId);
+    if (!progressItem) return [];
+    return (progressItem.details || [])
         .filter(item => item.resourceType === MATERIAL_TYPE && item.resource)
         .map(item => ({
           id: item.resource.id,
@@ -178,8 +183,31 @@ const materials = computed(() => {
 
   return [];
 });
+const listVehicles = computed(() => {
+  const requestType = props.data.requestType;
+  const fromTaskId = props.data.fromTaskId; // directly access it so Vue tracks it
+
+  if (requestType === PROJECT_TO_TASK || requestType === PROJECT_TO_PROJECT) {
+    return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE);
+  }
+
+  if (requestType === TASK_TO_TASK && fromTaskId) {
+    const progressItem = props.progressDetails.progressItems.find(item => item.id === fromTaskId);
+    if (!progressItem) return [];
+    return (progressItem.details || [])
+        .filter(item => item.resourceType === MACHINE_TYPE && item.resource)
+        .map(item => ({
+          id: item.resource.id,
+          quantity: item.quantity,
+          unit: item.unit,
+          name: item.resource.name
+        }));
+  }
+
+  return [];
+});
 // const materials = computed(() => inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE));
-const listVehicles = computed(() => inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE));
+// const listVehicles = computed(() => inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE));
 const listEmployees = computed(() => inventoryData.value.filter(item => item.resourceType === HUMAN_TYPE));
 
 const updateListMaterials = (listData) => {

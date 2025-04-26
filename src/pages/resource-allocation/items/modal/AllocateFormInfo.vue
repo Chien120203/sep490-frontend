@@ -59,8 +59,8 @@
           <el-form-item v-if="data.requestType === TASK_TO_TASK" label="From Task">
             <div class="select-project-container">
               <SingleOptionSelect
-                  v-model="data.fromTask"
-                  :optionKeys="{ id: 'idd', value: 'workName' }"
+                  v-model="data.fromTaskId"
+                  :optionKeys="{ id: 'id', value: 'workName' }"
                   :listData="progressDetails.progressItems"
                   :isRemote="true"
                   @remoteSearch="handleSearchTask"
@@ -73,7 +73,7 @@
           <el-form-item v-if="data.requestType === TASK_TO_TASK" label="To Task">
             <div class="select-project-container">
               <SingleOptionSelect
-                  v-model="data.toTask"
+                  v-model="data.toTaskId"
                   :optionKeys="{ id: 'id', value: 'workName' }"
                   :listData="progressDetails.progressItems.filter(task => task.id !== data.fromTaskId)"
                   :isRemote="true"

@@ -139,6 +139,24 @@ export const useAllocationStore = defineStore(
       await mixinMethods.endLoading();
     };
 
+    const clearRequestDtls = () => {
+      allocationDetails.value = {
+        requestType: 1,
+        requestCode: "",
+        fromProjectId: 0,
+        toProjectId: 1,
+        fromTaskId: null,
+        toTaskId: null,
+        requestName: "",
+        resourceAllocationDetails: [],
+        description: "",
+        priorityLevel: 0,
+        status: 0,
+        attachments: "",
+        requestDate: dayjs()
+      }
+    }
+
     return {
       validation,
       totalItems,
@@ -150,6 +168,7 @@ export const useAllocationStore = defineStore(
       handleChangeRequestStatus,
       getListAllocations,
       getAllocationDtls,
+      clearRequestDtls,
     };
   }
 );

@@ -105,6 +105,7 @@ const {
   totalItems,
   currentPage,
   allocationDetails,
+  clearRequestDtls,
   getListAllocations,
   handleDeleteAllocation,
   handleChangeRequestStatus,
@@ -141,6 +142,7 @@ const formSearchTask = ref({
 });
 
 const handleDisplayModalSave = (show = false) => {
+  if(!show) clearRequestDtls();
   isShowModalSave.value = show;
 };
 

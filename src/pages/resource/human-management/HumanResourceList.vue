@@ -184,6 +184,7 @@ const handleClear = () => {
 
 const submitForm = () => {
   isShowBoxSearch.value = false;
+  currentPage.value = 1;
   getListHumanResources(searchForms.value);
 };
 
