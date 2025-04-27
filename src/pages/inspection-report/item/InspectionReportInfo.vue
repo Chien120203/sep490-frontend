@@ -1,6 +1,7 @@
 <template>
   <el-card class="inspection-form">
     <el-form
+        :disabled="!allowEdit"
         label-position="top"
         :model="inspectionReportDetails"
         ref="ruleFormRef"
@@ -105,6 +106,10 @@ const props = defineProps({
     type: Object,
     default: () => {
     }
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
   }
 });
 const ruleFormRef = ref(null);

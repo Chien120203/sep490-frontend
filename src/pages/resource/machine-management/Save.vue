@@ -209,7 +209,6 @@ import { useI18n } from "vue-i18n";
 import { useMachineResourcesStore } from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
 import { useUserStore } from "@/store/user.js";
-import {useUserStore} from "@/store/user.js";
 import {ADMIN} from "@/constants/roles.js";
 
 export default {

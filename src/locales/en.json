@@ -1141,6 +1141,13 @@
     "edit": {
       "title": "Construction Log Details"
     },
+    "modal_title": "List Logs",
+    "log_code": "Log Code",
+    "log_name": "Log Name",
+    "modal_confirm": {
+      "message": "Do you want to change log status!",
+      "title": "Change log status"
+    },
     "status": {
       "approved": "Approved",
       "rejected": "Rejected",

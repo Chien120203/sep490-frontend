@@ -12,9 +12,17 @@
         </div>
         <div class="contract-save-btn">
           <div class="item">
-            <el-button class="btn btn-save" @click="submitForm()">
+            <el-button v-if="allowEdit" class="btn btn-save" @click="submitForm()">
               {{ $t("common.save") }}
             </el-button>
+            <div class="item" style="display: flex;">
+              <el-button v-if="allowApprove" class="btn btn-refuse" @click="handleChangeStatus(REJECTED_STATUS)">
+                {{ $t("common.reject") }}
+              </el-button>
+              <el-button v-if="allowApprove" class="btn btn-save" @click="handleChangeStatus(APPROVED_STATUS)">
+                {{ $t("common.approve") }}
+              </el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -23,6 +31,7 @@
           <ConstructLogWorkDetails
               ref="formLogDetailsRef"
               :rules="constructLogRules"
+              :allowEdit="allowEdit"
               :progressDtls="progressDetails.value"
               :logDetails="constructLogDetails.value"
               @remove-resource="handleRemoveResource"
@@ -32,17 +41,25 @@
         <div class="log-infor">
           <ConstructionLogInfor
               ref="formLogInfoRef"
+              :allowEdit="allowEdit"
               :rules="constructLogRules"
               :logDetails="constructLogDetails.value"
           />
         </div>
       </div>
     </div>
+    <ModalConfirm
+        :isShowModal="isShowModalConfirm"
+        @close-modal="() => isShowModalConfirm = false"
+        @confirmAction="handleConfirm"
+        :message="$t('construct_log.modal_confirm.message')"
+        :title="$t('construct_log.modal_confirm.title')"
+    />
   </div>
 </template>
 
 <script setup>
-import {onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
@@ -53,6 +70,10 @@ import {getConstructLogRules} from "@/rules/construct-log/index.js";
 import {useI18n} from "vue-i18n";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {useProgressStore} from "@/store/progress.js";
+import {mixinMethods} from "@/utils/variables.js";
+import {CONSTRUCTION_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {APPROVED_STATUS, REJECTED_STATUS, WAIT_FOR_APPROVE} from "@/constants/construct-log.js";
+import ModalConfirm from "@/components/common/ModalConfirm.vue";
 
 const constructLogRules = getConstructLogRules();
 const constructLogStore = useConstructLog();
@@ -66,6 +87,7 @@ const {
   constructLogDetails,
   saveConstructLog,
   getConstructLogDetails,
+  handleChangeLogStatus,
   clearConstructLog,
 } = constructLogStore;
 const {
@@ -76,15 +98,17 @@ const {
 const {t} = useI18n();
 const route = useRoute();
 const router = useRouter();
-
+const isShowModalConfirm = ref(null);
+const changeStatus = ref(null);
 onMounted(async () => {
   await getProgressDetails(projectId.value, false);
-  if(route.params.date && !route.params.id) constructLogDetails.value.logDate = route.params.date;
-  if(route.params.id) await getConstructLogDetails(route.params.id);
+  if (route.params.date && !route.params.id) constructLogDetails.value.logDate = route.params.date;
+  if (route.params.id) await getConstructLogDetails(route.params.id);
 });
 
 onUnmounted(() => {
   clearConstructLog();
+  changeStatus.value = null;
 });
 
 const handleRemoveResource = (data) => {
@@ -102,37 +126,53 @@ const handleRemoveTask = (taskIndex) => {
   constructLogDetails.value.workAmount = constructLogDetails.value.workAmount.filter(work => work.taskIndex !== taskIndex);
 }
 
-
 const handleBack = () => {
   router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
 };
 
+const handleChangeStatus = (status) => {
+  changeStatus.value = status;
+  isShowModalConfirm.value = true;
+}
+
+const handleConfirm = () => {
+  isShowModalConfirm.value = false;
+  switch (changeStatus.value) {
+    case APPROVED_STATUS:
+      handleChangeLogStatus(constructLogDetails.value.id, "approve");
+      break;
+    case REJECTED_STATUS:
+      handleChangeLogStatus(constructLogDetails.value.id, "reject");
+  }
+}
+
 const formLogDetailsRef = ref(null);
 const formLogInfoRef = ref(null);
-
+const allowEdit = computed(() => localStorage.getItem('role') === CONSTRUCTION_MANAGER && constructLogDetails.value.status === WAIT_FOR_APPROVE);
+const allowApprove = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER && constructLogDetails.value.status === WAIT_FOR_APPROVE);
 const submitForm = async () => {
   constructLogDetails.value.projectId = projectId.value;
   constructLogDetails.value.images = constructLogDetails.value.images.map(image => image.raw);
-  // const formRefs = [
-  //   ...formLogDetailsRef.value?.machineForm,
-  //   ...formLogDetailsRef.value?.materialForm,
-  //   ...formLogDetailsRef.value?.humanForm,
-  //   ...formLogDetailsRef.value?.workAmountForm,
-  //   formLogInfoRef.value
-  // ];
-  // console.log(constructLogDetails.value)
-  // for (const form of formRefs) {
-  //   const isValid = await new Promise((resolve) => {
-  //     form.ruleFormRef.validate((valid) => resolve(valid));
-  //   });
-  //
-  //   if (!isValid) {
-  //     mixinMethods.notifyError(
-  //         t("Failed")
-  //     );
-  //     return; // stop here if one form is invalid
-  //   }
-  // }
+  const formRefs = [
+    ...formLogDetailsRef.value?.machineForm,
+    ...formLogDetailsRef.value?.materialForm,
+    ...formLogDetailsRef.value?.humanForm,
+    ...formLogDetailsRef.value?.workAmountForm,
+    formLogInfoRef.value
+  ];
+  console.log(constructLogDetails.value)
+  for (const form of formRefs) {
+    const isValid = await new Promise((resolve) => {
+      form.ruleFormRef.validate((valid) => resolve(valid));
+    });
+
+    if (!isValid) {
+      mixinMethods.notifyError(
+          t("Failed")
+      );
+      return; // stop here if one form is invalid
+    }
+  }
   await saveConstructLog(constructLogDetails.value);
 }
 </script>
@@ -143,10 +183,10 @@ const submitForm = async () => {
 
 .log-details {
   margin-right: 12px;
-  width: 60%;
+  width: 70%;
 }
 
 .log-infor {
-  width: 40%;
+  width: 30%;
 }
 </style>

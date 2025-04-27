@@ -14,15 +14,6 @@
           <StatisticTable :task="task" :listLogsByTask="listLogsByTask" />
         </div>
 
-        <div v-if="selectedTab === 'log'">
-          <ConstructionLogTable
-              :title="title"
-              :dateRange="searchForm"
-              :listLog="listLogsByTask"
-              @choose-date="handleChooseDate"
-          />
-        </div>
-
         <div v-if="selectedTab === 'dependency'">
           <DependencyTaskTable
               ref="dependentFormRef"
@@ -73,6 +64,12 @@
         </div>
       </div>
     </div>
+    <ListLogsModal
+        :show="showLogModal"
+        :data="constructLogs"
+        @details="handleGetLogDetails"
+        @close="handleCloseModal"
+    />
   </div>
 </template>
 
@@ -80,7 +77,6 @@
 import {computed, defineProps, onMounted, onUnmounted, ref} from "vue";
 import TitleNavigation from "@/components/common/TitleNavigation.vue";
 import StatisticTable from "@/pages/progress/items/modal/items/progress-details/StatisticTable.vue";
-import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
 import DependencyTaskTable from "@/pages/progress/items/modal/items/DependencyTaskTable.vue";
 import ItemList from "@/pages/progress/items/modal/items/ItemList.vue";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
@@ -126,10 +122,6 @@ const listTabs =ref([
     label: "Thống kê",
   },
   {
-    name: "log",
-    label: "Nhật ký thi công",
-  },
-  {
     name: "dependency",
     label: "Công việc phụ thuộc",
   },
@@ -150,6 +142,7 @@ const materialOptions = ref({id: "id", value: "materialName"});
 const userOptions = ref({id: "id", value: "teamName"});
 const vehicleOptions = ref({id: "id", value: "chassisNumber"});
 const title = ref('');
+
 const PLANNING_RULES = getPlanningRules();
 
 const getListResourceByType = (list, type) => {
@@ -166,11 +159,6 @@ onMounted(async () => {
 
 onUnmounted(() => {
 });
-
-const handleChooseDate = (date) => {
-  const logUrl = `/construct-log/details?date=${date.day}`
-  window.open(logUrl, '_blank')
-}
 
 const handleTabChange = (tab) => {
   selectedTab.value = tab;

@@ -118,7 +118,7 @@ export const useInspectionReportStore = defineStore(
             isShowModalConfirm.value = false;
         }
 
-        const handleChangeRequestStatus = async (id, method) => {
+        const handleInspectStatus = async (id, method) => {
             mixinMethods.startLoading();
             await services.InspectionReportAPI[method](
                 id,
@@ -170,7 +170,7 @@ export const useInspectionReportStore = defineStore(
             getInspectionReportDetails,
             getListInspectionReport,
             handleDeleteInspectionReport,
-            handleChangeRequestStatus
+            handleInspectStatus
         };
     }
 );

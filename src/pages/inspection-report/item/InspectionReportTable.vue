@@ -55,17 +55,13 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="90">
-      <template #header>
-        <p v-html="$t('inspection.table.header.status')"></p>
-      </template>
-
+    <el-table-column
+        min-width="120"
+        :label="$t('common.status')"
+        align="left"
+    >
       <template #default="scope">
-        <span
-            class="inspection-status"
-        >
-          {{ scope.row.status ? scope.row.status : "-" }}
-        </span>
+        <span class="inspection-status"  :class="statusClass(getStatus(scope.row))">{{ $t(getStatus(scope.row.status)) }}</span>
       </template>
     </el-table-column>
 
@@ -82,6 +78,7 @@
             <IconEdit/>
           </button>
           <button
+              v-if="allowEdit"
               @click="$emit('delete', scope.row.id)"
               class="btn-action btn-delete"
           >
@@ -96,6 +93,9 @@
 <script>
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import {APPROVED_STATUS, REJECTED_STATUS, WAIT_FOR_APPROVE, LIST_INSPECT_STATUSES} from "@/constants/inspection.js";
+import {mixinMethods} from "@/utils/variables.js";
+import {DATE_FORMAT} from "@/constants/application.js";
 
 export default {
   name: "InspectionReportTable",
@@ -108,9 +108,33 @@ export default {
       type: Array,
       default: () => [],
     },
+    allowEdit: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, {emit}) {
-    return {};
+    const statusClass = (status) => {
+      switch (status) {
+        case REJECTED_STATUS:
+          return "status-reject";
+        case APPROVED_STATUS:
+          return "status-approved";
+        case WAIT_FOR_APPROVE:
+          return "status-draft";
+      }
+    };
+    const formatDate = (inputDate) => {
+      return mixinMethods.showDateTime(inputDate, DATE_FORMAT);
+    }
+    const getStatus = (status) => {
+      return LIST_INSPECT_STATUSES[status];
+    }
+    return {
+      statusClass,
+      getStatus,
+      formatDate
+    };
   },
 };
 </script>
@@ -144,36 +168,16 @@ export default {
     text-align: center;
   }
 
-  &-file {
-    margin-left: 12px;
+  &-draft {
+    background: #858080;
   }
 
-  &-renewed {
-    background: #d4a816;
+  &-approved {
+    background: #3e8e22;
   }
 
-  &-active {
-    background: #15a726;
-  }
-
-  &-terminated {
-    background: #d03333;
-  }
-
-  &-monthly {
-    background: #4e1b7b;
-  }
-
-  &-quater {
-    background: #136e87;
-  }
-
-  &-half-year {
-    background: #4616d4;
-  }
-
-  &-year {
-    background: #772044;
+  &-reject {
+    background: #cc3535;
   }
 
   &-type-cate {

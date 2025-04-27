@@ -5,6 +5,7 @@ import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
+import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
 
 export const useConstructLog = defineStore(
   "construct-log",
@@ -93,6 +94,9 @@ export const useConstructLog = defineStore(
         params,
         (response) => {
           listConstructLog.value = response.data;
+          if(localStorage.getItem('role') === CONSTRUCTION_MANAGER) {
+            listConstructLog.value = listConstructLog.value.filter((item) => item.creator == localStorage.getItem('userId'))
+          }
           mixinMethods.endLoading();
         },
         (error) => {
@@ -157,6 +161,22 @@ export const useConstructLog = defineStore(
       );
     };
 
+    const handleChangeLogStatus = async (id, method) => {
+      mixinMethods.startLoading();
+      await services.ConstructLogAPI[method](
+        id,
+        {},
+        (response) => {
+          mixinMethods.endLoading();
+          mixinMethods.notifySuccess(t("response.message.save_construct_log_success"));
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.save_construct_log_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
     const clearConstructLog = () => {
       constructLogDetails.value = {
         id: 0,
@@ -191,6 +211,7 @@ export const useConstructLog = defineStore(
       isShowModalConfirm,
       isShowModalCreate,
       clearConstructLog,
+      handleChangeLogStatus,
       getConstructLogDetails,
       getListLogsByTask,
       getListProjectLogs,

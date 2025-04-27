@@ -57,14 +57,12 @@ import {ref, onMounted, computed} from "vue";
 import { useRouter } from "vue-router";
 import { usePersistenceStore } from "@/store/persistence.js";
 import { usePlanningStore } from "@/store/planning.js";
-import IconSetting from "@/svg/IconSettingMain.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import PlanningTable from "@/pages/planning/item/list/PlanningTable.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
 import {PLANNING_STATUS} from "@/constants/project.js";
 

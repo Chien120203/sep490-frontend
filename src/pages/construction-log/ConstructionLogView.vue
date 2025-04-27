@@ -9,6 +9,15 @@
           }}
         </h3>
       </div>
+      <SingleOptionSelect
+          class="select-item"
+          :optionKeys="{ id: 'index', value: 'workName' }"
+          :listData="listProgressItems"
+          :isRemote="true"
+          :showClearable="true"
+          :placeholder="'Chọn công việc'"
+          @handleSelectedParams="handleSelectTask"
+      />
       <div>
         <ConstructionLogTable
             :dateRange="searchForm"
@@ -40,12 +49,19 @@ import dayjs from 'dayjs';
 import {DATE_FORMAT} from "@/constants/application.js";
 import ListLogsModal from "@/pages/construction-log/items/modal/ListLogsModal.vue";
 import {mixinMethods} from "@/utils/variables.js";
+import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
+import {useProgressStore} from "@/store/progress.js";
+import {useI18n} from "vue-i18n";
 
 // Store Data
 const constructLog = useConstructLog();
 const projectStore = useProjectStore();
 const persistenceStore = usePersistenceStore();
-
+const progressStore = useProgressStore();
+const {
+  progressDetails,
+  getProgressDetails
+} = progressStore;
 const {
   getListProjectLogs,
   listConstructLog
@@ -58,9 +74,13 @@ const {
 } = persistenceStore;
 
 const route = useRoute();
+const {t} = useI18n();
 const router = useRouter();
 const now = dayjs();
-
+const listProgressItems = computed(() => {
+  const filteredItems = progressDetails.value.progressItems?.filter(item => item.progress !== 100) || [];
+  return [{ index: "all", workName: t('common.all') }, ...filteredItems];
+});
 const fromDate = now.startOf('month').format('YYYY-MM-DD');
 const toDate = now.endOf('month').format('YYYY-MM-DD');
 
@@ -68,18 +88,26 @@ const searchForm = ref({
   projectId: projectId.value,
   fromDate: fromDate,
   toDate: toDate,
-  pageSize: 100
+  pageSize: 100,
+  taskIndex: "",
 });
 const constructLogs = ref([]);
 const showLogModal = ref(false);
 onMounted(async () => {
   await getListProjectLogs(searchForm.value);
+  await getProgressDetails(projectId.value, true);
 });
 
 onUnmounted(() => {
 });
 
 const handleChangeDate = () => {
+  getProgressDetails(projectId.value, true);
+  getListProjectLogs(searchForm.value);
+}
+
+const handleSelectTask = (taskIndex) => {
+  searchForm.value.taskIndex = taskIndex === "all" ? "" : taskIndex;
   getListProjectLogs(searchForm.value);
 }
 
@@ -111,3 +139,9 @@ const handleChooseDate = (date) => {
   } else showLogModal.value = true;
 }
 </script>
+
+<style scoped>
+.select-item {
+  width: 40%;
+}
+</style>

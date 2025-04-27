@@ -59,6 +59,7 @@ export const useAuthStore = defineStore(
       loggedIn.value = false;
       projectId.value = null;
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("userId");
       localStorage.removeItem("role");
       localStorage.removeItem("username");
       localStorage.removeItem("email");

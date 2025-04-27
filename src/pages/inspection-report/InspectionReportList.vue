@@ -4,7 +4,7 @@
       <h3 class="page__ttl">{{ $t("inspection.title") }}</h3>
       <div class="inspection-btn-box">
         <el-row class="mb-4">
-          <el-button class="btn btn-save" @click="handleRedirectToCreate">
+          <el-button v-if="allowEdit" class="btn btn-save" @click="handleRedirectToCreate">
             {{ $t("common.add_new") }}
           </el-button>
         </el-row>
@@ -38,6 +38,7 @@
 
     <div class="inspection-body-table">
       <InspectionReportTable
+          :allowEdit="allowEdit"
           :data="listInspectionReports.value"
           @details="handleGetInspectionDetails"
           @delete="handleDisplayModal"
@@ -62,7 +63,7 @@
 </template>
 
 <script>
-import {onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRouter} from "vue-router";
 import InspectionReportTable from "./item/InspectionReportTable.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
@@ -73,6 +74,7 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useInspectionReportStore} from "@/store/inspection.js";
+import {QUALITY_ASSURANCE} from "@/constants/roles.js";
 
 export default {
   name: "InspectionReportList",
@@ -102,7 +104,7 @@ export default {
       handleDeleteInspectionReport,
     } = inspectionStore;
     const isDisabled = ref(false);
-
+    const allowEdit = computed(() => localStorage.getItem('role') === QUALITY_ASSURANCE);
     onMounted(() => {
       getListInspectionReport(searchForms.value);
     });
@@ -161,6 +163,7 @@ export default {
       listInspectionReports,
       totalItems,
       currentPage,
+      allowEdit,
       handleLoadMore,
       handleCloseModal,
       TEXT_CONFIRM_DELETE,

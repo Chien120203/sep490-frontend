@@ -3,6 +3,7 @@
     <SingleOptionSelect
         class="select-item"
         :defaultList="selectedRow"
+        :is-disabled="!allowEdit"
         :optionKeys="{ id: 'index', value: 'workName' }"
         :listData="listProgressItems"
         :isRemote="true"
@@ -19,13 +20,14 @@
             <h3>{{ getTaskInfo(task.taskIndex)?.workName || "-" }}</h3>
           </div>
           <div class="el-collapse-item-header-icon">
-            <IconCircleClose class="close-icon" :width="15" :height="15" @click="handleDeleteLog(task.index)"/>
+            <IconCircleClose class="close-icon" :width="15" :height="15" @click="handleDeleteLog(task.taskIndex)"/>
           </div>
         </div>
         <div class="">
           <el-form
               ref="workAmountForm"
               :model="{listWorkAmount}"
+              :disabled="!allowEdit"
               :rules="rules"
               label-position="top"
               class="form-amount-box"
@@ -38,11 +40,15 @@
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.${index}.workAmount`" :rules="rules.workAmount.map(rule => ({ ...rule, task: task}))">
-              <el-input-number style="width: 100%" v-model.number="listWorkAmount[index].workAmount" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
+              <el-input-number style="width: 100%" v-model.number="listWorkAmount[index].workAmount" :min="0" :max="getTaskInfo(task.taskIndex).quantity - getTaskInfo(task.taskIndex).usedQuantity" type="number" placeholder="Nhập khối lượng thực tế" />
+            </el-form-item>
+
+            <el-form-item class="work-amount-item" label="Khối lượng hoàn thành" >
+              <el-input disabled :value="getTaskInfo(task.taskIndex).usedQuantity" type="number" placeholder="Nhập khối hoàn thành" />
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng còn lại" prop="remaining">
-              <el-input disabled :value="getTaskInfo(task.taskIndex).quantity - listWorkAmount[index].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
+              <el-input disabled :value="getTaskInfo(task.taskIndex).quantity - getTaskInfo(task.taskIndex).usedQuantity - listWorkAmount[index].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
             </el-form-item>
           </el-form>
         </div>
@@ -55,6 +61,7 @@
               ref="materialForm"
               :rules="rules"
               :taskIndex="task.taskIndex"
+              :allowEdit="allowEdit"
               :resourceType="MATERIAL_TYPE"
               :resources="logDetails.resources"
               :selectData="getListResourcesByType(task, MATERIAL_TYPE)"
@@ -73,6 +80,7 @@
               ref="humanForm"
               :rules="rules"
               :taskIndex="task.taskIndex"
+              :allowEdit="allowEdit"
               :resourceType="HUMAN_TYPE"
               :resources="logDetails.resources"
               :selectData="getListResourcesByType(task, HUMAN_TYPE)"
@@ -91,6 +99,7 @@
               ref="machineForm"
               :rules="rules"
               :taskIndex="task.taskIndex"
+              :allowEdit="allowEdit"
               :resourceType="MACHINE_TYPE"
               :resources="logDetails.resources"
               :selectData="getListResourcesByType(task, MACHINE_TYPE)"
@@ -123,6 +132,10 @@ const props = defineProps({
   rules: {
     type: Object,
     default: () => {}
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -184,11 +197,11 @@ const getListResourcesByType = (task, type) => {
         id: item.resourceId,
         unit: item.unit,
         plannedQuantity: item.quantity,
+        usedQuantity: item.usedQuantity,
         name: item.resource.name,
         type: item.resource.type
       }));
 };
-
 
 // Handle Task Deletion
 const handleDeleteLog = (index) => {
@@ -237,7 +250,7 @@ const handleSearch = (value) => {
 }
 
 .work-amount-item {
-  width: 30%;
+  width: 20%;
 }
 
 .progress-details {

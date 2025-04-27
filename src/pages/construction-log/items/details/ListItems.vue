@@ -3,6 +3,7 @@
     <SingleOptionSelect
         :defaultList="selectedRow"
         class="select-item"
+        :is-disabled="!allowEdit"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
         :listData="selectData"
         :isRemote="true"
@@ -11,6 +12,7 @@
     />
     <el-form
         ref="ruleFormRef"
+        :disabled="!allowEdit"
         :model="{ listAddedValues }"
         :rules="rules"
         class="form-search-box"
@@ -53,9 +55,17 @@
         </el-table-column>
 
         <el-table-column prop="quantity" label="Số lượng">
-          <template #default="{$index}">
+          <template #default="{row, $index}">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input :disabled="isHuman" v-model.number="listAddedValues[$index].quantity"/>
+              <el-input-number :min="0" :max="getResource(row.resourceId)?.usedQuantity - getResource(row.resourceId)?.usedQuantity" :disabled="isHuman" v-model.number="listAddedValues[$index].quantity"/>
+            </el-form-item>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="quantity" label="Khối lượng da su dung">
+          <template #default="{row, $index}">
+            <el-form-item >
+              {{ getResource(row.resourceId)?.usedQuantity || "-" }}
             </el-form-item>
           </template>
         </el-table-column>
@@ -64,6 +74,14 @@
           <template #default="scope">
             <el-form-item >
               {{ getResource(scope.row.resourceId).plannedQuantity || "-" }}
+            </el-form-item>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="quantity" label="Còn lại">
+          <template #default="scope">
+            <el-form-item >
+              {{ (getResource(scope.row.resourceId)?.plannedQuantity - getResource(scope.row.resourceId)?.usedQuantity) || "-" }}
             </el-form-item>
           </template>
         </el-table-column>
@@ -101,6 +119,7 @@ const props = defineProps({
   taskIndex: {type: [String, Number], default: ""},
   optionKeys: {type: Object, default: () => ({id: '', value: ''})},
   isExport: {type: Boolean, default: false},
+  allowEdit: { type: Boolean, default: false },
   rules: {
     type: Object,
     default: () => {
