@@ -10,7 +10,7 @@
         </h3>
         <div class="material-btn-detail">
           <div class="item">
-            <el-button class="btn btn-save" @click="submitForm()">
+            <el-button v-if="allowEdit" class="btn btn-save" @click="submitForm()">
               {{ $t("common.save") }}
             </el-button>
           </div>
@@ -20,6 +20,7 @@
       <div class="material-body mt-0">
         {{validation.value.value}}
         <el-form
+            :disabled="!allowEdit"
             ref="ruleFormRef"
             :model="materialResourcesDetails.value"
             :rules="MATERIAL_RULES"
@@ -146,11 +147,13 @@ import {useI18n} from "vue-i18n";
 import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {DATE_FORMAT, GENDERS} from "@/constants/application.js";
 import PAGE_NAME from "@/constants/route-name.js";
+import {ADMIN} from "@/constants/roles.js";
 
 export default {
   components: {FileUpload,ImageUpload, IconBackMain, SingleOptionSelect},
   setup() {
     const {t} = useI18n();
+    const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
     const materialResourcesStore = useMaterialResourcesStore();
     const {
       materialResourcesDetails,
@@ -209,6 +212,7 @@ export default {
       materialResourcesDetails,
       isUpdate,
       validation,
+      allowEdit,
       MATERIAL_RULES,
       DATE_FORMAT,
       handleBack,

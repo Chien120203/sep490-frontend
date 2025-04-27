@@ -4,13 +4,39 @@
       <h3 class="page__ttl">{{ $t("allocation.title") }}</h3>
       <div class="mobilization-btn-box mobilization-import-box">
         <el-row class="mb-4">
-          <el-button class="btn btn-save" @click="handleDisplayModalSave(true)">
+          <el-button v-if="allowCreate" class="btn btn-save" @click="handleDisplayModalSave(true)">
             {{ $t("allocation.add_new") }}
           </el-button>
         </el-row>
       </div>
     </div>
 
+    <div class="customer-body">
+      <div class="customer-search">
+        <div class="customer-search-box col-md-9 col-lg-9">
+          <p class="customer-search__ttl">
+            {{ $t("customer.keyword") }}
+          </p>
+          <div class="mb-0 ruleform">
+            <el-input
+                :placeholder="$t('common.input_keyword')"
+                @keyup.enter="submitForm"
+                v-model="searchForms.searchTerm"
+                prop="search"
+            >
+            </el-input>
+          </div>
+        </div>
+        <div class="btn-search-select col-md-3 col-lg-3 customer-box-btn-all">
+          <el-button class="btn btn-search" @click="submitForm()">
+            {{ $t("common.search") }}</el-button
+          >
+          <el-button class="btn btn-clear" @click="handleClear()">
+            {{ $t("common.clear") }}</el-button
+          >
+        </div>
+      </div>
+    </div>
     <!-- Table section -->
     <div class="mobilization-body-table">
       <el-tabs v-model="activeTab" @tab-click="handleTabChange">
@@ -93,6 +119,7 @@ import { useProjectStore } from "@/store/project.js";
 import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {useProgressStore} from "@/store/progress.js";
 import {useI18n} from "vue-i18n";
+import {RESOURCE_MANAGER} from "@/constants/roles.js";
 
 const persist = usePersistenceStore();
 const allocationStore = useAllocationStore();
@@ -125,9 +152,10 @@ const delete_id = ref(null);
 const changeObject = ref({});
 const title = ref("");
 const {t} = useI18n();
-
+const allowCreate = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER);
 const searchForms = ref({
   fromProjectId: projectId.value,
+  searchTerm: "",
   requestType: 1,
   pageIndex: 1
 });
@@ -179,9 +207,10 @@ const handleConfirm = async () => {
   await getListAllocations(searchForms.value);
 };
 
-const handleGetAllocationDtls = (id) => {
+const handleGetAllocationDtls = async (id) => {
   isShowModalSave.value = true;
-  getAllocationDtls(id);
+  await getAllocationDtls(id);
+  if(!projectId.value) await getProgressDetails(allocationDetails.value.fromProject.id, false);
 };
 
 const handleSearchProjects = (value) => {
@@ -216,10 +245,20 @@ const handleTabChange = (tab) => {
   getListAllocations(searchForms.value);
 };
 
+const handleClear = () => {
+  searchForms.value.pageIndex = 1;
+  searchForms.value.searchTerm = "";
+};
+
+const submitForm = () => {
+  searchForms.value.pageIndex = 1;
+  getListAllocations(searchForms.value);
+}
+
 onMounted(() => {
   getListAllocations(searchForms.value);
   getListProjects(formSearchProject.value);
-  getProgressDetails(projectId.value, false);
+  if(projectId.value) getProgressDetails(projectId.value, false);
 });
 
 onUnmounted(() => {

@@ -28,19 +28,20 @@ const processResponse = (response) => {
 const logError = (e, error) => {
     if (error && e.response) {
         if (e.response.hasOwnProperty('status')) {
+            // Sửa thành array thay vì object
             const errors = e.response.data.errors
-                ? Object.fromEntries(
-                    Object.entries(e.response.data.errors).map(([key, value]) => [key, value[0]])
-                )
-                : [];
+              ? Object.entries(e.response.data.errors)
+                .map(([key, value]) => value[0]) // Lấy message đầu tiên
+              : [];
+
             error({
                 code: e.response.status,
-                error: errors,
+                error: errors, // Đảm bảo luôn là array
                 responseCode: e.response.data,
             });
         }
     }
-};
+}
 
 // Performs a GET request
 const get = async (endpoint, success, error, params = {}) => {

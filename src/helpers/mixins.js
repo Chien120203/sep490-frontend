@@ -213,13 +213,16 @@ const base64ToFile = (base64String, fileName) => {
 
 
 const handleErrorResponse = (error) => {
-  return error.errors?.reduce((acc, { field, message }) => {
-    field.split(",").map(f => f.trim()).forEach(f => {
+  const errors = error?.errors || {};
+  return Object.entries(errors).reduce((acc, [field, messages]) => {
+    const message = messages?.[0] || 'Validation error';
+    field.split(',').map(f => f.trim()).forEach(f => {
       acc[f] = message;
     });
     return acc;
   }, {});
 };
+
 
 const createFormData = (params, skipArray = [], combineArray = []) => {
   const formData = new FormData();

@@ -1,6 +1,7 @@
 <template>
   <div class="item-list">
     <SingleOptionSelect
+        :isDisabled="!allowEdit"
         class="select-item"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
         :listData="selectData"
@@ -32,7 +33,7 @@
 
         <el-table-column prop="quantity" label="Số lượng">
           <template #default="{ row, $index }">
-            <el-input v-model.number="row.quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+            <el-input :disabled="!allowEdit" v-model.number="row.quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}
             </p>
@@ -45,7 +46,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="Actions">
+        <el-table-column v-if="allowEdit" label="Actions">
           <template #default="{ row }">
             <div>
               <button @click="handleRemoveResource(row.resourceId || row.tempId); $event.preventDefault()" class="btn-edit">
@@ -60,7 +61,7 @@
 </template>
 
 <script setup>
-import {defineEmits, defineProps, ref} from "vue";
+import {defineEmits, defineProps, ref, watch} from "vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {REQUEST_ALLOCATION, REQUEST_MOBILIZATION} from "@/constants/change-request.js";
 import {MATERIAL_TYPE} from "@/constants/resource.js";
@@ -72,6 +73,7 @@ const props = defineProps({
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
   resourceType: { type: Number, default: 0 },
+  allowEdit: { type: Boolean, default: false },
   rules: {
     type: Object,
     default: () => {
@@ -123,6 +125,10 @@ const handleRemoveResource = (id) => {
   listAddedValues.value = listAddedValues.value.filter(resource => resource.resourceId !== id);
   emit('update-list', listAddedValues.value);
 }
+
+watch(() => props.tableData, (data) => {
+  listAddedValues.value = data
+}, { deep: true });
 </script>
 
 <style scoped>

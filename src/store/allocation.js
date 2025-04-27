@@ -43,7 +43,7 @@ export const useAllocationStore = defineStore(
           } else {
             listAllocations.value = [...listAllocations.value, ...response.data];
           }
-          if(localStorage.getItem('role') === TECHNICAL_MANAGER || localStorage.getItem('role') === EXECUTIVE_BOARD) {
+          if (localStorage.getItem('role') === TECHNICAL_MANAGER || localStorage.getItem('role') === EXECUTIVE_BOARD) {
             listAllocations.value = listAllocations.value.filter((item) => item.status !== DRAFT_STATUS);
           }
           totalItems.value = response.meta.total;
@@ -80,16 +80,11 @@ export const useAllocationStore = defineStore(
       await services.AllocationAPI.save(
         params,
         (response) => {
-          if (response.success) {
-            allocationDetails.value = response.data;
-            mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
-          } else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
-          }
+          allocationDetails.value = response.data;
+          mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
           mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
           mixinMethods.endLoading();
         }
@@ -102,15 +97,11 @@ export const useAllocationStore = defineStore(
       await services.AllocationAPI.deleteAllocation(
         id,
         (response) => {
-          if(response.success) {
-            listAllocations.value = listAllocations.value.filter(mobilize => mobilize.id !== id);
-            mixinMethods.notifySuccess(t("response.message.delete_mobilize_success"));
-          } else {
-            mixinMethods.notifyError(t("response.message.delete_mobilize_failed"));
-          }
+          listAllocations.value = listAllocations.value.filter(mobilize => mobilize.id !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_mobilize_success"));
           mixinMethods.endLoading();
         },
-        () => {
+        (error) => {
           mixinMethods.notifyError(t("response.message.delete_mobilize_failed"));
           mixinMethods.endLoading();
         }
@@ -123,9 +114,9 @@ export const useAllocationStore = defineStore(
       await services.AllocationAPI[method](
         id,
         (response) => {
-          if(response.success) {
+          if (response.success) {
             mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
-          }else {
+          } else {
             validation.value = mixinMethods.handleErrorResponse(response);
             mixinMethods.notifyError(t("response.message.save_mobilize_failed"));
           }

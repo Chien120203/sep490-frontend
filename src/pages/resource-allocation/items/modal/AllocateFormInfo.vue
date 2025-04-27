@@ -11,12 +11,12 @@
             <el-input disabled v-model="data.requestCode" class="custom-input" />
           </el-form-item>
           <el-form-item label="Request Name">
-            <el-input v-model="data.requestName" class="custom-input" />
+            <el-input :disabled="!allowEdit" v-model="data.requestName" class="custom-input" />
           </el-form-item>
 
           <!-- Allocation type radio buttons -->
           <el-form-item label="Request Type" required>
-            <el-select v-model="data.requestType">
+            <el-select :disabled="!allowEdit" v-model="data.requestType">
               <el-option
                   v-for="request in ALLOCATION_REQUEST_TYPES"
                   :key="request.value"
@@ -31,6 +31,7 @@
           <el-form-item v-if="data.requestType === PROJECT_TO_PROJECT" label="Target Project">
             <div class="select-project-container">
               <SingleOptionSelect
+                  :isDisabled="!allowEdit"
                   v-model="data.toProjectId"
                   :optionKeys="{ id: 'id', value: 'projectCode' }"
                   :listData="listOngoingProjects"
@@ -46,6 +47,7 @@
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.toTaskId"
+                  :isDisabled="!allowEdit"
                   :optionKeys="{ id: 'id', value: 'workName' }"
                   :listData="progressDetails.progressItems"
                   :isRemote="true"
@@ -60,6 +62,7 @@
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.fromTaskId"
+                  :isDisabled="!allowEdit"
                   :optionKeys="{ id: 'id', value: 'workName' }"
                   :listData="progressDetails.progressItems"
                   :isRemote="true"
@@ -74,6 +77,7 @@
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.toTaskId"
+                  :isDisabled="!allowEdit"
                   :optionKeys="{ id: 'id', value: 'workName' }"
                   :listData="progressDetails.progressItems.filter(task => task.id !== data.fromTaskId)"
                   :isRemote="true"
@@ -97,7 +101,7 @@
           </el-form-item>
 
           <el-form-item label="Priority">
-            <el-select v-model="data.priorityLevel">
+            <el-select :disabled="!allowEdit" v-model="data.priorityLevel">
               <el-option
                   v-for="(status, index) in PRIORITIES"
                   :key="index"
@@ -109,6 +113,7 @@
 
           <el-form-item label="Description">
             <el-input
+                :disabled="!allowEdit"
                 v-model="data.description"
                 type="textarea"
                 class="custom-input"
@@ -131,6 +136,7 @@ import {IN_PROGRESS_STATUS} from "@/constants/project.js";
 
 const props = defineProps({
   data: { type: Object, default: () => ({}) },
+  allowEdit: { type: Boolean, default: false },
   listProjects: { type: Array, default: () => [] },
   progressDetails: { type: Object, default: () => ({}) },
 });

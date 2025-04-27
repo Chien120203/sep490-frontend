@@ -4,7 +4,7 @@
       <h3 class="page__ttl">{{ $t("resource.machine.title") }}</h3>
       <div class="machine-btn-box machine-import-box">
         <el-row class="mb-4">
-          <el-button class="btn btn-save" @click="handleRedirectToCreate">
+          <el-button v-if="allowEdit" class="btn btn-save" @click="handleRedirectToCreate">
             {{ $t("resource.add_new") }}
           </el-button>
         </el-row>
@@ -38,6 +38,7 @@
     <!-- Table Section -->
     <div class="machine-body-table" style="">
       <MachineTable
+          :allowEdit="allowEdit"
           :data="listMachineResources.value"
           @details="handleGetMachineResourcesDtls"
           @delete="handleDisplayModal"
@@ -67,7 +68,7 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import MachineTable from "./item/MachineTable.vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import { ADMIN } from "@/constants/roles.js";
@@ -92,6 +93,7 @@ export default {
     });
     const delete_id = ref();
     const router = useRouter();
+    const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
     const machineStore = useMachineResourcesStore();
     const {
       validation,
@@ -159,6 +161,7 @@ export default {
       ADMIN,
       isDisabled,
       TEXT_CONFIRM_DELETE,
+      allowEdit,
       validation,
       totalItems,
       listMachineResources,

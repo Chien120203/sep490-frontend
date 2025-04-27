@@ -77,6 +77,7 @@ import { ADMIN } from "@/constants/roles.js";
 import {useUserStore} from "@/store/user.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "userList",
@@ -96,6 +97,10 @@ export default {
     const delete_id = ref();
     const router = useRouter();
     const userStore = useUserStore();
+    const persist = usePersistenceStore();
+    const {
+      projectId
+    } = persist;
     const {
       validation,
       listUsers, // temporary
@@ -108,6 +113,7 @@ export default {
     const isDisabled = ref(false);
 
     onMounted(() => {
+      projectId.value = null;
       getListUsers(searchForms.value);
     });
 

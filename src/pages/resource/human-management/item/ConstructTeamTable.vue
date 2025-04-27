@@ -50,7 +50,7 @@
             <button @click="$emit('details', scope.row.id)" class="btn-edit">
               <IconEdit/>
             </button>
-            <button @click="$emit('delete', scope.row.id)" class="btn-edit">
+            <button v-if="allowEdit" @click="$emit('delete', scope.row.id)" class="btn-edit">
               <IconTrash/>
             </button>
           </div>
@@ -79,6 +79,10 @@ export default {
     data: {
       type: Array,
       default: [],
+    },
+    allowEdit: {
+      type: Boolean,
+      default: false,
     },
   },
   setup(props, {emit}) {

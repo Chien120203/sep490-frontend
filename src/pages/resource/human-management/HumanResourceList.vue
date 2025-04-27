@@ -6,7 +6,7 @@
         <el-row
             class="mb-4"
         >
-          <el-button v-if="allowCreate" class="btn btn-save" @click="handleOpenModalTeam"
+          <el-button v-if="allowEdit" class="btn btn-save" @click="handleOpenModalTeam"
           >{{ $t("customer.add_new") }}
           </el-button>
         </el-row>
@@ -68,6 +68,7 @@
     <!-- TABLES BY TYPE -->
     <div class="mobilization-body-table">
       <ConstructTeamTable
+          :allowEdit="allowEdit"
           :data="listHumanResources.value"
           @details="handleGetTeamDetails"
           @delete="handleDeleteTeam"
@@ -116,7 +117,7 @@ import IconSetting from "@/svg/IconSettingMain.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useUserStore} from "@/store/user.js";
-import {CONSTRUCTION_EMPLOYEE, CONSTRUCTION_MANAGER, RESOURCE_MANAGER} from "@/constants/roles.js";
+import {ADMIN, CONSTRUCTION_EMPLOYEE, CONSTRUCTION_MANAGER, RESOURCE_MANAGER} from "@/constants/roles.js";
 import ConstructTeamModal from "@/pages/resource/human-management/item/modal/ConstructTeamModal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 
@@ -170,7 +171,7 @@ watch(
 const isShowBoxSearch = ref(false);
 const isShowModalTeam = ref(false);
 const isShowModalConfirmDelMember = ref(false);
-const allowEdit = ref(true);
+const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
 const delete_id = ref();
 const delete_mem_id = ref();
 const handleSearchForm = () => {

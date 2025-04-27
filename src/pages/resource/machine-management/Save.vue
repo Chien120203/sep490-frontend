@@ -10,7 +10,7 @@
         </h3>
         <div class="machine-btn-detail">
           <div class="item">
-            <el-button class="btn btn-save" @click="submitForm()">
+            <el-button v-if="allowEdit" class="btn btn-save" @click="submitForm()">
               {{ $t("common.save") }}
             </el-button>
           </div>
@@ -20,6 +20,7 @@
       <div class="machine-body mt-0">
         {{validation.value.value}}
         <el-form
+            :disabled="!allowEdit"
             ref="ruleFormRef"
             :model="machineResourcesDetails.value"
             :rules="MACHINE_RULES"
@@ -171,6 +172,7 @@
 
             <el-form-item prop="image" class="input-item" :label="$t('resource.machine.details.images')">
               <ImageUpload
+                  :disabled="!allowEdit"
                   :fileLimit="1"
                   :allowedTypes="'.jpg,.png,.pdf,.docx'"
                   @file-selected="handleSelectFiles"
@@ -180,6 +182,7 @@
 
             <el-form-item prop="attachments" :label="$t('resource.machine.details.attachments')">
               <FileUpload
+                  :disabled="!allowEdit"
                   :existingFiles="machineResourcesDetails.value.attachment"
                   :allowedTypes="'.jpg,.png,.pdf,.docx'"
                   :fileLimit="3"
@@ -206,6 +209,8 @@ import { useI18n } from "vue-i18n";
 import { useMachineResourcesStore } from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
 import { useUserStore } from "@/store/user.js";
+import {useUserStore} from "@/store/user.js";
+import {ADMIN} from "@/constants/roles.js";
 
 export default {
   components: { FileUpload, ImageUpload, IconBackMain, SingleOptionSelect },
@@ -228,6 +233,7 @@ export default {
     } = userStore;
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
+    const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
     const router = useRouter();
 
     const constructionEmployees = computed(() => {
@@ -293,6 +299,7 @@ export default {
       machineResourcesDetails,
       isUpdate,
       validation,
+      allowEdit,
       MACHINE_RULES,
       handleBack,
       submitForm,

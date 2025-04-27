@@ -4,7 +4,7 @@
       <h3 class="page__ttl">{{ $t("resource.material.title") }}</h3>
       <div class="material-btn-box material-import-box">
         <el-row class="mb-4">
-          <el-button class="btn btn-save" @click="handleRedirectToCreate"
+          <el-button v-if="allowEdit" class="btn btn-save" @click="handleRedirectToCreate"
           >{{ $t("resource.add_new") }}
           </el-button>
         </el-row>
@@ -39,6 +39,7 @@
 
     <div class="material-body-table" style="">
       <MaterialTable
+          :allowEdit="allowEdit"
           :data="listMaterialResources.value"
           @details="handleGetMaterialResourcesDtls"
           @delete="handleDisplayModal"
@@ -68,7 +69,7 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import MaterialTable from "./item/MaterialTable.vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
 import { ADMIN } from "@/constants/roles.js";
@@ -105,7 +106,7 @@ export default {
       handleDeleteMaterialResources
     } = materialStore;
     const isDisabled = ref(false);
-
+    const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
     onMounted(() => {
       getListMaterialResources(searchForms.value);
     });
@@ -160,6 +161,7 @@ export default {
       NUMBER_FORMAT,
       ADMIN,
       isDisabled,
+      allowEdit,
       TEXT_CONFIRM_DELETE,
       validation,
       totalItems,

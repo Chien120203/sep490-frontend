@@ -12,7 +12,7 @@ export const useAuthStore = defineStore(
   "auth",
   () => {
     const persist = usePersistenceStore();
-    const {loggedIn} = persist;
+    const {loggedIn,projectId} = persist;
     const {t} = useI18n();
     const isShowModal = reactive({value: false});
     const resetPasswordForm = reactive({
@@ -57,6 +57,7 @@ export const useAuthStore = defineStore(
 
     const handleLogout = () => {
       loggedIn.value = false;
+      projectId.value = null;
       localStorage.removeItem("accessToken");
       localStorage.removeItem("role");
       localStorage.removeItem("username");

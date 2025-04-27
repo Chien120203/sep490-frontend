@@ -16,6 +16,7 @@
             ref="formAllocationInfo"
             :data="data"
             :listProjects="listProjects"
+            :allowEdit="allowSave"
             :progressDetails="progressDetails"
             @searchProject="handleSearchProjects"
             @searchTask="handleSearchTask"
@@ -31,6 +32,7 @@
                 :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="materials"
                 :resourceType="MATERIAL_TYPE"
+                :allowEdit="allowSave"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
                 @update-list="updateListMaterials"
@@ -43,6 +45,7 @@
                 ref="formAllocationHumanInfos"
                 :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="listEmployees"
+                :allowEdit="allowSave"
                 :resourceType="HUMAN_TYPE"
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
@@ -56,6 +59,7 @@
                 ref="formAllocationVehicleInfos"
                 :rules="ALLOCATIONFORMITEMS_RULES"
                 :selectData="listVehicles"
+                :allowEdit="allowSave"
                 :resourceType="MACHINE_TYPE"
                 :tableData="listSelectedVehicles"
                 :optionKeys="vehicleOptions"
@@ -65,7 +69,7 @@
         </el-tabs>
       </div>
       <div class="modal-footer">
-        <el-button class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
+        <el-button v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
         <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t("common.cancel") }}</el-button>
       </div>
     </template>
@@ -83,9 +87,10 @@ import {
 } from "@/constants/resource.js";
 import AllocateFormInfo from "@/pages/resource-allocation/items/modal/AllocateFormInfo.vue";
 import {useInventoryStore} from "@/store/inventory.js";
-import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
+import {DRAFT_STATUS, PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} from "@/constants/mobilization.js";
+import {RESOURCE_MANAGER} from "@/constants/roles.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -102,16 +107,11 @@ const {
 } = inventoryStore;
 const { projectId } = persist;
 
-const getListResourcesByType = (data, type) => {
-  if (!data) return [];
-  return data.filter(item => item?.resourceType === type);
-}
 const emit = defineEmits(["close", "submit", "searchProjects", "searchTask"]);
 const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
-
-
+const allowSave = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER && data.status === DRAFT_STATUS);
 watch(() => props.data.resourceAllocationDetails, (data) => {
   if (data) {
     let listUsers = [];

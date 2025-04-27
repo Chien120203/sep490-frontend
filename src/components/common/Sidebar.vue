@@ -74,7 +74,7 @@ import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import PAGES from "@/utils/pages.js";
 import {FRONT_END_URL} from "@/constants/application.js";
-import {PROJECT_SIDEBARS} from "@/constants/project.js";
+import {PROJECT_SIDEBARS, REQUEST_SIDEBAR} from "@/constants/project.js";
 import {
   ADMIN_MIDDLEWARE,
   BUSINESS_EMPLOYEE_MIDDLEWARE, CONSTRUCTION_EMPLOYEE_MIDDLEWARE,
@@ -84,7 +84,7 @@ import {
   RESOURCE_MANAGER_MIDDLEWARE,
   TECHNICAL_MANAGER_MIDDLEWARE
 } from "@/constants/middleware.js";
-import {ADMIN} from "@/constants/roles.js";
+import {ADMIN, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
@@ -145,7 +145,10 @@ export default {
           if (projectId.value) {
             newItem.isShow = PROJECT_SIDEBARS.includes(newItem.function_page_name) && allowedRoutes.includes(newItem.function_page_name);
           } else {
-            newItem.isShow = allowedRoutes.includes(newItem.function_page_name) && !PROJECT_SIDEBARS.includes(newItem.function_page_name);
+            newItem.isShow = role.value === ADMIN ? allowedRoutes.includes(newItem.function_page_name) : (allowedRoutes.includes(newItem.function_page_name) && !PROJECT_SIDEBARS.includes(newItem.function_page_name));
+            if(role.value === EXECUTIVE_BOARD || role.value === TECHNICAL_MANAGER) {
+              if(REQUEST_SIDEBAR.includes(newItem.function_page_name)) newItem.isShow = true;
+            }
           }
 
           if (newItem.children) {
