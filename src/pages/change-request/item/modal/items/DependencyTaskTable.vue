@@ -2,6 +2,7 @@
   <SingleOptionSelect
       :isDisabled="!allowEdit"
       :defaultList="selectedValue"
+      :showClearable="true"
       style="width: 30%"
       class="select-item"
       :optionKeys="dependencyOptions"

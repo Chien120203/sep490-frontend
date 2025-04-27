@@ -25,6 +25,11 @@
                 v-model="searchForms.keyWord"
                 prop="keyWord"
             >
+              <template #append>
+                <span @click="handleSearchForm" class="btn-setting">
+                  <IconSetting/>
+                </span>
+              </template>
             </el-input>
           </div>
         </div>
@@ -35,6 +40,39 @@
           <el-button class="btn btn-clear" @click="handleClear()">
             {{ $t("common.clear") }}</el-button
           >
+        </div>
+      </div>
+      <div class="form-search" :class="{ active: isShowBoxSearch }">
+        <div class="close-form">
+          <IconCircleClose @click="isShowBoxSearch = false"/>
+        </div>
+        <div class="form-search-box">
+          <div class="item">
+            <el-form-item :label="$t('project.customer')">
+<!--              <SingleOptionSelect-->
+<!--                  v-model="searchForms.customerId"-->
+<!--                  :optionKeys="{ id: 'id', value: 'customerCode' }"-->
+<!--                  :listData="listCustomers.value"-->
+<!--                  :isRemote="true"-->
+<!--                  :disabled="isDisabled"-->
+<!--                  @remoteSearch="handleSearchCustomer"-->
+<!--              />-->
+            </el-form-item>
+          </div>
+          <div class="item">
+            <el-form-item :label="$t('project.status')">
+              <el-select v-model="searchForms.status">
+                <el-option :label="$t('common.all')" value=""></el-option>
+                <el-option
+                    v-for="(status, index) in STATUSES"
+                    :key="index"
+                    :label="status"
+                    :value="index"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
         </div>
       </div>
     </div>

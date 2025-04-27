@@ -58,6 +58,7 @@
 
             <el-form-item prop="yearOfManufacture" class="required" :label="$t('resource.machine.details.yearOfManufacture')">
               <el-date-picker
+                  style="width: 100%"
                   v-model="machineResourcesDetails.value.yearOfManufacture"
                   type="year"
                   format="YYYY"
@@ -154,7 +155,7 @@
                 <el-option
                     v-for="user in constructionEmployees"
                     :key="user.id"
-                    :label="user.name"
+                    :label="user.username"
                     :value="user.id"
                 />
               </el-select>
@@ -209,7 +210,8 @@ import { useI18n } from "vue-i18n";
 import { useMachineResourcesStore } from "@/store/machine-resources.js";
 import PAGE_NAME from "@/constants/route-name.js";
 import { useUserStore } from "@/store/user.js";
-import {ADMIN} from "@/constants/roles.js";
+import {ADMIN, CONSTRUCTION_EMPLOYEE} from "@/constants/roles.js";
+import {AVAILABLE, MAINTAIN, UNAVAILABLE} from "@/constants/machine.js";
 
 export default {
   components: { FileUpload, ImageUpload, IconBackMain, SingleOptionSelect },
@@ -235,19 +237,13 @@ export default {
     const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
     const router = useRouter();
 
-    const constructionEmployees = computed(() => {
-      if (!Array.isArray(listUsers)) {
-        return []; // Return empty array if listUsers is not an array
-      }
-      return listUsers.filter(user => user.role === 'CONSTRUCTION_EMPLOYEE');
-    });
+    const constructionEmployees = computed(() => listUsers.value.filter(user => user.role === CONSTRUCTION_EMPLOYEE));
 
     // Define status options for the select dropdown
     const statusOptions = [
-      { value: "active", label: "resource.machine.status.active" },
-      { value: "inactive", label: "resource.machine.status.inactive" },
-      { value: "maintenance", label: "resource.machine.status.maintenance" },
-      { value: "out_of_service", label: "resource.machine.status.out_of_service" }
+      { value: AVAILABLE, label: "resource.machine.statuses.active" },
+      { value: UNAVAILABLE, label: "resource.machine.statuses.inactive" },
+      { value: MAINTAIN, label: "resource.machine.statuses.maintain" },
     ];
 
     // Define fuel unit options for the select dropdown
@@ -258,6 +254,11 @@ export default {
     ];
 
     onMounted(() => {
+      getListUsers({
+        keyWord: "",
+        pageIndex: 1,
+        pageSize: 100
+      });
       if (isUpdate.value) {
         getMachineResourcesDetails(route.params.id);
       }

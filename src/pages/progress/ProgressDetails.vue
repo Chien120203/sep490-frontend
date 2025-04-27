@@ -15,6 +15,9 @@ import {useMachineResourcesStore} from "@/store/machine-resources.js";
 import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {useChangeRequestStore} from "@/store/change-request.js";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
+import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
+import {useInventoryStore} from "@/store/inventory.js";
+import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 const router = useRouter();
 const persistenceStore = usePersistenceStore();
@@ -36,23 +39,22 @@ const {
 const progressItem = ref(null);
 const isShowModal = ref(false);
 const isShowModalSave = ref(false);
-const humanStore = useHumanResourcesStore();
-const machineStore = useMachineResourcesStore();
 const changeRequestStore = useChangeRequestStore();
-const materialStore = useMaterialResourcesStore();
-const {listHumanResources, getListHumanResources} = humanStore;
-const {listMachineResources, getListMachineResources} = machineStore;
-const {listMaterialResources, getListMaterialResources} = materialStore;
+const inventoryStore = useInventoryStore();
 const {
   changeRequestDetails,
   saveChangeRequest
 } =changeRequestStore;
+const {
+  inventoryData,
+  getListInventory
+} = inventoryStore;
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
 
 const tasks = ref(progressDetails.value.progressItems);
-
+const allowEdit = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
 watch(
     () => progressDetails.value,
     (newVal) => {
@@ -65,6 +67,24 @@ onMounted(() => {
   getProgressDetails(projectId.value, true);
 });
 
+const materials = computed(() => {
+  return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
+    id: item.resourceId,
+    quantity: item.quantity,
+    unit: item.unit,
+    name: item.name
+  })) || [];
+});
+const listVehicles = computed(() => {
+  return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE).map(item => ({
+    id: item.resourceId,
+    quantity: item.quantity,
+    unit: item.unit,
+    name: item.name
+  })) || [];
+});
+const listEmployees = computed(() => inventoryData.value.filter(item => item.resourceType === HUMAN_TYPE));
+
 const handleEditProgressItem = (item) => {
   isShowModal.value = true;
   getListLogsByTask(projectId.value, item[0]?.taskData.index);
@@ -76,27 +96,12 @@ const handleAddAllocation = () => {
 }
 
 const handleAddTask = async () => {
-  await getListHumanResources({pageIndex: 1}, false);
-  await getListMachineResources({pageIndex: 1}, false);
-  await getListMaterialResources({pageIndex: 1}, false);
+  getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 50});
   isShowModalSave.value = true;
 }
 
 const handleDisplayModalSave = (show = false) => {
   isShowModalSave.value = show;
-}
-
-const handleSearch = (data) => {
-  switch (data.type) {
-    case MACHINE_TYPE:
-      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
-      break;
-    case HUMAN_TYPE:
-      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
-      break;
-    case MATERIAL_TYPE:
-      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
-  }
 }
 
 const handleCloseModal = () => {
@@ -134,12 +139,13 @@ const handleCloseModal = () => {
     />
     <ChangeRequestModal
         :show="isShowModalSave"
-        :materials="listMaterialResources.value"
-        :vehicles="listMachineResources.value"
-        :users="listHumanResources.value"
+        :materials="materials"
+        :vehicles="listVehicles"
+        :tasks="progressDetails.value.progressItems"
+        :users="listEmployees"
         :data="changeRequestDetails.value"
+        :allowEdit="allowEdit"
         @close="handleDisplayModalSave"
-        @search="handleSearch"
         @submit="saveChangeRequest"
     />
   </div>

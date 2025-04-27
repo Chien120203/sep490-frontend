@@ -26,10 +26,14 @@
 
           <!-- Parent Index -->
           <el-form-item :label="$t('change_request.modal.parent_index')">
-            <el-input
+            <SingleOptionSelect
                 v-model="selectedRow.parentIndex"
-                class="custom-input"
-                :disabled="!allowEdit"
+                :isDisabled="!allowEdit"
+                style="width: 30%"
+                :showClearable="true"
+                class="select-item"
+                :optionKeys="{id: 'index', value: 'workName'}"
+                :listData="tasks"
             />
           </el-form-item>
 
@@ -107,10 +111,12 @@
 <script setup>
 import {defineProps, reactive, ref, watch} from "vue";
 import {mixinMethods} from "@/utils/variables.js";
+import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 
 const props = defineProps({
   selectedRow: {type: Object, default: () => ({})},
   total: {type: Object, default: () => ({})},
+  tasks: {type: Object, default: () => []},
   rules: {
     type: Object,
     default: () => ({

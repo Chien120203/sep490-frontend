@@ -56,7 +56,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.fax ? scope.row.tax : "-"}} </span>
+        <span class="data-table">{{ scope.row.taxCode ? scope.row.taxCode : "-"}} </span>
       </template>
     </el-table-column>
     <el-table-column min-width="140">

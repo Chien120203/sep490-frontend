@@ -506,7 +506,8 @@
       "type": "Type",
       "statuses": {
         "active": "Active",
-        "inactive": "Inactive"
+        "inactive": "Inactive",
+        "maintain": "Under Maintenance"
       },
       "details": {
         "title": "Machine Details",
@@ -549,6 +550,11 @@
       "modal_confirm": {
         "title": "Confirm delete machine",
         "message": "Please enter 'Delete' to confirm delete this machine"
+      },
+      "fuelUnit": {
+        "liters": "Liters",
+        "gallons": "Gallons",
+        "cubic_meters": "Cubic meters"
       }
     },
     "material": {

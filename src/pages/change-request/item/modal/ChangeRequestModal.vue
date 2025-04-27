@@ -16,6 +16,7 @@
             ref="childFormRef"
             :rules="rules"
             :allowEdit="allowEdit"
+            :tasks="tasks"
             :total="totalAllPrice"
             :selectedRow="selectedRow"
         />
@@ -95,7 +96,7 @@
 import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
-import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
+import DependencyTaskTable from "@/pages/change-request/item/modal/items/DependencyTaskTable.vue";
 import {
   HUMAN_TYPE,
   MACHINE_TYPE,
@@ -131,9 +132,9 @@ const tableHumanFormRef = ref(null);
 const tableMaterialFormRef = ref(null);
 const dependentFormRef = ref(null);
 const childFormRef = ref(null);
-const materialOptions = ref({id: "id", value: "materialName"});
-const userOptions = ref({id: "id", value: "teamName"});
-const vehicleOptions = ref({id: "id", value: "chassisNumber"});
+const materialOptions = ref({id: "id", value: "name"});
+const userOptions = ref({id: "id", value: "name"});
+const vehicleOptions = ref({id: "id", value: "name"});
 const totalAllPrice = ref({
   machine: 0,
   labor: 0,
