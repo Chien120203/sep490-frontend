@@ -293,6 +293,8 @@
       "get_human_dtls_failed": "Get Human details failed",
       "save_human_success": "Save Human Success",
       "save_human_failed": "Save Human Failed",
+      "delete_human_success": "Delete construction team success",
+      "delete_human_failed": "Delete construction team failed",
       "get_planning_dtls_failed": "Get planning details failed",
       "get_allocation_failed": "Get allocation requests failed",
       "get_allocation_dtls_failed": "Get allocation request details failed",
@@ -524,7 +526,8 @@
         "description": "Description",
         "fuelTankVolume": "Fuel Tank Volume",
         "fuelUnit": "Fuel Unit",
-        "attachments": "Attachments"
+        "attachments": "Attachments",
+        "selectYear": "Select Year"
       },
       "create": {
         "title": "Create Machine"
@@ -633,10 +636,11 @@
       "table": {
         "header": {
           "teamName": "Team Name",
-          "teamManager": "Team Manager",
           "manager": {
-            "fullName": "Manager Name"
+            "fullName": "Manager Name",
+            "username": "User Name"
           },
+          "description": "Description",
           "status": "Status",
           "action": "Action"
         }

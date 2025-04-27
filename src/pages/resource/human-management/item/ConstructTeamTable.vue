@@ -1,9 +1,8 @@
 <template>
-  <div class="material-container">
     <el-table
         :data="data"
         style="width: 100%"
-        class="el-tbl-custom material-table"
+        class="el-tbl-custom room-tbl"
     >
       <el-table-column
           type="index"
@@ -14,7 +13,7 @@
 
       <el-table-column min-width="130">
         <template #header>
-          <p>Team Name</p>
+          <p v-html="$t('resource.human.table.header.teamName')"></p>
         </template>
 
         <template #default="scope">
@@ -24,17 +23,17 @@
 
       <el-table-column min-width="130">
         <template #header>
-          <p>Team Manager</p>
+          <p v-html="$t('resource.human.table.header.manager.fullName')"></p>
         </template>
 
         <template #default="scope">
-          <span class="data-table">{{ scope.row.manager.username ?? "-" }}</span>
+          <span class="data-table">{{ scope.row.manager.fullName ?? "-" }}</span>
         </template>
       </el-table-column>
 
       <el-table-column min-width="200">
         <template #header>
-          <p>Description</p>
+          <p v-html="$t('resource.human.table.header.description')"></p>
         </template>
 
         <template #default="scope">
@@ -44,7 +43,7 @@
 
       <el-table-column min-width="90">
         <template #header>
-          <p>Action</p>
+          <p v-html="$t('resource.human.table.header.action')"></p>
         </template>
         <template #default="scope">
           <div>
@@ -67,7 +66,6 @@
           :current-page="1"
       ></el-pagination>
     </div>
-  </div>
 </template>
 
 <script>
@@ -90,132 +88,75 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.material-container {
-  padding: 20px;
-
-  .header {
-    margin-bottom: 20px;
-
-    h2 {
-      font-size: 24px;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-
-    p {
-      color: #7f8c8d;
-      margin: 0;
+.list-users-header {
+  h3 {
+    width: 90%;
+    text-align: start;
+  }
+  div {
+    align-items: center;
+    svg {
+      cursor: pointer;
     }
   }
-
-  .actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-
-      .add-btn {
-        background-color: #10b981;
-        color: white;
-        border: none;
-      }
-    }
-
-    .table-actions {
-      display: flex;
-      gap: 10px;
-
-      .action-dropdown {
-        margin-right: 10px;
-      }
-
-      .search-input {
-        width: 200px;
-      }
-    }
+}
+.human {
+  &-status {
+    background: #ccc;
+    color: #fff !important;
+    font-size: 12px;
+    border-radius: 100px;
+    display: block;
+    padding: 2px 16px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
   }
 
-  .material-table {
-    background-color: white;
-    border-radius: 8px;
-    margin-bottom: 20px;
-
-    .license-plate {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-
-      .plate-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-
-        &.blue {
-          background-color: #3498db;
-        }
-
-        &.red {
-          background-color: #e74c3c;
-        }
-
-        &.green {
-          background-color: #2ecc71;
-        }
-
-        &.orange {
-          background-color: #f39c12;
-        }
-      }
-    }
-
-    .status-badge {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-
-      &.active {
-        background-color: rgba(16, 185, 129, 0.1);
-        color: #10b981;
-      }
-    }
+  &-file {
+    margin-left: 12px;
   }
 
-  .pagination {
-    display: flex;
-    justify-content: center;
+  &-renewed {
+    background: #d4a816;
   }
-}
 
-// Override Element UI styles
-:deep(.el-table) {
-  border-radius: 8px;
-  overflow: hidden;
-}
+  &-active {
+    background: #15a726;
+  }
 
-:deep(.el-table th) {
-  background-color: #f8f9fa;
-  color: #606266;
-  font-weight: 600;
-}
+  &-terminated {
+    background: #d03333;
+  }
 
-:deep(.el-button) {
-  border-radius: 4px;
-}
+  &-monthly {
+    background: #4e1b7b;
+  }
 
-:deep(.el-dropdown-link) {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  &-quater {
+    background: #136e87;
+  }
+
+  &-half-year {
+    background: #4616d4;
+  }
+
+  &-year {
+    background: #772044;
+  }
+
+  &-type-cate {
+    border-radius: 100px;
+    display: block;
+    padding: 2px 16px;
+    line-height: 1.2;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  &-number {
+    font-weight: 700;
+  }
 }
 </style>
 
