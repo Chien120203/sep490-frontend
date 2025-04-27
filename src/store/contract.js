@@ -61,8 +61,6 @@ export const useContractStore = defineStore(
             mixinMethods.endLoading();
         },
         (error) => {
-            validation.value = mixinMethods.handleErrorResponse(error.responseCode);
-            mixinMethods.notifyError(t("response.message.get_contract_dtls_failed"));
           clearContractDetails();
           mixinMethods.endLoading();
         }

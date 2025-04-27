@@ -62,7 +62,7 @@ const notifyError = (messages, useHTML = false, notify = null) => {
   const notifyObj = notify ?? ElNotification;
   notifyObj.error({
     message,
-    duration: 2000,
+    duration: 1000,
     position: "top-right",
     dangerouslyUseHTMLString: useHTML,
     showClose: false,
@@ -83,7 +83,7 @@ const notifyWarning = (messages, useHTML = false, notify = null) => {
   const notifyObj = notify ?? ElNotification;
   notifyObj.warning({
     message,
-    duration: 2000,
+    duration: 1000,
     position: "top-right",
     dangerouslyUseHTMLString: useHTML,
     showClose: false,
@@ -103,7 +103,7 @@ const notifySuccess = (messages, useHTML = false, notify = null) => {
   const notifyObj = notify ?? ElNotification;
   notifyObj.success({
     message,
-    duration: 2000,
+    duration: 1000,
     position: "top-right",
     dangerouslyUseHTMLString: useHTML,
     showClose: false,

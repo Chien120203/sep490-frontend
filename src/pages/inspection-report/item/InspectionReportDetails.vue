@@ -1,5 +1,6 @@
 <template>
   <el-card class="construction-log-details">
+    <!-- Chọn công việc -->
     <SingleOptionSelect
         class="select-item"
         :defaultList="selectedRow"
@@ -12,18 +13,30 @@
         @remoteSearch="handleSearch"
     />
 
-    <div v-for="(task, index) in groupedByTasks" :key="task.index">
+    <!-- Hiển thị thông tin công việc đã chọn -->
+    <div v-if="selectedTask" class="selected-task-display">
+      <el-alert
+          type="info"
+          show-icon
+          :title="`Đã chọn: ${selectedTask.workName}`"
+          :description="`Mã công việc: ${selectedTask.index}`"
+          style="margin-bottom: 16px"
+      />
+    </div>
+
+    <!-- Form nhập khối lượng và tài nguyên cho công việc đã chọn -->
+    <div v-if="selectedTask">
       <el-divider content-position="left"></el-divider>
       <el-collapse v-model="activeCollapseItems">
         <div class="el-collapse-item-header">
           <div class="el-collapse-item-header-title">
-            <h3>{{ task.workName ?? "-" }}</h3>
+            <h3>{{ selectedTask.workName ?? "-" }}</h3>
           </div>
           <div class="el-collapse-item-header-icon">
-            <IconCircleClose class="close-icon" :width="15" :height="15" @click="handleDeleteLog(task.index)"/>
+            <IconCircleClose class="close-icon" :width="15" :height="15" @click="handleDeleteLog(selectedTask.index)"/>
           </div>
         </div>
-        <div class="">
+        <div>
           <el-form
               ref="workAmountForm"
               :model="{listWorkAmount}"
@@ -35,66 +48,67 @@
               <template #label>
                 <span class="label-start">Khối lượng dự kiến</span>
               </template>
-              <el-input disabled v-model.number="task.quantity" type="number" placeholder="Nhập khối lượng dự kiến" />
+              <el-input disabled v-model.number="selectedTask.quantity" type="number" placeholder="Nhập khối lượng dự kiến" />
             </el-form-item>
 
-            <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.${index}.workAmount`" :rules="rules.workAmount.map(rule => ({ ...rule, task: task}))">
-              <el-input-number style="width: 100%" v-model.number="listWorkAmount[index].workAmount" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
+            <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.0.workAmount`">
+              <el-input-number style="width: 100%" v-model.number="listWorkAmount[0].workAmount" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng còn lại" prop="remaining">
-              <el-input disabled :value="task.quantity - listWorkAmount[index].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
+              <el-input disabled :value="selectedTask.quantity - listWorkAmount[0].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
             </el-form-item>
           </el-form>
         </div>
-        <!-- Material -->
-        <el-collapse-item :name="task.index + '-1'">
+
+        <!-- Vật liệu -->
+        <el-collapse-item :name="selectedTask.index + '-1'">
           <template #title>
-            <h3>Vat Lieu</h3>
+            <h3>Vật Liệu</h3>
           </template>
           <ListItems
               ref="materialForm"
               :rules="rules"
-              :taskIndex="task.index"
+              :taskIndex="selectedTask.index"
               :resourceType="MATERIAL_TYPE"
               :resources="logDetails.resources"
-              :selectData="getListResourcesByType(task, MATERIAL_TYPE)"
+              :selectData="getListResourcesByType(selectedTask, MATERIAL_TYPE)"
               :optionKeys="materialOptionKeys"
               :isExport="true"
               @remove-resource="handleRemoveResource"
           />
         </el-collapse-item>
 
-        <!-- Employee -->
-        <el-collapse-item :name="task.index + '-2'">
+        <!-- Nhân công -->
+        <el-collapse-item :name="selectedTask.index + '-2'">
           <template #title>
-            <h3>Nhan Cong</h3>
+            <h3>Nhân Công</h3>
           </template>
           <ListItems
               ref="humanForm"
               :rules="rules"
-              :taskIndex="task.index"
+              :taskIndex="selectedTask.index"
               :resourceType="HUMAN_TYPE"
               :resources="logDetails.resources"
-              :selectData="getListResourcesByType(task, HUMAN_TYPE)"
+              :selectData="getListResourcesByType(selectedTask, HUMAN_TYPE)"
               :optionKeys="userOptionKeys"
               :isExport="false"
               @remove-resource="handleRemoveResource"
           />
         </el-collapse-item>
 
-        <!-- Vehicle -->
-        <el-collapse-item :name="task.index + '-3'">
+        <!-- Phương tiện -->
+        <el-collapse-item :name="selectedTask.index + '-3'">
           <template #title>
-            <h3>Phuong Tien</h3>
+            <h3>Phương Tiện</h3>
           </template>
           <ListItems
               ref="machineForm"
               :rules="rules"
-              :taskIndex="task.index"
+              :taskIndex="selectedTask.index"
               :resourceType="MACHINE_TYPE"
               :resources="logDetails.resources"
-              :selectData="getListResourcesByType(task, MACHINE_TYPE)"
+              :selectData="getListResourcesByType(selectedTask, MACHINE_TYPE)"
               :optionKeys="vehicleOptionKeys"
               :isExport="false"
               @remove-resource="handleRemoveResource"
@@ -106,7 +120,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref, watch} from 'vue';
+import { computed, ref } from 'vue';
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
@@ -115,31 +129,25 @@ import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from "@/constants/resource.js
 const props = defineProps({
   logDetails: {
     type: Object,
-    default: () => {}
+    default: () => ({})
   },
   progressDtls: {
     type: Object,
-    default: () => {}
+    default: () => ({})
   },
   rules: {
     type: Object,
-    default: () => {}
+    default: () => ({})
   }
 });
-const listWorkAmount = computed(() => props.logDetails.workAmount.reduce((acc, item) => {
-  acc[item.taskIndex] = item
-  return acc
-}, {}));
+
 const activeCollapseItems = ref(["1", "2", "3"]);
-const groupedByTasks = ref(props.logDetails?.resources.reduce((acc, task) => {
-  acc[task.index] = task;
-  return acc;
-}, {}));
-const emit = defineEmits(["remove-resource", "remove-task"]);
+const emit = defineEmits(["remove-task"]);
 const materialOptionKeys = ref({id: "id", value: "name"});
 const userOptionKeys = ref({id: "id", value: "name"});
 const vehicleOptionKeys = ref({id: "id", value: "name"});
 const selectedRow = ref(null);
+
 const machineForm = ref(null);
 const materialForm = ref(null);
 const humanForm = ref(null);
@@ -151,17 +159,18 @@ defineExpose({
   workAmountForm
 });
 
-// Handle Task Selection and Dynamically Add Task
+// Chỉ lưu 1 workAmount cho task đang chọn
+const listWorkAmount = ref([{ workAmount: 0 }]);
+
+const selectedTask = computed(() => {
+  if (!selectedRow.value) return null;
+  return props.progressDtls.progressItems.find(task => task.index === selectedRow.value);
+});
+
 const handleSelectTask = (id) => {
   selectedRow.value = id;
-  const selectedTask = props.progressDtls.progressItems.find(task => task.index === id);
-  props.logDetails.workAmount.push({taskIndex: id, workAmount: 0});
-  if (selectedTask) {
-    if (!groupedByTasks.value[selectedTask.index]) {
-      // Add selected task to grouped tasks if it doesn't exist yet
-      groupedByTasks.value[selectedTask.index] = selectedTask;
-    }
-  }
+  // Reset work amount mỗi khi chọn task mới
+  listWorkAmount.value = [{ workAmount: 0 }];
 };
 
 const getListResourcesByType = (task, type) =>
@@ -173,18 +182,16 @@ const getListResourcesByType = (task, type) =>
           ...resource,
         }));
 
-// Handle Task Deletion
 const handleDeleteLog = (index) => {
   selectedRow.value = null;
-  delete groupedByTasks.value[index];
-  emit("remove-task",  index);
+  listWorkAmount.value = [{ workAmount: 0 }];
+  emit("remove-task", index);
 };
 
 const handleRemoveResource = (data) => {
   emit("remove-resource", data);
-}
+};
 
-// Search Function (Empty for now)
 const handleSearch = (value) => {
   console.log("Search value:", value);
 };
@@ -228,5 +235,9 @@ const handleSearch = (value) => {
   grid-template-columns: repeat(6, 1fr);
   gap: 10px;
   align-items: center;
+}
+
+.selected-task-display {
+  margin-bottom: 16px;
 }
 </style>

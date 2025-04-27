@@ -3,7 +3,7 @@
   <div class="custom-upload">
     <!-- File input button -->
     <label
-        v-if="!disabled && fileList.length < (fileLimit ?? 3)"
+        v-if="!disabled && fileList.length < (fileLimit)"
         class="upload-button"
         for="file-input"
     >
@@ -229,13 +229,13 @@ export default {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
-    color: #8f9ba5;
+    color: #b6c2cc;
     font-size: 28px;
     transition: border-color 0.3s;
 
     &:hover {
       border-color: rgba(197, 207, 216, 0.45);
-      color: rgba(197, 207, 216, 0.45);
+      color: rgba(197, 207, 216, 0.65);
     }
   }
 

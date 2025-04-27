@@ -3,7 +3,8 @@
     <el-form label-position="top" :model="logDetails" ref="ruleFormRef" :rules="rules">
       <el-form-item label="Ảnh thi công">
         <ImageUpload
-            :existingFiles="logDetails.Images"
+            :fileLimit="3"
+            :existingFiles="logDetails.images"
             @file-selected="handleSelectFiles"
             @file-removed="handleRemoveFile"
         />
@@ -119,14 +120,14 @@ defineExpose({
   ruleFormRef,
 });
 
-const handleSelectFiles = (listFiles) => {
-  props.logDetails.images = listFiles.map(item => item.raw);
-}
 const handleSelectAttachments = (listFiles) => {
   props.logDetails.attachmentFiles = listFiles || [];
 }
+const handleSelectFiles = (listFiles) => {
+  props.logDetails.images = listFiles;
+}
 const handleRemoveFile = (file) => {
-  props.logDetails.images =  props.logDetails.images.filter((f) => f.uid !== file.uid);
+  // props.logDetails.images =  props.logDetails.images.filter((f) => f.uid !== file.uid);
 }
 const handleRemoveAttachments = (file) => {
   props.logDetails.attachmentFiles = props.logDetails.attachmentFiles.filter((f) => f.uid !== file.uid);

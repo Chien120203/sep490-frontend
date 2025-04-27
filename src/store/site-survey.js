@@ -53,8 +53,6 @@ export const useSiteSurveyStore = defineStore(
         },
         (error) => {
           isSiteSurveyNull.value = true;
-          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
-          mixinMethods.notifyError(t("response.message.get_survey_dtls_failed"));
           mixinMethods.endLoading();
         }
       );

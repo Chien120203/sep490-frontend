@@ -36,17 +36,17 @@
     <!-- TABLES BY TYPE -->
     <div class="mobilization-body-table">
       <el-tabs v-model="activeTab">
-        <el-tab-pane :label="`${$t('inventory.type.team')} (${listTeams.length})`" :name="HUMAN_TYPE">
+        <el-tab-pane :label="`${$t('inventory.type.team')}`" :name="HUMAN_TYPE">
           <InventoryTable
               :data="listTeams"
           />
         </el-tab-pane>
-        <el-tab-pane :label="`${$t('inventory.type.machine')} (${listMachines.length})`" :name="MACHINE_TYPE">
+        <el-tab-pane :label="`${$t('inventory.type.machine')}`" :name="MACHINE_TYPE">
           <InventoryTable
               :data="listMachines"
           />
         </el-tab-pane>
-        <el-tab-pane :label="`${$t('inventory.type.material')} (${listMaterials.length})`" :name="MATERIAL_TYPE">
+        <el-tab-pane :label="`${$t('inventory.type.material')}`" :name="MATERIAL_TYPE">
           <InventoryTable
               :data="listMaterials"
           />

@@ -4,6 +4,7 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
+import PAGE_NAME from "@/constants/route-name.js";
 
 export const useConstructLog = defineStore(
   "construct-log",
@@ -35,7 +36,7 @@ export const useConstructLog = defineStore(
         problem: "",
         advice: "",
         status: 2,
-        Images: [],
+        images: [],
         attachmentFiles: [],
         note: "",
       }
@@ -108,7 +109,7 @@ export const useConstructLog = defineStore(
         id,
         {},
         (response) => {
-          constructLogDetails.value = response.data;
+          constructLogDetails.value = {...response.data, images: response.data.images.map(item => item.webContentLink)};
           mixinMethods.endLoading();
         },
         (error) => {
@@ -143,19 +144,42 @@ export const useConstructLog = defineStore(
       await services.ConstructLogAPI.save(
         formData,
         (response) => {
-          constructLogDetails.value = {
-            ...response.data,
-            projectId: response.data?.project.id,
-            images: response.data.images || []
-          };
-          mixinMethods.notifySuccess(t("response.message.save_construct_log_success"));
           mixinMethods.endLoading();
+          mixinMethods.notifySuccess(t("response.message.save_construct_log_success"));
+          if(params.id !== 0) {
+            constructLogDetails.value = {...response.data, images: response.data.images.map(item => item.webContentLink)};
+          } else router.push({name: PAGE_NAME.CONSTRUCT_LOG.DETAILS, params: response.data.id});
         },
         (error) => {
           mixinMethods.notifyError(t("response.message.save_construct_log_failed"));
           mixinMethods.endLoading();
         }
       );
+    };
+
+    const clearConstructLog = () => {
+      constructLogDetails.value = {
+        id: 0,
+        logCode: "",
+        logName: "",
+        logDate: "",
+        projectId: 0,
+        resources: [],
+        workAmount: [],
+        weather: [
+          {type: "Điều kiện", values: ["", "", "", ""]},
+          {type: "Nhiệt độ", values: ["", "", "", ""]},
+        ],
+        safety: "",
+        quality: "",
+        progress: "",
+        problem: "",
+        advice: "",
+        status: 2,
+        images: [],
+        attachmentFiles: [],
+        note: "",
+      };
     }
 
     return {
@@ -166,6 +190,7 @@ export const useConstructLog = defineStore(
       constructLogDetails,
       isShowModalConfirm,
       isShowModalCreate,
+      clearConstructLog,
       getConstructLogDetails,
       getListLogsByTask,
       getListProjectLogs,

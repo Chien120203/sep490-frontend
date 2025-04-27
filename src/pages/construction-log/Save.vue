@@ -65,7 +65,8 @@ const {
 const {
   constructLogDetails,
   saveConstructLog,
-  getConstructLogDetails
+  getConstructLogDetails,
+  clearConstructLog,
 } = constructLogStore;
 const {
   progressDetails,
@@ -83,6 +84,7 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
+  clearConstructLog();
 });
 
 const handleRemoveResource = (data) => {
@@ -110,6 +112,7 @@ const formLogInfoRef = ref(null);
 
 const submitForm = async () => {
   constructLogDetails.value.projectId = projectId.value;
+  constructLogDetails.value.images = constructLogDetails.value.images.map(image => image.raw);
   // const formRefs = [
   //   ...formLogDetailsRef.value?.machineForm,
   //   ...formLogDetailsRef.value?.materialForm,

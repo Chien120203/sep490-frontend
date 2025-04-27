@@ -4,7 +4,7 @@
         class="select-item"
         :defaultList="selectedRow"
         :optionKeys="{ id: 'index', value: 'workName' }"
-        :listData="progressDtls.progressItems"
+        :listData="listProgressItems"
         :isRemote="true"
         :showClearable="true"
         :placeholder="'Chọn công việc'"
@@ -110,8 +110,6 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from "@/constants/resource.js";
-import {useConstructLog} from "@/store/construct-log.js";
-import {usePersistenceStore} from "@/store/persistence.js";
 
 const props = defineProps({
   logDetails: {
@@ -128,24 +126,14 @@ const props = defineProps({
   }
 });
 
-const constructLogStore = useConstructLog();
-const persistenceStore = usePersistenceStore();
-const {
-  projectId
-} = persistenceStore;
-const {
-  listLogsByTask,
-  getListLogsByTask
-} = constructLogStore;
+const listProgressItems = computed(() => props.progressDtls.progressItems?.filter(item => item.progress !== 100 && !groupedByTasks.value[item.index])) || [];
 
 const listWorkAmount = computed(() => props.logDetails?.workAmount.reduce((acc, item) => {
-  // getListLogsByTask(projectId.value, item.taskIndex);
   acc[item.taskIndex] = item
   return acc
 }, {}));
 const activeCollapseItems = ref(["1", "2", "3"]);
 const groupedByTasks = computed(() => props.logDetails?.resources.reduce((acc, item) => {
-  // getListLogsByTask(projectId.value, item.taskIndex);
   acc[item.taskIndex] = item;
   return acc;
 }, {}));
