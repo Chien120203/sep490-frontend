@@ -142,11 +142,10 @@ export default {
         return items.map(item => {
           const newItem = {...item};
 
-
-          newItem.isShow = allowedRoutes.includes(newItem.function_page_name);
-
-          if(role.value !== ADMIN) {
-            newItem.isShow = PROJECT_SIDEBARS.includes(route.name)
+          if (projectId.value) {
+            newItem.isShow = PROJECT_SIDEBARS.includes(newItem.function_page_name) && allowedRoutes.includes(newItem.function_page_name);
+          } else {
+            newItem.isShow = allowedRoutes.includes(newItem.function_page_name) && !PROJECT_SIDEBARS.includes(newItem.function_page_name);
           }
 
           if (newItem.children) {
