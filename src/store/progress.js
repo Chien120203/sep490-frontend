@@ -12,7 +12,9 @@ export const useProgressStore = defineStore(
     const progressDetails = reactive({
       value: {}
     });
-
+    const selectedProgressItem = reactive({
+      value: {},
+    })
     const getProgressDetails = async (projectId, isLoading) => {
       if(isLoading) mixinMethods.startLoading();
       await services.ProgressAPI.details(
@@ -53,6 +55,7 @@ export const useProgressStore = defineStore(
     return {
       validation,
       progressDetails,
+      selectedProgressItem,
       getProgressDetails,
       convertProgressToTasks
     };

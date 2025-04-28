@@ -17,7 +17,7 @@
         <div v-if="selectedTab === 'dependency'">
           <DependencyTaskTable
               ref="dependentFormRef"
-              :allowEdit="allowEdit"
+              :allowEdit="false"
               :rules="PLANNING_RULES"
               :tasks="listTasks"
               :selectedRow="task"
@@ -64,12 +64,6 @@
         </div>
       </div>
     </div>
-    <ListLogsModal
-        :show="showLogModal"
-        :data="constructLogs"
-        @details="handleGetLogDetails"
-        @close="handleCloseModal"
-    />
   </div>
 </template>
 

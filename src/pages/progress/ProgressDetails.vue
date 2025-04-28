@@ -18,6 +18,7 @@ import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {useInventoryStore} from "@/store/inventory.js";
 import {TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {getProgressRules} from "@/rules/progress/index.js";
 
 const router = useRouter();
 const persistenceStore = usePersistenceStore();
@@ -25,6 +26,7 @@ const progressStore = useProgressStore();
 const constructLogStore = useConstructLog();
 const {
   progressDetails,
+  selectedProgressItem,
   getProgressDetails
 } = progressStore;
 
@@ -53,6 +55,8 @@ const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
 
+const progressRules = getProgressRules();
+
 const tasks = ref(progressDetails.value.progressItems);
 const allowEdit = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
 watch(
@@ -60,7 +64,7 @@ watch(
     (newVal) => {
       tasks.value = newVal.progressItems;
     },
-    { immediate: true, deep: true } // `immediate` handles initial assignment; `deep` tracks nested changes
+    { immediate: true, deep: true }
 )
 
 onMounted(() => {
@@ -96,7 +100,7 @@ const handleAddAllocation = () => {
 }
 
 const handleAddTask = async () => {
-  getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 50});
+  await getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 50});
   isShowModalSave.value = true;
 }
 
@@ -138,12 +142,13 @@ const handleCloseModal = () => {
         @close="handleCloseModal"
     />
     <ChangeRequestModal
+        :selectedRow="selectedProgressItem.value"
         :show="isShowModalSave"
         :materials="materials"
         :vehicles="listVehicles"
         :tasks="progressDetails.value.progressItems"
         :users="listEmployees"
-        :data="changeRequestDetails.value"
+        :rules="progressRules"
         :allowEdit="allowEdit"
         @close="handleDisplayModalSave"
         @submit="saveChangeRequest"

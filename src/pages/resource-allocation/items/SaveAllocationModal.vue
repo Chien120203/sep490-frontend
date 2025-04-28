@@ -111,7 +111,7 @@ const emit = defineEmits(["close", "submit", "searchProjects", "searchTask"]);
 const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
-const allowSave = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER && data.status === DRAFT_STATUS);
+const allowSave = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER && props.data.status === DRAFT_STATUS);
 watch(() => props.data.resourceAllocationDetails, (data) => {
   if (data) {
     let listUsers = [];

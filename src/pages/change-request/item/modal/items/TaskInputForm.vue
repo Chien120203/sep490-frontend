@@ -12,24 +12,12 @@
             />
           </el-form-item>
 
-          <!-- Request Date -->
-          <el-form-item :label="$t('change_request.modal.request_date')">
-            <el-date-picker
-                style="width: 80%"
-                v-model="selectedRow.requestDate"
-                type="date"
-                class="custom-input"
-                :disabled="!allowEdit"
-                placeholder="Select Date"
-            />
-          </el-form-item>
-
           <!-- Parent Index -->
           <el-form-item :label="$t('change_request.modal.parent_index')">
             <SingleOptionSelect
                 v-model="selectedRow.parentIndex"
                 :isDisabled="!allowEdit"
-                style="width: 30%"
+                style="width: 80%"
                 :showClearable="true"
                 class="select-item"
                 :optionKeys="{id: 'index', value: 'workName'}"
@@ -70,10 +58,9 @@
           <!-- Unit Price -->
           <el-form-item :label="$t('change_request.modal.unit_price')">
             <el-input
-                v-model.number="selectedRow.unitPrice"
+                v-model="selectedRow.unitPrice"
                 :formatter="(value) => mixinMethods.formatInputMoney(value)"
                 :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                type="number"
                 class="custom-input"
                 :disabled="!allowEdit"
             />

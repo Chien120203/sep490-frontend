@@ -12,8 +12,7 @@
 
       <div class="details-container">
         <div class="column">
-          <p><strong>{{ $t('survey.details.biddingDecision') }}:</strong> {{ $t(getBidDecision(data.biddingDecision)) }}</p>
-          <span><strong>{{ $t('survey.details.status') }}:</strong> {{ $t(formatStatus(data.status)) }}</span>
+          <p><strong>{{ $t('survey.details.biddingDecision') }}:</strong> {{ getBidDecision(data?.biddingDecision) }}</p>
         </div>
         <div class="column">
           <p><strong>{{ $t('survey.details.estimatedProfits') }}:</strong> {{ formatCurrency(data.estimatedProfits) }}</p>
@@ -52,6 +51,7 @@
 import {BID_DECISION_LABELS, RECEIVE_STATUS, STATUS_LABELS} from "@/constants/survey.js";
 import { mixinMethods } from "@/utils/variables.js";
 import { toRefs } from 'vue';
+import {useI18n} from "vue-i18n";
 
 // Nhận dữ liệu từ component cha
 const props = defineProps({
@@ -70,7 +70,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['details', 'create']);
-
+const {t} = useI18n();
 const { data, isSurveyNull } = toRefs(props);
 
 const formatStatus = (status) => {
@@ -78,7 +78,7 @@ const formatStatus = (status) => {
 };
 
 const getBidDecision = (bidDecision) => {
-  return BID_DECISION_LABELS[bidDecision];
+  return t(BID_DECISION_LABELS[bidDecision]);
 }
 
 const formatCurrency = (inputCurrency) => {

@@ -27,13 +27,13 @@
       <!-- Due Date -->
       <el-table-column label="Start Date" sortable>
         <template #default="{ row }">
-          {{ mixinMethods.showDateTime(row.startDate) ?? "-" }}
+          {{ mixinMethods.showDateTime(row.planStartDate) ?? "-" }}
         </template>
       </el-table-column>
       <!-- Due Date -->
       <el-table-column label="Due Date" sortable>
         <template #default="{ row }">
-          {{ mixinMethods.showDateTime(row.endDate) ?? "-" }}
+          {{ mixinMethods.showDateTime(row.planEndDate) ?? "-" }}
         </template>
       </el-table-column>
 
