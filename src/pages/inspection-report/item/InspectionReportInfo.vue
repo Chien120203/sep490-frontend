@@ -82,11 +82,6 @@
             @file-removed="handleRemoveAttachments"
         />
       </el-form-item>
-
-      <el-form-item>
-        <el-button type="primary" @click="saveInspectionReport">Lưu</el-button>
-        <el-button type="default" @click="clearForm">Xóa</el-button>
-      </el-form-item>
     </el-form>
   </el-card>
 </template>

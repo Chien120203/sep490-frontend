@@ -26,7 +26,6 @@ export const getMaterialRules = () => {
                 trigger: "blur",
             },
             {
-                pattern: /^[A-Z0-9-]*$/, // Chỉ cho phép chữ cái, số, và dấu gạch ngang
                 message: t("E-MAT-002"), // Định dạng mã vật liệu không hợp lệ
                 trigger: "change",
             },
@@ -76,7 +75,6 @@ export const getMaterialRules = () => {
         ],
         chassisNumber: [
             {
-                required: true,
                 message: t("E-MAT-005"), // Số khung là bắt buộc
                 trigger: "blur",
             },
@@ -93,16 +91,6 @@ export const getMaterialRules = () => {
         ],
         wholesalePrice: [
             {
-                required: true,
-                message: t("E-MAT-007"), // Giá bán buôn là bắt buộc
-                trigger: "blur",
-            },
-            {
-                pattern: /^\d+$/,
-                message: t("E-MAT-008"), // Giá bán buôn phải là số hợp lệ
-                trigger: "change",
-            },
-            {
                 validator: (rule, value, callback) =>
                     validateMinMax(
                         rule,
@@ -117,11 +105,6 @@ export const getMaterialRules = () => {
             },
         ],
         retailPrice: [
-            {
-                required: true,
-                message: t("E-MAT-010"), // Giá bán lẻ là bắt buộc
-                trigger: "blur",
-            },
             {
                 pattern: /^\d+$/,
                 message: t("E-MAT-011"), // Giá bán lẻ phải là số hợp lệ
@@ -143,7 +126,6 @@ export const getMaterialRules = () => {
         ],
         inventory: [
             {
-                required: true,
                 message: t("E-MAT-013"), // Số lượng tồn kho là bắt buộc
                 trigger: "blur",
             },

@@ -133,7 +133,6 @@ const {
   isShowModalConfirm,
   saveHumanResources,
   getHumanResourcesDetails,
-  handleRemoveMember,
   getListHumanResources,
   clearHumanResourcesDetails,
   handleDeleteHumanResources
@@ -200,14 +199,11 @@ const closeTeamModal = () => {
 }
 
 const handleRemoveTeamMember = (id) => {
-  delete_mem_id.value = id;
+  delete_mem_id.value = id?.id || id;
   isShowModalConfirmDelMember.value = true;
 };
 
 const handleConfirmRemove = () => {
-  if(humanResourcesDetails.value.id !== 0) {
-    handleRemoveMember(delete_mem_id.value);
-  }
   humanResourcesDetails.value.teamMemberIds = humanResourcesDetails.value.teamMemberIds.filter(memId => memId !== delete_mem_id.value);
   isShowModalConfirmDelMember.value = false;
 }
@@ -236,7 +232,14 @@ const handleOpenModalTeam = () => {
 }
 
 const handleSave = (data) => {
-  saveHumanResources(data);
+  let param = {
+      id: data.id,
+    teamName: data.teamName,
+    teamManager: data.teamManager,
+    description: data.description,
+    teamMemberIds: data.teamMemberIds,
+  };
+  saveHumanResources(param);
 };
 
 const handleConfirm = () => {

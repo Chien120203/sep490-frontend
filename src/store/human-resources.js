@@ -52,7 +52,10 @@ export const useHumanResourcesStore = defineStore(
         id,
         {},
         (response) => {
-          humanResourcesDetails.value = {...response.data, teamMemberIds: response.data.members.filter(item => item.role === CONSTRUCTION_EMPLOYEE)};
+          humanResourcesDetails.value = {
+            ...response.data,
+            teamMemberIds: response.data.members.filter(item => item.role === CONSTRUCTION_EMPLOYEE).map(item => item.id)
+          };
           mixinMethods.endLoading();
         },
         (error) => {
@@ -67,14 +70,13 @@ export const useHumanResourcesStore = defineStore(
       await services.HumanResourceAPI.save(
         params,
         (response) => {
-          if (response.success) {
-            humanResourcesDetails.value = response.data;
-              listHumanResources.value.push(response.data);
-            mixinMethods.notifySuccess(t("response.message.save_human_success"));
-          } else {
-            validation.value = mixinMethods.handleErrorResponse(response.responseCode || response);
-            mixinMethods.notifyError(t("response.message.save_human_failed"));
-          }
+          humanResourcesDetails.value = response.data;
+          getListHumanResources({
+            teamManager: "",
+            teamName: "",
+            pageIndex: 1
+          });
+          mixinMethods.notifySuccess(t("response.message.save_human_success"));
           mixinMethods.endLoading();
         },
         (error) => {
@@ -90,8 +92,8 @@ export const useHumanResourcesStore = defineStore(
       await services.HumanResourceAPI.deleteHuman(
         id,
         (response) => {
-            listHumanResources.value = listHumanResources.value.filter(humanResources => humanResources.id !== id);
-            mixinMethods.notifySuccess(t("response.message.delete_human_success"));
+          listHumanResources.value = listHumanResources.value.filter(humanResources => humanResources.id !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_human_success"));
           mixinMethods.endLoading();
         },
         () => {

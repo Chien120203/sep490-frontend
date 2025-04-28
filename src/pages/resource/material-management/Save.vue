@@ -38,7 +38,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="materialName" class="custom-textarea" :label="$t('resource.material.details.materialName')">
+            <el-form-item prop="materialName" class="custom-textarea required" :label="$t('resource.material.details.materialName')">
               <el-input v-model="materialResourcesDetails.value.materialName" />
               <label class="error-feedback-material" v-if="validation && validation.value.materialName">
                 {{ $t(validation.value.materialName) }}
@@ -78,20 +78,25 @@
 
           <div class="item item-bib-add item-material-add">
             <el-form-item prop="wholesalePrice" class="custom-textarea" :label="$t('resource.material.details.wholesalePrice')">
-              <el-input v-model="materialResourcesDetails.value.wholesalePrice" />
+              <el-input :formatter="(value) => mixinMethods.formatInputMoney(value)"
+                        :parser="(value) => mixinMethods.parseInputCurrency(value)"
+                        v-model="materialResourcesDetails.value.wholesalePrice"
+              />
               <label class="error-feedback-material" v-if="validation && validation.value.wholesalePrice">
                 {{ $t(validation.value.wholesalePrice) }}
               </label>
             </el-form-item>
 
             <el-form-item prop="retailPrice" class="custom-textarea" :label="$t('resource.material.details.retailPrice')">
-              <el-input v-model="materialResourcesDetails.value.retailPrice" />
+              <el-input :formatter="(value) => mixinMethods.formatInputMoney(value)"
+                        :parser="(value) => mixinMethods.parseInputCurrency(value)"
+                        v-model="materialResourcesDetails.value.retailPrice" />
               <label class="error-feedback-material" v-if="validation && validation.value.retailPrice">
                 {{ $t(validation.value.retailPrice) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="inventory" class="custom-textarea" :label="$t('resource.material.details.inventory')">
+            <el-form-item prop="inventory" class="custom-textarea required" :label="$t('resource.material.details.inventory')">
               <el-input v-model="materialResourcesDetails.value.inventory" />
               <label class="error-feedback-material" v-if="validation && validation.value.inventory">
                 {{ $t(validation.value.inventory) }}
@@ -148,8 +153,14 @@ import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {DATE_FORMAT, GENDERS} from "@/constants/application.js";
 import PAGE_NAME from "@/constants/route-name.js";
 import {ADMIN} from "@/constants/roles.js";
+import {mixinMethods} from "@/utils/variables.js";
 
 export default {
+  computed: {
+    mixinMethods() {
+      return mixinMethods
+    }
+  },
   components: {FileUpload,ImageUpload, IconBackMain, SingleOptionSelect},
   setup() {
     const {t} = useI18n();
