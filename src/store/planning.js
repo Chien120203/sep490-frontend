@@ -43,31 +43,6 @@ export const usePlanningStore = defineStore(
       }
     });
     const approveStatuses = reactive({value: []});
-    // const approveStatuses = reactive({
-    //   value: [
-    //     {
-    //       id: 4,
-    //       name: "Technical Manager",
-    //       role: "Technical Manager",
-    //       email: "longrpk200315@gmail.com",
-    //       isApproved: ""
-    //     },
-    //     {
-    //       id: 6,
-    //       name: "Executive Board",
-    //       role: "Executive Board",
-    //       email: "longrpk200317@gmail.com",
-    //       isApproved: ""
-    //     },
-    //     {
-    //       id: 8,
-    //       name: "Resource Manager",
-    //       role: "Resource Manager",
-    //       email: "longrpk200319@gmail.com",
-    //       isApproved: ""
-    //     }
-    //   ]
-    // });
     const taskPlanDetails = reactive({
       value: {
         id: 1,
@@ -186,6 +161,7 @@ export const usePlanningStore = defineStore(
           rejectReason: "abc"
         },
         (response) => {
+          getPlanningDetails(planningDetails.value.id);
           mixinMethods.notifySuccess(t("response.message.approve_planning_success"));
           mixinMethods.endLoading();
         },
@@ -219,7 +195,8 @@ export const usePlanningStore = defineStore(
             if (p.role === EXECUTIVE_BOARD && p.email === currentEmail) {
               return p.isApproved = false;
             }
-          })
+          });
+          getPlanningDetails(planningDetails.value.id);
           mixinMethods.notifySuccess(t("response.message.reject_planning_success"));
           mixinMethods.endLoading();
         },

@@ -12,11 +12,6 @@
         <el-input v-model="inspectionReportDetails.inspectCode" placeholder="Nhập mã kiểm tra" />
       </el-form-item>
 
-      <!-- Inspector -->
-      <el-form-item label="Người kiểm tra" prop="inspectorId" required>
-        <el-input v-model="userName" disabled/>
-      </el-form-item>
-
       <!-- Inspection dates -->
       <div class="form-row">
         <el-form-item label="Ngày bắt đầu kiểm tra" prop="inspectStartDate" required class="date-field">
@@ -55,9 +50,10 @@
 
       <!-- Status -->
       <el-form-item label="Trạng thái" prop="status" required>
-        <el-radio-group v-model="inspectionReportDetails.status">
+        <el-radio-group disabled v-model="inspectionReportDetails.status">
           <el-radio :label="1">Duyệt</el-radio>
-          <el-radio :label="2">Từ chối</el-radio>
+          <el-radio :label="0">Từ chối</el-radio>
+          <el-radio :label="2">Đợi Duyệt</el-radio>
         </el-radio-group>
       </el-form-item>
 
@@ -119,9 +115,6 @@ const handleSelectAttachments = (listFiles) => {
 const handleRemoveAttachments = (file) => {
   props.inspectionReportDetails.attachment = props.inspectionReportDetails.attachment.filter((f) => f.uid !== file.uid);
 }
-
-const userName = localStorage.getItem("username");
-
 </script>
 
 <style scoped>

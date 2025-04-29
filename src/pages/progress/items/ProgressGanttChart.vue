@@ -12,14 +12,14 @@ const gantt = ref(null);
 watch(
     () => props.tasks,
     (newVal) => {
-      if (newVal && newVal.length > 0) {
-        if (gantt.value?.ej2Instances && gantt.value?.ej2Instances.dataSource) {
-          let ganttObj = gantt.value.ej2Instances;
-          ganttObj.hideSpinner();
-          ganttObj.dataSource = newVal;
-          ganttObj.refresh();
-        }
-      }
+      // if (newVal && newVal.length > 0) {
+      //   if (gantt.value?.ej2Instances && gantt.value?.ej2Instances.dataSource) {
+      //     let ganttObj = gantt.value.ej2Instances;
+      //     ganttObj.hideSpinner();
+      //     ganttObj.dataSource = newVal;
+      //     ganttObj.refresh();
+      //   }
+      // }
     },
     {immediate: true, deep: true} // `immediate` handles initial assignment; `deep` tracks nested changes
 );
@@ -45,7 +45,7 @@ const taskSettings = ref({
   startDate: "actualStartDate",
   endDate: "actualEndDate",
   progress: "progress",
-  parentID: "parentIndex",
+  parentID: "parentId",
   dependency: "predecessor",
   baselineStartDate: "planStartDate",
   baselineEndDate: "planEndDate"

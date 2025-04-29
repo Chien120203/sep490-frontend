@@ -32,7 +32,6 @@ export const useProjectStore = defineStore(
         startDate: "",
         endDate: "",
         budget: 0,
-        status: 0,
         technicalManager: "",
         constructionManager: "",
         qa: "",
@@ -173,7 +172,6 @@ export const useProjectStore = defineStore(
         technicalManager: "",
         constructionManager: "",
         resourceManager: "",
-        status: 0,
         attachment: "",
         description: "",
         viewerUserIds: null

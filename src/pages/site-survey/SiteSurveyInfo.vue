@@ -78,7 +78,8 @@ const formatStatus = (status) => {
 };
 
 const getBidDecision = (bidDecision) => {
-  return t(BID_DECISION_LABELS[bidDecision]);
+  const labelKey = BID_DECISION_LABELS[bidDecision];
+  return labelKey ? t(labelKey) : "";
 }
 
 const formatCurrency = (inputCurrency) => {

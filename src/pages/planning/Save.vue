@@ -14,7 +14,7 @@
           <div class="btn-container">
             <el-button v-if="allowApprove" style="height: 36px" type="success" @click="handleApprove()">{{ $t("common.approve") }}</el-button>
             <el-button v-if="allowReject" class="btn btn-refuse" @click="handleReject()">{{ $t("common.reject") }}</el-button>
-            <el-button v-if="allowEdit" class="btn btn-save" @click="submitForm">
+            <el-button :disabled="disableBtn" v-if="allowEdit" class="btn btn-save" @click="submitForm">
               {{ $t("common.save") }}
             </el-button>
           </div>
@@ -37,6 +37,7 @@
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
               :contractDetails="contractDetails.value"
+              @disable-btn="handleDisableBtn"
           />
           <PlanningDetails
               ref="detailsFormRef"
@@ -111,40 +112,13 @@ const listTabs = ref([
   },
 ]);
 const isShowModalItemDtls = ref(false);
+const disableBtn = ref(false);
 const isUpdate = computed(() => !!route.params.id);
 const selectedRow = ref({});
 const PLANNING_RULES = getPlanningRules();
 
 const currentStep = ref(1);
-const activities = ref([
-  {
-    id: 1,
-    username: "Trần Văn Bằng",
-    text: "đã cập nhật kế hoạch thi công",
-    time: "14:36",
-    icon: "✏️",
-    type: "edit",
-    date: "23/05/2024",
-  },
-  {
-    id: 2,
-    username: "Nguyễn Văn A",
-    text: "đã thêm mới kế hoạch thi công",
-    time: "15:20",
-    icon: "➕",
-    type: "add",
-    date: "23/05/2024",
-  },
-  {
-    id: 3,
-    username: "Lê Thị B",
-    text: "đã xác nhận hoàn thành kế hoạch",
-    time: "16:45",
-    icon: "✅",
-    type: "confirm",
-    date: "24/05/2024",
-  },
-]); // Placeholder for activity data
+const activities = ref([]); // Placeholder for activity data
 const {t} = useI18n();
 // Store Data
 const contractStore = useContractStore();
@@ -280,6 +254,10 @@ const handleEditPlanDetails = (row) => {
   selectedRow.value = JSON.parse(JSON.stringify(row));
   planSelectedRow.value = selectedRow.value;
   isShowModalItemDtls.value = true;
+}
+
+const handleDisableBtn = (data) => {
+  disableBtn.value = data;
 }
 
 const handleCloseModal = () => {

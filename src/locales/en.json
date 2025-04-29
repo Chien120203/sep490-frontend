@@ -890,7 +890,8 @@
       "FF": "Cannot finish task {currentTaskIndex} until the task {relatedTaskIndex} is completed.",
       "SF": "Cannot finish task {currentTaskIndex} until the task {relatedTaskIndex} is started.",
       "FS": "Cannot start task {currentTaskIndex} until the task {relatedTaskIndex} is completed.",
-      "invalid_form": "Validation failed in {form}"
+      "invalid_form": "Validation failed in {form}",
+      "exceed_budget": "Exceed project budget"
     },
     "form_ref": {
       "planning_info": "Plan Information",

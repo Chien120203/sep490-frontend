@@ -890,7 +890,8 @@
       "FF": "Không thể hoàn thành công việc {currentTaskIndex} cho đến khi công việc {relatedTaskIndex} hoàn thành.",
       "SF": "Không thể hoàn thành công việc {currentTaskIndex} cho đến khi công việc {relatedTaskIndex} bắt đầu.",
       "FS": "Không thể bắt đầu công việc {currentTaskIndex} cho đến khi công việc {relatedTaskIndex} hoàn thành.",
-      "invalid_form": "Xác thực thất bại ở {form}"
+      "invalid_form": "Xác thực thất bại ở {form}",
+      "exceed_budget": "Vượt quá ngân sách dự án"
     },
     "form_ref": {
       "planning_info": "Thông tin kế hoạch",

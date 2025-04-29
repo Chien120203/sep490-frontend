@@ -4,7 +4,7 @@
     <SingleOptionSelect
         class="select-item"
         :defaultList="selectedRow"
-        :optionKeys="{ id: 'index', value: 'workName' }"
+        :optionKeys="{ id: 'id', value: 'workName' }"
         :listData="progressDtls.progressItems"
         :isRemote="true"
         :showClearable="true"
@@ -33,7 +33,7 @@
             <h3>{{ selectedTask.workName ?? "-" }}</h3>
           </div>
           <div class="el-collapse-item-header-icon">
-            <IconCircleClose class="close-icon" :width="15" :height="15" @click="handleDeleteLog(selectedTask.index)"/>
+            <IconCircleClose class="close-icon" :width="15" :height="15" @click="handleDeleteLog(selectedTask.id)"/>
           </div>
         </div>
         <div>
@@ -52,7 +52,7 @@
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.0.workAmount`">
-              <el-input-number style="width: 100%" v-model.number="listWorkAmount[0].workAmount" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
+              <el-input-number disabled style="width: 100%" v-model.number="listWorkAmount[0].workAmount" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng còn lại" prop="remaining">
@@ -75,7 +75,6 @@
               :selectData="getListResourcesByType(selectedTask, MATERIAL_TYPE)"
               :optionKeys="materialOptionKeys"
               :isExport="true"
-              @remove-resource="handleRemoveResource"
           />
         </el-collapse-item>
 
@@ -93,7 +92,6 @@
               :selectData="getListResourcesByType(selectedTask, HUMAN_TYPE)"
               :optionKeys="userOptionKeys"
               :isExport="false"
-              @remove-resource="handleRemoveResource"
           />
         </el-collapse-item>
 
@@ -111,7 +109,6 @@
               :selectData="getListResourcesByType(selectedTask, MACHINE_TYPE)"
               :optionKeys="vehicleOptionKeys"
               :isExport="false"
-              @remove-resource="handleRemoveResource"
           />
         </el-collapse-item>
       </el-collapse>
@@ -132,6 +129,10 @@ const props = defineProps({
     default: () => ({})
   },
   progressDtls: {
+    type: Object,
+    default: () => ({})
+  },
+  inspectionReportDetails: {
     type: Object,
     default: () => ({})
   },
@@ -164,13 +165,15 @@ const listWorkAmount = ref([{ workAmount: 0 }]);
 
 const selectedTask = computed(() => {
   if (!selectedRow.value) return null;
-  return props.progressDtls.progressItems.find(task => task.index === selectedRow.value);
+  return props.progressDtls.progressItems.find(task => task.id === selectedRow.value);
 });
 
 const handleSelectTask = (id) => {
   selectedRow.value = id;
-  // Reset work amount mỗi khi chọn task mới
-  listWorkAmount.value = [{ workAmount: 0 }];
+  let selectedItem = props.progressDtls.progressItems.find(task => task.id === id);
+  props.inspectionReportDetails.progressId = id;
+  props.inspectionReportDetails.planId = props.progressDtls.planId;
+  listWorkAmount.value = [{ workAmount: selectedItem.usedQuantity }];
 };
 
 const getListResourcesByType = (task, type) =>
@@ -186,10 +189,6 @@ const handleDeleteLog = (index) => {
   selectedRow.value = null;
   listWorkAmount.value = [{ workAmount: 0 }];
   emit("remove-task", index);
-};
-
-const handleRemoveResource = (data) => {
-  emit("remove-resource", data);
 };
 
 const handleSearch = (value) => {

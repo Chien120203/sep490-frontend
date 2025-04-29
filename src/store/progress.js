@@ -32,17 +32,58 @@ export const useProgressStore = defineStore(
       );
     }
 
+    // const convertProgressToTasks = (progressItems) => {
+    //   progressItems.forEach((item) => {
+    //     if (item.itemRelations) {
+    //       Object.entries(item.itemRelations).forEach(([relatedIndex, relation]) => {
+    //         const relatedTask = progressItems.find(t => t.index === relatedIndex);
+    //         if (relatedTask) {
+    //           const newRelation = `${item.index.toString().trim()}${relation.toString().trim()}`;
+    //           if (!relatedTask.predecessor) {
+    //             relatedTask.predecessor = newRelation;
+    //           } else {
+    //             relatedTask.predecessor += `,${newRelation}`;
+    //           }
+    //         }
+    //       });
+    //     }
+    //   });
+    //
+    //   return progressItems;
+    // };
+
     const convertProgressToTasks = (progressItems) => {
+      // First, map indexes to items for quick lookup
+      const indexMap = new Map();
+      progressItems.forEach(item => {
+        indexMap.set(item.index, item);
+      });
+
+      // Iterate to set parentId based on parentIndex
+      progressItems.forEach(item => {
+        if (item.parentIndex) {
+          const parentItem = indexMap.get(item.parentIndex);
+          item.parentId = parentItem ? parentItem.id : null;
+        } else {
+          item.parentId = null;
+        }
+      });
+
+      // Iterate to handle itemRelations and set unique predecessors using item.id
       progressItems.forEach((item) => {
         if (item.itemRelations) {
           Object.entries(item.itemRelations).forEach(([relatedIndex, relation]) => {
-            const relatedTask = progressItems.find(t => t.index === relatedIndex);
+            const relatedTask = indexMap.get(relatedIndex);
             if (relatedTask) {
-              const newRelation = `${item.index.toString().trim()}${relation.toString().trim()}`;
+              const newRelation = `${item.id.toString().trim()}${relation.toString().trim()}`;
               if (!relatedTask.predecessor) {
                 relatedTask.predecessor = newRelation;
               } else {
-                relatedTask.predecessor += `,${newRelation}`;
+                // Split and check for duplicates before adding
+                const existing = new Set(relatedTask.predecessor.split(','));
+                if (!existing.has(newRelation)) {
+                  relatedTask.predecessor += `,${newRelation}`;
+                }
               }
             }
           });

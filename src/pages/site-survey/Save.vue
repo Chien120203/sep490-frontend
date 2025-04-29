@@ -191,7 +191,6 @@ import {useProjectStore} from "@/store/project.js";
 export default {
   components: {FileUpload, IconBackMain},
   setup() {
-    const {t} = useI18n();
     const SURVEY_RULES = getSiteSurveyRules();
     const siteSurveyStore = useSiteSurveyStore();
     const persistenceStore = usePersistenceStore();

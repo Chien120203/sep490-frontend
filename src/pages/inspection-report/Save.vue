@@ -135,6 +135,9 @@ const formInspectionReportRef = ref(null);
 
 const submitForm = async () => {
   inspectionReportDetails.value.projectId = projectId.value;
+  if(route.params.id) {
+    await saveInspectionReport(inspectionReportDetails.value);
+  } else
   await saveInspectionReport(inspectionReportDetails.value);
 }
 </script>
