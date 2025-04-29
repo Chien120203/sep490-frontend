@@ -13,7 +13,25 @@ export const useProgressStore = defineStore(
       value: {}
     });
     const selectedProgressItem = reactive({
-      value: {},
+      value: {
+        progressId: 0,
+        workCode: "",
+        index: "",
+        parentIndex: "",
+        workName: "",
+        unit: "",
+        quantity: 0.01,
+        unitPrice: 0,
+        totalPrice: 0,
+        progress: 100,
+        status: 0,
+        planStartDate: "",
+        planEndDate: "",
+        actualStartDate: "",
+        actualEndDate: "",
+        usedQuantity: 0,
+        itemRelations: {}
+      },
     })
     const getProgressDetails = async (projectId, isLoading) => {
       if(isLoading) mixinMethods.startLoading();

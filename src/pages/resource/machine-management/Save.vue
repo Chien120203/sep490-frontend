@@ -171,16 +171,6 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="image" class="input-item" :label="$t('resource.machine.details.images')">
-              <ImageUpload
-                  :disabled="!allowEdit"
-                  :fileLimit="1"
-                  :allowedTypes="'.jpg,.png,.pdf,.docx'"
-                  @file-selected="handleSelectFiles"
-                  @file-removed="handleRemoveFile"
-              />
-            </el-form-item>
-
             <el-form-item prop="attachments" :label="$t('resource.machine.details.attachments')">
               <FileUpload
                   :disabled="!allowEdit"
@@ -285,15 +275,6 @@ export default {
     const handleFileUpload = (files) => {
       machineResourcesDetails.value.attachment = files;
     };
-
-    const handleSelectFiles = (listFiles) => {
-      machineResourcesDetails.value.image = [listFiles[0].raw];
-    };
-
-    const handleRemoveFile = (file) => {
-      machineResourcesDetails.value.image = machineResourcesDetails.value.filter((f) => f.uid !== file.uid);
-    };
-
     return {
       ruleFormRef,
       machineResourcesDetails,
@@ -304,8 +285,6 @@ export default {
       handleBack,
       submitForm,
       handleFileUpload,
-      handleSelectFiles,
-      handleRemoveFile,
       statusOptions,
       fuelUnitOptions,
       constructionEmployees

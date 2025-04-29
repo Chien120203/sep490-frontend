@@ -1,6 +1,6 @@
 import {useI18n} from "vue-i18n";
 import {
-  MAX_CHARACTER, MAX_NUMBER, MAX_PRICE, MIN_NUMBER, MIN_PRICE,
+  MAX_NUMBER, MAX_PRICE, MIN_NUMBER, MIN_PRICE,
 } from "@/constants/application.js";
 import {
   validateChooseDateRelation,
@@ -9,27 +9,16 @@ import {
   validateChooseTypeRelation,
   validateDateBetween
 } from "@/rules/validation/validation.js";
-import {usePlanningStore} from "@/store/planning.js";
-import {MAX_TAX, MIN_TAX} from "@/constants/contract.js";
-import {useContractStore} from "@/store/contract.js";
 import {useProgressStore} from "@/store/progress.js";
 
 export const getProgressRules = () => {
   const progressStore = useProgressStore();
   const {selectedProgressItem, progressDetails} = progressStore;
+  const getParentTask = (index) => {
+    return progressDetails.value.progressItems.find(item => item.index === index) || null;
+  }
   const {t} = useI18n();
   return {
-    planName: [
-      {required: true, message: t("E-CM-002"), trigger: "blur"},
-      {
-        max: MAX_CHARACTER,
-        message: t("E-CM-003", {max: MAX_CHARACTER}),
-        trigger: "blur",
-      },
-    ],
-    selectedFollowers: [
-      {required: true, message: t("E-CM-002"), trigger: "blur"}
-    ],
     workName: [
       { required: true, message: t("E-CM-002"), trigger: 'blur' }
     ],
@@ -68,7 +57,7 @@ export const getProgressRules = () => {
         trigger: "blur",
       }
     ],
-    startDate: [
+    planStartDate: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
@@ -82,16 +71,21 @@ export const getProgressRules = () => {
       },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, selectedProgressItem.value.planEndDate, value, "E-CM-032"),
+          validateChooseDateRelation(rule, value, callback, selectedProgressItem.value, progressDetails.value.progressItems, false),
         trigger: "blur",
       },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback,  value, selectedProgressItem.value.planEndDate, "E-CM-035"),
+          validateStartBeforeEnd(rule, value, callback, getParentTask(selectedProgressItem.value.parentIndex)?.planStartDate, value, "E-CM-032"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback,  value, getParentTask(selectedProgressItem.value.parentIndex)?.planEndDate, "E-CM-035"),
         trigger: "blur",
       }
     ],
-    endDate: [
+    planEndDate: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
@@ -105,19 +99,19 @@ export const getProgressRules = () => {
       },
       {
         validator: (rule, value, callback) =>
-          validateChooseDateRelation(rule, value, callback, selectedProgressItem.value, progressDetails.value),
+          validateChooseDateRelation(rule, value, callback, selectedProgressItem.value, progressDetails.value.progressItems, false),
         trigger: "blur",
       },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, value, selectedProgressItem.value.planEndDate, "E-CM-033"),
+          validateStartBeforeEnd(rule, value, callback, value, getParentTask(selectedProgressItem.value.parentIndex)?.planEndDate, "E-CM-033"),
         trigger: "blur",
       }
     ],
     dependency: [
       {
         validator: (rule, value, callback) =>
-          validateChooseTypeRelation(rule, value, callback, selectedProgressItem.value, progressDetails.value),
+          validateChooseTypeRelation(rule, value, callback, selectedProgressItem.value, progressDetails.value.progressItems, false),
         trigger: "change",
       }
     ],

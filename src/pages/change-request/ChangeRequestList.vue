@@ -93,16 +93,6 @@
         :message="title"
         :title="$t('mobilization.modal_confirm.title')"
     />
-    <ChangeRequestModal
-        :show="isShowModalSave"
-        :materials="listMaterialResources.value"
-        :vehicles="listMachineResources.value"
-        :users="listHumanResources.value"
-        :data="changeRequestDetails.value"
-        @close="handleDisplayModalSave"
-        @search="handleSearch"
-        @submit="saveChangeRequest"
-    />
   </div>
 </template>
 <script setup>
@@ -127,7 +117,6 @@ import {useRouter} from "vue-router";
 import {CHANGE_REQUEST_STATUSES} from "@/constants/change-request.js";
 import ChangeRequestTable from "@/pages/change-request/item/ChangeRequestTable.vue";
 import {useChangeRequestStore} from "@/store/change-request.js";
-import ChangeRequestModal from "@/pages/change-request/item/modal/ChangeRequestModal.vue";
 
 const persist = usePersistenceStore();
 const changeRequestStore = useChangeRequestStore();
