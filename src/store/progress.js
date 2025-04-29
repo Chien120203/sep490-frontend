@@ -3,11 +3,14 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export const useProgressStore = defineStore(
   "progress",
   () => {
     const {t} = useI18n();
+    const persist = usePersistenceStore();
+    const { projectId } = persist;
     const validation = reactive({value: {}});
     const progressDetails = reactive({
       value: {}
@@ -50,26 +53,6 @@ export const useProgressStore = defineStore(
       );
     }
 
-    // const convertProgressToTasks = (progressItems) => {
-    //   progressItems.forEach((item) => {
-    //     if (item.itemRelations) {
-    //       Object.entries(item.itemRelations).forEach(([relatedIndex, relation]) => {
-    //         const relatedTask = progressItems.find(t => t.index === relatedIndex);
-    //         if (relatedTask) {
-    //           const newRelation = `${item.index.toString().trim()}${relation.toString().trim()}`;
-    //           if (!relatedTask.predecessor) {
-    //             relatedTask.predecessor = newRelation;
-    //           } else {
-    //             relatedTask.predecessor += `,${newRelation}`;
-    //           }
-    //         }
-    //       });
-    //     }
-    //   });
-    //
-    //   return progressItems;
-    // };
-
     const convertProgressToTasks = (progressItems) => {
       // First, map indexes to items for quick lookup
       const indexMap = new Map();
@@ -111,10 +94,29 @@ export const useProgressStore = defineStore(
       return progressItems;
     };
 
+    const saveProgressItem = async (params) => {
+      mixinMethods.startLoading();
+      await services.ProgressAPI.saveItem(
+        params,
+        (response) => {
+          getProgressDetails(projectId.value);
+          validation.value = [];
+          mixinMethods.notifySuccess(t("response.message.save_progress_item_success"));
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+          mixinMethods.notifyError(t("response.message.save_progress_item_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
     return {
       validation,
       progressDetails,
       selectedProgressItem,
+      saveProgressItem,
       getProgressDetails,
       convertProgressToTasks
     };

@@ -11,4 +11,6 @@ export const PROGRESS_STATUS = [
   'progress.status.completed',
   'progress.status.paused',
   'progress.status.canceled',
-]
+];
+
+export const STATUS_NOT_START = 0;

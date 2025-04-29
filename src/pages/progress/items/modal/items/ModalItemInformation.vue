@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="hover" class="task-card">
-    <el-form :model="formTask" label-position="top" label-width="auto">
+    <el-form :rules="rules" :model="formTask" label-position="top" label-width="auto">
       <el-row :gutter="20" class="task-details">
         <el-col :span="12">
           <el-form-item label="Mã công việc">
@@ -22,12 +22,12 @@
 
         <el-col :span="12">
           <el-form-item label="Ngày bắt đầu kế hoạch">
-            <el-date-picker disabled style="width: 100%" v-model="formTask.planStartDate" type="date"
+            <el-date-picker :disabled="!allowEditRelation" style="width: 100%" v-model="formTask.planStartDate" type="date"
                             placeholder="Chọn ngày"/>
           </el-form-item>
 
           <el-form-item label="Ngày kết thúc kế hoạch">
-            <el-date-picker disabled style="width: 100%" v-model="formTask.planEndDate" type="date"
+            <el-date-picker :disabled="!allowEditRelation" style="width: 100%" v-model="formTask.planEndDate" type="date"
                             placeholder="Chọn ngày"/>
           </el-form-item>
 
@@ -56,6 +56,14 @@ const props = defineProps({
   task: {
     type: Object,
     required: true
+  },
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
+  allowEditRelation: {
+    type: Boolean,
+    default: false
   }
 });
 

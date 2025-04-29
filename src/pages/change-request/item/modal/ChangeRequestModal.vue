@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw} from "vue";
+import {ref, defineProps, defineEmits} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import DependencyTaskTable from "@/pages/change-request/item/modal/items/DependencyTaskTable.vue";
 import {useI18n} from "vue-i18n";

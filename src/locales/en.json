@@ -320,7 +320,9 @@
       "save_construct_log_success": "Save construct log success",
       "get_construct_log_failed": "Get construct log list failed",
       "get_construct_log_dtls_failed": "Get construct log details failed",
-      "get_logs_by_task_failed": "Get logs by task failed"
+      "get_logs_by_task_failed": "Get logs by task failed",
+      "save_progress_item_success": "Save progress item success",
+      "save_progress_item_failed": "Save progress item failed"
     }
   },
   "contract": {

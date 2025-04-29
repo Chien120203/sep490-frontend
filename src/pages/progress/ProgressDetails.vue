@@ -27,6 +27,7 @@ const constructLogStore = useConstructLog();
 const {
   progressDetails,
   selectedProgressItem,
+  saveProgressItem,
   getProgressDetails
 } = progressStore;
 
@@ -41,12 +42,7 @@ const {
 const progressItem = ref(null);
 const isShowModal = ref(false);
 const isShowModalSave = ref(false);
-const changeRequestStore = useChangeRequestStore();
 const inventoryStore = useInventoryStore();
-const {
-  changeRequestDetails,
-  saveChangeRequest
-} =changeRequestStore;
 const {
   inventoryData,
   getListInventory
@@ -67,9 +63,23 @@ watch(
     { immediate: true, deep: true }
 )
 
+watch(
+    () => selectedProgressItem.value.parentIndex,
+    (newVal) => {
+      if(newVal) {
+        setTaskIndex();
+      }
+    },
+    { immediate: true, deep: true }
+)
+
 onMounted(() => {
   getProgressDetails(projectId.value, true);
 });
+
+const setTaskIndex = () => {
+
+}
 
 const materials = computed(() => {
   return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
@@ -95,8 +105,9 @@ const handleEditProgressItem = (item) => {
   progressItem.value = item[0]?.taskData;
 }
 
-const handleAddAllocation = () => {
-
+const handleSaveProgressItem = () => {
+  isShowModalSave.value = false;
+  saveProgressItem(selectedProgressItem.value);
 }
 
 const handleAddTask = async () => {
@@ -130,7 +141,6 @@ const handleCloseModal = () => {
             :tasks="tasks"
             @handleSelectRow="handleEditProgressItem"
             @add-task="handleAddTask"
-            @add-allocation="handleAddAllocation"
         />
       </div>
     </div>
@@ -151,7 +161,7 @@ const handleCloseModal = () => {
         :rules="progressRules"
         :allowEdit="allowEdit"
         @close="handleDisplayModalSave"
-        @submit="saveChangeRequest"
+        @submit="handleSaveProgressItem"
     />
   </div>
 </template>

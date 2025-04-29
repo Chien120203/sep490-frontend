@@ -11,21 +11,24 @@
     </template>
     <template #body>
       <div>
-        <ModalItemInformation :task="progressDetails"/>
+        <ModalItemInformation :rules="progressRules" :allowEditRelation="allowEditRelation" :task="progressDetails"/>
       </div>
       <div style="display: flex">
-        <ModalItemProgressDetails :listTasks="progressItems" :task="progressDetails" :listLogsByTask="listLogsByTask" style="width: 100%"/>
+        <ModalItemProgressDetails :rules="progressRules" :allowEditRelation="allowEditRelation" :listTasks="progressItems" :task="progressDetails" :listLogsByTask="listLogsByTask" style="width: 100%"/>
       </div>
     </template>
   </Modal>
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits} from "vue";
+import {ref, defineProps, defineEmits, computed} from "vue";
 import {useI18n} from "vue-i18n";
 import Modal from "@/components/common/Modal.vue";
 import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemInformation.vue";
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
+import {STATUS_NOT_START} from "@/constants/progress.js";
+import {TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {getProgressRules} from "@/rules/progress/index.js";
 
 const {t} = useI18n();
 const props = defineProps({
@@ -45,6 +48,27 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "submit"]);
 const selectedUsers = ref([]);
+const progressRules = getProgressRules();
+const allowEditRelation = computed(() => {
+  const details = props.progressDetails;
+  const role = localStorage.getItem("role");
+  if (!details || role !== TECHNICAL_MANAGER) return false;
+
+  // No itemRelations: just check own status
+  if (!details.itemRelations || Object.keys(details.itemRelations).length === 0) {
+    return details.status === STATUS_NOT_START;
+  }
+
+  // With itemRelations: check that all related tasks are STATUS_NOT_START
+  const relatedTasks = props.progressItems?.filter(task =>
+      Object.keys(details.itemRelations).includes(task.index)
+  );
+
+  const allRelationsNotStarted = relatedTasks?.every(task => task.status === STATUS_NOT_START);
+
+  return allRelationsNotStarted;
+});
+
 
 const handleSubmit = () => {
   emit("submit", selectedUsers.value);

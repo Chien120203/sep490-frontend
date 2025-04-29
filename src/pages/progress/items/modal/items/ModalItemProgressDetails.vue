@@ -17,8 +17,8 @@
         <div v-if="selectedTab === 'dependency'">
           <DependencyTaskTable
               ref="dependentFormRef"
-              :allowEdit="false"
-              :rules="PLANNING_RULES"
+              :allowEdit="allowEditRelation"
+              :rules="rules"
               :tasks="listTasks"
               :selectedRow="task"
           />
@@ -27,7 +27,7 @@
         <div v-if="selectedTab === 'material'">
           <ItemList
               ref="tableMaterialFormRef"
-              :rules="PLANNING_RULES"
+              :rules="rules"
               :allowEdit="false"
               :selectedRow="task"
               :selectData="listSelectedMaterials"
@@ -40,7 +40,7 @@
         <div v-if="selectedTab === 'employee'">
           <ItemList
               ref="tableHumanFormRef"
-              :rules="PLANNING_RULES"
+              :rules="rules"
               :is-human="true"
               :allowEdit="false"
               :selectedRow="task"
@@ -53,7 +53,7 @@
 
         <div v-if="selectedTab === 'machine'">
           <ItemList
-              ref="tableMachineFormRef" :rules="PLANNING_RULES"
+              ref="tableMachineFormRef" :rules="rules"
               :allowEdit="false"
               :selectData="listSelectedMachines"
               :selectedRow="task"
@@ -74,8 +74,6 @@ import StatisticTable from "@/pages/progress/items/modal/items/progress-details/
 import DependencyTaskTable from "@/pages/progress/items/modal/items/DependencyTaskTable.vue";
 import ItemList from "@/pages/progress/items/modal/items/ItemList.vue";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
-import {getPlanningRules} from "@/rules/planning/index.js";
-import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 import dayjs from "dayjs";
 import {usePersistenceStore} from "@/store/persistence.js";
 
@@ -88,25 +86,24 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
   listTasks: {
     type: Array,
     default: () => []
+  },
+  allowEditRelation: {
+    type: Boolean,
+    default: false
   }
 });
 const now = dayjs();
 
-const fromDate = now.startOf('month').format('YYYY-MM-DD');
-const toDate = now.endOf('month').format('YYYY-MM-DD');
 const persistenceStore = usePersistenceStore();
 const {
-  projectId
 } = persistenceStore;
-const searchForm = ref({
-  projectId: projectId.value,
-  taskIndex: props.task.index,
-  fromDate: fromDate,
-  toDate: toDate
-});
 const selectedTab = ref("statistic"); // Default tab
 
 //mock data
@@ -135,15 +132,11 @@ const listTabs =ref([
 const materialOptions = ref({id: "id", value: "materialName"});
 const userOptions = ref({id: "id", value: "teamName"});
 const vehicleOptions = ref({id: "id", value: "chassisNumber"});
-const title = ref('');
-
-const PLANNING_RULES = getPlanningRules();
 
 const getListResourceByType = (list, type) => {
   if (!Array.isArray(list)) return [];
   return list.filter(item => item.resourceType === type);
 };
-const allowEdit = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
 const listSelectedMachines = computed(() => getListResourceByType(props.task?.details, MACHINE_TYPE));
 const listSelectedMaterials = computed(() => getListResourceByType(props.task?.details, MATERIAL_TYPE));
 const listSelectedUsers = computed(() => getListResourceByType(props.task?.details, HUMAN_TYPE));
