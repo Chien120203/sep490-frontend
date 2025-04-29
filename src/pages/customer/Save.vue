@@ -88,13 +88,6 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="address" class="input-item" :label="$t('customer.details.address')">
-              <el-input v-model="customerDetails.value.address" type="text" />
-              <label class="error-feedback-customer" v-if="validation && validation.value.address">
-                {{ $t(validation.value.address) }}
-              </label>
-            </el-form-item>
-
             <el-form-item prop="directorName" class="input-item" :label="$t('customer.details.director_name')">
               <el-input v-model="customerDetails.value.directorName" type="text" />
               <label class="error-feedback-customer" v-if="validation && validation.value.directorName">

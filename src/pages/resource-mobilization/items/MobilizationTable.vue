@@ -48,7 +48,7 @@
 
       <template #default="scope">
         <span class="data-table mobilization-priority" :class="priorityClass(scope.row.priorityLevel)"
-        >{{ formatPriority(scope.row.priorityLevel) }}
+        >{{ $t(formatPriority(scope.row.priorityLevel)) }}
         </span>
       </template>
     </el-table-column>

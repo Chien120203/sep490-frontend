@@ -59,15 +59,6 @@
         <span class="data-table">{{ scope.row.taxCode ? scope.row.taxCode : "-"}} </span>
       </template>
     </el-table-column>
-    <el-table-column min-width="140">
-      <template #header>
-        <p v-html="$t('customer.table.header.address')"></p>
-      </template>
-
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.address ? scope.row.address : "-"}} </span>
-      </template>
-    </el-table-column>
     <el-table-column min-width="130">
       <template #header>
         <p v-html="$t('customer.table.header.email')"></p>

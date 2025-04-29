@@ -49,7 +49,7 @@
             :rules="USER_RULES"
             label-width="120px">
           <div class="form-grid">
-            <el-form-item :label="$t('profile.details.username')" required>
+            <el-form-item prop="username" :label="$t('profile.details.username')" required>
               <el-input v-model="userDetails.value.username"></el-input>
               <label
                   class="error-feedback-user"
@@ -57,7 +57,7 @@
               >{{ $t(validation.value.username) }}</label>
             </el-form-item>
 
-            <el-form-item :label="$t('profile.details.fullName')" required>
+            <el-form-item prop="fullName" :label="$t('profile.details.fullName')" required>
               <el-input v-model="userDetails.value.fullName"></el-input>
               <label
                   class="error-feedback-user"
@@ -65,7 +65,7 @@
               >{{ $t(validation.value.fullName) }}</label>
             </el-form-item>
 
-            <el-form-item :label="$t('profile.details.email')">
+            <el-form-item prop="email" :label="$t('profile.details.email')">
               <el-input v-model="userDetails.value.email" type="email"></el-input>
               <label
                   class="error-feedback-user"
@@ -73,7 +73,7 @@
               >{{ $t(validation.value.email) }}</label>
             </el-form-item>
 
-            <el-form-item :label="$t('profile.details.phone')">
+            <el-form-item prop="phone" :label="$t('profile.details.phone')">
               <el-input v-model="userDetails.value.phone"></el-input>
               <label
                   class="error-feedback-user"
@@ -81,7 +81,7 @@
               >{{ $t(validation.value.phone) }}</label>
             </el-form-item>
 
-            <el-form-item :label="$t('profile.details.gender')">
+            <el-form-item prop="gender" :label="$t('profile.details.gender')">
               <el-select v-model="userDetails.value.gender">
                 <el-option label="Male" :value="true"></el-option>
                 <el-option label="Female" :value="false"></el-option>
@@ -104,13 +104,6 @@
               >{{ $t(validation.value.dob) }}</label>
             </el-form-item>
 
-            <el-form-item :label="$t('profile.details.address')">
-              <el-input v-model="userDetails.value.address"></el-input>
-              <label
-                  class="error-feedback-user"
-                  v-if="validation && validation.value.address"
-              >{{ $t(validation.value.address) }}</label>
-            </el-form-item>
           </div>
         </el-form>
       </div>

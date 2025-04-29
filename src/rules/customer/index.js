@@ -64,13 +64,6 @@ export const CUSTOMER_RULES = {
       trigger: "change",
     },
   ],
-  address: [
-    {
-      max: MAX_CHARACTER,
-      message: i18n.global.t("E-CM-003", { max: MAX_CHARACTER }),
-      trigger: "change",
-    },
-  ],
   directorName: [
     {
       max: MAX_CHARACTER,

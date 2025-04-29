@@ -4,17 +4,19 @@
       <span>{{ dayjs(dateRange.fromDate).format('MMMM YYYY') }}</span>
       <el-button-group>
         <el-button size="small" @click="selectDate('prev-year')">
-          Previous Year
+          {{ $t('construct_log.log_table.previous_year') }}
         </el-button>
         <el-button size="small" @click="selectDate('prev-month')">
-          Previous Month
+          {{ $t('construct_log.log_table.previous_month') }}
         </el-button>
-        <el-button size="small" @click="selectDate('today')">Today</el-button>
+        <el-button size="small" @click="selectDate('today')">
+          {{ $t('construct_log.log_table.today') }}
+        </el-button>
         <el-button size="small" @click="selectDate('next-month')">
-          Next Month
+          {{ $t('construct_log.log_table.next_month') }}
         </el-button>
         <el-button size="small" @click="selectDate('next-year')">
-          Next Year
+          {{ $t('construct_log.log_table.next_year') }}
         </el-button>
       </el-button-group>
     </template>

@@ -24,7 +24,7 @@ export const useUserStore = defineStore(
         fullName: "",
         phone: "",
         gender: "",
-        dob: ""
+        dob: "",
       }
     });
     const userProfileDetails = reactive({
@@ -143,7 +143,6 @@ export const useUserStore = defineStore(
         fullName: "",
         phone: "",
         gender: "",
-        address: "",
         dob: ""
       };
     };
@@ -156,7 +155,6 @@ export const useUserStore = defineStore(
         phone: params.phone,
         gender: params.gender,
         dob: params.dob,
-        address: params.address,
         picProfile: params.picProfile?.[0]?.raw ? [params.picProfile[0].raw] : []
       }
       const formData = mixinMethods.createFormData(data);
