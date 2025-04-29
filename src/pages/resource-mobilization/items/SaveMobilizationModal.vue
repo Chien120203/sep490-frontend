@@ -21,7 +21,7 @@
         </label>
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
-          <el-tab-pane label="Tài nguyên" name="materials">
+          <el-tab-pane :label="$t('mobilization.table.header.material')" name="materials">
             <ItemList
                 :selectData="materials"
                 :resourceType="RESOURCE_TYPE_MATERIALS"
@@ -34,7 +34,7 @@
           </el-tab-pane>
 
           <!-- Nhân lực -->
-          <el-tab-pane label="Nhân lực" name="users">
+          <el-tab-pane :label="$t('mobilization.table.header.human')" name="users">
             <ItemList
                 :selectData="users"
                 :resourceType="RESOURCE_TYPE_USERS"
@@ -47,7 +47,7 @@
           </el-tab-pane>
 
           <!-- Phương tiện -->
-          <el-tab-pane label="Phương tiện" name="vehicles">
+          <el-tab-pane :label="$t('mobilization.table.header.vehicle')" name="vehicles">
             <ItemList
                 :selectData="vehicles"
                 :resourceType="RESOURCE_TYPE_VEHICLES"

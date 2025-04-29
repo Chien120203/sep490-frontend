@@ -12,9 +12,9 @@ export const STATUSES = [
 ];
 
 export const PRIORITIES = [
-  "Low",
-  "Medium",
-  "High",
+  "mobilization.modal.priority_level.low",
+  "mobilization.modal.priority_level.medium",
+  "mobilization.modal.priority_level.high",
 ];
 
 export const REQUEST_TYPE_SUPPLY_MORE = 1;

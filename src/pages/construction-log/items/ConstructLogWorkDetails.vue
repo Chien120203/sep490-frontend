@@ -156,10 +156,10 @@ const materialOptionKeys = ref({id: "id", value: "name"});
 const userOptionKeys = ref({id: "id", value: "name"});
 const vehicleOptionKeys = ref({id: "id", value: "name"});
 const selectedRow = ref(null);
-const machineForm = ref(null);
-const materialForm = ref(null);
-const humanForm = ref(null);
-const workAmountForm = ref(null);
+const machineForm = ref([]);
+const materialForm = ref([]);
+const humanForm = ref([]);
+const workAmountForm = ref([]);
 defineExpose({
   machineForm,
   materialForm,

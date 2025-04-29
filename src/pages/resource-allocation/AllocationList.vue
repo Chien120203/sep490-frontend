@@ -40,7 +40,7 @@
     <!-- Table section -->
     <div class="mobilization-body-table">
       <el-tabs v-model="activeTab" @tab-click="handleTabChange">
-        <el-tab-pane label="From Current Project To Other" name="project">
+        <el-tab-pane :label="$t('allocation.type.project')" name="project">
           <AllocationTable
               :isFrom="true"
               :data="listAllocations.value"
@@ -54,7 +54,7 @@
           />
         </el-tab-pane>
 
-        <el-tab-pane label="Project To Task" name="project-to-task">
+        <el-tab-pane :label="$t('allocation.type.project_task')" name="project-to-task">
           <AllocationTable
               :isFrom="true"
               :data="listAllocations.value"
@@ -69,7 +69,7 @@
           />
         </el-tab-pane>
 
-        <el-tab-pane label="Task to Task" name="task">
+        <el-tab-pane :label="$t('allocation.type.task')" name="task">
           <AllocationTable
               :isFrom="true"
               :data="listAllocations.value"

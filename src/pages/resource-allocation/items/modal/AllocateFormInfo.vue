@@ -7,15 +7,15 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="Request Code">
+          <el-form-item :label="$t('mobilization.modal.code')">
             <el-input disabled v-model="data.requestCode" class="custom-input" />
           </el-form-item>
-          <el-form-item label="Request Name">
+          <el-form-item :label="$t('mobilization.modal.name')">
             <el-input :disabled="!allowEdit" v-model="data.requestName" class="custom-input" />
           </el-form-item>
 
           <!-- Allocation type radio buttons -->
-          <el-form-item label="Request Type" required>
+          <el-form-item :label="$t('mobilization.modal.type')" required>
             <el-select :disabled="!allowEdit" v-model="data.requestType">
               <el-option
                   v-for="request in ALLOCATION_REQUEST_TYPES"
@@ -28,7 +28,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === PROJECT_TO_PROJECT" label="Target Project">
+          <el-form-item v-if="data.requestType === PROJECT_TO_PROJECT" :label="$t('allocation.target_project')">
             <div class="select-project-container">
               <SingleOptionSelect
                   :isDisabled="!allowEdit"
@@ -43,7 +43,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === PROJECT_TO_TASK" label="Target Task">
+          <el-form-item v-if="data.requestType === PROJECT_TO_TASK" :label="$t('allocation.target_task')">
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.toTaskId"
@@ -58,7 +58,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === TASK_TO_TASK" label="From Task">
+          <el-form-item v-if="data.requestType === TASK_TO_TASK" :label="$t('allocation.from_task')">
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.fromTaskId"
@@ -73,7 +73,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === TASK_TO_TASK" label="To Task">
+          <el-form-item v-if="data.requestType === TASK_TO_TASK" :label="$t('allocation.to_task')">
             <div class="select-project-container">
               <SingleOptionSelect
                   v-model="data.toTaskId"
@@ -89,7 +89,7 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item label="Request Date" prop="requestDate">
+          <el-form-item :label="$t('mobilization.modal.date')" prop="requestDate">
             <el-date-picker
                 style="width: 96%"
                 disabled
@@ -100,18 +100,18 @@
             />
           </el-form-item>
 
-          <el-form-item label="Priority">
+          <el-form-item :label="$t('mobilization.modal.priority')">
             <el-select :disabled="!allowEdit" v-model="data.priorityLevel">
               <el-option
                   v-for="(status, index) in PRIORITIES"
                   :key="index"
-                  :label="status"
+                  :label="$t(status)"
                   :value="index"
               />
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Description">
+          <el-form-item :label="$t('mobilization.modal.description')">
             <el-input
                 :disabled="!allowEdit"
                 v-model="data.description"

@@ -70,7 +70,7 @@
 
       <template #default="scope">
         <span class="data-table allocation-priority" :class="priorityClass(scope.row.status)"
-        >{{ formatPriority(scope.row.priorityLevel) }}
+        >{{ $t(formatPriority(scope.row.priorityLevel)) }}
         </span>
       </template>
     </el-table-column>

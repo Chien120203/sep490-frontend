@@ -8,13 +8,13 @@
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="Request Code">
+          <el-form-item :label="$t('mobilization.modal.code')">
             <el-input disabled v-model="data.requestCode" class="custom-input" />
           </el-form-item>
-          <el-form-item label="Request Name">
+          <el-form-item :label="$t('mobilization.modal.name')">
             <el-input v-model="data.requestName" class="custom-input" />
           </el-form-item>
-          <el-form-item prop="requestDate" label="Request Date">
+          <el-form-item prop="requestDate" :label="$t('mobilization.modal.date')">
             <el-date-picker
                 style="width: 80%;"
                 :value-format="DATE_FORMAT"
@@ -30,7 +30,7 @@
         </el-col>
 
         <el-col :span="12">
-          <el-form-item prop="requestType" label="Request Type" required>
+          <el-form-item prop="requestType" :label="$t('mobilization.modal.type')" required>
             <el-select v-model="data.requestType">
               <el-option
                   v-for="request in MOBILIZE_REQUEST_TYPES"
@@ -44,19 +44,19 @@
               {{ $t(validation.requestType) }}
             </label>
           </el-form-item>
-          <el-form-item label="Priority">
+          <el-form-item :label="$t('mobilization.modal.priority')">
             <el-select v-model="data.priorityLevel">
               <el-option
                   v-for="(status, index) in PRIORITIES"
                   :key="index"
-                  :label="status"
+                  :label="$t(status)"
                   :value="index"
               >
               </el-option>
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Description">
+          <el-form-item :label="$t('mobilization.modal.description')">
             <el-input v-model="data.description" type="textarea" class="custom-input" />
           </el-form-item>
         </el-col>

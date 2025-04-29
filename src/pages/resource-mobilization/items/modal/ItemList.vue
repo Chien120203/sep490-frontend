@@ -75,7 +75,7 @@
         </el-table-column>
 
         <!-- Actions -->
-        <el-table-column label="Actions">
+        <el-table-column :label="$t('mobilization.modal.action')">
           <template #default="{ row }">
             <div>
               <button @click="handleRemoveResource(row.resourceId || row.tempId); $event.preventDefault()" class="btn-edit">

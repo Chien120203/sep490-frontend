@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
@@ -160,12 +160,14 @@ const submitForm = async () => {
     ...formLogDetailsRef.value?.workAmountForm,
     formLogInfoRef.value
   ];
-  console.log(constructLogDetails.value)
   for (const form of formRefs) {
     const isValid = await new Promise((resolve) => {
-      form.ruleFormRef.validate((valid) => resolve(valid));
+      if (form.ruleFormRef) {
+        form.ruleFormRef?.validate((valid) => resolve(valid));
+      } else {
+        form.validate((valid) => resolve(valid));
+      }
     });
-
     if (!isValid) {
       mixinMethods.notifyError(
           t("Failed")
