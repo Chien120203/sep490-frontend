@@ -18,13 +18,11 @@ export const useInspectionReportStore = defineStore(
     const inspectionReportDetails = reactive({
       value: {
         id: 0,
-        projectId: 0,
         inspectCode: "",
+        constructionProgressItemId: "",
         inspectorId: 0,
         inspectStartDate: "",
         inspectEndDate: "",
-        progressId: 0,
-        planId: 0,
         location: "",
         attachment: [],
         inspectionDecision: 0,

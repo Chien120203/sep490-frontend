@@ -171,8 +171,7 @@ const selectedTask = computed(() => {
 const handleSelectTask = (id) => {
   selectedRow.value = id;
   let selectedItem = props.progressDtls.progressItems.find(task => task.id === id);
-  props.inspectionReportDetails.progressId = id;
-  props.inspectionReportDetails.planId = props.progressDtls.planId;
+  props.inspectionReportDetails.constructionProgressItemId = id;
   listWorkAmount.value = [{ workAmount: selectedItem.usedQuantity }];
 };
 

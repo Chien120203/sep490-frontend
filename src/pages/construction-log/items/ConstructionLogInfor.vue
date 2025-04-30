@@ -1,6 +1,6 @@
 <template>
   <el-card class="construction-log">
-    <el-form label-position="top" :model="logDetails" ref="ruleFormRef" :rules="rules">
+    <el-form :disabled="!allowEdit" label-position="top" :model="logDetails" ref="ruleFormRef" :rules="rules">
       <el-form-item label="Ảnh thi công">
         <ImageUpload
             :fileLimit="3"
@@ -31,7 +31,7 @@
       </el-form-item>
 
       <el-form-item label="Trạng thái" required prop="status">
-        <el-select v-model="logDetails.status">
+        <el-select disabled v-model="logDetails.status">
           <el-option
               v-for="(label, index) in LIST_LOG_STATUSES"
               :key="index"
@@ -112,6 +112,10 @@ const props = defineProps({
     type: Object,
     default: () => {
     }
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false,
   }
 });
 const timesOfDay = ref(["Sáng", "Chiều", "Tối", "Đêm"]);

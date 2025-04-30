@@ -149,6 +149,11 @@ export default {
             if(role.value === EXECUTIVE_BOARD || role.value === TECHNICAL_MANAGER) {
               if(REQUEST_SIDEBAR.includes(newItem.function_page_name)) newItem.isShow = true;
             }
+            if(role.value === EXECUTIVE_BOARD) {
+              if(newItem.function_page_name === PAGE_NAME.INSPECTION_REPORT.LIST) {
+                newItem.isShow = true;
+              }
+            }
           }
 
           if (newItem.children) {

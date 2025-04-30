@@ -57,7 +57,7 @@
         <el-table-column prop="quantity" label="Số lượng">
           <template #default="{row, $index}">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input-number :min="0" :max="getResource(row.resourceId)?.usedQuantity - getResource(row.resourceId)?.usedQuantity" :disabled="isHuman" v-model.number="listAddedValues[$index].quantity"/>
+              <el-input-number :min="0" :max="getResource(row.resourceId)?.plannedQuantity - getResource(row.resourceId)?.usedQuantity" :disabled="isHuman" v-model.number="listAddedValues[$index].quantity"/>
             </el-form-item>
           </template>
         </el-table-column>
@@ -81,7 +81,7 @@
         <el-table-column prop="quantity" label="Còn lại">
           <template #default="scope">
             <el-form-item >
-              {{ (getResource(scope.row.resourceId)?.plannedQuantity - getResource(scope.row.resourceId)?.usedQuantity) || "-" }}
+              {{ (getResource(scope.row.resourceId)?.plannedQuantity - getResource(scope.row.resourceId)?.usedQuantity) - scope.row.quantity || "-" }}
             </el-form-item>
           </template>
         </el-table-column>

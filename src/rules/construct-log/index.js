@@ -79,7 +79,7 @@ export const getConstructLogRules = () => {
         validator: (rule, value, callback) => {
           const task = rule?.task;
           if(!value) return callback(new Error(t("E-CM-002")));
-          if (value > task.expectedAmount) {
+          if (value > task.quantity - task.usedQuantity) {
             return callback(new Error(t('E-LOG-002')));
           }
           callback();

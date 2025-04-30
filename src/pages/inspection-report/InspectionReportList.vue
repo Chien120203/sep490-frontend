@@ -75,6 +75,7 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import {useInspectionReportStore} from "@/store/inspection.js";
 import {QUALITY_ASSURANCE} from "@/constants/roles.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "InspectionReportList",
@@ -87,13 +88,13 @@ export default {
     LoadMore,
   },
   setup() {
-    const searchForms = ref({
-      keyword: "",
-      pageIndex: 1,
-    });
     const delete_id = ref();
     const router = useRouter();
     const inspectionStore = useInspectionReportStore();
+    const persist = usePersistenceStore();
+    const {
+      projectId
+    } = persist;
     const {
       validation,
       listInspectionReports,
@@ -103,6 +104,11 @@ export default {
       getListInspectionReport,
       handleDeleteInspectionReport,
     } = inspectionStore;
+    const searchForms = ref({
+      projectId: projectId.value ? projectId.value : "",
+      keyword: "",
+      pageIndex: 1,
+    });
     const isDisabled = ref(false);
     const allowEdit = computed(() => localStorage.getItem('role') === QUALITY_ASSURANCE);
     onMounted(() => {
