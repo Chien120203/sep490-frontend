@@ -14,3 +14,5 @@ export const PROGRESS_STATUS = [
 ];
 
 export const STATUS_NOT_START = 0;
+
+export const DONE_PROGRESS = 100;

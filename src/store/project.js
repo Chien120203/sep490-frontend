@@ -113,6 +113,27 @@ export const useProjectStore = defineStore(
       );
     };
 
+    const updateProjectStatus = async (projectId, status) => {
+      await mixinMethods.startLoading();
+      await services.ProjectAPI.updateStatus(
+        {
+          projectId: projectId,
+          targetStatus: status,
+          notes: ""
+        },
+        (response) => {
+          getProjectDetails(projectId);
+          mixinMethods.notifySuccess(t("common.success"));
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+          mixinMethods.notifyError(t("common.failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
     const getProjectDetails = async (id) => {
       mixinMethods.startLoading();
       await services.ProjectAPI.details(
@@ -188,6 +209,7 @@ export const useProjectStore = defineStore(
       chartData,
       isShowModalCreate,
       getProjectDetails,
+      updateProjectStatus,
       getProjectChart,
       saveProject,
       clearProjectDetails,

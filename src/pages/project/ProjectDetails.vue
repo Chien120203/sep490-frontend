@@ -127,6 +127,7 @@ export default {
       isShowModalConfirm,
       projectDetails,
       getProjectDetails,
+      updateProjectStatus,
       saveProject
     } = projectStore;
 
@@ -248,10 +249,11 @@ export default {
     }
 
     const handleConfirm = () => {
+      let status = null;
       if(actionText.value === t('common.approve')) {
-        projectDetails.value.status = PLANNING_STATUS;
-      } else projectDetails.value.status = CLOSED_STATUS;
-      saveProject(projectDetails.value);
+        status = PLANNING_STATUS;
+      } else status = CLOSED_STATUS;
+      updateProjectStatus(projectDetails.value.id, status);
       isShowModalConfirm.value = false;
     };
 
