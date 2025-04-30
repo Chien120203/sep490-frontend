@@ -28,6 +28,8 @@ const {
   progressDetails,
   selectedProgressItem,
   saveProgressItem,
+  updateItem,
+  clearSelectedProgressItem,
   getProgressDetails
 } = progressStore;
 
@@ -39,7 +41,6 @@ const {
   projectId
 } = persistenceStore;
 
-const progressItem = ref(null);
 const isShowModal = ref(false);
 const isShowModalSave = ref(false);
 const inventoryStore = useInventoryStore();
@@ -62,24 +63,39 @@ watch(
     },
     { immediate: true, deep: true }
 )
-
-watch(
-    () => selectedProgressItem.value.parentIndex,
-    (newVal) => {
-      if(newVal) {
-        setTaskIndex();
-      }
-    },
-    { immediate: true, deep: true }
-)
-
 onMounted(() => {
   getProgressDetails(projectId.value, true);
 });
 
 const setTaskIndex = () => {
+  const items = progressDetails.value.progressItems;
+  const parentIndex = selectedProgressItem.value.parentIndex;
 
-}
+  let newIndex;
+
+  if (!parentIndex) {
+    // Case 1: Top-level task (no parentIndex)
+    const topLevelTasks = items.filter(item => !item.parentIndex);
+    const maxTopIndex = topLevelTasks.reduce((max, item) => {
+      const idx = parseInt(item.index, 10);
+      return idx > max ? idx : max;
+    }, 0);
+    newIndex = (maxTopIndex + 1).toString();
+  } else {
+    // Case 2: Child task (has parentIndex)
+    const childTasks = items.filter(item => item.parentIndex === parentIndex);
+    const lastChildIndex = childTasks.reduce((max, item) => {
+      const parts = item.index.split('.');
+      const last = parseInt(parts[parts.length - 1], 10);
+      return last > max ? last : max;
+    }, 0);
+
+    newIndex = `${parentIndex}.${lastChildIndex + 1}`;
+  }
+
+  return newIndex;
+};
+
 
 const materials = computed(() => {
   return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
@@ -102,12 +118,32 @@ const listEmployees = computed(() => inventoryData.value.filter(item => item.res
 const handleEditProgressItem = (item) => {
   isShowModal.value = true;
   getListLogsByTask(projectId.value, item[0]?.taskData.index);
-  progressItem.value = item[0]?.taskData;
+  selectedProgressItem.value = item[0]?.taskData;
 }
 
-const handleSaveProgressItem = () => {
+const handleSaveProgressItem = async () => {
   isShowModalSave.value = false;
-  saveProgressItem(selectedProgressItem.value);
+  selectedProgressItem.value.index = await setTaskIndex();
+  selectedProgressItem.value.progressId = progressDetails.value.id;
+  await saveProgressItem(selectedProgressItem.value);
+  clearSelectedProgressItem();
+}
+
+const handleUpdateProgressItem = async () => {
+  let params = {
+    progressId: progressDetails.value.id,
+    progress: selectedProgressItem.value.progress,
+    id: selectedProgressItem.value.id,
+    status: selectedProgressItem.value.status,
+    planStartDate: selectedProgressItem.value.planStartDate,
+    planEndDate: selectedProgressItem.value.planEndDate,
+    actualStartDate: selectedProgressItem.value.actualStartDate,
+    actualEndDate: selectedProgressItem.value.actualEndDate,
+    itemRelations: selectedProgressItem.value.itemRelations,
+  }
+  await updateItem(params);
+  await clearSelectedProgressItem();
+  handleCloseModal();
 }
 
 const handleAddTask = async () => {
@@ -117,6 +153,7 @@ const handleAddTask = async () => {
 
 const handleDisplayModalSave = (show = false) => {
   isShowModalSave.value = show;
+  if(!show) clearSelectedProgressItem();
 }
 
 const handleCloseModal = () => {
@@ -146,10 +183,12 @@ const handleCloseModal = () => {
     </div>
     <ProgressDetailsModal
         :progressItems="progressDetails.value.progressItems"
-        :progressDetails="progressItem"
+        :progressDetails="selectedProgressItem.value"
+        :allowEdit="allowEdit"
         :listLogsByTask="listLogsByTask.value"
         :show="isShowModal"
         @close="handleCloseModal"
+        @submit="handleUpdateProgressItem"
     />
     <ChangeRequestModal
         :selectedRow="selectedProgressItem.value"

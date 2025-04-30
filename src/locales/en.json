@@ -1291,6 +1291,7 @@
       "parent_index": "Parent Index",
       "work_name": "Work Name",
       "quantity": "Quantity",
+      "total": "Total",
       "unit": "Unit",
       "unit_price": "Unit Price",
       "start_date": "Plan Start Date",

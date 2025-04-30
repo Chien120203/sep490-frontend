@@ -3,7 +3,7 @@
       :show="show"
       :width="'100%'"
       :containerHeight="'100%'"
-      :isShowFooter="false"
+      :isShowFooter="true"
       @close="$emit('close')"
   >
     <template #header>
@@ -15,6 +15,12 @@
       </div>
       <div style="display: flex">
         <ModalItemProgressDetails :rules="progressRules" :allowEditRelation="allowEditRelation" :listTasks="progressItems" :task="progressDetails" :listLogsByTask="listLogsByTask" style="width: 100%"/>
+      </div>
+    </template>
+    <template #footer>
+      <div class="modal-footer">
+        <el-button v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
+        <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
   </Modal>
@@ -40,6 +46,14 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  allowEdit: {
+    type: Boolean,
+    default: false
+  },
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
   progressItems: {
     type: Array,
     default: () => []
@@ -47,7 +61,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close", "submit"]);
-const selectedUsers = ref([]);
 const progressRules = getProgressRules();
 const allowEditRelation = computed(() => {
   const details = props.progressDetails;
@@ -64,14 +77,12 @@ const allowEditRelation = computed(() => {
       Object.keys(details.itemRelations).includes(task.index)
   );
 
-  const allRelationsNotStarted = relatedTasks?.every(task => task.status === STATUS_NOT_START);
-
-  return allRelationsNotStarted;
+  return relatedTasks?.every(task => task.status === STATUS_NOT_START);
 });
 
 
 const handleSubmit = () => {
-  emit("submit", selectedUsers.value);
+  emit("submit");
 };
 </script>
 

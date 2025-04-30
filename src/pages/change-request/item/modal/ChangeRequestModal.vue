@@ -118,8 +118,8 @@ const handleSubmit = async () => {
 
   console.log(props.selectedRow);
 
-  // emit("submit", props.selectedRow);
-  // emit("close");
+  emit("submit");
+  emit("close");
   activeTab.value = "tasks"
 };
 

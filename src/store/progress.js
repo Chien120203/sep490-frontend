@@ -23,10 +23,10 @@ export const useProgressStore = defineStore(
         parentIndex: "",
         workName: "",
         unit: "",
-        quantity: 0.01,
+        quantity: 0,
         unitPrice: 0,
         totalPrice: 0,
-        progress: 100,
+        progress: 0,
         status: 0,
         planStartDate: "",
         planEndDate: "",
@@ -112,13 +112,55 @@ export const useProgressStore = defineStore(
       );
     };
 
+    const updateItem = async (params) => {
+      mixinMethods.startLoading();
+      await services.ProgressAPI.updateItem(
+        params,
+        (response) => {
+          getProgressDetails(projectId.value);
+          validation.value = [];
+          mixinMethods.notifySuccess(t("response.message.save_progress_item_success"));
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+          mixinMethods.notifyError(t("response.message.save_progress_item_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const clearSelectedProgressItem = () => {
+      selectedProgressItem.value = {
+        progressId: 0,
+        workCode: "",
+        index: "",
+        parentIndex: "",
+        workName: "",
+        unit: "",
+        quantity: 0,
+        unitPrice: 0,
+        totalPrice: 0,
+        progress: 0,
+        status: 0,
+        planStartDate: "",
+        planEndDate: "",
+        actualStartDate: "",
+        actualEndDate: "",
+        usedQuantity: 0,
+        itemRelations: {}
+      }
+    }
+
     return {
       validation,
       progressDetails,
       selectedProgressItem,
+      updateItem,
       saveProgressItem,
       getProgressDetails,
-      convertProgressToTasks
+      convertProgressToTasks,
+      clearSelectedProgressItem
     };
   }
 );

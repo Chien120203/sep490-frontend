@@ -80,9 +80,9 @@
             />
           </el-form-item>
 
-          <el-form-item :label="$t('change_request.modal.unit_price')">
+          <el-form-item :label="$t('change_request.modal.total')">
             <el-input
-                v-model="total"
+                v-model="totalPrice"
                 :formatter="(value) => mixinMethods.formatInputMoney(value)"
                 :parser="(value) => mixinMethods.parseInputCurrency(value)"
                 class="custom-input"
@@ -140,10 +140,10 @@ watch(
     {immediate: true}
 );
 
-const total = computed(() => {
-  let totalPrice = props.selectedRow.unitPrice * props.selectedRow.quantity;
-  props.selectedRow.totalPrice = totalPrice;
-  return total;
+const totalPrice = computed(() => {
+  let value = props.selectedRow.unitPrice * props.selectedRow.quantity;
+  props.selectedRow.totalPrice = value;
+  return value;
 })
 
 defineExpose({
