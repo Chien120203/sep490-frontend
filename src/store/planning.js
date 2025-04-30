@@ -43,6 +43,8 @@ export const usePlanningStore = defineStore(
       }
     });
     const approveStatuses = reactive({value: []});
+    const isLocked = reactive({value: false});
+    const lockInfo = reactive({value: null});
     const taskPlanDetails = reactive({
       value: {
         id: 1,
@@ -234,6 +236,75 @@ export const usePlanningStore = defineStore(
       };
     }
 
+    const acquireLock = async (planId) => {
+      mixinMethods.startLoading();
+      await services.PlanningAPI.acquireLock(
+        { planId },
+        (response) => {
+          lockInfo.value = response.data;
+          isLocked.value = true;
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          if (error.responseCode === "E-CP-007") {
+            // Plan is locked by another user
+            checkLockStatus(planId);
+          } else {
+            mixinMethods.notifyError(t("response.message.acquire_lock_failed"));
+          }
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const releaseLock = async (planId) => {
+      if (!isLocked.value || !lockInfo.value) return;
+      
+      mixinMethods.startLoading();
+      await services.PlanningAPI.releaseLock(
+        { planId },
+        (response) => {
+          lockInfo.value = null;
+          isLocked.value = false;
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.release_lock_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const checkLockStatus = async (planId) => {
+      mixinMethods.startLoading();
+      await services.PlanningAPI.getLockStatus(
+        planId,
+        (response) => {
+          isLocked.value = response.data.locked;
+          lockInfo.value = response.data.lockInfo;
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.check_lock_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const extendLock = async (planId) => {
+      if (!isLocked.value || !lockInfo.value) return;
+      
+      await services.PlanningAPI.extendLock(
+        { planId },
+        (response) => {
+          lockInfo.value = response.data;
+        },
+        (error) => {
+          mixinMethods.notifyError(t("response.message.extend_lock_failed"));
+        }
+      );
+    };
+
     return {
       validation,
       listPlannings, // temporary
@@ -244,13 +315,19 @@ export const usePlanningStore = defineStore(
       approveStatuses,
       isShowModalConfirm,
       taskPlanDetails,
+      isLocked,
+      lockInfo,
       approvePlanning,
       rejectPlanning,
       clearPlanningDetails,
       handleDeletePlan,
+      savePlanning,
       getListPlannings,
       getPlanningDetails,
-      savePlanning
+      acquireLock,
+      releaseLock,
+      checkLockStatus,
+      extendLock
     };
   }
 );

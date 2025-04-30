@@ -14,12 +14,34 @@
           <div class="btn-container">
             <el-button v-if="allowApprove" style="height: 36px" type="success" @click="handleApprove()">{{ $t("common.approve") }}</el-button>
             <el-button v-if="allowReject" class="btn btn-refuse" @click="handleReject()">{{ $t("common.reject") }}</el-button>
-            <el-button :disabled="disableBtn" v-if="allowEdit" class="btn btn-save" @click="submitForm">
+            <el-button :disabled="disableBtn || !allowEdit || !isCurrentUserLock" v-if="allowEdit" class="btn btn-save" @click="submitForm">
               {{ $t("common.save") }}
             </el-button>
           </div>
         </div>
       </div>
+
+      <!-- Lock warning dialog -->
+      <el-dialog
+        v-model="showLockWarning"
+        title="Plan is being edited"
+        width="30%"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false"
+        :show-close="false"
+      >
+        <div>
+          <p>This plan is currently being edited by <strong>{{ lockInfo?.userName || 'another user' }}</strong> ({{ lockInfo?.userEmail }}).</p>
+          <p>You can view the plan but cannot make changes until they finish editing.</p>
+          <p v-if="lockInfo">Lock expires at: {{ formatLockTime(lockInfo.lockExpiresAt) }}</p>
+        </div>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="handleBack">Go Back</el-button>
+            <el-button type="primary" @click="showLockWarning = false">View in Read-Only Mode</el-button>
+          </span>
+        </template>
+      </el-dialog>
 
       <div>
         <!-- Title Navigation -->
@@ -33,7 +55,7 @@
         <div v-if="selectedTab === 'info'">
           <SelectionFilters
               ref="selectionFormRef"
-              :allowEdit="allowEdit"
+              :allowEdit="allowEdit && isCurrentUserLock"
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
               :contractDetails="contractDetails.value"
@@ -41,7 +63,7 @@
           />
           <PlanningDetails
               ref="detailsFormRef"
-              :allowEdit="allowEdit"
+              :allowEdit="allowEdit && isCurrentUserLock"
               :rules="PLANNING_RULES"
               :items="planningDetails.value.planItems"
               :isUpdate="isUpdate" @update:items="updateItems"
@@ -64,7 +86,7 @@
       :rules="PLANNING_RULES"
       :show="isShowModalItemDtls"
       :selectedRow="selectedRow"
-      :allowEdit="allowEdit"
+      :allowEdit="allowEdit && isCurrentUserLock"
       :tasks="planningDetails.value.planItems"
       :isUpdate="isUpdate"
       :materials="listMaterialResources.value"
@@ -77,7 +99,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import TitleNavigation from "@/components/common/TitleNavigation.vue";
@@ -116,6 +138,8 @@ const disableBtn = ref(false);
 const isUpdate = computed(() => !!route.params.id);
 const selectedRow = ref({});
 const PLANNING_RULES = getPlanningRules();
+const showLockWarning = ref(false);
+const heartbeatInterval = ref(null);
 
 const currentStep = ref(1);
 const activities = ref([]); // Placeholder for activity data
@@ -140,11 +164,17 @@ const {
   planningDetails,
   planSelectedRow,
   approveStatuses,
+  isLocked,
+  lockInfo,
   approvePlanning,
   rejectPlanning,
   clearPlanningDetails,
   getPlanningDetails,
   savePlanning,
+  acquireLock,
+  releaseLock,
+  checkLockStatus,
+  extendLock
 } = planningStore;
 const currentEmail = localStorage.getItem("email");
 const currentRole = localStorage.getItem("role");
@@ -184,6 +214,17 @@ const allowEdit = computed(() => {
   return false;
 });
 
+// Check if current user owns the lock
+const isCurrentUserLock = computed(() => {
+  if (!isLocked.value || !lockInfo.value) return true; // If not locked, user can edit
+  return lockInfo.value.isCurrentUserLock;
+});
+
+const formatLockTime = (dateTimeString) => {
+  if (!dateTimeString) return '';
+  const date = new Date(dateTimeString);
+  return date.toLocaleString();
+};
 
 const statuses = computed(() => {
 
@@ -213,6 +254,10 @@ const route = useRoute();
 const router = useRouter();
 
 onMounted(async () => {
+  // Add window event listeners for visibility changes
+  window.addEventListener('visibilitychange', handleVisibilityChange);
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  
   await getContractDetails(projectId.value);
   if (!route.params.id) {
     planningDetails.value.planItems = contractDetails.value.contractDetails.map(
@@ -220,11 +265,48 @@ onMounted(async () => {
     );
   } else {
     await getPlanningDetails(route.params.id);
+    
+    // Check if plan is locked and try to acquire lock
+    if (allowEdit.value) {
+      await checkLockStatus(route.params.id);
+      
+      if (isLocked.value && !isCurrentUserLock.value) {
+        // Show warning that plan is being edited
+        showLockWarning.value = true;
+      } else {
+        // Try to acquire the lock
+        await acquireLock(route.params.id);
+        
+        // Start the heartbeat to keep the lock active
+        startHeartbeat();
+      }
+    }
   }
   await getListHumanResources({pageIndex: 1}, false);
   await getListMachineResources({pageIndex: 1}, false);
   await getListMaterialResources({pageIndex: 1}, false);
 });
+
+// Watch for lock changes (can happen when acquiring a lock fails)
+watch(isLocked, (newValue) => {
+  if (newValue && !isCurrentUserLock.value) {
+    showLockWarning.value = true;
+  }
+});
+
+const startHeartbeat = () => {
+  // Clear any existing interval
+  if (heartbeatInterval.value) {
+    clearInterval(heartbeatInterval.value);
+  }
+  
+  // Set a new interval to extend the lock every 5 minutes
+  heartbeatInterval.value = setInterval(() => {
+    if (route.params.id && isLocked.value && isCurrentUserLock.value) {
+      extendLock(route.params.id);
+    }
+  }, 5 * 60 * 1000); // 5 minutes
+};
 
 const handleApprove = () => {
   allowReject.value = false;
@@ -239,10 +321,29 @@ const handleReject = () => {
 };
 
 onUnmounted(() => {
+  // Remove window event listeners
+  window.removeEventListener('visibilitychange', handleVisibilityChange);
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+  
   clearPlanningDetails();
+  
+  // Release the lock when leaving the page
+  if (route.params.id && isLocked.value && isCurrentUserLock.value) {
+    releaseLock(route.params.id);
+  }
+  
+  // Clear the heartbeat interval
+  if (heartbeatInterval.value) {
+    clearInterval(heartbeatInterval.value);
+  }
 });
 
 const handleBack = () => {
+  // Release the lock when navigating away
+  if (route.params.id && isLocked.value && isCurrentUserLock.value) {
+    releaseLock(route.params.id);
+  }
+  
   router.push({name: PAGE_NAME.PLANNING.LIST});
 };
 
@@ -327,6 +428,36 @@ const submitForm = async () => {
   }
   await savePlanning(payload, method);
 }
+
+// Handle visibility change (tab switching, minimizing browser)
+const handleVisibilityChange = () => {
+  if (document.hidden && route.params.id && isLocked.value && isCurrentUserLock.value) {
+    // Page is hidden, release the lock
+    releaseLock(route.params.id);
+  } else if (!document.hidden && route.params.id && allowEdit.value) {
+    // Page is visible again, try to reacquire the lock
+    checkLockStatus(route.params.id).then(() => {
+      if (!isLocked.value) {
+        acquireLock(route.params.id).then(() => {
+          if (isLocked.value && isCurrentUserLock.value) {
+            startHeartbeat();
+          }
+        });
+      } else if (!isCurrentUserLock.value) {
+        showLockWarning.value = true;
+      }
+    });
+  }
+};
+
+// Handle page unload (closing browser, refreshing page)
+const handleBeforeUnload = (event) => {
+  if (route.params.id && isLocked.value && isCurrentUserLock.value) {
+    // Try to release the lock before unloading
+    // This may not always work as the page might close before the API call completes
+    releaseLock(route.params.id);
+  }
+};
 </script>
 
 <style scoped>
