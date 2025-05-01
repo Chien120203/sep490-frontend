@@ -191,6 +191,7 @@ import PAGE_NAME from "@/constants/route-name.js";
 import { useUserStore } from "@/store/user.js";
 import {ADMIN, CONSTRUCTION_EMPLOYEE} from "@/constants/roles.js";
 import {AVAILABLE, MAINTAIN, UNAVAILABLE} from "@/constants/machine.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   components: { FileUpload, ImageUpload, IconBackMain, SingleOptionSelect },
@@ -211,6 +212,10 @@ export default {
       listUsers,
       getListUsers
     } = userStore;
+    const persist = usePersistenceStore();
+    const {
+      loggedIn
+    } = persist;
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
@@ -233,11 +238,13 @@ export default {
     ];
 
     onMounted(() => {
-      getListUsers({
-        keyWord: "",
-        pageIndex: 1,
-        pageSize: 100
-      });
+      if (loggedIn.value) {
+        getListUsers({
+          keyWord: "",
+          pageIndex: 1,
+          pageSize: 100
+        });
+      }
       if (isUpdate.value) {
         getMachineResourcesDetails(route.params.id);
       }

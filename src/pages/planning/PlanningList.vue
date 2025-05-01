@@ -71,7 +71,8 @@ const planningStore = usePlanningStore();
 
 const {
   projectId,
-  projectStatus
+  projectStatus,
+  loggedIn
 } = persistenceStore;
 
 const {
@@ -92,7 +93,9 @@ const searchForms = ref({
 });
 
 onMounted(() => {
-  getListPlannings(searchForms.value);
+  if (loggedIn.value) {
+    getListPlannings(searchForms.value);
+  }
 });
 
 const handleClear = () => {

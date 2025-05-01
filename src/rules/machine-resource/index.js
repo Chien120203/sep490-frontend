@@ -4,7 +4,6 @@ import {
     MAX_DESCRIPTION,
     MIN_NUMBER,
     MAX_NUMBER,
-    LICENSE_PLATE_PATTERN,
 } from "@/constants/application.js";
 import {validateMinMax} from "@/rules/validation/validation.js";
 
@@ -28,11 +27,6 @@ export const getMachineRules = () => {
             {
                 required: true,
                 message: t("E-MACH-001"), // Biển số là bắt buộc
-                trigger: "blur",
-            },
-            {
-                pattern: LICENSE_PLATE_PATTERN, // /^\d{2}[A-Z]-[A-Z0-9]{1,2}\s?\d{3,5}(\.\d{2})?$/
-                message: t("E-MACH-015"), // Định dạng biển số không hợp lệ
                 trigger: "blur",
             },
             {

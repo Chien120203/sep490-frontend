@@ -132,6 +132,7 @@ export default {
     const userStore = useUserStore();
     const persist = usePersistenceStore();
     const {
+      loggedIn,
       projectId
     } = persist;
     const {
@@ -147,7 +148,9 @@ export default {
 
     onMounted(() => {
       projectId.value = null;
-      getListUsers(searchForms.value);
+      if (loggedIn.value) {
+        getListUsers(searchForms.value);
+      }
     });
 
     onUnmounted(() => {

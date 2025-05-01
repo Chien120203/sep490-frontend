@@ -111,7 +111,7 @@
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
-import {CUSTOMER_RULES} from "@/rules/customer/index.js";
+import {getCustomerRules} from "@/rules/customer/index.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useI18n} from "vue-i18n";
 import {useCustomerStore} from "@/store/customer.js";
@@ -132,6 +132,8 @@ export default {
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
+
+    const CUSTOMER_RULES = getCustomerRules();
 
     onMounted(() => {
       if(isUpdate.value) {

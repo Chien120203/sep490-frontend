@@ -4,10 +4,13 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import userList from "@/pages/user/UserList.vue";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 export const useUserStore = defineStore(
   "user",
   () => {
+    const router = useRouter();
     const {t} = useI18n();
     const validation = reactive({value: {}});
     const loadingSaveButton = reactive({value: false});
@@ -101,6 +104,7 @@ export const useUserStore = defineStore(
           userDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.save_user_success"));
           mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.USER.LIST});
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);

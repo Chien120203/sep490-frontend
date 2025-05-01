@@ -4,6 +4,7 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import PAGE_NAME from "@/constants/route-name.js";
+import {RECEIVE_STATUS} from "@/constants/project.js";
 import {useRouter} from "vue-router";
 
 export const useProjectStore = defineStore(
@@ -39,7 +40,8 @@ export const useProjectStore = defineStore(
         resourceManager: "",
         attachments: [],
         description: "",
-        viewerUserIds: null
+        viewerUserIds: null,
+        status: RECEIVE_STATUS
       }
     });
     const chartData = reactive({
@@ -105,6 +107,7 @@ export const useProjectStore = defineStore(
           router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: response.data.id}});
           mixinMethods.notifySuccess(t("response.message.save_project_success"));
           mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.PROJECT.LIST});
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
@@ -197,7 +200,8 @@ export const useProjectStore = defineStore(
         resourceManager: "",
         attachment: "",
         description: "",
-        viewerUserIds: null
+        viewerUserIds: null,
+        status: RECEIVE_STATUS
       };
     };
 

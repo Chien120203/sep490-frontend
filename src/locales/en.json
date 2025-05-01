@@ -1372,6 +1372,7 @@
   "E-CUS-005": "Tax code is invalid",
   "E-CUS-006": "Fax number is invalid",
   "E-CUS-007": "Tax code is required",
+  "E-CUS-008": "Phone number is invalid",
 
   "E-USER-001": "User Name is required",
   "E-USER-002": "Email is required",

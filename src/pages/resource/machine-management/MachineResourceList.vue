@@ -75,6 +75,7 @@ import { ADMIN } from "@/constants/roles.js";
 import { useMachineResourcesStore } from "@/store/machine-resources.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "machineList",
@@ -91,6 +92,10 @@ export default {
       search: "",
       pageIndex: 1,
     });
+    const persist = usePersistenceStore();
+    const {
+      loggedIn
+    } = persist;
     const delete_id = ref();
     const router = useRouter();
     const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
@@ -107,7 +112,9 @@ export default {
     const isDisabled = ref(false);
 
     onMounted(() => {
-      getListMachineResources(searchForms.value);
+      if (loggedIn.value) {
+        getListMachineResources(searchForms.value);
+      }
     });
 
     onUnmounted(() => {

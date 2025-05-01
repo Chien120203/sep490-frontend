@@ -3,10 +3,13 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import {useRouter} from "vue-router";
+import PAGE_NAME from "@/constants/route-name.js";
 
 export const useCustomerStore = defineStore(
   "customer",
   () => {
+    const router = useRouter();
     const {t} = useI18n();
     const validation = reactive({value: {}});
     const isShowModalConfirm = reactive({value: false});
@@ -77,6 +80,7 @@ export const useCustomerStore = defineStore(
           mixinMethods.notifySuccess(t("response.message.save_customer_success"));
           validation.value = {};
           mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.CUSTOMER.LIST});
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
