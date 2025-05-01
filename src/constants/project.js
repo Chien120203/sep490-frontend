@@ -3,6 +3,8 @@ import PAGE_NAME from "@/constants/route-name.js";
 export const RECEIVE_STATUS = 0;
 export const PLANNING_STATUS = 1;
 export const IN_PROGRESS_STATUS = 2;
+export const COMPLETE = 3;
+export const WAIT_TO_COMPLETE = 4;
 export const CLOSED_STATUS = 5;
 
 export const STATUSES = [
@@ -10,6 +12,7 @@ export const STATUSES = [
   'Planning',
   'InProgress',
   'Completed',
+  'Waiting Approve To Complete',
   'Paused',
   'Closed'
 ];
@@ -19,6 +22,7 @@ export const STATUS_LABELS = [
   'project.statuses.planning',
   'project.statuses.in_progress',
   'project.statuses.complete',
+  'project.statuses.wait_to_complete',
   'project.statuses.paused',
   'project.statuses.close',
 ];

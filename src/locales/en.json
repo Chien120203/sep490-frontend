@@ -734,6 +734,7 @@
       "planning": "Planning",
       "in_progress": "In Progress",
       "complete": "Completed",
+      "wait_to_complete": "Wait for approval to complete",
       "paused": "Paused",
       "close": "Closed"
     },
