@@ -590,6 +590,7 @@
         "description": "Description",
         "retailPrice": "Retail Price",
         "inventory": "Inventory",
+        "roll_back": "Roll back",
         "expireDate": "Expire Date",
         "productionDate": "Production Date",
         "attachments": "Attachments"

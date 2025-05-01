@@ -133,6 +133,13 @@
                 {{ $t(validation.value.description) }}
               </label>
             </el-form-item>
+
+            <el-form-item class="input-item" :label="$t('resource.material.details.roll_back')">
+              <el-radio-group v-model="materialResourcesDetails.value.canRollBack">
+                <el-radio label="Có thể hoàn" :value="true"/>
+                <el-radio label="Không the hoàn" :value="false"/>
+              </el-radio-group>
+            </el-form-item>
           </div>
         </el-form>
       </div>

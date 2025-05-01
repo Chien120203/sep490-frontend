@@ -26,7 +26,7 @@
                 prop="keyWord"
             >
               <template #append>
-                <span @click="handleSearchForm" class="btn-setting">
+                <span @click="() => isShowBoxSearch = !isShowBoxSearch" class="btn-setting">
                   <IconSetting/>
                 </span>
               </template>
@@ -42,32 +42,20 @@
           >
         </div>
       </div>
-      <div class="form-search" :class="{ active: isShowBoxSearch }">
+      <div style="width: 75%" class="form-search" :class="{ active: isShowBoxSearch }">
         <div class="close-form">
           <IconCircleClose @click="isShowBoxSearch = false"/>
         </div>
         <div class="form-search-box">
           <div class="item">
-            <el-form-item :label="$t('project.customer')">
-<!--              <SingleOptionSelect-->
-<!--                  v-model="searchForms.customerId"-->
-<!--                  :optionKeys="{ id: 'id', value: 'customerCode' }"-->
-<!--                  :listData="listCustomers.value"-->
-<!--                  :isRemote="true"-->
-<!--                  :disabled="isDisabled"-->
-<!--                  @remoteSearch="handleSearchCustomer"-->
-<!--              />-->
-            </el-form-item>
-          </div>
-          <div class="item">
-            <el-form-item :label="$t('project.status')">
-              <el-select v-model="searchForms.status">
+            <el-form-item :label="$t('user.role')">
+              <el-select v-model="searchForms.role">
                 <el-option :label="$t('common.all')" value=""></el-option>
                 <el-option
-                    v-for="(status, index) in STATUSES"
+                    v-for="(role, index) in LIST_ROLES"
                     :key="index"
-                    :label="status"
-                    :value="index"
+                    :label="role"
+                    :value="role"
                 >
                 </el-option>
               </el-select>
@@ -111,14 +99,20 @@ import UserTable from "./item/UserTable.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
-import { ADMIN } from "@/constants/roles.js";
+import {ADMIN, ROLE_LABELS} from "@/constants/roles.js";
 import {useUserStore} from "@/store/user.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {LIST_ROLES} from "@/constants/roles.js";
 
 export default {
   name: "userList",
+  computed: {
+    ROLE_LABELS() {
+      return ROLE_LABELS
+    }
+  },
   components: {
     IconSetting,
     IconCircleClose,
@@ -133,6 +127,7 @@ export default {
       pageIndex: 1,
     });
     const delete_id = ref();
+    const isShowBoxSearch = ref(false);
     const router = useRouter();
     const userStore = useUserStore();
     const persist = usePersistenceStore();
@@ -161,9 +156,11 @@ export default {
 
     const handleClear = () => {
       searchForms.value.keyWord = "";
+      searchForms.value.role = "";
     };
 
     const submitForm = () => {
+      isShowBoxSearch.value = false;
       searchForms.value.pageIndex = 1;
       currentPage.value = 1;
       getListUsers(searchForms.value);
@@ -207,13 +204,15 @@ export default {
       searchForms,
       NUMBER_FORMAT,
       ADMIN,
-      isDisabled,
       TEXT_CONFIRM_DELETE,
+      LIST_ROLES,
+      isDisabled,
       validation,
       totalItems,
       listUsers,
       isShowModalConfirm,
       closeModalConfirm,
+      isShowBoxSearch,
       handleClear,
       submitForm,
       handleLoadMore,

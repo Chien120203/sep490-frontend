@@ -62,7 +62,12 @@
       </div>
       <div class="modal-footer">
         <el-button class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
-        <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t("common.cancel") }}</el-button>
+        <el-button v-if="allowApprove(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'approve'})" type="success" class="btn btn-save">
+          {{ $t("common.approve") }}
+        </el-button>
+        <el-button v-if="allowReject(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'reject'})" class="btn btn-refuse">
+          {{ $t("common.reject") }}
+        </el-button>
       </div>
     </template>
   </Modal>
@@ -80,6 +85,8 @@ import {
   RESOURCE_TYPE_USERS,
   REQUEST_TYPE_SUPPLY_MORE
 } from "@/constants/mobilization";
+import {MANAGER_APPROVED, WAIT_MANAGER_APPROVE} from "@/constants/allocation.js";
+import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -88,7 +95,7 @@ const props = defineProps({
   users: {type: Array, default: () => []},
   vehicles: {type: Array, default: () => []},
 });
-const emit = defineEmits(["close", "submit"]);
+const emit = defineEmits(["close", "submit", "changeStatus"]);
 const listSelectedVehicles = ref( []);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
@@ -111,6 +118,17 @@ const updateListVehicles = (listData) => {
 
 const handleSearch = (data) => {
   emit("search", data)
+}
+
+const currentRole = ref(localStorage.getItem("role"));
+
+const allowApprove = (status) => {
+  if(status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
+  return status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD;
+}
+
+const allowReject = (status) => {
+  return (status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) || (status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD);
 }
 
 watch(() => props.data.resourceMobilizationDetails, (data) => {
