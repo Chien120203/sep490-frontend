@@ -3,7 +3,7 @@
       :show="show"
       :width="'85%'"
       :containerHeight="'70%'"
-      :isShowFooter="false"
+      :isShowFooter="true"
       @close="$emit('close')"
   >
     <template #header>
@@ -29,8 +29,9 @@
           <el-tab-pane label="Tài nguyên" name="materials">
             <ItemList
                 ref="formAllocationMaterialInfos"
-                :rules="ALLOCATIONFORMITEMS_RULES"
+                :rules="ALLOCATION_FORM_ITEMS_RULES"
                 :selectData="materials"
+                :progressDetails="progressDetails"
                 :resourceType="MATERIAL_TYPE"
                 :allowEdit="allowSave"
                 :tableData="listSelectedMaterials"
@@ -43,8 +44,9 @@
           <el-tab-pane label="Nhân lực" name="users">
             <ItemList
                 ref="formAllocationHumanInfos"
-                :rules="ALLOCATIONFORMITEMS_RULES"
+                :rules="ALLOCATION_FORM_ITEMS_RULES"
                 :selectData="listEmployees"
+                :progressDetails="progressDetails"
                 :allowEdit="allowSave"
                 :resourceType="HUMAN_TYPE"
                 :tableData="listSelectedUsers"
@@ -57,8 +59,9 @@
           <el-tab-pane label="Phương tiện" name="vehicles">
             <ItemList
                 ref="formAllocationVehicleInfos"
-                :rules="ALLOCATIONFORMITEMS_RULES"
+                :rules="ALLOCATION_FORM_ITEMS_RULES"
                 :selectData="listVehicles"
+                :progressDetails="progressDetails"
                 :allowEdit="allowSave"
                 :resourceType="MACHINE_TYPE"
                 :tableData="listSelectedVehicles"
@@ -68,6 +71,8 @@
           </el-tab-pane>
         </el-tabs>
       </div>
+    </template>
+    <template #footer>
       <div class="modal-footer">
         <el-button v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
         <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t("common.cancel") }}</el-button>
@@ -101,12 +106,12 @@ const props = defineProps({
 
 const inventoryStore = useInventoryStore();
 const persist = usePersistenceStore();
+
 const {
   inventoryData,
   getListInventory
 } = inventoryStore;
 const { projectId } = persist;
-
 const emit = defineEmits(["close", "submit", "searchProjects", "searchTask"]);
 const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);

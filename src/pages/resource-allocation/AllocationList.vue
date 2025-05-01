@@ -46,6 +46,7 @@
               :data="listAllocations.value"
               @details="handleGetAllocationDtls"
               @delete="handleDisplayModal"
+              @changeStatus="handleChangeStatus"
           />
           <LoadMore
               :listData="listAllocations.value"
@@ -91,7 +92,7 @@
         :isShowModal="isShowModalConfirm"
         @close-modal="closeModalConfirm"
         @confirmAction="handleConfirm"
-        :message="$t('mobilization.modal_confirm.message_delete')"
+        :message="message"
         :title="$t('mobilization.modal_confirm.title')"
     />
     <SaveAllocationModal
@@ -150,7 +151,7 @@ const isShowModalSave = ref(false);
 const activeTab = ref("project");
 const delete_id = ref(null);
 const changeObject = ref({});
-const title = ref("");
+const message = ref("");
 const {t} = useI18n();
 const allowCreate = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER);
 const searchForms = ref({
@@ -171,6 +172,7 @@ const formSearchTask = ref({
 
 const handleDisplayModalSave = (show = false) => {
   if(!show) clearRequestDtls();
+  else getProgressDetails(projectId.value, false);
   isShowModalSave.value = show;
 };
 
@@ -180,19 +182,21 @@ const handleLoadMore = () => {
   getListAllocations(searchForms.value);
 };
 
-const handleSaveRequest = (data) => {
+const handleSaveRequest = async (data) => {
   allocationDetails.value.resourceAllocationDetails = data;
   allocationDetails.value.fromProjectId = projectId.value;
   if(allocationDetails.value.requestType === PROJECT_TO_TASK || allocationDetails.value.requestType === TASK_TO_TASK) {
     allocationDetails.value.toProjectId = projectId.value;
   }
-  saveRequest(allocationDetails.value);
+  await saveRequest(allocationDetails.value);
   handleDisplayModalSave(false);
+  await getListAllocations(searchForms.value);
 };
 
 const handleDisplayModal = (mobilization_id) => {
   isShowModalConfirm.value = !!mobilization_id;
   delete_id.value = mobilization_id;
+  message.value = t('mobilization.modal_confirm.message_delete');
 };
 
 const closeModalConfirm = () => {
@@ -228,7 +232,7 @@ const handleSearchTasks = (value) => {
 
 const handleChangeStatus = (data) => {
   changeObject.value = data;
-  title.value = t('mobilization.modal_confirm.message_change_status');
+  message.value = t('mobilization.modal_confirm.message_change_status');
   isShowModalConfirm.value = true;
 };
 

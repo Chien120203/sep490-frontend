@@ -33,16 +33,28 @@
 
         <el-table-column prop="quantity" label="Số lượng">
           <template #default="{ row, $index }">
-            <el-input :disabled="!allowEdit" v-model.number="row.quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+            <el-input-number style="width: 100%" :disabled="!allowEdit" :min="0" :max="getInventory(row.resourceId) - getUsedQuantity(row.resourceId)" v-model.number="row.quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}
             </p>
           </template>
         </el-table-column>
 
+        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="quantity" label="Số lượng su dung">
+          <template #default="{ row, $index }">
+           {{getUsedQuantity(row.resourceId)}}
+          </template>
+        </el-table-column>
+
         <el-table-column v-if="resourceType === MATERIAL_TYPE" :label="$t('planning.items.inventory')">
           <template #default="{ row }">
             {{getInventory(row.resourceId)}}
+          </template>
+        </el-table-column>
+
+        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="quantity" label="Số lượng con lai">
+          <template #default="{ row, $index }">
+            {{getInventory(row.resourceId) - getUsedQuantity(row.resourceId)}}
           </template>
         </el-table-column>
 
@@ -76,8 +88,11 @@ const props = defineProps({
   allowEdit: { type: Boolean, default: false },
   rules: {
     type: Object,
-    default: () => {
-    }
+    default: () => {}
+  },
+  progressDetails: {
+    type: Object,
+    default: () => {}
   }
 });
 const ruleFormRef = ref(null);
@@ -119,6 +134,24 @@ const handleSelectItem = (id) => {
     });
   }
   emit('update-list', listAddedValues.value);
+};
+
+const getUsedQuantity = (resourceId) => {
+  if (!props.progressDetails || !Array.isArray(props.progressDetails.progressItems)) {
+    return 0;
+  }
+
+  return props.progressDetails.progressItems.reduce((total, item) => {
+    if (Array.isArray(item.details)) {
+      const materialUsed = item.details.reduce((sum, detail) => {
+        return detail.resourceType === 3 && detail.resourceId === resourceId
+            ? sum + (detail.usedQuantity || 0)
+            : sum;
+      }, 0);
+      return total + materialUsed;
+    }
+    return total;
+  }, 0);
 };
 
 const handleRemoveResource = (id) => {

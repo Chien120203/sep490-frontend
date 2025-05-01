@@ -16,7 +16,7 @@
 
           <!-- Allocation type radio buttons -->
           <el-form-item :label="$t('mobilization.modal.type')" required>
-            <el-select :disabled="!allowEdit" v-model="data.requestType">
+            <el-select class="custom-input" :disabled="!allowEdit" v-model="data.requestType">
               <el-option
                   v-for="request in ALLOCATION_REQUEST_TYPES"
                   :key="request.value"
@@ -29,7 +29,7 @@
 
           <!-- Target project/task selector -->
           <el-form-item v-if="data.requestType === PROJECT_TO_PROJECT" :label="$t('allocation.target_project')">
-            <div class="select-project-container">
+            <div class="select-project-container custom-input">
               <SingleOptionSelect
                   :isDisabled="!allowEdit"
                   v-model="data.toProjectId"
@@ -44,12 +44,12 @@
 
           <!-- Target project/task selector -->
           <el-form-item v-if="data.requestType === PROJECT_TO_TASK" :label="$t('allocation.target_task')">
-            <div class="select-project-container">
+            <div class="select-project-container custom-input">
               <SingleOptionSelect
                   v-model="data.toTaskId"
                   :isDisabled="!allowEdit"
                   :optionKeys="{ id: 'id', value: 'workName' }"
-                  :listData="progressDetails.progressItems"
+                  :listData="listProgressItems"
                   :isRemote="true"
                   @remoteSearch="handleSearchTask"
                   :showClearable="true"
@@ -59,12 +59,12 @@
 
           <!-- Target project/task selector -->
           <el-form-item v-if="data.requestType === TASK_TO_TASK" :label="$t('allocation.from_task')">
-            <div class="select-project-container">
+            <div class="select-project-container custom-input">
               <SingleOptionSelect
                   v-model="data.fromTaskId"
                   :isDisabled="!allowEdit"
                   :optionKeys="{ id: 'id', value: 'workName' }"
-                  :listData="progressDetails.progressItems"
+                  :listData="listProgressItems"
                   :isRemote="true"
                   @remoteSearch="handleSearchTask"
                   :showClearable="true"
@@ -73,13 +73,13 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === TASK_TO_TASK" :label="$t('allocation.to_task')">
-            <div class="select-project-container">
+          <el-form-item v-if="data.requestType === TASK_TO_TASK && data.fromTaskId" :label="$t('allocation.to_task')">
+            <div class="select-project-container custom-input">
               <SingleOptionSelect
                   v-model="data.toTaskId"
                   :isDisabled="!allowEdit"
                   :optionKeys="{ id: 'id', value: 'workName' }"
-                  :listData="progressDetails.progressItems.filter(task => task.id !== data.fromTaskId)"
+                  :listData="listProgressItems.filter(task => task.id !== data.fromTaskId)"
                   :isRemote="true"
                   @remoteSearch="handleSearchTask"
                   :showClearable="true"
@@ -91,7 +91,7 @@
         <el-col :span="12">
           <el-form-item :label="$t('mobilization.modal.date')" prop="requestDate">
             <el-date-picker
-                style="width: 96%"
+                style="width: 80%"
                 disabled
                 :value-format="DATE_FORMAT"
                 v-model="data.requestDate"
@@ -101,7 +101,7 @@
           </el-form-item>
 
           <el-form-item :label="$t('mobilization.modal.priority')">
-            <el-select :disabled="!allowEdit" v-model="data.priorityLevel">
+            <el-select class="custom-input" :disabled="!allowEdit" v-model="data.priorityLevel">
               <el-option
                   v-for="(status, index) in PRIORITIES"
                   :key="index"
@@ -133,6 +133,7 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import { getAllocationRules } from "@/rules/allocation";
 import {ALLOCATION_REQUEST_TYPES, PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {IN_PROGRESS_STATUS} from "@/constants/project.js";
+import {DONE_PROGRESS} from "@/constants/progress.js";
 
 const props = defineProps({
   data: { type: Object, default: () => ({}) },
@@ -142,7 +143,9 @@ const props = defineProps({
 });
 
 const listOngoingProjects = computed(() => props.listProjects.filter(item => item.status === IN_PROGRESS_STATUS));
+const hasChildren = (parent) => props.progressDetails.progressItems.some(child => child.parentIndex === parent.index);
 
+const listProgressItems = computed(() => props.progressDetails.progressItems?.filter(item => !hasChildren(item) && item.progress !== DONE_PROGRESS)) || [];
 const emit = defineEmits(["searchProject",  "searchTask"]);
 const ALLOCATIONFORMINFO_RULES = getAllocationRules();
 
