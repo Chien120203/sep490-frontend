@@ -56,7 +56,6 @@ export const useAuthStore = defineStore(
     };
 
     const handleLogout = () => {
-      router.push({name: PAGE_NAME.LOGIN});
       localStorage.removeItem("accessToken");
       localStorage.removeItem("userId");
       localStorage.removeItem("role");
@@ -64,9 +63,10 @@ export const useAuthStore = defineStore(
       localStorage.removeItem("email");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("isVerify");
-      mixinMethods.notifySuccess(t("response.message.logout_success"));
       loggedIn.value = false;
       projectId.value = null;
+      router.push({name: PAGE_NAME.LOGIN});
+      mixinMethods.notifySuccess(t("response.message.logout_success"));
     };
 
 

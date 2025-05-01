@@ -138,7 +138,8 @@ const {
   handleDeleteHumanResources
 } = humanResourceStore;
 const {
-  projectId
+  projectId,
+  loggedIn
 } = persist;
 const {
   listUsers,
@@ -248,12 +249,14 @@ const handleConfirm = () => {
 
 // Lifecycle
 onMounted(() => {
-  getListHumanResources(searchForms.value);
-  getListUsers({
-    keyWord: "",
-    pageIndex: 1,
-    pageSize: 50,
-  }, false)
+  if (loggedIn.value) {
+    getListHumanResources(searchForms.value);
+    getListUsers({
+      keyWord: "",
+      pageIndex: 1,
+      pageSize: 50,
+    }, false)
+  }
 });
 
 onUnmounted(() => {

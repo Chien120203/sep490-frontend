@@ -186,7 +186,8 @@ export default {
       handleDeleteProject
     } = projectStore;
     const {
-      projectId
+      projectId,
+      loggedIn
     } = persist;
     const {
       listCustomers,
@@ -237,9 +238,11 @@ export default {
     onMounted(() => {
       if(role === ADMIN) router.push({name: PAGE_NAME.USER.LIST});
       projectId.value = null;
-      getListProjects(searchForms.value);
-      getListCustomers();
-      getProjectChart();
+      if (loggedIn.value) {
+        getListProjects(searchForms.value);
+        getListCustomers();
+        getProjectChart();
+      }
     });
 
     onUnmounted(() => {

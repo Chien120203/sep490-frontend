@@ -127,7 +127,7 @@ const allocationStore = useAllocationStore();
 const projectStore = useProjectStore();
 const progressStore = useProgressStore();
 
-const { projectId } = persist;
+const { projectId, loggedIn } = persist;
 const {
   listAllocations,
   totalItems,
@@ -263,9 +263,11 @@ const submitForm = () => {
 }
 
 onMounted(() => {
-  getListAllocations(searchForms.value);
-  getListProjects(formSearchProject.value);
-  if(projectId.value) getProgressDetails(projectId.value, false);
+  if (loggedIn.value) {
+    getListAllocations(searchForms.value);
+    getListProjects(formSearchProject.value);
+    if(projectId.value) getProgressDetails(projectId.value, false);
+  }
 });
 
 onUnmounted(() => {
