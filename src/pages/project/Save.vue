@@ -21,7 +21,7 @@
         <el-form
             ref="ruleFormRef"
             :model="projectDetails.value"
-            :rules="PROJECT_RULES"
+            :rules="projectRules"
             class="form-search-box"
         >
           <div class="item item-bib-add">
@@ -39,7 +39,7 @@
 
             <el-form-item
                 prop="projectName"
-                class="custom-textarea"
+                class="custom-textarea required"
                 :label="$t('project.create.project_name')"
             >
               <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.projectName"/>
@@ -52,7 +52,7 @@
             <div class="item-project-members">
               <el-form-item
                   prop="customerId"
-                  class="input-select-member"
+                  class="input-select-member required"
                   :label="$t('project.create.customer')"
               >
                 <SingleOptionSelect
@@ -69,7 +69,7 @@
                 >{{ $t(validation.value.customerId) }}</label>
               </el-form-item>
 
-              <el-form-item prop="technicalManager" class="input-select-member">
+              <el-form-item prop="technicalManager" class="input-select-member required">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.technical_manager') }}</span>
                 </template>
@@ -90,7 +90,7 @@
             </div>
 
             <div class="item-project-members">
-              <el-form-item prop="resourceManager" class="input-select-member">
+              <el-form-item prop="resourceManager" class="input-select-member required">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.resource_manager') }}</span>
                 </template>
@@ -109,7 +109,7 @@
                 </label>
               </el-form-item>
 
-              <el-form-item prop="constructionManager" class="input-select-member">
+              <el-form-item prop="constructionManager" class="input-select-member required">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.construction_manager') }}</span>
                 </template>
@@ -128,16 +128,43 @@
                 </label>
               </el-form-item>
             </div>
+            <div class="item-project-members">
+              <el-form-item prop="qa" class="input-select-member required">
+                <template #label>
+                  <span class="label-start">{{ $t('project.create.qa') }}</span>
+                </template>
+                <SingleOptionSelect
+                    v-model="projectDetails.value.qa"
+                    :optionKeys="{ id: 'id', value: 'username' }"
+                    :listData="listQAs"
+                    :role="QUALITY_ASSURANCE"
+                    :isRemote="true"
+                    :disabled="!isAllowEdit"
+                    class="input-wd-96"
+                    @remoteSearch="handleSearchManager"
+                />
+                <label class="error-feedback-customer" v-if="validation && validation.viewerUserIds">
+                  {{ $t(validation.viewerUserIds) }}
+                </label>
+              </el-form-item>
+              <el-form-item
+                  :label="$t('project.create.construct_type')"
+                  prop="constructType"
+                  class="input-select-member required"
+              >
+                <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.constructType"/>
+                <label
+                    class="error-feedback-user"
+                    v-if="validation.value && validation.value.constructType"
+                >{{ $t(validation.value.constructType) }}</label>
+              </el-form-item>
+            </div>
 
             <el-form-item
-                :label="$t('project.create.construct_type')"
-                prop="constructType"
+                :label="$t('project.create.location')"
+                prop="location"
             >
-              <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.constructType"/>
-              <label
-                  class="error-feedback-user"
-                  v-if="validation.value && validation.value.constructType"
-              >{{ $t(validation.value.constructType) }}</label>
+              <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.location"/>
             </el-form-item>
 
             <el-form-item
@@ -205,7 +232,8 @@
             >
               <el-input
                   :disabled="!isAllowEdit"
-                  :formatter="(value) => formatCurrency(value)"
+                  :formatter="(value) => mixinMethods.formatInputMoney(value)"
+                  :parser="(value) => mixinMethods.parseInputCurrency(value)"
                   v-model="projectDetails.value.budget"
               />
               <label
@@ -231,7 +259,8 @@
                 class="custom-textarea required"
                 :label="$t('project.create.technical_reqs')"
             >
-              <el-input :disabled="!isAllowEdit" :rows="4" type="textarea" v-model="projectDetails.value.technicalReqs"/>
+              <el-input :disabled="!isAllowEdit" :rows="4" type="textarea"
+                        v-model="projectDetails.value.technicalReqs"/>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.technicalReqs"
@@ -276,11 +305,17 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useProjectStore} from "@/store/project.js";
 import {useCustomerStore} from "@/store/customer.js";
-import { mixinMethods } from "@/utils/variables";
-import {PROJECT_RULES} from "@/rules/project/index.js";
+import {mixinMethods} from "@/utils/variables";
+import {getProjectRules} from "@/rules/project/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import {useUserStore} from "@/store/user.js";
-import {BUSINESS_EMPLOYEE, CONSTRUCTION_MANAGER, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {
+  BUSINESS_EMPLOYEE,
+  CONSTRUCTION_MANAGER,
+  QUALITY_ASSURANCE,
+  RESOURCE_MANAGER,
+  TECHNICAL_MANAGER
+} from "@/constants/roles.js";
 import {RECEIVE_STATUS} from "@/constants/project.js";
 
 export default {
@@ -310,7 +345,9 @@ export default {
     const listConstructionManagers = ref([]);
     const listTechnicalManagers = ref([]);
     const listResourceManagers = ref([]);
+    const listQAs = ref([]);
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const projectRules = getProjectRules();
 
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
@@ -318,16 +355,18 @@ export default {
 
     onMounted(async () => {
       await getListCustomers({search: "", pageIndex: 1}, false);
-      await getListUsers({keyWord: "", pageIndex: 1}, false);
-      if(route.params.id) {
+      await getListUsers({keyWord: "", pageIndex: 1, pageSize: 50}, false);
+      if (route.params.id) {
         await getProjectDetails(route.params.id);
         projectDetails.value.technicalManager = getUserIdByRole(projectDetails.value.viewerUserIds, TECHNICAL_MANAGER)?.id;
         projectDetails.value.constructionManager = getUserIdByRole(projectDetails.value.viewerUserIds, CONSTRUCTION_MANAGER)?.id;
         projectDetails.value.resourceManager = getUserIdByRole(projectDetails.value.viewerUserIds, RESOURCE_MANAGER)?.id;
+        projectDetails.value.qa = getUserIdByRole(projectDetails.value.viewerUserIds, QUALITY_ASSURANCE)?.id;
       } else await clearProjectDetails();
       listConstructionManagers.value = listUsers.value.filter((item) => item.role === CONSTRUCTION_MANAGER);
       listResourceManagers.value = listUsers.value.filter((item) => item.role === RESOURCE_MANAGER);
       listTechnicalManagers.value = listUsers.value.filter((item) => item.role === TECHNICAL_MANAGER);
+      listQAs.value = listUsers.value.filter((item) => item.role === QUALITY_ASSURANCE);
     });
 
     onUnmounted(() => {
@@ -335,14 +374,16 @@ export default {
     });
 
     const handleBack = () => {
-      router.push(isUpdate.value ? {name: PAGE_NAME.PROJECT.DETAILS, params:{id: route.params.id}} :{name: PAGE_NAME.PROJECT.LIST});
+      router.push(isUpdate.value ? {
+        name: PAGE_NAME.PROJECT.DETAILS,
+        params: {id: route.params.id}
+      } : {name: PAGE_NAME.PROJECT.LIST});
     };
 
     const ruleFormRef = ref(null);
 
     const submitForm = () => {
-      projectDetails.value.budget = mixinMethods.handleChangeNumber(projectDetails.value.budget);
-      projectDetails.value.viewerUserIds = [projectDetails.value.technicalManager, projectDetails.value.resourceManager, projectDetails.value.constructionManager];
+      projectDetails.value.viewerUserIds = [projectDetails.value.technicalManager, projectDetails.value.resourceManager, projectDetails.value.constructionManager, projectDetails.value.qa];
       ruleFormRef.value.validate((valid) => {
         if (valid) {
           saveProject(projectDetails.value);
@@ -373,6 +414,9 @@ export default {
           break;
         case TECHNICAL_MANAGER:
           listTechnicalManagers.value = listUsers.value.filter((item) => item.role === TECHNICAL_MANAGER);
+          break;
+        case QUALITY_ASSURANCE:
+          listQAs.value = listUsers.value.filter((item) => item.role === QUALITY_ASSURANCE);
       }
     }
 
@@ -381,16 +425,19 @@ export default {
     }
 
     return {
-      PROJECT_RULES,
       DATE_FORMAT,
       CONSTRUCTION_MANAGER,
       RESOURCE_MANAGER,
       TECHNICAL_MANAGER,
+      QUALITY_ASSURANCE,
+      mixinMethods,
+      projectRules,
       isAllowEdit,
       ruleFormRef,
       isUpdate,
       projectDetails,
       validation,
+      listQAs,
       listTechnicalManagers,
       listResourceManagers,
       listConstructionManagers,
@@ -493,7 +540,7 @@ export default {
 }
 
 .user-body .form-search-box,
-.user-body .form-search-box{
+.user-body .form-search-box {
   justify-content: space-between;
   font-size: 16px;
   line-height: 21px;

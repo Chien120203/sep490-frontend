@@ -1,6 +1,6 @@
 <!-- GanttChart.vue -->
 <script setup>
-import {defineEmits, defineProps, ref} from 'vue';
+import {defineEmits, defineProps, ref, watch} from 'vue';
 import {provide} from "vue";
 import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Filter, Selection} from "@syncfusion/ej2-vue-gantt";
 
@@ -8,7 +8,27 @@ import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Filter, Sele
 const props = defineProps({
   tasks: Array
 });
-
+const gantt = ref(null);
+watch(
+    () => props.tasks,
+    (newVal) => {
+      // if (newVal && newVal.length > 0) {
+      //   if (gantt.value?.ej2Instances && gantt.value?.ej2Instances.dataSource) {
+      //     let ganttObj = gantt.value.ej2Instances;
+      //     ganttObj.hideSpinner();
+      //     ganttObj.dataSource = newVal;
+      //     ganttObj.refresh();
+      //   }
+      // }
+    },
+    {immediate: true, deep: true} // `immediate` handles initial assignment; `deep` tracks nested changes
+);
+const handleRefresh = () => {
+  let ganttObj = gantt.value.ej2Instances;
+  ganttObj.hideSpinner();
+  ganttObj.dataSource = props.tasks;
+  ganttObj.refresh();
+}
 const emit = defineEmits(["handleSelectRow", "addTask", "addAllocation"]);
 
 const handleAddNewTask = () => {
@@ -18,23 +38,21 @@ const handleAddNewAllocation = () => {
   emit("addAllocation");
 }
 
-const gantt = ref(null);
 // Configure task mappings
 const taskSettings = ref({
-  id: "TaskID",
-  name: "TaskName",
-  startDate: "StartDate",
-  endDate: "EndDate",
-  duration: "Duration",
-  progress: "Progress",
-  child: "subtasks",
-  dependency: "Predecessor",
-  baselineStartDate: "BaselineStartDate",
-  baselineEndDate: "BaselineEndDate"
+  id: "id",
+  name: "workName",
+  // startDate: "actualStartDate",
+  // endDate: "actualEndDate",
+  progress: "progress",
+  parentID: "parentId",
+  dependency: "predecessor",
+  baselineStartDate: "planStartDate",
+  baselineEndDate: "planEndDate"
 });
 
 const labelSettings = {
-  taskLabel: '${Progress}%'
+  taskLabel: '${progress}%'
 };
 
 const toolbar = [
@@ -55,14 +73,14 @@ const selectionOptions = {
   type: "Single"
 }
 
-const rowSelected = function(args) {
+const rowSelected = function (args) {
   let ganttObj = gantt.value.ej2Instances;
   let selectedRecords = ganttObj.selectionModule.getSelectedRecords();  // get the selected records.
   emit("handleSelectRow", selectedRecords);
 }
 const searchValue = ref('');
 
-const searchSettings = ref({fields: ['TaskName'], operator: 'contains', key: searchValue.value, ignoreCase: true});
+const searchSettings = ref({fields: ['workName'], operator: 'contains', key: searchValue.value, ignoreCase: true});
 
 // Reactive timeline settings
 const timelineSettings = ref({
@@ -75,10 +93,6 @@ const handleSearch = (isClear = false) => {
   let ganttObj = gantt.value.ej2Instances;
   searchValue.value = isClear ? '' : searchValue.value;
   ganttObj.search(searchValue.value);
-}
-
-const handleCreateCR = () => {
-
 }
 
 const change = (isOpen) => {
@@ -114,31 +128,25 @@ provide('gantt', [Toolbar, Filter, Selection]);
           >
           <el-button class="btn btn-clear" @click="handleSearch(true)">
             {{ $t("common.clear") }}
-          </el-button
-          >
+          </el-button>
+          <el-button class="btn btn-clear" @click="handleRefresh">
+            Refresh
+          </el-button>
         </div>
       </div>
       <div class="col-md-3 col-lg-3 d-flex btn-cr">
         <el-button class="btn btn-save" @click="change(isCollapse)"
-        >Ẩn Gantt Chart
+        >{{$t('progress.hide_gantt_chart')}}
         </el-button>
-        <el-dropdown>
-          <el-button class="btn btn-save">
-            Add New CR<el-icon class="el-icon--right"><arrow-down /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="handleAddNewTask">Add New Task</el-dropdown-item>
-              <el-dropdown-item @click="handleAddNewAllocation">Add New ALlocation</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <el-button @click="handleAddNewTask" class="btn btn-save">
+          {{ $t('common.add_new') }}
+        </el-button>
       </div>
     </div>
     <div style="padding-top: 70px">
       <GanttComponent
           ref='gantt'
-          :dataSource="props.tasks"
+          :dataSource="tasks"
           :taskFields="taskSettings"
           :labelSettings="labelSettings"
           :height="'100%'"
@@ -153,14 +161,14 @@ provide('gantt', [Toolbar, Filter, Selection]);
           :rowSelected="rowSelected"
       >
         <ColumnsDirective>
-          <ColumnDirective field="TaskID" headerText="STT" width="60"></ColumnDirective>
-          <ColumnDirective field="TaskName" headerText="Công việc" width="200"></ColumnDirective>
-          <ColumnDirective field="StartDate" headerText="Ngày bắt đầu" width="120"></ColumnDirective>
-          <ColumnDirective field="EndDate" headerText="Ngày kết thúc" width="120"></ColumnDirective>
-          <ColumnDirective field="BaselineStartDate" headerText="Thời gian bắt đầu dự kiến" width="120"></ColumnDirective>
-          <ColumnDirective field="BaselineEndDate" headerText="Thời gian kết thúc dự kiến" width="120"></ColumnDirective>
-          <ColumnDirective field="Duration" headerText="Thời lượng" width="100"></ColumnDirective>
-          <ColumnDirective field="Progress" headerText="Tiến độ (%)" width="100"></ColumnDirective>
+          <ColumnDirective field="index" headerText="STT" width="60"></ColumnDirective>
+          <ColumnDirective field="workName" headerText="Công việc" width="200"></ColumnDirective>
+          <ColumnDirective field="predecessor" headerText="Dependency" width="120"></ColumnDirective>
+          <ColumnDirective field="planStartDate" format="yyyy-MM-dd" headerText="Thời gian bắt đầu dự kiến"
+                           width="120"></ColumnDirective>
+          <ColumnDirective field="planEndDate" format="yyyy-MM-dd" headerText="Thời gian kết thúc dự kiến"
+                           width="120"></ColumnDirective>
+          <ColumnDirective field="progress" headerText="Tiến độ (%)" width="100"></ColumnDirective>
         </ColumnsDirective>
       </GanttComponent>
     </div>
@@ -173,12 +181,15 @@ h2 {
   text-align: center;
   margin-bottom: 20px;
 }
+
 .project-search {
   width: 100%;
 }
+
 .btn-cr {
   justify-content: end;
 }
+
 .gantt-chart-container {
 }
 </style>

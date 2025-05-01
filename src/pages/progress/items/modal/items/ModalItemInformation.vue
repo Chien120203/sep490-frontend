@@ -1,123 +1,83 @@
 <template>
-  <el-card shadow="hover">
-    <div class="task-details">
-      <p><strong>Task ID:</strong> {{ task.TaskID }}</p>
-      <p><strong>Task Name:</strong> {{ task.TaskName }}</p>
-      <p><strong>Start Date:</strong> {{ formatDate(task.StartDate) }}</p>
-      <p><strong>End Date:</strong> {{ formatDate(task.EndDate) }}</p>
-      <p><strong>Baseline Start Date:</strong> {{ formatDate(task.BaselineStartDate) }}</p>
-      <p><strong>Baseline End Date:</strong> {{ formatDate(task.BaselineEndDate) }}</p>
-      <p><strong>Duration:</strong> {{ task.Duration }} days</p>
-    </div>
+  <el-card shadow="hover" class="task-card">
+    <el-form :disabled="!allowEdit" :rules="rules" :model="task" label-position="top" label-width="auto">
+      <el-row :gutter="20" class="task-details">
+        <el-col :span="12">
+          <el-form-item label="Mã công việc">
+            <el-input disabled v-model="task.index"/>
+          </el-form-item>
 
-    <div class="status-container">
-      <el-tag
-          :type="statusType"
-          class="status-tag"
-          @click="editStatus"
-      >
-        {{ task.status }}
-      </el-tag>
+          <el-form-item label="Tên công việc">
+            <el-input disabled v-model="task.workName"/>
+          </el-form-item>
 
-      <el-tag
-          type="success"
-          class="progress-tag"
-          @click="editProgress"
-      >
-        {{ task.progress }}%
-      </el-tag>
-    </div>
+          <el-form-item prop="actualStartDate" label="Ngày bắt đầu thực tế">
+            <el-date-picker style="width: 100%" v-model="task.actualStartDate" type="date" placeholder="Chọn ngày"/>
+          </el-form-item>
 
-    <el-dialog v-model="statusDialog" title="Chỉnh sửa trạng thái">
-      <el-select v-model="newStatus" placeholder="Chọn trạng thái">
-        <el-option label="Hoàn thành" value="Hoàn thành" />
-        <el-option label="Đang thực hiện" value="Đang thực hiện" />
-        <el-option label="Chưa bắt đầu" value="Chưa bắt đầu" />
-      </el-select>
-      <template #footer>
-        <el-button @click="statusDialog = false">Hủy</el-button>
-        <el-button type="primary" @click="saveStatus">Lưu</el-button>
-      </template>
-    </el-dialog>
+          <el-form-item prop="actualEndDate" label="Ngày kết thúc thực tế">
+            <el-date-picker style="width: 100%" v-model="task.actualEndDate" type="date" placeholder="Chọn ngày"/>
+          </el-form-item>
+        </el-col>
 
-    <el-dialog v-model="progressDialog" title="Chỉnh sửa tiến độ">
-      <el-input-number v-model="newProgress" :min="0" :max="100" />
-      <template #footer>
-        <el-button @click="progressDialog = false">Hủy</el-button>
-        <el-button type="primary" @click="saveProgress">Lưu</el-button>
-      </template>
-    </el-dialog>
+        <el-col :span="12">
+          <el-form-item prop="planStartDate" label="Ngày bắt đầu kế hoạch">
+            <el-date-picker :disabled="!allowEditRelation" style="width: 100%" v-model="task.planStartDate" type="date"
+                            placeholder="Chọn ngày"/>
+          </el-form-item>
+
+          <el-form-item prop="planEndDate" label="Ngày kết thúc kế hoạch">
+            <el-date-picker :disabled="!allowEditRelation" style="width: 100%" v-model="task.planEndDate" type="date"
+                            placeholder="Chọn ngày"/>
+          </el-form-item>
+
+          <el-form-item label="Trạng thái">
+            <el-select v-model="task.status" placeholder="Chọn trạng thái">
+              <el-option v-for="(label, index) in PROGRESS_STATUS" :label="$t(label)" :key="index"
+                         :value="index"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="Tiến độ">
+            <el-slider v-model="task.progress" :step="1" :max="100" show-input/>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
   </el-card>
 </template>
 
 <script setup>
-import {ref, computed, defineProps, defineEmits, watch} from "vue";
+import {reactive, watch, defineProps} from 'vue';
+import {mixinMethods} from '@/utils/variables.js';
+import {PROGRESS_STATUS} from "@/constants/progress.js";
 
 const props = defineProps({
   task: {
     type: Object,
     required: true
+  },
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
+  },
+  allowEditRelation: {
+    type: Boolean,
+    default: false
   }
 });
-
-const emit = defineEmits(["updateStatus", "updateProgress"]);
-
-// Reactive variables for editing
-const newStatus = ref(props.task.status);
-const newProgress = ref(props.task.progress);
-
-// Dialog states
-const statusDialog = ref(false);
-const progressDialog = ref(false);
-
-const statusType = computed(() => {
-  if (newStatus.value === "Hoàn thành") return "success";
-  if (newStatus.value === "Đang thực hiện") return "warning";
-  return "danger";
-});
-
-// Format date function
-const formatDate = (date) => {
-  if (!date) return "N/A";
-  return new Date(date).toLocaleDateString("vi-VN");
-};
-
-const editStatus = () => {
-  statusDialog.value = true;
-};
-
-const saveStatus = () => {
-  statusDialog.value = false;
-  emit("updateStatus", newStatus.value);
-};
-
-const editProgress = () => {
-  progressDialog.value = true;
-};
-
-const saveProgress = () => {
-  progressDialog.value = false;
-  emit("updateProgress", newProgress.value);
-};
-
-// Watch for prop changes (useful if task data updates externally)
-watch(() => props.task, (newTask) => {
-  newStatus.value = newTask.status;
-  newProgress.value = newTask.progress;
-}, {deep: true});
 </script>
 
 <style scoped>
+.task-card {
+  padding: 20px;
+}
+
 .task-details {
-  margin-bottom: 15px;
-}
-
-.status-container {
-  display: flex;
-  gap: 10px;
-}
-
-.status-tag, .progress-tag {
-  cursor: pointer;
+  margin-top: 10px;
 }
 </style>

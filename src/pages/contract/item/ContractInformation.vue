@@ -18,7 +18,7 @@
           </label>
         </el-form-item>
 
-        <el-form-item prop="contractCode" class="input-container">
+        <el-form-item prop="contractName" class="input-container">
           <template #label>
             <span class="label-start">{{ $t('contract.create.infor.label.name') }}</span>
           </template>
@@ -194,7 +194,6 @@ const props = defineProps({
 const emit = defineEmits(["searchProject", "fileUpload"]);
 
 const ruleFormRef = ref(null);
-
 defineExpose({
   ruleFormRef,
 });

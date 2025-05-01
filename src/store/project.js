@@ -4,21 +4,22 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import PAGE_NAME from "@/constants/route-name.js";
+import {RECEIVE_STATUS} from "@/constants/project.js";
 import {useRouter} from "vue-router";
 
 export const useProjectStore = defineStore(
   "project",
   () => {
     const {t} = useI18n();
-    const validation = reactive({ value: {} });
+    const validation = reactive({value: {}});
     const router = useRouter();
-    const isShowModalConfirm = reactive({ value: false });
-    const isShowModalCreate = reactive({ value: false });
-    const totalItems = reactive({ value: 0 });
-    const currentPage = reactive({ value: 1 });
-    const listProjects = reactive({ value: [] });
+    const isShowModalConfirm = reactive({value: false});
+    const isShowModalCreate = reactive({value: false});
+    const totalItems = reactive({value: 0});
+    const currentPage = reactive({value: 1});
+    const listProjects = reactive({value: []});
     const projectDetails = reactive({
-      value:{
+      value: {
         id: 0,
         projectCode: "",
         projectName: "",
@@ -35,10 +36,12 @@ export const useProjectStore = defineStore(
         status: 0,
         technicalManager: "",
         constructionManager: "",
+        qa: "",
         resourceManager: "",
         attachments: [],
         description: "",
-        viewerUserIds: null
+        viewerUserIds: null,
+        status: RECEIVE_STATUS
       }
     });
     const chartData = reactive({
@@ -60,7 +63,7 @@ export const useProjectStore = defineStore(
     });
 
     const getListProjects = async (params, isLoading = true) => {
-      if(isLoading) mixinMethods.startLoading();
+      if (isLoading) mixinMethods.startLoading();
       await services.ProjectAPI.list(
         params,
         (response) => {
@@ -85,7 +88,7 @@ export const useProjectStore = defineStore(
       await services.ProjectAPI.getChart(
         {},
         (response) => {
-          const { total, ...filteredData } = response.data;
+          const {total, ...filteredData} = response.data;
           chartData.datasets[0].data = Object.values(filteredData);
         },
         (error) => {
@@ -99,19 +102,37 @@ export const useProjectStore = defineStore(
       await services.ProjectAPI.save(
         formData,
         (response) => {
-          if(response.success) {
-            projectDetails.value = {...response.data, customerId: response.data.customer.id};
-            validation.value = [];
-            router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: response.data.id}});
-            mixinMethods.notifySuccess(t("response.message.save_project_success"));
-          }else {
-            validation.value = mixinMethods.handleErrorResponse(response);
-            mixinMethods.notifyError(t("response.message.save_project_failed"));
-          }
+          projectDetails.value = {...response.data, customerId: response.data.customer.id};
+          validation.value = [];
+          router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: response.data.id}});
+          mixinMethods.notifySuccess(t("response.message.save_project_success"));
+          mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.PROJECT.LIST});
+        },
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+          mixinMethods.notifyError(t("response.message.save_project_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const updateProjectStatus = async (projectId, status) => {
+      await mixinMethods.startLoading();
+      await services.ProjectAPI.updateStatus(
+        {
+          projectId: projectId,
+          targetStatus: status,
+          notes: ""
+        },
+        (response) => {
+          getProjectDetails(projectId);
+          mixinMethods.notifySuccess(t("common.success"));
           mixinMethods.endLoading();
         },
-        () => {
-          mixinMethods.notifyError(t("response.message.save_project_failed"));
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+          mixinMethods.notifyError(t("common.failed"));
           mixinMethods.endLoading();
         }
       );
@@ -123,19 +144,35 @@ export const useProjectStore = defineStore(
         id,
         {},
         (response) => {
-          projectDetails.value = {...response.data, customerCode: response.data?.customer.customerCode, customerId: response.data?.customer.id};
+          projectDetails.value = {
+            ...response.data,
+            customerCode: response.data?.customer.customerCode,
+            customerId: response.data?.customer.id
+          };
 
           mixinMethods.endLoading();
         },
         (error) => {
-          mixinMethods.notifyError(t("response.message.get_projects_failed"));
+          mixinMethods.notifyError(t("response.message.get_project_details_failed"));
           mixinMethods.endLoading();
         }
       );
     }
 
     const handleDeleteProject = async (id) => {
-      alert("delete customer "+ id)
+      mixinMethods.startLoading();
+      await services.ProjectAPI.deleteProject(
+        id,
+        (response) => {
+          listProjects.value = listProjects.value.filter(project => project.id !== id);
+          mixinMethods.notifySuccess(t("response.message.delete_project_success"));
+          mixinMethods.endLoading();
+        },
+        () => {
+          mixinMethods.notifyError(t("response.message.delete_project_failed"));
+          mixinMethods.endLoading();
+        }
+      );
       isShowModalConfirm.value = false;
     }
 
@@ -156,14 +193,15 @@ export const useProjectStore = defineStore(
         technicalReqs: "",
         startDate: "",
         endDate: "",
+        status: 0,
         budget: 0,
         technicalManager: "",
         constructionManager: "",
         resourceManager: "",
-        status: 0,
         attachment: "",
         description: "",
-        viewerUserIds: null
+        viewerUserIds: null,
+        status: RECEIVE_STATUS
       };
     };
 
@@ -177,6 +215,7 @@ export const useProjectStore = defineStore(
       chartData,
       isShowModalCreate,
       getProjectDetails,
+      updateProjectStatus,
       getProjectChart,
       saveProject,
       clearProjectDetails,

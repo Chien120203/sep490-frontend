@@ -17,6 +17,7 @@ export const MODAL_TITLE = {
 export const COOKIE_EXPIRE_TIME = import.meta.env.VITE_COOKIE_EXPIRE_TIME || 365;
 export const FRONT_END_URL = import.meta.env.VITE_FRONTEND_URL || "http://localhost:9999";
 export const DATE_FORMAT = import.meta.env.VITE_APP_FORMATDATE || "YYYY-MM-DD";
+export const DATE_TIME_FORMAT = import.meta.env.VITE_APP_FORMATDATE || "YYYY-MM-DD HH:mm:ss";
 
 export const DEPARTMENT_ACTIVE = 1;
 
@@ -28,7 +29,6 @@ export const MAX_CHARACTER = 255;
 export const MAX_SHORT_NUMBER = 20;
 export const MAX_LENGTH_TEXT = 32000;
 export const MAX_DESCRIPTION = 2000;
-export const MAX_PRICE = 10000;
 export const MAX_CAPACITY = 50;
 export const MAX_AREA = 100;
 export const TEXT_CONFIRM_DELETE="Delete"
@@ -36,7 +36,7 @@ export const DEFAULT_EXCHANGE_RATE = 1;
 export const TEXT_CONFIRM_TERMINATE="Terminate"
 export const TEXT_CONFIRM_INACTIVE="Deactivate"
 export const PAYPAL_SUCCESS_STATUS="COMPLETED"
-export const BILL_DATE_FORMAT="YYYY-MM"
+export const MONTH_DAY_FORMAT = "MM-DD"
 export const IMPORT_VALID_EXTENSIONS = [".xlsx"];
 export const PDF_CONTENT_TYPE = /^application\/pdf/;
 export const NUMBER_FORMAT = 2;
@@ -47,3 +47,11 @@ export const LIMIT = 20;
 export const ENTER_KEY_CODE = 13;
 export const MAX_MONTH = 12;
 export const MIN_MONTH = 1;
+export const MIN_NUMBER = 0;
+export const MAX_NUMBER = 1000000;
+export const MIN_PRICE = 0;
+export const MAX_PRICE = 100000000000000;
+export const GENDERS = [
+    {value: true, label: 'user.gender.male'},
+    {value: false, label: 'user.gender.female'},
+];

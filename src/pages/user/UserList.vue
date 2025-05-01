@@ -22,9 +22,14 @@
             <el-input
                 :placeholder="$t('common.input_keyword')"
                 @keyup.enter="submitForm"
-                v-model="searchForms.searchValue"
-                prop="searchValue"
+                v-model="searchForms.keyWord"
+                prop="keyWord"
             >
+              <template #append>
+                <span @click="() => isShowBoxSearch = !isShowBoxSearch" class="btn-setting">
+                  <IconSetting/>
+                </span>
+              </template>
             </el-input>
           </div>
         </div>
@@ -37,6 +42,27 @@
           >
         </div>
       </div>
+      <div style="width: 75%" class="form-search" :class="{ active: isShowBoxSearch }">
+        <div class="close-form">
+          <IconCircleClose @click="isShowBoxSearch = false"/>
+        </div>
+        <div class="form-search-box">
+          <div class="item">
+            <el-form-item :label="$t('user.role')">
+              <el-select v-model="searchForms.role">
+                <el-option :label="$t('common.all')" value=""></el-option>
+                <el-option
+                    v-for="(role, index) in LIST_ROLES"
+                    :key="index"
+                    :label="role"
+                    :value="role"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="user-body-table" style="margin-top: 16px; min-height: 400px">
@@ -47,7 +73,7 @@
       />
       <LoadMore
           :listData="listUsers.value"
-          :totalItems="totalItems.value"
+            :totalItems="totalItems.value"
           @loadMore="handleLoadMore"
       />
     </div>
@@ -57,8 +83,8 @@
         :isConfirmByText="true"
         :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
-        :message="$t('user.delete.text_delete')"
-        :title="$t('user.delete.title_delete')"
+        :message="$t('user.modal_confirm.message')"
+        :title="$t('user.modal_confirm.title')"
     />
   </div>
 </template>
@@ -73,13 +99,20 @@ import UserTable from "./item/UserTable.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import { NUMBER_FORMAT } from "@/constants/application.js";
 import { TEXT_CONFIRM_DELETE } from "@/constants/application.js";
-import { ADMIN } from "@/constants/roles.js";
+import {ADMIN, ROLE_LABELS} from "@/constants/roles.js";
 import {useUserStore} from "@/store/user.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
+import {usePersistenceStore} from "@/store/persistence.js";
+import {LIST_ROLES} from "@/constants/roles.js";
 
 export default {
   name: "userList",
+  computed: {
+    ROLE_LABELS() {
+      return ROLE_LABELS
+    }
+  },
   components: {
     IconSetting,
     IconCircleClose,
@@ -94,8 +127,14 @@ export default {
       pageIndex: 1,
     });
     const delete_id = ref();
+    const isShowBoxSearch = ref(false);
     const router = useRouter();
     const userStore = useUserStore();
+    const persist = usePersistenceStore();
+    const {
+      loggedIn,
+      projectId
+    } = persist;
     const {
       validation,
       listUsers, // temporary
@@ -108,7 +147,10 @@ export default {
     const isDisabled = ref(false);
 
     onMounted(() => {
-      getListUsers(searchForms.value);
+      projectId.value = null;
+      if (loggedIn.value) {
+        getListUsers(searchForms.value);
+      }
     });
 
     onUnmounted(() => {
@@ -116,12 +158,14 @@ export default {
     });
 
     const handleClear = () => {
-      searchForms.value.search = "";
+      searchForms.value.keyWord = "";
+      searchForms.value.role = "";
     };
 
     const submitForm = () => {
+      isShowBoxSearch.value = false;
       searchForms.value.pageIndex = 1;
-      currentPage.value = 0;
+      currentPage.value = 1;
       getListUsers(searchForms.value);
     };
 
@@ -163,13 +207,15 @@ export default {
       searchForms,
       NUMBER_FORMAT,
       ADMIN,
-      isDisabled,
       TEXT_CONFIRM_DELETE,
+      LIST_ROLES,
+      isDisabled,
       validation,
       totalItems,
       listUsers,
       isShowModalConfirm,
       closeModalConfirm,
+      isShowBoxSearch,
       handleClear,
       submitForm,
       handleLoadMore,

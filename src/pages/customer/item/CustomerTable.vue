@@ -50,13 +50,13 @@
         <span class="data-table">{{ scope.row.fax ? scope.row.fax : "-"}} </span>
       </template>
     </el-table-column>
-    <el-table-column min-width="140">
+    <el-table-column min-width="100">
       <template #header>
-        <p v-html="$t('customer.table.header.address')"></p>
+        <p v-html="$t('customer.table.header.tax')"></p>
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.address ? scope.row.address : "-"}} </span>
+        <span class="data-table">{{ scope.row.taxCode ? scope.row.taxCode : "-"}} </span>
       </template>
     </el-table-column>
     <el-table-column min-width="130">

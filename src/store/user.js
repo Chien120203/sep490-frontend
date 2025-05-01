@@ -4,12 +4,16 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import userList from "@/pages/user/UserList.vue";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 export const useUserStore = defineStore(
   "user",
   () => {
+    const router = useRouter();
     const {t} = useI18n();
     const validation = reactive({value: {}});
+    const loadingSaveButton = reactive({value: false});
     const isShowModalConfirm = reactive({value: false});
     const totalItems = reactive({value: 0});
     const currentPage = reactive({value: 1});
@@ -23,10 +27,22 @@ export const useUserStore = defineStore(
         fullName: "",
         phone: "",
         gender: "",
-        dob: ""
+        dob: "",
       }
     });
-
+    const userProfileDetails = reactive({
+      value: {
+        id: 0,
+        username: "",
+        email: "",
+        role: "",
+        fullName: "",
+        phone: "",
+        gender: "",
+        dob: "",
+        picProfile: []
+      }
+    });
 
     const getListUsers = async (params, isLoading = true) => {
       if (isLoading) mixinMethods.startLoading();
@@ -57,7 +73,7 @@ export const useUserStore = defineStore(
       await services.UserAPI.details(
         params,
         (response) => {
-          userDetails.value = response.data;
+          userDetails.value = {...response.data, picProfile: [response.data.picProfile]};
           mixinMethods.endLoading();
         },
         (error) => {
@@ -70,19 +86,28 @@ export const useUserStore = defineStore(
       );
     };
 
-    const saveCustomer = async (params, method) => {
+    const saveUser = async (params, method) => {
       mixinMethods.startLoading();
       await services.UserAPI[method](
-        params,
+        {
+          id: params.userId,
+          userName: params.username,
+          email: params.email,
+          role: params.role,
+          fullName: params.fullName,
+          phone: params.phone,
+          gender: params.gender,
+          isVerify: true,
+          dob: params.dob,
+        },
         (response) => {
           userDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.save_user_success"));
           mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.USER.LIST});
         },
         (error) => {
-          validation.value = mixinMethods.handleErrorResponse(
-            error.responseCode
-          );
+          validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_user_failed"));
           mixinMethods.endLoading();
         }
@@ -92,16 +117,13 @@ export const useUserStore = defineStore(
     const handleDeleteUser = async (id) => {
       mixinMethods.startLoading();
       await services.UserAPI.deleteUser(
-        {customerId: id},
+        id,
         (response) => {
-          userDetails.value = response.data;
+          listUsers.value = listUsers.value.filter(user => user.id !== id);
           mixinMethods.notifySuccess(t("response.message.delete_user_success"));
           mixinMethods.endLoading();
         },
         (error) => {
-          validation.value = mixinMethods.handleErrorResponse(
-            error.responseCode
-          );
           mixinMethods.notifyError(t("response.message.delete_user_failed"));
           mixinMethods.endLoading();
         }
@@ -129,6 +151,34 @@ export const useUserStore = defineStore(
       };
     };
 
+    const updateUserProfile = async (params) => {
+      mixinMethods.startLoading();
+      let data = {
+        username: params.username,
+        fullName: params.fullName,
+        phone: params.phone,
+        gender: params.gender,
+        dob: params.dob,
+        picProfile: params.picProfile?.[0]?.raw ? [params.picProfile[0].raw] : []
+      }
+      const formData = mixinMethods.createFormData(data);
+      await services.AuthenticationAPI.updateUserProfile(
+        formData,
+        (response) => {
+          userProfileDetails.value = response.data;
+          mixinMethods.notifySuccess(t("response.message.update_success"));
+          mixinMethods.endLoading();
+        },
+        (error) => {
+          validation.value = mixinMethods.handleErrorResponse(
+            error.responseCode
+          );
+          mixinMethods.notifyError(t("response.message.update_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
     return {
       validation,
       listUsers, // temporary
@@ -138,10 +188,11 @@ export const useUserStore = defineStore(
       isShowModalConfirm,
       getUserIdByRole,
       clearUserDetails,
-      saveCustomer,
+      saveUser,
       getUserDetails,
       getListUsers,
-      handleDeleteUser
+      handleDeleteUser,
+      updateUserProfile
     };
   }
 );

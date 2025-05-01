@@ -6,12 +6,13 @@ import {useRouter} from "vue-router";
 import services from "@/plugins/services";
 import PAGE_NAME from "@/constants/route-name.js";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {ADMIN} from "@/constants/roles.js";
 
 export const useAuthStore = defineStore(
   "auth",
   () => {
     const persist = usePersistenceStore();
-    const {loggedIn} = persist;
+    const {loggedIn,projectId} = persist;
     const {t} = useI18n();
     const isShowModal = reactive({value: false});
     const resetPasswordForm = reactive({
@@ -32,20 +33,18 @@ export const useAuthStore = defineStore(
       await services.AuthenticationAPI.login(
         params,
         (response) => {
-          if (response.data && response.success) {
-            loggedIn.value = true;
-            localStorage.setItem('username', response.data.username);
-            localStorage.setItem('role', response.data.role);
-            localStorage.setItem('accessToken', response.data.accessToken);
-            localStorage.setItem('email', response.data.email);
-            localStorage.setItem('refreshToken', response.data.refreshToken);
-            localStorage.setItem('isVerify', response.data.isVerify);
-            validation.value = {};
-
-            router.push({name: PAGE_NAME.HOME});
-          } else {
-            mixinMethods.notifyError(t("response.message.login_fail"));
-          }
+          loggedIn.value = true;
+          localStorage.setItem('userId', response.data.userId);
+          localStorage.setItem('username', response.data.username);
+          localStorage.setItem('role', response.data.role);
+          localStorage.setItem('accessToken', response.data.accessToken);
+          localStorage.setItem('email', response.data.email);
+          localStorage.setItem('refreshToken', response.data.refreshToken);
+          localStorage.setItem('isVerify', response.data.isVerify);
+          validation.value = {};
+          if(localStorage.getItem('role') === ADMIN) {
+            router.push({name: PAGE_NAME.USER.LIST});
+          } else router.push({name: PAGE_NAME.HOME});
 
           mixinMethods.endLoading();
         },
@@ -57,15 +56,17 @@ export const useAuthStore = defineStore(
     };
 
     const handleLogout = () => {
-      loggedIn.value = false;
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("userId");
       localStorage.removeItem("role");
       localStorage.removeItem("username");
       localStorage.removeItem("email");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("isVerify");
-
+      loggedIn.value = false;
+      projectId.value = null;
       router.push({name: PAGE_NAME.LOGIN});
+      mixinMethods.notifySuccess(t("response.message.logout_success"));
     };
 
 
@@ -131,7 +132,7 @@ export const useAuthStore = defineStore(
       getOTPCode,
       handleLogin,
       handleLogout,
-      resetNewPassword,
+      resetNewPassword
     };
   }
 );

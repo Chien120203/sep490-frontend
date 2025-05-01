@@ -88,13 +88,6 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="address" class="input-item" :label="$t('customer.details.address')">
-              <el-input v-model="customerDetails.value.address" type="text" />
-              <label class="error-feedback-customer" v-if="validation && validation.value.address">
-                {{ $t(validation.value.address) }}
-              </label>
-            </el-form-item>
-
             <el-form-item prop="directorName" class="input-item" :label="$t('customer.details.director_name')">
               <el-input v-model="customerDetails.value.directorName" type="text" />
               <label class="error-feedback-customer" v-if="validation && validation.value.directorName">
@@ -118,7 +111,7 @@
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import IconBackMain from "@/svg/IconBackMain.vue";
-import {CUSTOMER_RULES} from "@/rules/customer/index.js";
+import {getCustomerRules} from "@/rules/customer/index.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useI18n} from "vue-i18n";
 import {useCustomerStore} from "@/store/customer.js";
@@ -139,6 +132,8 @@ export default {
     const route = useRoute();
     const isUpdate = computed(() => !!route.params.id);
     const router = useRouter();
+
+    const CUSTOMER_RULES = getCustomerRules();
 
     onMounted(() => {
       if(isUpdate.value) {

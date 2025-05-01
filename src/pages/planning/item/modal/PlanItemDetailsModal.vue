@@ -3,165 +3,240 @@
       :show="show"
       :width="'85%'"
       :containerHeight="'70%'"
-      :isShowFooter="false"
-      @close="$emit('close')"
+      :isShowFooter="true"
+      @close="closeModal"
   >
     <template #header>
-      <h4 class="modal-title">Construct Item Details</h4>
+      <h4 class="modal-title">{{ $t('planning.modal_title') }}</h4>
     </template>
 
     <template #body>
       <div class="modal-body-container">
-        <PriceInputForm :total="totalAllPrice" :selectedRow="selectedRow" />
+        <PriceInputForm
+            ref="childFormRef"
+            :rules="rules"
+            :allowEdit="allowEdit"
+            :total="totalAllPrice"
+            :selectedRow="selectedRow"
+        />
         <el-tabs v-model="activeTab">
           <!-- Công việc phụ thuộc -->
-          <el-tab-pane label="Công việc phụ thuộc" name="tasks">
-            <SingleOptionSelect
-                style="width: 30%"
-                class="select-item"
-                :optionKeys="dependencyOptions"
-                :listData="tasks.filter(item => item.index !== selectedRow.index)"
-                @handleSelectedParams="handleSelectTask"
+          <el-tab-pane :label="$t('planning.modal.el_pane.depen_work')" name="tasks">
+            <DependencyTaskTable
+                ref="dependentFormRef"
+                :allowEdit="allowEdit"
+                :rules="rules"
+                :tasks="tasks"
+                :selectedRow="selectedRow"
             />
-            <DependencyTaskTable :tasks="listTaskDependency" :isPlanning="true" @delete="handleRemoveDependency"/>
           </el-tab-pane>
 
           <!-- Tài nguyên -->
-          <el-tab-pane label="Tài nguyên" name="materials">
+          <el-tab-pane v-if="!hasChildren" :label="$t('planning.modal.el_pane.material')" name="materials">
             <ItemList
+                ref="tableMaterialFormRef"
+                :rules="rules"
+                :allowEdit="allowEdit"
+                :selectedRow="selectedRow"
                 :selectData="materials"
-                :resourceType="MATERIAL_RESOURCE"
+                :resourceType="MATERIAL_TYPE"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
-                @update-list="updateListMaterials"
+                @search="handleSearch"
+                @update-value="calculateTotal"
             />
           </el-tab-pane>
 
           <!-- Nhân lực -->
-          <el-tab-pane label="Nhân lực" name="users">
+          <el-tab-pane v-if="!hasChildren" :label="$t('planning.modal.el_pane.human')" name="users">
             <ItemList
+                ref="tableHumanFormRef"
+                :rules="rules"
+                :is-human="true"
+                :allowEdit="allowEdit"
+                :selectedRow="selectedRow"
                 :selectData="users"
-                :resourceType="HUMAN_RESOURCE"
+                :resourceType="HUMAN_TYPE"
                 :tableData="listSelectedUsers"
+                @search="handleSearch"
                 :optionKeys="userOptions"
-                @update-list="updateListUsers"
+                @update-value="calculateTotal"
             />
           </el-tab-pane>
 
           <!-- Phương tiện -->
-          <el-tab-pane label="Phương tiện" name="vehicles">
+          <el-tab-pane v-if="!hasChildren" :label="$t('planning.modal.el_pane.machine')" name="vehicles">
             <ItemList
+                ref="tableMachineFormRef"
+                :is-human="true"
+                :rules="rules"
+                :allowEdit="allowEdit"
                 :selectData="vehicles"
-                :resourceType="MACHINE_RESOURCE"
-                :tableData="listSelectedVehicles"
+                :selectedRow="selectedRow"
+                :resourceType="MACHINE_TYPE"
+                :tableData="listSelectedMachines"
+                @search="handleSearch"
                 :optionKeys="vehicleOptions"
-                @update-list="updateListVehicles"
+                @update-value="calculateTotal"
             />
           </el-tab-pane>
         </el-tabs>
       </div>
-
+    </template>
+    <template #footer>
       <div class="modal-footer">
-        <el-button class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
-        <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t("common.cancel") }}</el-button>
+        <el-button v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
+        <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
   </Modal>
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits, computed, onMounted, onUnmounted, watch, watchEffect} from "vue";
+import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
-import DependencyTaskTable from "@/pages/progress/items/modal/items/progress-details/DependencyTaskTable.vue";
-import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import {HUMAN_RESOURCE, MACHINE_RESOURCE, MATERIAL_RESOURCE} from "@/constants/resource.js";
+import DependencyTaskTable from "@/pages/planning/item/modal/items/DependencyTaskTable.vue";
+import {
+  HUMAN_TYPE,
+  MACHINE_TYPE,
+  MATERIAL_TYPE
+} from "@/constants/resource.js";
+import {mixinMethods} from "@/utils/variables.js";
+import {useI18n} from "vue-i18n";
 
 const props = defineProps({
-  selectedRow: { type: Object, default: {} },
-  show: { type: Boolean, default: false },
-  materials: { type: Array, default: () => [] },
-  users: { type: Array, default: () => [] },
-  vehicles: { type: Array, default: () => [] },
-  tasks: { type: Array, default: () => [] },
+  selectedRow: {type: Object, default: () => ({})},
+  show: {type: Boolean, default: false},
+  materials: {type: Array, default: () => []},
+  users: {type: Array, default: () => []},
+  vehicles: {type: Array, default: () => []},
+  tasks: {type: Array, default: () => []},
+  rules: {
+    type: Object,
+    default: () => ({})
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false
+  }
 });
 
-const materialOptions = ref({ id: "id", value: "name" });
-const userOptions = ref({ id: "id", value: "name" });
-const vehicleOptions = ref({ id: "id", value: "name" });
-const dependencyOptions = ref({ id: "index", value: "workName" });
-const listSelectedVehicles = ref( []);
-const listSelectedMaterials = ref([]);
-const listSelectedUsers = ref([]);
-const listTaskDependency = ref([]);
-const activeTab = ref("tasks"); // Default active tab
+const emit = defineEmits(["close", "submit", "search"]);
+const {t} = useI18n();
 
-const totalAllPrice = computed(() => {
-  const machine = listSelectedVehicles.value.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0);
-  const labor = listSelectedUsers.value.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0);
-  const material = listSelectedMaterials.value.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0);
+const activeTab = ref("tasks");
+const tableMachineFormRef = ref(null);
+const tableHumanFormRef = ref(null);
+const tableMaterialFormRef = ref(null);
+const dependentFormRef = ref(null);
+const childFormRef = ref(null);
+const materialOptions = ref({id: "id", value: "materialName"});
+const userOptions = ref({id: "id", value: "teamName"});
+const vehicleOptions = ref({id: "id", value: "chassisNumber"});
+const totalAllPrice = ref({
+  machine: 0,
+  labor: 0,
+  material: 0,
+  totalPrice: 0,
+});
+const hasChildren = computed(() => props.tasks.some(child => child.parentIndex === props.selectedRow.index && !child.deleted));
 
-  return {
+const getListResourceByType = (list, type) => {
+  if (!Array.isArray(list)) return [];
+  return list.filter(item => item.resourceType === type);
+};
+
+const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_TYPE));
+const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_TYPE));
+const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_TYPE));
+const calculateTotal = () => {
+  const machine = listSelectedMachines.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
+  const labor = listSelectedUsers.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
+  const material = listSelectedMaterials.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
+
+  totalAllPrice.value = {
     machine: machine.toFixed(2),
     labor: labor.toFixed(2),
     material: material.toFixed(2),
     totalPrice: (machine + labor + material).toFixed(2),
   };
-});
+};
 
-const getListResourceByType = (list, type) => {
-  if(!Array.isArray(list)) return [];
-  return list.filter(item => item.resourceType === type);
+const handleSearch = (data) => {
+  emit("search", data)
 }
 
-watchEffect(() => {
-  listSelectedVehicles.value = getListResourceByType(props.selectedRow?.details, MACHINE_RESOURCE);
-  listSelectedMaterials.value = getListResourceByType(props.selectedRow?.details, MATERIAL_RESOURCE);
-  listSelectedUsers.value = getListResourceByType(props.selectedRow?.details, HUMAN_RESOURCE);
-  listTaskDependency.value = props.selectedRow?.itemRelations || [];
-});
-
-const emit = defineEmits(["close", "submit"]);
-
-const handleSelectTask = (taskId) => {
-  let task = props.tasks.find((task) => task.index === taskId && task.index !== props.selectedRow.index);
-  if (!task) return;
-
-  listTaskDependency.value.push({
-    index: task.index,
-    workName: task.workName,
-    endDate: task.endDate,
-    startDate: task.startDate,
-    dependency: "",
-  });
+const closeModal = () => {
+  totalAllPrice.value = {
+    machine: 0,
+    labor: 0,
+    material: 0,
+    totalPrice: 0,
+  };
+  activeTab.value = "tasks"
+  emit("close");
 };
 
-const handleRemoveDependency = (index) => {
-  listTaskDependency.value = listTaskDependency.value.filter((task) => task.index !== index);
-};
+const handleSubmit = async () => {
+  const forms = hasChildren.value ? [
+    {
+      ref: dependentFormRef,
+      name: t("planning.form_ref.dependency"),
+    },
+    {
+      ref: childFormRef,
+      name: t("planning.form_ref.planning_info"),
+    }
+  ] : [
+    {
+      ref: dependentFormRef,
+      name: t("planning.form_ref.dependency"),
+    },
+    {
+      ref: childFormRef,
+      name: t("planning.form_ref.planning_info"),
+    },
+    {
+      ref: tableMaterialFormRef,
+      name: t("planning.form_ref.material"),
+    },
+    {
+      ref: tableMachineFormRef,
+      name: t("planning.form_ref.machine"),
+    },
+    {
+      ref: tableHumanFormRef,
+      name: t("planning.form_ref.human"),
+    },
+  ];
 
-const updateListMaterials = (listData) => {
-  listSelectedMaterials.value = listData;
-};
-const updateListUsers = (listData) => {
-  listSelectedUsers.value = listData;
-};
-const updateListVehicles = (listData) => {
-  listSelectedVehicles.value = listData;
-};
+  for (const form of forms) {
+    const isValid = await new Promise((resolve) => {
+      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+    });
 
-const handleSubmit = () => {
-  let data = {
-    details: [
-      ...listSelectedUsers.value,
-      ...listSelectedVehicles.value,
-      ...listSelectedMaterials.value,
-    ],
-    itemRelations: listTaskDependency.value,
+    if (!isValid) {
+      mixinMethods.notifyError(
+          t("planning.errors.invalid_form", { form: form.name })
+      );
+      return; // stop here if one form is invalid
+    }
   }
-  emit("submit", data);
+
+  // ✅ All forms are valid — proceed with submission
+  props.selectedRow.details = [
+    ...listSelectedUsers.value,
+    ...listSelectedMachines.value,
+    ...listSelectedMaterials.value,
+  ];
+
+  emit("submit", props.selectedRow);
+  emit("close");
+  activeTab.value = "tasks"
 };
+
 </script>
 
 <style scoped>
@@ -173,6 +248,7 @@ const handleSubmit = () => {
 .modal-title {
   margin: 0;
 }
+
 .modal-body-container {
   min-height: 550px;
 }

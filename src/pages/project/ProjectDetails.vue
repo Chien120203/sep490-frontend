@@ -29,73 +29,6 @@
               </template>
               <FinancialSummary :sections="financialData"/>
             </el-collapse-item>
-            <el-collapse-item name="3">
-              <template #title>
-                <h3>{{ $t("project.details.change_request") }}</h3>
-              </template>
-              <div class="project-body">
-                <div class="project-search">
-                  <div class="project-search-box col-md-9 col-lg-9">
-                    <p class="project-search__ttl">
-                      {{ $t("project.keyword") }}
-                    </p>
-                    <div class="mb-0 ruleform">
-                      <el-input
-                          :placeholder="$t('common.input_keyword')"
-                          @keyup.enter=""
-                          v-model="searchCRForms.searchValue"
-                          prop="searchValue"
-                      >
-                        <template #append>
-                <span @click="handleCRSearchForm" class="btn-setting">
-                  <IconSetting/>
-                </span>
-                        </template>
-                      </el-input>
-                    </div>
-                  </div>
-                  <div class="btn-search-select col-md-3 col-lg-3 project-box-btn-all">
-                    <el-button class="btn btn-search" @click="">
-                      {{ $t("common.search") }}
-                    </el-button
-                    >
-                    <el-button class="btn btn-clear" @click="">
-                      {{ $t("common.clear") }}
-                    </el-button
-                    >
-                  </div>
-                </div>
-                <div class="form-search" :class="{ active: isShowBoxSearch }">
-                  <div class="close-form">
-                    <IconCircleClose @click="isShowBoxSearch = false"/>
-                  </div>
-                  <div class="form-search-box">
-                    <div class="item">
-                      <el-form-item :label="$t('project.status')">
-                        <el-select v-model="searchCRForms.status">
-                          <el-option :label="$t('common.all')" value=""></el-option>
-                          <el-option
-                              v-for="(status, index) in STATUSES"
-                              :key="index"
-                              :label="status"
-                              :value="index"
-                          >
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <ProjectCR
-                  :data="changeRequestData"
-              />
-              <LoadMore
-                  :listData="changeRequestData.value"
-                  :totalItems="10"
-                  @loadMore="handleLoadMore"
-              />
-            </el-collapse-item>
             <el-collapse-item name="4">
               <template #title>
                 <h3>{{ $t("contract.title") }}</h3>
@@ -112,13 +45,13 @@
                 </div>
               </div>
               <ContractList
-                  :data="listContracts.value"
-                  @details="getContractDetails"
+                  :data="contractDetails.value"
+                  @details="getContractDtls"
               />
             </el-collapse-item>
             <el-collapse-item name="5">
               <template #title>
-                <h3>{{ $t("project.details.site_survey") }}</h3>
+                <h3>{{ $t("project.details.site-survey") }}</h3>
               </template>
               <SiteSurveyInfo
                   :data="siteSurveyDetails.value"
@@ -161,7 +94,7 @@ import LoadMore from "@/components/common/LoadMore.vue";
 import { useProjectStore } from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
 import { useContractStore } from "@/store/contract.js";
-import SiteSurveyInfo from "@/pages/site_survey/SiteSurveyInfo.vue";
+import SiteSurveyInfo from "@/pages/site-survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
@@ -194,20 +127,22 @@ export default {
       isShowModalConfirm,
       projectDetails,
       getProjectDetails,
+      updateProjectStatus,
       saveProject
     } = projectStore;
 
     const {
-      listContracts,
       totalItems,
-      currentPage,
-      getListContracts,
+      contractDetails,
+      getContractDetails,
     } = contractStore;
 
     const { siteSurveyDetails, isSiteSurveyNull, getSurveyDetails } = surveyStore;
 
     const {
-      projectId
+      projectId,
+      projectStatus,
+      loggedIn
     } = persist;
 
     const activeCollapseItems = ref(["3", "2", "4", "5"]);
@@ -275,22 +210,18 @@ export default {
       pageIndex: 1,
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
-    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === PLANNING_STATUS && listContracts.value.length === 0));
-    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull));
-    const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull));
-    onMounted(() => {
+    const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && contractDetails.value.id === 0));
+    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull.value));
+    const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
+    onMounted(async () => {
       projectId.value = route.params.id;
-      getProjectDetails(route.params.id);
-      getListContracts(contractSearchForms.value);
-      getSurveyDetails(route.params.id);
+      if (loggedIn.value) {
+        await getProjectDetails(route.params.id);
+        projectStatus.value = projectDetails.value.status;
+        await getContractDetails(projectId.value, false);
+        await getSurveyDetails(route.params.id, false);
+      }
     });
-
-    onUnmounted(() => {});
-
-    const getContractDetails = (id) => {
-      projectId.value = route.params.id;
-      router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
-    }
 
     const getSiteSurveyDetails = () => {
       router.push({ name: PAGE_NAME.SITE_SURVEY.DETAILS, params: { id: route.params.id } });
@@ -304,6 +235,10 @@ export default {
       router.push({ name: PAGE_NAME.PROJECT.EDIT, params: { id: route.params.id } });
     };
 
+    const getContractDtls = (id) => {
+      router.push({name: PAGE_NAME.CONTRACT.DETAILS, params: {id}});
+    }
+
     const handleBack = () => {
       router.push({ name: PAGE_NAME.PROJECT.LIST });
     };
@@ -312,21 +247,16 @@ export default {
       isShowBoxContractSearch.value = !isShowBoxContractSearch.value;
     };
 
-    const handleSearchContract = (isSearch = false) => {
-      currentPage.value = isSearch ? 1 : currentPage.value + 1;
-      contractSearchForms.value.pageIndex = isSearch ? 1 : contractSearchForms.value.pageIndex + 1;
-      getListContracts(contractSearchForms.value);
-    };
-
     const closeModalConfirm = () => {
       isShowModalConfirm.value = false;
     }
 
     const handleConfirm = () => {
+      let status = null;
       if(actionText.value === t('common.approve')) {
-        projectDetails.value.status = PLANNING_STATUS;
-      } else projectDetails.value.status = CLOSED_STATUS;
-      saveProject(projectDetails.value);
+        status = PLANNING_STATUS;
+      } else status = CLOSED_STATUS;
+      updateProjectStatus(projectDetails.value.id, status);
       isShowModalConfirm.value = false;
     };
 
@@ -339,7 +269,6 @@ export default {
     };
 
     const handleRedirectToCreate = () => {
-      projectId.value = route.params.id;
       router.push({name: PAGE_NAME.CONTRACT.CREATE});
     }
 
@@ -368,12 +297,13 @@ export default {
       isAllowCreateSiteSurvey,
       isShowBoxContractSearch,
       contractSearchForms,
-      listContracts,
       siteSurveyDetails,
       totalItems,
+      contractDetails,
       isAllowEdit,
       actionText,
       closeModalConfirm,
+      getContractDtls,
       handleChangeStatus,
       handleConfirm,
       handleBack,
@@ -382,7 +312,6 @@ export default {
       getSiteSurveyDetails,
       handleContractSearchForm,
       handleClearSearchContractForm,
-      handleSearchContract,
       getContractDetails,
       handleCreateSiteSurvey,
     };

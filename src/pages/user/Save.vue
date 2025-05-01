@@ -66,9 +66,10 @@
                 prop="dob"
             >
               <el-date-picker
+                  style="width: 90%"
+                  :format="DATE_FORMAT"
+                  :value-format="DATE_FORMAT"
                   v-model="userDetails.value.dob"
-                  type="date"
-                  placeholder="Select Date"
               />
               <label
                   class="error-feedback-user"
@@ -83,11 +84,9 @@
                 class="custom-textarea required"
                 :label="$t('user.details.gender')"
             >
-              <el-input v-model="userDetails.value.gender"/>
-              <label
-                  class="error-feedback-user"
-                  v-if="validation && validation.value.gender"
-              >{{ $t(validation.value.gender) }}</label>
+              <el-select v-model="userDetails.value.gender">
+                <el-option v-for="gender in GENDERS" :label="$t(gender.label)" :key="gender.label" :value="gender.value"></el-option>
+              </el-select>
             </el-form-item>
 
             <el-form-item
@@ -95,7 +94,9 @@
                 class="custom-textarea required"
                 :label="$t('user.details.role')"
             >
-              <el-input v-model="userDetails.value.role"/>
+              <el-select v-model="userDetails.value.role">
+                <el-option v-for="(role, index) in LIST_ROLES" :key="index" :value="role"></el-option>
+              </el-select>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.role"
@@ -147,6 +148,8 @@ import {USER_RULES} from "@/rules/user/index.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import {useUserStore} from "@/store/user.js";
 import PAGE_NAME from "@/constants/route-name.js";
+import {DATE_FORMAT, GENDERS} from "@/constants/application.js";
+import {LIST_ROLES} from "@/constants/roles.js";
 
 export default {
   components: {IconBackMain, SingleOptionSelect},
@@ -170,6 +173,7 @@ export default {
     });
 
     onUnmounted(() => {
+      validation.value = {};
       clearUserDetails();
     });
 
@@ -196,6 +200,9 @@ export default {
       validation,
       handleBack,
       submitForm,
+      LIST_ROLES,
+      GENDERS,
+      DATE_FORMAT
     };
   },
 };

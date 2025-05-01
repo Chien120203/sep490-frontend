@@ -86,6 +86,7 @@
             <el-col :span="12">
               <el-form-item prop="estimatedExpenses" :label="$t('survey.details.estimatedExpenses')">
                 <el-input :formatter="(value) => formatCurrency(value)"
+                          :parser="(value) => mixinMethods.parseInputCurrency(value)"
                           v-model="siteSurveyDetails.value.estimatedExpenses"/>
               </el-form-item>
             </el-col>
@@ -94,12 +95,14 @@
             <el-col :span="12">
               <el-form-item prop="estimatedProfits" :label="$t('survey.details.estimatedProfits')">
                 <el-input :formatter="(value) => formatCurrency(value)"
+                          :parser="(value) => mixinMethods.parseInputCurrency(value)"
                           v-model="siteSurveyDetails.value.estimatedProfits"/>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="tenderPackagePrice" :label="$t('survey.details.tenderPackagePrice')">
                 <el-input :formatter="(value) => formatCurrency(value)"
+                          :parser="(value) => mixinMethods.parseInputCurrency(value)"
                           v-model="siteSurveyDetails.value.tenderPackagePrice"/>
               </el-form-item>
             </el-col>
@@ -108,6 +111,7 @@
             <el-col :span="12">
               <el-form-item prop="totalBidPrice" :label="$t('survey.details.totalBidPrice')">
                 <el-input :formatter="(value) => formatCurrency(value)"
+                          :parser="(value) => mixinMethods.parseInputCurrency(value)"
                           v-model="siteSurveyDetails.value.totalBidPrice"/>
               </el-form-item>
             </el-col>
@@ -123,6 +127,7 @@
             <el-col :span="12">
               <el-form-item prop="projectCost" :label="$t('survey.details.projectCost')">
                 <el-input :formatter="(value) => formatCurrency(value)"
+                          :parser="(value) => mixinMethods.parseInputCurrency(value)"
                           v-model="siteSurveyDetails.value.projectCost">
                 </el-input>
               </el-form-item>
@@ -130,6 +135,7 @@
             <el-col :span="12">
               <el-form-item prop="finalProfit" :label="$t('survey.details.finalProfit')">
                 <el-input :formatter="(value) => formatCurrency(value)"
+                          :parser="(value) => mixinMethods.parseInputCurrency(value, true)"
                           v-model="siteSurveyDetails.value.finalProfit"/>
               </el-form-item>
             </el-col>
@@ -185,7 +191,6 @@ import {useProjectStore} from "@/store/project.js";
 export default {
   components: {FileUpload, IconBackMain},
   setup() {
-    const {t} = useI18n();
     const SURVEY_RULES = getSiteSurveyRules();
     const siteSurveyStore = useSiteSurveyStore();
     const persistenceStore = usePersistenceStore();
@@ -205,7 +210,7 @@ export default {
 
     onMounted(async () => {
       if (route.params.id) {
-        getProjectDetails(projectId.value);
+        await getProjectDetails(projectId.value);
         await getSurveyDetails(route.params.id);
         isCreateMode.value = !siteSurveyDetails.value;
 
@@ -232,12 +237,7 @@ export default {
     }
 
     const submitForm = () => {
-      siteSurveyDetails.value.estimatedExpenses = mixinMethods.handleChangeNumber(siteSurveyDetails.value.estimatedExpenses);
-      siteSurveyDetails.value.estimatedProfits = mixinMethods.handleChangeNumber(siteSurveyDetails.value.estimatedProfits);
-      siteSurveyDetails.value.tenderPackagePrice = mixinMethods.handleChangeNumber(siteSurveyDetails.value.tenderPackagePrice);
-      siteSurveyDetails.value.totalBidPrice = mixinMethods.handleChangeNumber(siteSurveyDetails.value.totalBidPrice);
-      siteSurveyDetails.value.finalProfit = mixinMethods.handleChangeNumber(siteSurveyDetails.value.finalProfit);
-      siteSurveyDetails.value.projectCost = mixinMethods.handleChangeNumber(siteSurveyDetails.value.projectCost);
+      siteSurveyDetails.value.projectId = projectId.value;
       ruleFormRef.value.validate(async (valid) => {
         if (valid) {
           await saveSurvey(siteSurveyDetails.value);
@@ -251,6 +251,7 @@ export default {
       ruleFormRef,
       siteSurveyDetails,
       isAllowEditSurvey,
+      mixinMethods,
       handleBack,
       submitForm,
       handleFileUpload,

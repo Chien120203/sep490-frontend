@@ -1,41 +1,150 @@
 <template>
   <div class="selection-filters">
-    <div class="form-container">
-      <div>
-        <!-- Tên kế hoạch -->
-        <el-form-item label-class="custom-label">
-          <template #label> Tên kế hoạch </template>
-          <el-input v-model="planDetails.planName" />
-        </el-form-item>
-      </div>
+    <el-form
+        ref="ruleFormRef"
+        :model="planDetails"
+        :rules="rules"
+        class="form-search-box"
+        label-width="15%"
+    >
+      <div class="form-container">
+        <div>
+          <!-- Tên kế hoạch -->
+          <el-form-item prop="planName">
+            <template #label> {{$t('planning.form.name')}} </template>
+            <el-input :disabled="!allowEdit" required v-model="planDetails.planName" />
+          </el-form-item>
 
-      <div>
-        <!-- Người theo dõi -->
-        <el-form-item label-class="custom-label">
-          <template #label> Người theo dõi </template>
-          <el-select v-model="selectedFollowers" multiple placeholder="Chọn người theo dõi" @change="emit('updateFollowers', selectedFollowers)">
-            <el-option v-for="user in followers" :key="user.id" :label="user.username" :value="user.id"></el-option>
-          </el-select>
-        </el-form-item>
+          <!-- Người theo dõi -->
+          <el-form-item prop="reviewers">
+            <template #label> {{$t('planning.form.inspector')}} </template>
+            <el-select disabled v-model="listSelectedUsers" multiple>
+              <el-option
+                  v-for="user in planDetails.reviewers"
+                  :key="user.id"
+                  :label="user.name"
+                  :value="user.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </div>
+
+        <div>
+          <!-- Ngày bắt đầu -->
+          <el-form-item>
+            <template #label> {{$t('planning.form.ctr_start_date')}} </template>
+            <el-date-picker
+                style="width: 100%"
+                class="custom-input"
+                v-model="contractDetails.startDate"
+                type="date"
+                :disabled="true"
+                placeholder="Select Date"
+            />
+          </el-form-item>
+
+          <!-- Ngày kết thúc -->
+          <el-form-item>
+            <template #label> {{$t('planning.form.ctr_end_date')}} </template>
+            <el-date-picker
+                style="width: 100%"
+                class="custom-input"
+                v-model="contractDetails.endDate"
+                type="date"
+                :disabled="true"
+                placeholder="Select Date"
+            />
+          </el-form-item>
+
+          <!-- Ngân sách -->
+          <el-form-item>
+            <template #label> {{$t('planning.form.budget')}} </template>
+            <el-input
+                v-model="totalPrice"
+                :formatter="(value) => mixinMethods.formatInputMoney(value)"
+                :parser="(value) => mixinMethods.parseInputCurrency(value)"
+                :disabled="true"
+            />
+            <p style="margin-bottom: 18px" class="error-feedback">
+              {{ exceedMessages }}
+            </p>
+          </el-form-item>
+        </div>
       </div>
+    </el-form>
+    <!-- Hiển thị thông tin công việc đã chọn -->
+    <div v-if="lockInfo.userName" class="selected-task-display">
+      <el-alert
+          type="warning"
+          show-icon
+          :title="`This plan is currently being edited by ${lockInfo?.userName}`"
+          :description="`You can view the plan but cannot make changes until they finish editing.\n
+            Lock expires at: ${formatLockTime(lockInfo?.lockExpiresAt)}`"
+          style="margin-bottom: 16px"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from "vue";
+import { ref, defineProps,defineEmits, computed } from "vue";
+import { mixinMethods } from "@/utils/variables.js";
+import {useI18n} from "vue-i18n";
+import {DATE_TIME_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
-  followers: Array,
   planDetails: {
     type: Object,
-    default: () => {},
-  }
+    default: () => ({}),
+  },
+  contractDetails: {
+    type: Object,
+    default: () => ({}),
+  },
+  lockInfo: {
+    type: Object,
+    default: () => ({}),
+  },
+  rules: {
+    type: Object,
+    default: () => ({}),
+  },
+  allowEdit: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const selectedFollowers = ref([]);
+const emit = defineEmits(["disable-btn"]);
+const ruleFormRef = ref(null);
+const {t} = useI18n();
+const listSelectedUsers = computed(() =>
+    props.planDetails.reviewers.map((user) => user.id)
+);
 
-const emit = defineEmits([ "updateFollowers", "search"]);
+const totalPrice = computed(() =>
+    props.contractDetails.contractDetails.reduce((sum, item) => sum + item.total, 0)
+);
+
+const formatLockTime = (dateTimeString) => {
+  if (!dateTimeString) return '';
+  const date = new Date(dateTimeString);
+  return mixinMethods.showDateTime(date, DATE_TIME_FORMAT);
+};
+
+const exceedMessages = computed(() => {
+  const actualBudget = props.planDetails.planItems.reduce((sum, item) => sum + item.totalPrice, 0);
+  if(totalPrice.value < actualBudget) {
+    emit("disable-btn", true);
+    return t('planning.errors.exceed_budget');
+  }
+  emit("disable-btn", false);
+  return ''
+})
+
+defineExpose({
+  ruleFormRef,
+});
 </script>
 
 <style scoped>
@@ -43,14 +152,9 @@ const emit = defineEmits([ "updateFollowers", "search"]);
   padding: 10px;
 }
 
-.custom-label {
-  width: 20%;
-  display: inline-block;
-}
-
 .form-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 2 columns */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 15px;
 }
 </style>

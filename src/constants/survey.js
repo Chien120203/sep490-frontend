@@ -17,3 +17,8 @@ export const STATUS_LABELS = [
     'project.statuses.paused',
     'project.statuses.close',
 ]
+
+export const BID_DECISION_LABELS = [
+    'survey.details.bid_reject',
+    'survey.details.bid_approve',
+]

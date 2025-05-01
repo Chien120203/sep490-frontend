@@ -62,12 +62,34 @@ const notifyError = (messages, useHTML = false, notify = null) => {
   const notifyObj = notify ?? ElNotification;
   notifyObj.error({
     message,
-    duration: 2000,
+    duration: 1000,
     position: "top-right",
     dangerouslyUseHTMLString: useHTML,
     showClose: false,
   });
 };
+
+const notifyWarning = (messages, useHTML = false, notify = null) => {
+  let message = "";
+
+  if (useHTML && Array.isArray(messages)) {
+    messages.forEach((item) => (message += `<p>${item}</p>`));
+  } else if (useHTML && typeof messages === "object") {
+    for (let key in messages) message += `<p>${messages[key]}</p>`;
+  } else {
+    message = messages;
+  }
+
+  const notifyObj = notify ?? ElNotification;
+  notifyObj.warning({
+    message,
+    duration: 1000,
+    position: "top-right",
+    dangerouslyUseHTMLString: useHTML,
+    showClose: false,
+  });
+};
+
 
 const notifySuccess = (messages, useHTML = false, notify = null) => {
   let message = "";
@@ -81,7 +103,7 @@ const notifySuccess = (messages, useHTML = false, notify = null) => {
   const notifyObj = notify ?? ElNotification;
   notifyObj.success({
     message,
-    duration: 2000,
+    duration: 1000,
     position: "top-right",
     dangerouslyUseHTMLString: useHTML,
     showClose: false,
@@ -134,6 +156,41 @@ const formatInputCurrency = (value, isEmpty = false, withoutComma = false) => {
   return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
+const formatInputMoney = (value) => {
+  if (value === null || value === undefined) return "";
+
+  const numericValue = Number(value); // Convert to number for validation
+  if (isNaN(numericValue) || numericValue < 0) return ""; // Return "0" for negative values
+
+  const stringValue = String(numericValue); // Convert back to string for formatting
+  return stringValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+const parseInputCurrency = (value, allowNegative = false) => {
+  if (!value) return;
+
+  // Extract negative sign if allowed and present at the beginning
+  let isNegative = false;
+  if (allowNegative && value.trim().startsWith('-')) {
+    isNegative = true;
+  }
+
+  // Remove everything except digits and decimal point
+  const cleaned = value.replace(/[^\d.]/g, '');
+
+  // Handle multiple decimals
+  const parts = cleaned.split('.');
+  const normalized = parts.length > 2
+    ? parts[0] + '.' + parts.slice(1).join('')
+    : cleaned;
+
+  // Parse to number
+  const result = parseFloat(normalized);
+  if (isNaN(result)) return;
+
+  return isNegative ? -result : result;
+};
+
 const formatNumberVietnam = (number) => {
   if (number === null || number === undefined) return "";
   return new Intl.NumberFormat("vi-VN").format(number);
@@ -156,21 +213,24 @@ const base64ToFile = (base64String, fileName) => {
 
 
 const handleErrorResponse = (error) => {
-  return error.errors.reduce((acc, { field, message }) => {
-    field.split(",").map(f => f.trim()).forEach(f => {
+  const errors = error?.errors || {};
+  return Object.entries(errors).reduce((acc, [field, messages]) => {
+    const message = messages?.[0] || 'Validation error';
+    field.split(',').map(f => f.trim()).forEach(f => {
       acc[f] = message;
     });
     return acc;
   }, {});
 };
 
-const createFormData = (params) => {
+
+const createFormData = (params, skipArray = [], combineArray = []) => {
   const formData = new FormData();
 
   Object.keys(params).forEach((key) => {
     const value = params[key];
 
-    if (Array.isArray(value)) {
+    if (Array.isArray(value) && !skipArray.includes(key)) {
       // Check if the array contains only File or Blob objects
       const isArrayOfFiles = value.every(item => item instanceof File || item instanceof Blob);
 
@@ -180,8 +240,8 @@ const createFormData = (params) => {
           formData.append(key, item);
         });
       } else {
-        // If it's a regular array, convert items to JSON
-        value.forEach(item => {
+        if(combineArray.includes(key)) formData.append(key, JSON.stringify(value));
+        else value.forEach(item => {
           formData.append(key, JSON.stringify(item));
         });
       }
@@ -194,19 +254,66 @@ const createFormData = (params) => {
   return formData;
 };
 
+const validateForm = (formRef) => {
+  try {
+    if (!formRef || typeof formRef.validate !== 'function') {
+      console.warn("Invalid formRef:", formRef);
+      return false;
+    }
+    let result = true;
+    formRef.validate((valid) => {
+      result = !!valid;
+    });
+    return result;
+  } catch (error) {
+    return false;
+  }
+};
+const validateField = (index, field, rules, item, validationErrors) => {
+  const fieldRules = rules[field];
+  const fieldValue = item[field];
 
+  fieldRules.forEach((rule) => {
+    if (rule.required && !fieldValue) {
+      validationErrors[`${
+        field}-${index
+      }`] = rule.message;
+    }
 
+    if (rule.min !== undefined && fieldValue < rule.min) {
+      validationErrors[`${field}-${index}`] = rule.message
+    }
+
+    if (rule.max !== undefined && fieldValue > rule.max) {
+      validationErrors[`${field}-${index}`] = rule.message;
+    }
+
+    if (rule.validator) {
+      rule.validator(rule, fieldValue, (error) => {
+        if (error) {
+          validationErrors[`${
+            field}-${index
+          }`] = error.message;
+        }
+      });
+    }
+  });
+};
 
 export const mixins = {
   screenLoading,
   startLoading,
+  validateForm,
   createFormData,
   endLoading,
   checkEmptyWithOutZero,
+  notifyWarning,
   checkEmpty,
   formatCurrency,
   formatNumberVietnam,
   formatInputCurrency,
+  parseInputCurrency,
+  formatInputMoney,
   handleErrorResponse,
   arrayChunk,
   notifyError,
@@ -215,4 +322,5 @@ export const mixins = {
   validateInvalidEmail,
   showDateTime,
   base64ToFile,
+  validateField,
 };

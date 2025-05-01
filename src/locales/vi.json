@@ -7,6 +7,7 @@
     "invoice_attachment": "Tệp đính kèm hóa đơn",
     "contract": "Hợp đồng",
     "sales": "Bán hàng",
+    "upload": "Tải lên",
     "status_note": "Ghi chú trạng thái",
     "start_date": "Ngày bắt đầu",
     "end_date": "Ngày kết thúc",
@@ -14,6 +15,7 @@
     "export_pdf": "Xuất ra PDF",
     "terminate": "Chấm dứt",
     "new": "Mới",
+    "details": "Chi tiết",
     "extend": "Kéo dài",
     "first_half_year": "Nửa năm đầu",
     "second_half_year": "Nửa năm sau",
@@ -53,6 +55,7 @@
     "error": "Lỗi",
     "action": "Hành động",
     "cancel": "Hủy",
+    "download": "Tải về",
     "notthing_found": "Không tìm thấy gì",
     "status": "Trạng thái",
     "reset": "Đặt lại",
@@ -64,6 +67,7 @@
     "department": "Phòng ban",
     "account_manager": "Quản lý tài khoản",
     "customer": "Khách hàng",
+    "no_dependency": "No Dependency",
     "unit": "Đơn vị",
     "total": "Tổng cộng",
     "name": "Tên",
@@ -119,6 +123,11 @@
       "completed": "Hoàn thành",
       "closed": "Đã đóng"
     },
+    "file": {
+      "name": {
+        "default": "Tên file mặc định"
+      }
+    },
     "all_options": "Tất cả",
     "keyword": "Từ khóa",
     "submit": "Gửi",
@@ -128,6 +137,7 @@
     "note": "Ghi chú",
     "select_date": "Chọn ngày",
     "approve": "Duyệt",
+    "wait": "Chờ duyệt",
     "remain": "Còn lại",
     "reject": "Từ chối",
     "review": "Đánh giá",
@@ -137,6 +147,22 @@
     "load": "Tải",
     "reload": "Tải lại",
     "get_otp": "Lấy mã OTP"
+  },
+  "profile": {
+    "title": "Thông tin người dùng",
+    "details": {
+      "title": "Thông tin chi tiết",
+      "change_password": "Thay đổi mật khẩu",
+      "logout": "Đăng xuất",
+      "username": "Tên đăng nhập",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "phone": "SĐT",
+      "role": "Vị trí",
+      "gender": "Giới tính",
+      "image": "Ảnh đại diện",
+      "address": "Địa chỉ"
+    }
   },
   "permission": {
     "menu": "Menu",
@@ -167,7 +193,16 @@
     "status": "Trạng thái",
     "admin": "Quản trị viên",
     "landlord": "Chủ nhà",
-    "tenant": "Người thuê"
+    "tenant": "Người thuê",
+    "label": {
+      "construct_manager": "Quản lý thi công",
+      "employee": "Nhân viên thi công",
+      "business": "Nhân viên kinh doanh",
+      "technical": "Quản lý kỹ thuật",
+      "qa": "Đảm bảo chất lượng",
+      "bod": "Ban giám đốc",
+      "resource": "Quản lý tài nguyên"
+    }
   },
   "response": {
     "code": {
@@ -195,7 +230,1260 @@
       "create_success": "Tạo mới thành công!",
       "delete_success": "Xóa thành công!",
       "update_success": "Cập nhật thành công!",
-      "error_occurred": "Đã có lỗi xảy ra. Vui lòng thử lại sau."
+      "update_failed" : "Cập nhật thất bại",
+      "error_occurred": "Đã có lỗi xảy ra. Vui lòng thử lại sau.",
+      "get_otp_success": "Mã OTP đã được gửi đến email của bạn",
+      "get_otp_failed": "Gửi mã OTP thất bại",
+      "reset_password_success": "Đặt lại mật khẩu thành công",
+      "reset_password_failed": "Đặt lại mật khẩu thất bại",
+      "change_password_success": "Đổi mật khẩu thành công",
+      "change_password_failed": "Đổi mật khẩu thất bại",
+      "create_user_success": "Tạo người dùng thành công",
+      "create_user_failed": "Tạo người dùng thất bại",
+      "delete_user_failed": "Xóa người dùng thất bại",
+      "delete_user_success": "Xóa người dùng thành công",
+      "get_user_dtls_failed": "Lấy thông tin chi tiết người dùng thất bại",
+      "create_contract_success": "Tạo hợp đồng thành công",
+      "create_contract_failed": "Tạo hợp đồng thất bại",
+      "get_contract_details_failed": "Lấy thông tin chi tiết hợp đồng thất bại",
+      "terminate_contract_success": "Chấm dứt hợp đồng thành công",
+      "terminate_contract_failed": "Chấm dứt hợp đồng thất bại",
+      "get_customer_failed": "Lấy danh sách khách hàng thất bại",
+      "get_customer_dtls_failed": "Lấy thông tin chi tiết khách hàng thất bại",
+      "save_customer_success": "Lưu khách hàng thành công",
+      "save_customer_failed": "Lưu khách hàng thất bại",
+      "get_user_failed": "Lấy danh sách người dùng thất bại",
+      "save_user_success": "Lưu người dùng thành công",
+      "save_user_failed": "Lưu người dùng thất bại",
+      "delete_customer_success": "Xóa khách hàng thành công",
+      "delete_customer_failed": "Xóa khách hàng thất bại",
+      "delete_plan_success": "Xóa kế hoạch thành công",
+      "delete_plan_failed": "Xóa kế hoạch thất bại",
+      "get_projects_failed": "Lấy danh sách dự án thất bại",
+      "get_project_details_failed": "Lấy thông tin chi tiết dự án thất bại",
+      "get_progress_dtls_failed": "Lấy chi tiết tiến độ thất bại",
+      "save_planning_failed": "Lưu kế hoạch thất bại",
+      "save_planning_success": "Lưu kế hoạch thành công",
+      "approve_planning_failed": "Phê duyệt kế hoạch thất bại",
+      "approve_planning_success": "Phê duyệt kế hoạch thành công",
+      "reject_planning_failed": "Từ chối kế hoạch thất bại",
+      "reject_planning_success": "Từ chối kế hoạch thành công",
+      "save_project_success": "Lưu dự án thành công",
+      "save_project_failed": "Lưu dự án thất bại",
+      "save_contract_success": "Lưu hợp đồng thành công",
+      "get_contracts_failed": "Lấy danh sách hợp đồng thất bại",
+      "save_contract_failed": "Lưu hợp đồng thất bại",
+      "get_contract_dtls_failed": "Lấy chi tiết hợp đồng thất bại",
+      "get_planning_failed": "Lấy danh sách kế hoạch thất bại",
+      "get_mobilization_failed": "Lấy danh sách yêu cầu điều động thất bại",
+      "save_mobilize_success": "Lưu yêu cầu điều động thành công",
+      "save_mobilize_failed": "Lưu yêu cầu điều động thất bại",
+      "delete_mobilize_success": "Xóa yêu cầu điều động thành công",
+      "delete_mobilize_failed": "Xóa yêu cầu điều động thất bại",
+      "get_survey_dtls_failed": "Lấy thông tin khảo sát thực địa thất bại",
+      "save_survey_success": "Lưu khảo sát thực địa thành công",
+      "save_survey_failed": "Lưu khảo sát thực địa thất bại",
+      "get_machine_failed": "Lấy danh sách máy móc thất bại",
+      "get_machine_dtls_failed": "Lấy thông tin chi tiết máy móc thất bại",
+      "save_machine_success": "Lưu máy móc thành công",
+      "save_machine_failed": "Lưu máy móc thất bại",
+      "delete_machine_success": "Xóa máy móc thành công",
+      "delete_machine_failed": "Xóa máy móc thất bại",
+      "get_material_failed": "Lấy danh sách vật tư thất bại",
+      "get_material_dtls_failed": "Lấy thông tin chi tiết vật tư thất bại",
+      "save_material_success": "Lưu vật tư thành công",
+      "save_material_failed": "Lưu vật tư thất bại",
+      "delete_material_success": "Xóa vật tư thành công",
+      "delete_material_failed": "Xóa vật tư thất bại",
+      "get_human_failed": "Lấy danh sách nhân sự thất bại",
+      "get_human_dtls_failed": "Lấy thông tin chi tiết nhân sự thất bại",
+      "save_human_success": "Lưu nhân sự thành công",
+      "save_human_failed": "Lưu nhân sự thất bại",
+      "delete_human_success": "Xóa đội thi công thành công",
+      "delete_human_failed": "Xóa đội thi công thất bại",
+      "get_planning_dtls_failed": "Lấy chi tiết kế hoạch thất bại",
+      "get_allocation_failed": "Lấy danh sách yêu cầu phân bổ thất bại",
+      "get_allocation_dtls_failed": "Lấy thông tin chi tiết yêu cầu phân bổ thất bại",
+      "get_list_inventory_failed": "Lấy danh sách kho thất bại",
+      "delete_project_success": "Xóa dự án thành công",
+      "delete_project_failed": "Xóa dự án thất bại",
+      "get_inspection_failed": "Lấy báo cáo kiểm tra thất bại",
+      "get_inspection_dtls_failed": "Lấy chi tiết báo cáo kiểm tra thất bại",
+      "save_inspection_success": "Lưu báo cáo kiểm tra thành công",
+      "save_inspection_failed": "Lưu báo cáo kiểm tra thất bại",
+      "get_mobilization_dtls_failed": "Lấy chi tiết yêu cầu điều động thất bại",
+      "update_mobilization_status_failed": "Cập nhật trạng thái điều động thất bại",
+      "update_mobilization_status_success": "Cập nhật trạng thái điều động thành công",
+      "remove_member_failed": "Xóa thành viên đội thất bại",
+      "remove_member_success": "Xóa thành viên đội thành công",
+      "save_construct_log_failed": "Lưu nhật ký thi công thất bại",
+      "save_construct_log_success": "Lưu nhật ký thi công thành công",
+      "get_construct_log_failed": "Lấy danh sách nhật ký thi công thất bại",
+      "get_construct_log_dtls_failed": "Lấy chi tiết nhật ký thi công thất bại",
+      "get_logs_by_task_failed": "Lấy nhật ký theo công việc thất bại"
     }
-  }
+  },
+  "contract": {
+    "title": "Hợp đồng",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "date": "Ngày ký hợp đồng",
+    "status": "Trạng thái",
+    "type": "Loại",
+    "room": "Phòng",
+    "tenant": "Người thuê",
+    "landlord": "Chủ nhà",
+    "statuses": {
+      "active": "Đang hoạt động",
+      "terminated": "Đã chấm dứt",
+      "renewed": "Đã gia hạn"
+    },
+    "types": {
+      "monthly": "Hàng tháng",
+      "quater": "Hàng quý",
+      "half-year": "Nửa năm",
+      "year": "Hàng năm"
+    },
+    "create": {
+      "title": "Tạo hợp đồng",
+      "contract_name": "Tên hợp đồng",
+      "items": "Các mục trong hợp đồng",
+      "btn": {
+        "new_item": "Thêm mục mới"
+      },
+      "details": "Thông tin hợp đồng",
+      "infor": {
+        "label": {
+          "code": "Mã hợp đồng",
+          "name": "Tên hợp đồng",
+          "project": "Dự án",
+          "start_date": "Ngày bắt đầu",
+          "end_date": "Ngày kết thúc",
+          "estimate_day": "Số ngày ước tính",
+          "tax": "Thuế",
+          "sign_date": "Ngày ký",
+          "attachments": "Tệp đính kèm"
+        }
+      },
+      "item_table": {
+        "no": "STT",
+        "action": "Hành động",
+        "code": "Mã",
+        "item": "Hạng mục",
+        "unit": "Đơn vị",
+        "amount": "Số lượng",
+        "unit_price": "Đơn giá",
+        "total_price": "Thành tiền"
+      }
+    },
+    "detail": {
+      "title": "Chi tiết hợp đồng"
+    },
+    "table": {
+      "header": {
+        "name": "Tên hợp đồng",
+        "code": "Mã hợp đồng",
+        "customer": "Tên khách hàng",
+        "project_name": "Tên dự án",
+        "type": "Loại thi công",
+        "budget": "Ngân sách",
+        "start_date": "Ngày bắt đầu",
+        "finish_date": "Ngày kết thúc",
+        "sign_date": "Ngày ký",
+        "status": "Trạng thái",
+        "room": "Mã phòng",
+        "tenant": "Người thuê",
+        "attachment": "Tệp đính kèm hợp đồng",
+        "action": "Hành động",
+        "estimate_days": "Số ngày ước tính"
+      }
+    },
+    "modal_confirm": {
+      "title": "Xác nhận chấm dứt hợp đồng",
+      "message": "Vui lòng nhập 'Terminate' để xác nhận chấm dứt hợp đồng này"
+    },
+    "status_placeholder": "Trạng thái hợp đồng",
+    "room_placeholder": "Phòng hợp đồng",
+    "tenant_placeholder": "Người thuê hợp đồng",
+    "type_placeholder": "Loại hợp đồng",
+    "landlord_placeholder": "Chủ nhà hợp đồng"
+  },
+  "survey": {
+    "title": "Khảo sát thực địa",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "date": "Ngày ký hợp đồng",
+    "status": "Trạng thái",
+    "type": "Loại",
+    "statuses": {
+      "active": "Đang hoạt động",
+      "terminated": "Đã chấm dứt",
+      "renewed": "Đã gia hạn"
+    },
+    "types": {
+      "monthly": "Hàng tháng",
+      "quater": "Hàng quý",
+      "half-year": "Nửa năm",
+      "year": "Hàng năm"
+    },
+    "create": {
+      "title": "Tạo khảo sát thực địa mới",
+      "contract_name": "Tên hợp đồng",
+      "duration": "Thời lượng",
+      "deposit": "Tiền đặt cọc",
+      "room": "Phòng",
+      "type": "Loại",
+      "tenants": "Người thuê",
+      "landlord": "Chủ nhà"
+    },
+    "details": {
+      "sections": {
+        "generalInfo": "Thông tin chung",
+        "facilityAssessment": "Đánh giá cơ sở vật chất",
+        "mainInfo": "Thông tin chính",
+        "additionalInfo": "Thông tin bổ sung",
+        "conclusion": "Kết luận"
+      },
+      "title": "Chi tiết khảo sát thực địa",
+      "no_survey": "Không có khảo sát thực địa nào",
+      "siteSurveyName": "Tên khảo sát thực địa",
+      "projectId": "Mã dự án",
+      "constructionRequirements": "Yêu cầu thi công",
+      "equipmentRequirements": "Yêu cầu thiết bị",
+      "humanResourceCapacity": "Năng lực nhân sự",
+      "riskAssessment": "Đánh giá rủi ro",
+      "biddingDecision": "Quyết định tham gia đấu thầu",
+      "profitAssessment": "Đánh giá lợi nhuận",
+      "bidWinProb": "Xác suất thắng thầu",
+      "estimatedExpenses": "Chi phí ước tính",
+      "estimatedProfits": "Lợi nhuận ước tính",
+      "tenderPackagePrice": "Giá gói thầu",
+      "totalBidPrice": "Tổng giá dự thầu",
+      "discountRate": "Tỷ lệ chiết khấu",
+      "projectCost": "Chi phí dự án",
+      "finalProfit": "Lợi nhuận cuối cùng",
+      "status": "Trạng thái",
+      "comments": "Bình luận",
+      "attachments": "Tệp đính kèm",
+      "surveyDetails": "Chi tiết khảo sát",
+      "bid_approve": "Phê duyệt",
+      "bid_reject": "Từ chối"
+    },
+    "table": {
+      "header": {
+        "name": "Tên hợp đồng",
+        "start_date": "Ngày bắt đầu",
+        "finish_date": "Ngày kết thúc",
+        "room": "Mã phòng",
+        "tenant": "Người thuê",
+        "attachment": "Tệp đính kèm hợp đồng",
+        "action": "Hành động",
+        "status": "Trạng thái",
+        "type": "Loại",
+        "landlord": "Chủ nhà"
+      }
+    },
+    "modal_confirm": {
+      "title": "Xác nhận chấm dứt hợp đồng",
+      "message": "Vui lòng nhập 'Terminate' để xác nhận chấm dứt hợp đồng này"
+    },
+    "status_placeholder": "Trạng thái hợp đồng",
+    "room_placeholder": "Phòng hợp đồng",
+    "tenant_placeholder": "Người thuê hợp đồng",
+    "type_placeholder": "Loại hợp đồng",
+    "landlord_placeholder": "Chủ nhà hợp đồng"
+  },
+  "resource": {
+    "title": "Quản lý tài nguyên",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "search": "Tìm kiếm",
+    "machine": {
+      "title": "Quản lý tài nguyên máy móc",
+      "add_new": "Thêm mới",
+      "keyword": "Từ khóa",
+      "search": "Tìm kiếm",
+      "clear": "Xóa",
+      "status": "Trạng thái",
+      "type": "Loại",
+      "statuses": {
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động",
+        "maintain": "Đang bảo trì"
+      },
+      "details": {
+        "title": "Chi tiết máy móc",
+        "licensePlate": "Biển số xe",
+        "vehicleName": "Tên phương tiện",
+        "brand": "Thương hiệu",
+        "yearOfManufacture": "Năm sản xuất",
+        "countryOfManufacture": "Nước sản xuất",
+        "vehicleType": "Loại phương tiện",
+        "chassisNumber": "Số khung",
+        "engineNumber": "Số động cơ",
+        "images": "Hình ảnh",
+        "status": "Trạng thái",
+        "driver": "Tài xế",
+        "color": "Màu sắc",
+        "fuelType": "Loại nhiên liệu",
+        "description": "Mô tả",
+        "fuelTankVolume": "Dung tích bình nhiên liệu",
+        "fuelUnit": "Đơn vị nhiên liệu",
+        "attachments": "Tệp đính kèm",
+        "selectYear": "Chọn năm"
+      },
+      "create": {
+        "title": "Tạo máy móc"
+      },
+      "table": {
+        "header": {
+          "code": "Mã máy móc",
+          "name": "Tên máy móc",
+          "licensePlate": "Biển số xe",
+          "vehicleName": "Tên phương tiện",
+          "brand": "Thương hiệu",
+          "vehicleType": "Loại phương tiện",
+          "driver": "Tài xế",
+          "type": "Loại",
+          "status": "Trạng thái",
+          "action": "Hành động"
+        }
+      },
+      "modal_confirm": {
+        "title": "Xác nhận xóa máy móc",
+        "message": "Vui lòng nhập 'Delete' để xác nhận xóa máy móc này"
+      },
+      "fuelUnit": {
+        "liters": "Lít",
+        "gallons": "Gallon",
+        "cubic_meters": "Mét khối"
+      }
+    },
+    "material": {
+      "title": "Quản lý tài nguyên vật tư",
+      "add_new": "Thêm mới",
+      "keyword": "Từ khóa",
+      "search": "Tìm kiếm",
+      "clear": "Xóa",
+      "status": "Trạng thái",
+      "type": "Loại",
+      "statuses": {
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "details": {
+        "title": "Chi tiết vật tư",
+        "materialCode": "Mã vật tư",
+        "materialName": "Tên vật tư",
+        "unit": "Đơn vị tính",
+        "branch": "Chi nhánh",
+        "status": "Trạng thái",
+        "madeIn": "Sản xuất tại",
+        "chassisNumber": "Số khung",
+        "wholesalePrice": "Giá bán sỉ",
+        "description": "Mô tả",
+        "retailPrice": "Giá bán lẻ",
+        "inventory": "Tồn kho",
+        "expireDate": "Ngày hết hạn",
+        "productionDate": "Ngày sản xuất",
+        "attachments": "Tệp đính kèm"
+      },
+      "create": {
+        "title": "Tạo vật tư"
+      },
+      "table": {
+        "header": {
+          "materialCode": "Mã vật tư",
+          "materialName": "Tên vật tư",
+          "inventory": "Tồn kho",
+          "expireDate": "Ngày hết hạn",
+          "productionDate": "Ngày sản xuất",
+          "status": "Trạng thái",
+          "action": "Hành động",
+          "isFlag": "Cờ"
+        }
+      },
+      "modal_confirm": {
+        "title": "Xác nhận xóa vật tư",
+        "message": "Vui lòng nhập 'Delete' để xác nhận xóa vật tư này"
+      }
+    },
+    "human": {
+      "modal_confirm": {
+        "message": "Bạn có muốn xóa đội thi công này không?",
+        "title": "Xóa đội thi công",
+        "title_member": "Xóa thành viên đội",
+        "msg_member": "Bạn có muốn xóa thành viên này không?"
+      },
+      "modal_title": "Chi tiết đội thi công",
+      "members": "Quản lý thành viên",
+      "status": "Trạng thái",
+      "type": "Loại",
+      "statuses": {
+        "active": "Đang hoạt động",
+        "inactive": "Không hoạt động"
+      },
+      "details": {
+        "title": "Chi tiết đội",
+        "userName": "Tên đăng nhập",
+        "fullName": "Họ và tên",
+        "phoneNumber": "Số điện thoại",
+        "teamName": "Tên đội",
+        "teamManager": "Quản lý đội",
+        "manager": {
+          "fullName": "Tên quản lý"
+        },
+        "status": "Trạng thái",
+        "action": "Hành động",
+        "attachments": "Tệp đính kèm",
+        "description": "Mô tả"
+      },
+      "create": {
+        "title": "Quản lý đội thi công"
+      },
+      "table": {
+        "header": {
+          "teamName": "Tên đội",
+          "manager": {
+            "fullName": "Tên quản lý",
+            "username": "Tên đăng nhập"
+          },
+          "description": "Mô tả",
+          "status": "Trạng thái",
+          "action": "Hành động"
+        }
+      },
+      "error": {
+        "modal_error": ""
+      }
+    }
+  },
+  "customer": {
+    "title": "Khách hàng",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "date": "Ngày ký hợp đồng",
+    "status": "Trạng thái",
+    "type": "Loại",
+    "room": "Phòng",
+    "tenant": "Người thuê",
+    "landlord": "Chủ nhà",
+    "statuses": {
+      "active": "Đang hoạt động",
+      "terminated": "Đã chấm dứt",
+      "renewed": "Đã gia hạn"
+    },
+    "details": {
+      "title": "Chi tiết khách hàng",
+      "customer_code": "Mã khách hàng",
+      "customer_name": "Tên khách hàng",
+      "phone": "Số điện thoại",
+      "tax_code": "Mã số thuế",
+      "fax": "Số fax",
+      "address": "Địa chỉ",
+      "email": "Email",
+      "director_name": "Tên giám đốc",
+      "bank_account": "Số tài khoản ngân hàng",
+      "bank_name": "Tên ngân hàng",
+      "description": "Mô tả"
+    },
+    "create": {
+      "title": "Tạo khách hàng"
+    },
+    "table": {
+      "header": {
+        "code": "Mã khách hàng",
+        "name": "Tên khách hàng",
+        "phone": "Số điện thoại",
+        "fax": "Số fax",
+        "tax": "Mã số thuế",
+        "address": "Địa chỉ",
+        "email": "Email",
+        "action": "Hành động",
+        "director": "Giám đốc"
+      }
+    },
+    "modal_confirm": {
+      "title": "Xác nhận xóa khách hàng",
+      "message": "Vui lòng nhập 'Delete' để xác nhận xóa khách hàng này"
+    }
+  },
+  "project": {
+    "title": "Dự án",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "customer": "Khách hàng",
+    "status": "Trạng thái",
+    "type": "Loại",
+    "room": "Phòng",
+    "tenant": "Người thuê",
+    "landlord": "Chủ nhà",
+    "statuses": {
+      "receive_reqs": "Nhận yêu cầu",
+      "planning": "Lập kế hoạch",
+      "in_progress": "Đang thực hiện",
+      "complete": "Hoàn thành",
+      "paused": "Tạm dừng",
+      "close": "Đóng"
+    },
+    "details": {
+      "title": "Chi tiết dự án",
+      "financial_summary": "Tóm tắt tài chính",
+      "change_request": "Yêu cầu thay đổi",
+      "site-survey": "Khảo sát thực địa",
+      "change_request_table": {
+        "header": {
+          "request_code": "Mã yêu cầu",
+          "request_name": "Tên yêu cầu",
+          "requested_by": "Yêu cầu bởi",
+          "change_type": "Loại yêu cầu",
+          "status": "Trạng thái yêu cầu",
+          "request_date": "Ngày yêu cầu"
+        },
+        "action": "Hành động"
+      },
+      "infor": {
+        "project_code": "Mã dự án",
+        "project_name": "Tên dự án",
+        "customer": "Khách hàng",
+        "construct_type": "Loại công trình",
+        "area": "Diện tích",
+        "location": "Vị trí",
+        "purpose": "Mục đích",
+        "technical_reqs": "Yêu cầu kỹ thuật",
+        "start_date": "Ngày bắt đầu",
+        "end_date": "Ngày kết thúc",
+        "status": "Trạng thái",
+        "budget": "Ngân sách",
+        "attachment": "Tệp đính kèm",
+        "description": "Mô tả"
+      }
+    },
+    "create": {
+      "title": "Tạo dự án",
+      "project_code": "Mã dự án",
+      "project_name": "Tên dự án",
+      "customer": "Khách hàng",
+      "construct_type": "Loại công trình",
+      "area": "Diện tích",
+      "purpose": "Mục đích",
+      "location": "Vị trí",
+      "technical_reqs": "Yêu cầu kỹ thuật",
+      "start_date": "Ngày bắt đầu",
+      "end_date": "Ngày kết thúc",
+      "budget": "Ngân sách",
+      "attachment": "Tệp đính kèm",
+      "description": "Mô tả",
+      "technical_manager": "Quản lý kỹ thuật",
+      "resource_manager": "Quản lý tài nguyên",
+      "qa": "Đảm bảo chất lượng",
+      "construction_manager": "Quản lý thi công",
+      "upload_file": "Tải tệp lên"
+    },
+    "edit": {
+      "title": "Chỉnh sửa dự án"
+    },
+    "table": {
+      "header": {
+        "code": "Mã dự án",
+        "name": "Tên dự án",
+        "customer": "Khách hàng",
+        "type": "Loại công trình",
+        "location": "Vị trí",
+        "budget": "Ngân sách",
+        "start_date": "Ngày bắt đầu",
+        "end_date": "Ngày kết thúc",
+        "status": "Trạng thái",
+        "action": "Hành động"
+      }
+    },
+    "modal_confirm": {
+      "title": "Xác nhận thay đổi trạng thái dự án",
+      "message": "Bạn có muốn {action} dự án này không?"
+    },
+    "status_placeholder": "Trạng thái hợp đồng",
+    "room_placeholder": "Phòng hợp đồng",
+    "tenant_placeholder": "Người thuê hợp đồng",
+    "type_placeholder": "Loại hợp đồng",
+    "task": {
+      "relation": {
+        "ss": "Bắt đầu với Bắt đầu",
+        "sf": "Bắt đầu với Kết thúc",
+        "fs": "Kết thúc với Bắt đầu",
+        "ff": "Kết thúc với Kết thúc"
+      }
+    }
+  },
+  "progress": {
+    "add_new_cr": "Thêm yêu cầu thay đổi mới",
+    "add_new": "Thêm mới",
+    "hide_gantt_chart": "Ẩn biểu đồ Gantt",
+    "timeline": {
+      "day": "Ngày",
+      "week": "Tuần",
+      "month": "Tháng",
+      "year": "Năm"
+    },
+    "details": {
+      "title": "Tiến độ dự án"
+    },
+    "status": {
+      "not_started": "Chưa bắt đầu",
+      "in_progress": "Đang thực hiện",
+      "completed": "Đã hoàn thành",
+      "paused": "Tạm dừng",
+      "canceled": "Đã hủy"
+    }
+  },
+  "planning": {
+    "title": "Lập kế hoạch dự án",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "modal_title": "Chi tiết hạng mục thi công",
+    "create": {
+      "title": "Tạo kế hoạch"
+    },
+    "edit": {
+      "title": "Chỉnh sửa kế hoạch"
+    },
+    "table": {
+      "header": {
+        "title": "Tiêu đề",
+        "date": "Ngày",
+        "status": "Trạng thái",
+        "creator": "Người tạo",
+        "action": "Hành động"
+      }
+    },
+    "form": {
+      "name": "Tên kế hoạch",
+      "inspector": "Người kiểm tra",
+      "ctr_start_date": "Ngày bắt đầu hợp đồng",
+      "ctr_end_date": "Ngày kết thúc hợp đồng",
+      "budget": "Ngân sách dự án"
+    },
+    "modal": {
+      "work_name": "Tên công việc",
+      "start_date": "Ngày bắt đầu",
+      "end_date": "Ngày kết thúc",
+      "price": "Giá dự kiến",
+      "el_pane": {
+        "depen_work": "Công việc phụ thuộc",
+        "material": "Tài nguyên vật tư",
+        "human": "Tài nguyên nhân lực",
+        "machine": "Tài nguyên máy móc"
+      }
+    },
+    "errors": {
+      "select_date": "Vui lòng chọn ngày cho công việc {relatedTaskIndex} trước khi chọn mối quan hệ",
+      "SS": "Không thể bắt đầu công việc {currentTaskIndex} cho đến khi công việc {relatedTaskIndex} cũng bắt đầu.",
+      "FF": "Không thể hoàn thành công việc {currentTaskIndex} cho đến khi công việc {relatedTaskIndex} hoàn thành.",
+      "SF": "Không thể hoàn thành công việc {currentTaskIndex} cho đến khi công việc {relatedTaskIndex} bắt đầu.",
+      "FS": "Không thể bắt đầu công việc {currentTaskIndex} cho đến khi công việc {relatedTaskIndex} hoàn thành.",
+      "invalid_form": "Xác thực thất bại ở {form}",
+      "exceed_budget": "Vượt quá ngân sách dự án"
+    },
+    "form_ref": {
+      "planning_info": "Thông tin kế hoạch",
+      "planning_items": "Các hạng mục kế hoạch",
+      "planning_item_dtls": "Chi tiết hạng mục kế hoạch",
+      "dependency": "Mối quan hệ công việc",
+      "material": "Biểu mẫu vật tư",
+      "machine": "Biểu mẫu máy móc",
+      "human": "Biểu mẫu nhân lực"
+    },
+    "items": {
+      "name": "Tên",
+      "unit": "Đơn vị",
+      "quantity": "Số lượng",
+      "price": "Đơn giá",
+      "total": "Thành tiền",
+      "action": "Hành động",
+      "inventory": "Số lượng tồn kho"
+    },
+    "planned": {
+      "material": "Giá trị vật tư dự kiến",
+      "human": "Giá trị nhân lực dự kiến",
+      "machine": "Giá trị máy móc dự kiến",
+      "total": "Tổng giá trị dự kiến"
+    },
+    "status": {
+      "wait_approved": "Chờ phê duyệt",
+      "re_planning": "Lập lại kế hoạch",
+      "bod_approved": "Ban điều hành phê duyệt",
+      "tech_approved": "Phòng kỹ thuật phê duyệt",
+      "resource_approved": "Phòng tài nguyên phê duyệt",
+      "draft": "Bản nháp",
+      "rejected": "Từ chối",
+      "approved": "Đã phê duyệt"
+    }
+  },
+  "bill": {
+    "title": "Hóa đơn",
+    "bill_details_title": "Thông tin hóa đơn",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "room": "Phòng",
+    "status": "Trạng thái thanh toán",
+    "date_month": "Tháng",
+    "status_placeholder": "Trạng thái hóa đơn",
+    "room_placeholder": "Phòng",
+    "list_details": "Chi tiết hóa đơn",
+    "rent_price": "Giá thuê",
+    "total_price": "Tổng giá trị",
+    "statuses": {
+      "paid": "Đã thanh toán",
+      "unpaid": "Chưa thanh toán",
+      "terminated": "Đã chấm dứt"
+    },
+    "create": {
+      "title": "Tạo hóa đơn mới"
+    },
+    "details": {
+      "title": "Chi tiết hóa đơn"
+    },
+    "table": {
+      "header": {
+        "code": "Mã hóa đơn",
+        "room": "Phòng",
+        "month": "Tháng",
+        "action": "Hành động",
+        "status": "Trạng thái thanh toán",
+        "total_bill": "Tổng tiền hóa đơn",
+        "landlord": "Chủ nhà"
+      },
+      "utilities": {
+        "header": {
+          "name": "Tên dịch vụ",
+          "amount": "Số lượng",
+          "unit_price": "Đơn giá",
+          "price": "Thành tiền",
+          "total_util_cost": "Tổng chi phí dịch vụ"
+        }
+      }
+    },
+    "form": {
+      "label_bill_code": "Mã hóa đơn",
+      "placeholder_bill_code": "Mã hóa đơn",
+      "label_room_code": "Mã phòng",
+      "placeholder_room_code": "Mã phòng",
+      "label_room_tenants": "Người thuê phòng",
+      "room_tenants_placeholder": "Người thuê phòng",
+      "label_room_landlord": "Chủ nhà",
+      "room_landlord_placeholder": "Chủ nhà",
+      "label_bill_status": "Trạng thái hóa đơn",
+      "bill_status_placeholder": "Trạng thái hóa đơn",
+      "bill_utility_amount_placeholder": "Số lượng",
+      "label_bill_date": "Ngày",
+      "bill_date_placeholder": "Ngày"
+    }
+  },
+  "dashboard": {
+    "year_to_date": "Từ đầu năm đến nay",
+    "quarter_to_date": "Từ đầu quý đến nay",
+    "month_to_date": "Từ đầu tháng đến nay",
+    "revenue_information": "Thông tin doanh thu",
+    "actual_revenue_and_planned_evenue": "Doanh thu thực tế và doanh thu kế hoạch",
+    "actual_KPI_revenue_chart": "Biểu đồ doanh thu thực tế và KPI",
+    "total_number_of_new_customers": "Tổng số khách hàng mới",
+    "revenue_plan": "Kế hoạch doanh thu",
+    "revenue_actual": "Doanh thu thực tế",
+    "kpi_revenue": "Doanh thu KPI còn lại",
+    "actual": "Thực tế",
+    "planned_revuene": "Doanh thu kế hoạch",
+    "year": "Năm",
+    "new_customer": "Khách hàng mới"
+  },
+  "user": {
+    "infor": "Thông tin cá nhân",
+    "title": "Người dùng",
+    "add_new": "Thêm người dùng mới",
+    "no": "STT",
+    "user_name": "Tên đăng nhập",
+    "user_full_name": "Họ và tên",
+    "email": "Email",
+    "department_type": "Loại phòng ban",
+    "department_name": "Phòng ban",
+    "role": "Vai trò",
+    "phone": "Số điện thoại",
+    "actions": "Thao tác",
+    "no_data": "Không có dữ liệu",
+    "location": "Địa điểm",
+    "load_more": "Tải thêm",
+    "search": "Tìm kiếm",
+    "clear": "Xóa",
+    "keyword": "Từ khóa",
+    "input_keyword": "Nhập từ khóa",
+    "filter_department": "Lọc theo phòng ban",
+    "all_department": "Tất cả phòng ban",
+    "filter_role": "Lọc theo vai trò",
+    "all_role": "Tất cả vai trò",
+    "sale_department_type": "Phòng kinh doanh",
+    "prd_department_type": "Phòng sản xuất",
+    "text_create": "Tạo mới",
+    "messages": {
+      "err_get_all_users": "Lấy danh sách người dùng thất bại",
+      "err_catch_find_user": "Tìm kiếm người dùng thất bại",
+      "err_find_user": "Không tìm thấy người dùng",
+      "err_delete": "Không thể xóa người dùng này do còn quyền khác",
+      "err_department_type": "Không tìm thấy loại phòng ban",
+      "err_departments": "Lấy danh sách phòng ban thất bại",
+      "err_roles": "Lấy vai trò thất bại",
+      "success_create_user": "Tạo người dùng thành công",
+      "success_update_user": "Cập nhật người dùng thành công",
+      "error_create_user": "Tạo người dùng thất bại",
+      "error_update_user": "Cập nhật người dùng thất bại",
+      "success_delete": "Xóa người dùng thành công",
+      "error_get_all_users": "Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau",
+      "error_get_user": "Không thể tìm thấy người dùng do lỗi hệ thống. Vui lòng thử lại sau",
+      "error_delete_user": "Không thể xóa người dùng do lỗi hệ thống. Vui lòng thử lại sau",
+      "error_server_create_update_user": "Không thể tạo hoặc cập nhật người dùng do lỗi hệ thống. Vui lòng thử lại sau"
+    },
+    "table": {
+      "header": {
+        "username": "Tên đăng nhập",
+        "fullName": "Họ và tên",
+        "dob": "Ngày sinh",
+        "gender": "Giới tính",
+        "email": "Email",
+        "phone": "Số điện thoại",
+        "location": "Địa điểm",
+        "role": "Vai trò",
+        "action": "Thao tác",
+        "code": "Mã người dùng"
+      }
+    },
+    "details": {
+      "title": "Chi tiết người dùng",
+      "username": "Tên đăng nhập",
+      "fullName": "Họ và tên",
+      "dob": "Ngày sinh",
+      "gender": "Giới tính",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "location": "Địa điểm",
+      "role": "Vai trò",
+      "action": "Thao tác",
+      "code": "Mã người dùng",
+      "description": "Mô tả"
+    },
+    "create": {
+      "title": "Tạo người dùng mới",
+      "username": "Tên đăng nhập",
+      "fullName": "Họ và tên",
+      "dob": "Ngày sinh",
+      "gender": "Giới tính",
+      "email": "Email",
+      "phone": "Số điện thoại",
+      "location": "Địa điểm",
+      "role": "Vai trò",
+      "action": "Thao tác",
+      "code": "Mã người dùng",
+      "description": "Mô tả"
+    },
+    "modal_confirm": {
+      "message_delete": "CẢNH BÁO: Bạn sẽ xóa người dùng này. Vui lòng nhập 'Delete' để tiếp tục.",
+      "title_delete": "Xóa người dùng",
+      "title": "Xác nhận xóa người dùng",
+      "message": "Vui lòng nhập 'Delete' để xác nhận xóa người dùng này"
+    },
+    "gender": {
+      "male": "Nam",
+      "female": "Nữ"
+    },
+    "label_username": "Tên đăng nhập",
+    "label_fullname": "Họ và tên",
+    "label_email": "Email",
+    "label_phone": "Số điện thoại",
+    "label_location": "Địa điểm",
+    "label_old_password": "Mật khẩu cũ",
+    "label_new_password": "Mật khẩu mới",
+    "label_confirmed_password": "Xác nhận mật khẩu",
+    "label_otp": "Mã OTP",
+    "placeholder_otp": "Vui lòng nhập mã OTP",
+    "placeholder_old_password": "Nhập mật khẩu cũ",
+    "placeholder_new_password": "Nhập mật khẩu mới",
+    "placeholder_confirmed_password": "Nhập xác nhận mật khẩu",
+    "placeholder_username": "Vui lòng nhập tên đăng nhập",
+    "placeholder_fullname": "Vui lòng nhập họ và tên",
+    "placeholder_email": "Vui lòng nhập email",
+    "placeholder_phone": "Vui lòng nhập số điện thoại",
+    "placeholder_location": "Vui lòng nhập địa điểm"
+  },
+  "side_bar": {
+    "label": {
+      "user": "Người dùng",
+      "profile": "Hồ sơ",
+      "contract": "Hợp đồng",
+      "customer": "Khách hàng",
+      "planning": "Lập kế hoạch",
+      "progress": "Tiến độ",
+      "construct_log": "Nhật ký thi công",
+      "change_request": "Yêu cầu thay đổi",
+      "progress_change": "Thay đổi tiến độ",
+      "resource_mobilization": "Điều động tài nguyên",
+      "resource_allocation": "Phân bổ tài nguyên",
+      "project": "Dự án",
+      "inventory": "Kho vật tư",
+      "inspector_report": "Báo cáo kiểm tra",
+      "resource": {
+        "title": "Tài nguyên",
+        "machine": "Tài nguyên máy móc",
+        "material": "Tài nguyên vật tư",
+        "human": "Đội thi công"
+      }
+    }
+  },
+  "construct_log": {
+    "view": {
+      "title": "Nhật ký thi công"
+    },
+    "edit": {
+      "title": "Chi tiết nhật ký thi công"
+    },
+    "modal_title": "Danh sách nhật ký",
+    "log_code": "Mã nhật ký",
+    "log_name": "Tên nhật ký",
+    "modal_confirm": {
+      "message": "Bạn có muốn thay đổi trạng thái nhật ký không!",
+      "title": "Thay đổi trạng thái nhật ký"
+    },
+    "status": {
+      "approved": "Phê duyệt",
+      "rejected": "Từ chối",
+      "wait_approve": "Chờ phê duyệt"
+    },
+    "log_table": {
+      "previous_year": "Năm trước",
+      "previous_month": "Tháng trước",
+      "today": "Hôm nay",
+      "next_month": "Tháng tới",
+      "next_year": "Năm tới"
+    }
+  },
+  "mobilization": {
+    "title": "Điều động tài nguyên",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "modal_confirm": {
+      "message_delete": "Bạn có muốn xóa yêu cầu này không?",
+      "message_change_status": "Bạn có muốn thay đổi trạng thái của yêu cầu này không?",
+      "title": "Xác nhận"
+    },
+    "table": {
+      "header": {
+        "code": "Mã yêu cầu",
+        "name": "Tên yêu cầu",
+        "priority": "Mức độ ưu tiên",
+        "status": "Trạng thái",
+        "date": "Ngày yêu cầu",
+        "action": "Hành động",
+        "vehicle": "Phương tiện",
+        "material": "Vật liệu",
+        "human": "Nhân lực"
+      }
+    },
+    "modal": {
+      "title": "Lưu yêu cầu điều động",
+      "code": "Mã yêu cầu",
+      "name": "Tên yêu cầu",
+      "type": "Loại yêu cầu",
+      "priority": "Ưu tiên",
+      "date": "Ngày yêu cầu",
+      "description": "Mô tả",
+      "action": "Hành động",
+      "priority_level": {
+        "low": "Thấp",
+        "medium": "Trung bình",
+        "high": "Cao"
+      }
+    },
+    "statuses": {
+      "draft": "Bản nháp",
+      "wait_manager": "Chờ quản lý phê duyệt",
+      "manager_approved": "Quản lý đã phê duyệt",
+      "bod_approved": "Ban giám đốc đã phê duyệt",
+      "rejected": "Từ chối"
+    },
+    "type": {
+      "supply_more": "Cung cấp cho kho dự án",
+      "supply_general": "Cung cấp cho kho tổng",
+      "add_new": "Thêm tài nguyên mới"
+    }
+  },  
+  "allocation": {
+    "title": "Phân bổ tài nguyên",
+    "add_new": "Thêm mới",
+    "keyword": "Từ khóa",
+    "modal_confirm": {
+      "message": "Bạn có muốn xóa yêu cầu này không?",
+      "title": "Xóa yêu cầu phân bổ"
+    },
+    "target_project": "Dự án đích",
+    "target_task": "Nhiệm vụ đích",
+    "from_task": "Từ nhiệm vụ",
+    "to_task": "Đến nhiệm vụ",
+    "table": {
+      "header": {
+        "code": "Mã yêu cầu",
+        "name": "Tên yêu cầu",
+        "priority": "Mức độ ưu tiên",
+        "status": "Trạng thái",
+        "date": "Ngày yêu cầu",
+        "from": "Từ dự án",
+        "to": "Đến dự án",
+        "action": "Hành động"
+      }
+    },
+    "type": {
+      "project": "Dự án sang Dự án",
+      "project_task": "Dự án sang Nhiệm vụ",
+      "task": "Nhiệm vụ sang Nhiệm vụ"
+    }
+  },
+  "inventory": {
+    "title": "Kho",
+    "type": {
+      "team": "Nhóm",
+      "material": "Vật liệu",
+      "machine": "Máy móc"
+    }
+  },
+  "construct_team": {
+    "title": "Nhóm thi công",
+    "manager": "Quản lý thi công"
+  },
+  "change_request": {
+    "title": "Yêu cầu thay đổi",
+    "add_new": "Thêm mới",
+    "type": {
+      "add_new": "Thêm mới",
+      "update": "Sửa đổi"
+    },
+    "table": {
+      "header": {
+        "name": "Tên yêu cầu",
+        "request_type": "Loại yêu cầu",
+        "request_date": "Ngày yêu cầu",
+        "creator": "Người tạo",
+        "no": "Số thứ tự",
+        "action": "Hành động",
+        "status": "Trạng thái"
+      }
+    },
+    "modal": {
+      "request_name": "Tên yêu cầu",
+      "request_date": "Ngày yêu cầu",
+      "parent_index": "Chỉ mục cha",
+      "work_name": "Tên công việc",
+      "quantity": "Số lượng",
+      "unit": "Đơn vị",
+      "unit_price": "Đơn giá",
+      "start_date": "Ngày bắt đầu dự kiến",
+      "end_date": "Ngày kết thúc dự kiến"
+    }
+  },
+  "inspection": {
+    "title": "Báo cáo kiểm tra",
+    "edit": {
+      "title": "Chi tiết báo cáo kiểm tra"
+    },
+    "table": {
+      "header": {
+        "projectCode": "Mã dự án",
+        "inspectionCode": "Mã báo cáo kiểm tra",
+        "inspectionName": "Tên báo cáo kiểm tra",
+        "inspectorName": "Tên người kiểm tra",
+        "location": "Địa điểm",
+        "date": "Ngày",
+        "startDate": "Ngày bắt đầu",
+        "endDate": "Ngày kết thúc",
+        "status": "Trạng thái",
+        "action": "Hành động"
+      }
+    },
+    "modal_confirm": {
+      "title": "Xác nhận xóa báo cáo kiểm tra",
+      "message": "Vui lòng nhập 'Xóa' để xác nhận xóa báo cáo kiểm tra này"
+    }
+  },
+  "E-CM-001": "Đăng nhập thất bại",
+  "E-CM-002": "Yêu cầu",
+  "E-CM-003": "Trường phải ít hơn {max} ký tự",
+  "E-CM-004": "Email không hợp lệ",
+  "E-CM-005": "Mật khẩu xác nhận và mật khẩu mới phải khớp",
+  "E-CM-006": "Số điện thoại không hợp lệ",
+  "E-CM-007": "Email đã tồn tại",
+  "E-CM-008": "Email không tồn tại",
+  "E-CM-009": "Số điện thoại đã tồn tại",
+  "E-CM-010": "Mật khẩu không hợp lệ",
+  "E-CM-011": "Tên người dùng không hợp lệ",
+  "E-CM-012": "Vai trò không hợp lệ",
+  "E-CM-013": "Tên người dùng đã tồn tại",
+  "E-CM-014": "Vui lòng nhập đúng văn bản xác nhận",
+  "E-CM-015": "Số phải lớn hơn {min}",
+  "E-CM-016": "Trạng thái không hợp lệ",
+  "E-CM-017": "Mã phòng bị trùng.",
+  "E-CM-018": "Số phải ít hơn {max}.",
+  "E-CM-019": "Số người thuê vượt quá công suất phòng",
+  "E-CM-020": "Ngày bắt đầu phải trước ngày kết thúc",
+  "E-CM-021": "Tên hợp đồng đã tồn tại",
+  "E-CM-022": "Ngày chọn phải lớn hơn hoặc bằng ngày hiện tại",
+  "E-CM-023": "Ngày hợp đồng bị trùng với hợp đồng khác",
+  "E-CM-024": "Mã hóa đơn đã tồn tại",
+  "E-CM-025": "Tên tiện ích đã tồn tại",
+  "E-CM-026": "Tên tiện ích bị trùng",
+  "E-CM-027": "Email không hợp lệ",
+  "E-CM-028": "Ngày kết thúc phải lớn hơn ngày bắt đầu",
+  "E-CM-029": "Ngày không được trong tương lai",
+  "E-CM-030": "Giờ kết thúc phải lớn hơn giờ bắt đầu",
+  "E-CM-031": "Giờ bắt đầu phải trước giờ kết thúc",
+  "E-CM-032": "Ngày bắt đầu phải sau ngày bắt đầu của cha",
+  "E-CM-033": "Ngày kết thúc phải trước ngày kết thúc của cha",
+  "E-CM-034": "Số điện thoại không hợp lệ",
+  "E-CM-035": "Ngày bắt đầu phải trước ngày kết thúc của cha",
+  "E-CM-036": "Ngày chọn phải nằm trong khoảng thời gian hợp đồng",
+  "E-CM-403": "Bạn không được phép.",
+  "E-CM-401": "Chưa xác thực.",
+  "E-CM-404": "Không tìm thấy.",
+  "E-CM-500": "Đã xảy ra lỗi, vui lòng liên hệ quản trị viên hoặc thử lại sau!",
+  "E-CM-200": "Hành động đã hoàn thành thành công.",
+  "E-PW-001": "Mật khẩu phải có độ dài từ {min} đến {max} ký tự",
+
+  "E-CUS-001": "Mã khách hàng là bắt buộc",
+  "E-CUS-002": "Mã khách hàng bị trùng",
+  "E-CUS-004": "Mã fax không hợp lệ",
+  "E-CUS-005": "Mã số thuế không hợp lệ",
+  "E-CUS-006": "Số fax không hợp lệ",
+  "E-CUS-007": "Mã số thuế là bắt buộc",
+  "E-CUS-008": "Số điện thoại không hợp lệ",
+
+  "E-USER-001": "Tên người dùng là bắt buộc",
+  "E-USER-002": "Email là bắt buộc",
+  "E-USER-003": "Họ tên là bắt buộc",
+  "E-USER-004": "Số điện thoại là bắt buộc",
+  "E-USER-005": "Vai trò là bắt buộc",
+  "E-USER-006": "Giới tính là bắt buộc",
+
+  "E-CTR-001": "Mã hợp đồng là bắt buộc",
+  "E-CTR-002": "Dự án là bắt buộc",
+  "E-CTR-003": "Ngày bắt đầu là bắt buộc",
+  "E-CTR-004": "Ngày kết thúc là bắt buộc",
+  "E-CTR-005": "Ngày ký hợp đồng là bắt buộc",
+  "E-CTR-006": "Ngày ước tính là bắt buộc",
+  "E-CTR-007": "Ngày ước tính phải lớn hơn {min}",
+  "E-CTR-008": "Ngày ước tính phải nhỏ hơn {max}",
+  "E-CTR-009": "Thuế là bắt buộc",
+  "E-CTR-010": "Thuế phải lớn hơn {min}%",
+  "E-CTR-011": "Thuế phải nhỏ hơn {max}%",
+  "E-CTR-012": "Ngày ký hợp đồng phải trước ngày bắt đầu",
+
+  "E-PRJ-009": "Mã dự án là bắt buộc",
+  "E-PRJ-002": "Mã dự án bị trùng",
+  "E-PRJ-003": "Diện tích là bắt buộc",
+  "E-PRJ-004": "Ngày bắt đầu là bắt buộc",
+  "E-PRJ-005": "Ngày kết thúc là bắt buộc",
+  "E-PRJ-006": "Ngân sách là bắt buộc",
+  "E-PRJ-007": "Mục đích là bắt buộc",
+  "E-PRJ-008": "Yêu cầu kỹ thuật là bắt buộc",
+  "E-PRJ-001": "Ngày bắt đầu phải trước ngày kết thúc",
+  "E-PRJ-010": "Khách hàng là bắt buộc",
+
+  "E-AUTHEN-001": "Email của bạn đã tồn tại.",
+  "E-AUTHEN-002": "Tên người dùng của bạn đã tồn tại.",
+  "E-AUTHEN-003": "Email bạn vừa nhập không đúng định dạng.",
+  "E-AUTHEN-004": "Tên người dùng của bạn không thể chứa khoảng trắng.",
+  "E-AUTHEN-005": "Mật khẩu của bạn không hợp lệ.",
+  "E-AUTHEN-006": "Mật khẩu hiện tại của bạn không đúng!",
+  "E-AUTHEN-007": "Mật khẩu mới và mật khẩu xác nhận của bạn không khớp!",
+  "E-AUTHEN-008": "Tài khoản của bạn không đăng ký hoặc thông tin không chính xác.",
+  "E-AUTHEN-009": "Tài khoản của bạn chưa được xác thực!",
+  "E-AUTHEN-010": "OTP của bạn không đúng, vui lòng kiểm tra lại trong email.",
+  "E-AUTHEN-011": "Token đã hết hạn hoặc bị thu hồi.",
+  "E-AUTHEN-012": "Hành động này yêu cầu OTP.",
+  "S-AUTHEN-001": "Đăng ký tài khoản thành công, vui lòng kiểm tra email để nhận mã OTP dùng để xác minh tài khoản.",
+  "S-AUTHEN-002": "Xác minh mã OTP thành công.",
+  "S-AUTHEN-003": "Yêu cầu đặt lại mật khẩu thành công, vui lòng kiểm tra email để nhận mã OTP.",
+  "S-AUTHEN-004": "Đổi mật khẩu thành công!",
+  "S-AUTHEN-005": "Đăng nhập thành công.",
+  "S-AUTHEN-006": "Làm mới token thành công.",
+
+  "S-ADMIN-001": "Tìm kiếm người dùng thành công!",
+  "S-ADMIN-002": "Xóa người dùng thành công!",
+  "S-ADMIN-003": "Tạo người dùng thành công!",
+  "S-ADMIN-004": "Cập nhật người dùng thành công!",
+  "E-ADMIN-001": "Đã xảy ra lỗi khi xóa người dùng, bạn không thể xóa tài khoản của chính mình hoặc người bạn muốn xóa có quyền hạn cao hơn hoặc bằng bạn.",
+  "E-ADMIN-002": "Người dùng đã tồn tại, tên người dùng và email đã tồn tại",
+  "E-ADMIN-003": "Vai trò không tồn tại hoặc bạn không có quyền thiết lập quyền này.",
+
+  "E-SV-001": "Xác suất phải lớn hơn hoặc bằng {min}",
+  "E-SV-002": "Xác suất phải nhỏ hơn hoặc bằng {max}",
+  "E-SV-003": "Tỷ lệ giảm giá phải lớn hơn hoặc bằng {min}",
+  "E-RR-FE-001": "Ngày yêu cầu là bắt buộc",
+  "E-RR-FE-002": "Chọn ít nhất một người dùng, vật liệu hoặc phương tiện",
+  "E-RR-FE-003": "Đơn vị là bắt buộc",
+  "E-RR-FE-004": "Số lượng là bắt buộc",
+  "E-RR-FE-005": "Số lượng phải lớn hơn hoặc bằng {min}",
+  "E-RR-FE-006": "Loại yêu cầu là bắt buộc",
+  "E-RR-010": "Phải chỉ định ít nhất một tài nguyên!",
+  "E-SV-004": "Tỷ lệ giảm giá phải nhỏ hơn hoặc bằng {max}",
+
+  "E-PLAN-001": "Giá trị thực tế vượt quá giá trị dự kiến",
+  "E-PLAN-002": "Số lượng kế hoạch vượt quá tồn kho",
+
+  "E-LOG-001": "Lưu nhật ký thi công thất bại",
+  "E-LOG-002": "Số lượng công việc không thể vượt quá dự kiến",
+
+  "E-MACH-001": "Biển số là bắt buộc",
+  "E-MACH-002": "Hãng xe là bắt buộc",
+  "E-MACH-003": "Năm sản xuất là bắt buộc",
+  "E-MACH-004": "Tên phương tiện là bắt buộc",
+  "E-MACH-005": "Loại phương tiện là bắt buộc",
+  "E-MACH-006": "Số khung là bắt buộc",
+  "E-MACH-007": "Số động cơ",
+  "E-MACH-009": "Trạng thái là bắt buộc",
+  "E-MACH-010": "Tài xế là bắt buộc",
+  "E-MACH-011": "Loại nhiên liệu là bắt buộc",
+  "E-MACH-012": "Dung tích bình xăng là bắt buộc",
+  "E-MACH-013": "Dung tích bình xăng phải là một số",
+  "E-MACH-014": "Đơn vị nhiên liệu là bắt buộc",
+  "E-MACH-015": "Định dạng biển số không hợp lệ",
+  "E-MACH-016": "Năm sản xuất không hợp lệ",
+  "E-MACH-017": "Định dạng số khung không hợp lệ",
+  "E-MACH-018": "Định dạng số máy không hợp lệ",
+  "E-MACH-020": "Dung tích bình xăng phải nằm trong khoảng từ 0 đến 1.000.000",
+  "E-MACH-022": "Năm sản xuất phải là một số",
+
+  "E-MAT-001": "Mã vật liệu là bắt buộc",
+  "E-MAT-002": "Định dạng mã vật liệu không hợp lệ",
+  "E-MAT-003": "Tên vật liệu là bắt buộc",
+  "E-MAT-004": "Đơn vị là bắt buộc",
+  "E-MAT-005": "Số khung là bắt buộc",
+  "E-MAT-006": "Định dạng số khung không hợp lệ",
+  "E-MAT-007": "Giá bán buôn là bắt buộc",
+  "E-MAT-008": "Giá bán buôn phải là một số hợp lệ",
+  "E-MAT-009": "Giá bán buôn phải nằm trong khoảng từ 0 đến 100.000.000.000.000",
+  "E-MAT-010": "Giá bán lẻ là bắt buộc",
+  "E-MAT-011": "Giá bán lẻ phải là một số hợp lệ",
+  "E-MAT-012": "Giá bán lẻ phải nằm trong khoảng từ 0 đến 100.000.000.000.000",
+  "E-MAT-013": "Số lượng là bắt buộc",
+  "E-MAT-014": "Số lượng phải là một số hợp lệ",
+  "E-MAT-015": "Số lượng phải là một số nguyên dương",
+  "E-MAT-016": "Số lượng phải nằm trong khoảng từ 0 đến 1.000.000",
+  "E-MAT-017": "Dung lượng tệp đính kèm vượt quá 10MB",
+  "E-MAT-018": "Ngày hết hạn phải là một ngày hợp lệ",
+  "E-MAT-019": "Ngày sản xuất phải là một ngày hợp lệ",
+  "E-MAT-020": "Ngày sản xuất không được là ngày trong tương lai"
 }

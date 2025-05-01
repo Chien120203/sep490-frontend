@@ -8,6 +8,7 @@
       :placeholder="placeholder || ''"
       :disabled="isDisabled"
       :clearable="showClearable"
+      :multiple="multiple"
       ref="singleOptionSelect"
   >
     <div class="bs-searchbox">
@@ -71,6 +72,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
     usingListItems: {
       type: Array,
       default: () => [],
@@ -119,7 +124,7 @@ export default {
     const filteredSearchData = computed(() => {
       const lowerCaseSearch = searchName.value.toLowerCase() || "";
       let searchList = props.listData.filter((item) =>
-          item[props.optionKeys.value].toLowerCase().includes(lowerCaseSearch)
+          item[props.optionKeys.value]?.toLowerCase()?.includes(lowerCaseSearch)
       );
       if (props.haveSelectAllOption && searchList.length) {
         searchList.push({
@@ -131,7 +136,7 @@ export default {
     });
 
     watch(selectedItem, (newValue) => {
-      emit("handleSelectedParams", newValue);
+      if(selectedItem.value) emit("handleSelectedParams", newValue);
     });
 
     watch(() => props.defaultList, (newValue) => {

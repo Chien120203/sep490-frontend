@@ -6,7 +6,7 @@
         <el-row
             class="mb-4"
         >
-          <el-button class="btn btn-save" @click="handleRedirectToCreate"
+          <el-button v-if="allowCreateProject" class="btn btn-save" @click="handleRedirectToCreate"
           >{{ $t("project.add_new") }}
           </el-button>
         </el-row>
@@ -14,11 +14,11 @@
     </div>
 
     <!--    DASHBOARD AND USER TASK-->
-    <div v-if="role !== ''" class="project-container">
+    <div class="project-container">
       <div class="project-items">
         <!--    charts-->
         <div class="project-body">
-          <div class="project-chart">
+          <div v-if="listProjects.value !== 0" class="project-chart">
             <DonutChart :chart-data="chartData"/>
           </div>
         </div>
@@ -45,8 +45,8 @@
             <el-input
                 :placeholder="$t('common.input_keyword')"
                 @keyup.enter="submitForm"
-                v-model="searchForms.searchValue"
-                prop="searchValue"
+                v-model="searchForms.keyWord"
+                prop="keyWord"
             >
               <template #append>
                 <span @click="handleSearchForm" class="btn-setting">
@@ -106,7 +106,7 @@
       <ProjectTable
           :data="listProjects.value"
           @details="handleToProjectDtls"
-          @delete="handleDeleteProject"
+          @delete="handleDisplayModal"
       />
       <LoadMore
           :listData="listProjects.value"
@@ -132,9 +132,9 @@ import IconCircleClose from "@/svg/IconCircleClose.vue";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import LoadMore from "@/components/common/LoadMore.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
-import {onMounted, onUnmounted, reactive, ref} from "vue";
+import {computed, onMounted, onUnmounted, reactive, ref} from "vue";
 import {NUMBER_FORMAT, TEXT_CONFIRM_DELETE} from "@/constants/application.js";
-import {BUSINESS_EMPLOYEE} from "@/constants/roles.js"
+import {ADMIN, BUSINESS_EMPLOYEE} from "@/constants/roles.js"
 import {useRouter} from "vue-router";
 import {STATUSES} from "@/constants/project.js";
 import ProjectTable from "@/pages/project/item/list/ProjectTable.vue";
@@ -144,6 +144,7 @@ import DonutChart from "./item/list/ProjectChart.vue";
 import FinancialSummary from "./item/list/FinancialSummary.vue";
 import TaskAndCR from "@/pages/project/item/list/TaskAndCR.vue";
 import PAGE_NAME from "@/constants/route-name.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "customer-reqList",
@@ -166,9 +167,11 @@ export default {
       pageIndex: 1,
     });
     const projectStore = useProjectStore();
+    const persist = usePersistenceStore();
     const customerStore = useCustomerStore();
     const isShowBoxSearch = ref(false);
-    const role = ref(localStorage.getItem('role'));
+    const role = localStorage.getItem('role');
+    const allowCreateProject = computed(() => role === BUSINESS_EMPLOYEE)
     const {
       validation,
       listProjects, // temporary
@@ -182,6 +185,10 @@ export default {
       getProjectChart,
       handleDeleteProject
     } = projectStore;
+    const {
+      projectId,
+      loggedIn
+    } = persist;
     const {
       listCustomers,
       getListCustomers
@@ -229,9 +236,13 @@ export default {
     ]);
 
     onMounted(() => {
-      getListProjects(searchForms.value);
-      getListCustomers();
-      getProjectChart();
+      if(role === ADMIN) router.push({name: PAGE_NAME.USER.LIST});
+      projectId.value = null;
+      if (loggedIn.value) {
+        getListProjects(searchForms.value);
+        getListCustomers();
+        getProjectChart();
+      }
     });
 
     onUnmounted(() => {
@@ -242,7 +253,7 @@ export default {
     };
 
     const handleClear = () => {
-      searchForms.value.searchValue = "";
+      searchForms.value.keyWord = "";
       searchForms.value.status = null;
       searchForms.value.customerId = null;
     };
@@ -282,7 +293,7 @@ export default {
     };
 
     const handleConfirm = () => {
-      handleDeleteCustomerReq(delete_id.value);
+      handleDeleteProject(delete_id.value);
     };
 
     const handleSearchCustomer = (searchValue) => {
@@ -308,6 +319,7 @@ export default {
       validation,
       isShowModalCreate,
       projectDetails,
+      allowCreateProject,
       handleSearchForm,
       handleSearchCustomer,
       handleClear,

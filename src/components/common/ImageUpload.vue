@@ -1,111 +1,295 @@
-<template>
-  <el-upload
-      action="#"
-      list-type="picture-card"
-      :auto-upload="false"
-      :on-change="handleFileChange"
-      :on-remove="handleRemove"
-      v-model:file-list="fileList"
-      :limit="fileLimit"
-      :disabled="disabled"
-      :accept="allowedTypes"
-  >
-    <el-icon><IconPlus/></el-icon>
 
-    <template #file="{ file }">
-      <div>
-        <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-        <span class="el-upload-list__item-actions">
-          <span
-              class="el-upload-list__item-preview"
-              @click="handlePictureCardPreview(file)"
-          >
-            <el-icon><IconEye :fill="'#8f9ba5'"/></el-icon>
+<template>
+  <div class="custom-upload">
+    <!-- File input button -->
+    <label
+        v-if="!disabled && fileList.length < (fileLimit)"
+        class="upload-button"
+        for="file-input"
+    >
+      <el-icon><IconPlus /></el-icon>
+      <input
+          id="file-input"
+          type="file"
+          :accept="allowedTypes"
+          multiple
+          @change="onFileInputChange"
+          style="display: none"
+      />
+    </label>
+
+    <!-- File list as picture cards -->
+    <div class="file-list">
+      <div
+          v-for="file in fileList"
+          :key="file.uid"
+          class="file-card"
+      >
+        <img
+            v-if="file.url"
+            :src="file.url"
+            alt="file preview"
+            class="file-thumbnail"
+            @click="handlePictureCardPreview(file)"
+        />
+        <div class="file-actions">
+          <span class="action-icon" @click="handlePictureCardPreview(file)">
+            <el-icon><IconEye fill="#8f9ba5" /></el-icon>
           </span>
           <span
               v-if="!disabled"
-              class="el-upload-list__item-delete"
+              class="action-icon"
               @click="handleDownload(file)"
           >
-            <el-icon><IconDownload :fill="'#8f9ba5'"/></el-icon>
+            <el-icon><IconDownload fill="#8f9ba5" /></el-icon>
           </span>
           <span
               v-if="!disabled"
-              class="el-upload-list__item-delete"
+              class="action-icon"
               @click="handleRemove(file)"
           >
-            <el-icon><IconTrash :fill="'#8f9ba5'"/></el-icon>
+            <el-icon><IconTrash fill="#8f9ba5" /></el-icon>
           </span>
-        </span>
+        </div>
       </div>
-    </template>
-  </el-upload>
+    </div>
 
-  <el-dialog style="margin-top: 50vh !important" v-model="dialogVisible">
-    <img class="img-preview" :src="dialogImageUrl" alt="Preview Image" />
-  </el-dialog>
+    <!-- Preview dialog -->
+    <el-dialog
+        style="margin-top: 50vh !important"
+        v-model="dialogVisible"
+        width="50%"
+    >
+      <img class="img-preview" :src="dialogImageUrl" alt="Preview Image" />
+    </el-dialog>
+  </div>
 </template>
 
-<script lang="ts" setup>
-import { computed, defineEmits, defineProps, ref } from "vue";
-import type { UploadFile } from "element-plus";
+<script>
+import { ref, watch, onBeforeUnmount } from "vue";
 import IconPlus from "@/svg/IconPlus.vue";
 import IconDownload from "@/svg/IconDownload.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import IconEye from "@/svg/IconEye.vue";
-import { useRoute } from "vue-router";
 
-const props = defineProps({
-  allowedTypes: {
-    type: String,
-    default: ".jpg,.png,.pdf,.docx",
+export default {
+  name: "CustomUpload",
+  components: {
+    IconPlus,
+    IconDownload,
+    IconTrash,
+    IconEye,
   },
-  fileLimit: {
-    type: Number,
-    default: 3,
+  props: {
+    allowedTypes: {
+      type: String,
+      default: "",
+    },
+    fileLimit: {
+      type: Number,
+      default: 3,
+    },
+    existingFiles: {
+      type: Array,
+      default: () => [],
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
-  existingFiles: {
-    type: Array,
-    default: () => [],
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-});
+  emits: ["file-selected", "file-removed"],
+  setup(props, { emit }) {
+    const fileList = ref([]);
+    const dialogImageUrl = ref("");
+    const dialogVisible = ref(false);
 
-const emit = defineEmits(["file-selected", "file-removed"]);
-const route = useRoute();
-const isUpdate = computed(() => route.params.id);
-const fileList = ref<UploadFile[]>(props.existingFiles || []);
+    // Convert Google Drive "view" URL to "thumbnail" URL
+    const convertGoogleDriveUrl = (url) => {
+      if (typeof url === "object" && url?.url) return url?.url;
+      if (typeof url !== "string") return "";
+      let match = url.match(/\/d\/(.*?)\/view/);
+      if (match && match[1]) {
+        const imageId = match[1];
+        return `https://drive.google.com/thumbnail?id=${imageId}`;
+      }
+      match = url.match(/[?&]id=([^&]+)/);
+      if (match && match[1]) {
+        const imageId = match[1];
+        return `https://drive.google.com/thumbnail?id=${imageId}`;
+      }
+      return url;
+    };
 
-const dialogImageUrl = ref("");
-const dialogVisible = ref(false);
+    // Update fileList from existingFiles
+    const updateFileList = (existingFiles) => {
+      fileList.value = existingFiles.map((url, index) => ({
+        name: `file_${index}`,
+        url: convertGoogleDriveUrl(url),
+        status: "success",
+        uid: String(Date.now() + index),
+        raw: undefined,
+      }));
+    };
 
-const handleFileChange = (file: UploadFile, fileList: UploadFile[]) => {
-  if (fileList.length > props.fileLimit) {
-    alert(`You can only upload up to ${props.fileLimit} files.`);
-    return;
+    // Watch for existingFiles prop changes
+    watch(
+        () => props.existingFiles,
+        (newVal) => {
+          if (newVal && newVal.length > 0) {
+            updateFileList(newVal);
+          } else {
+            fileList.value = [];
+          }
+        },
+        { immediate: true }
+    );
+
+    // Handle local file input change
+    const onFileInputChange = (event) => {
+      const input = event.target;
+      if (!input.files) return;
+      const selectedFiles = Array.from(input.files);
+
+      if (fileList.value.length + selectedFiles.length > (props.fileLimit ?? 3)) {
+        alert(`You can only upload up to ${props.fileLimit} files.`);
+        input.value = "";
+        return;
+      }
+
+      const newFiles = selectedFiles.map((file) => {
+        const url = URL.createObjectURL(file);
+        return {
+          name: file.name,
+          raw: file,
+          url,
+          status: "success",
+          uid: String(Date.now() + Math.random()),
+        };
+      });
+
+      fileList.value = [...fileList.value, ...newFiles];
+      emit("file-selected", fileList.value);
+      input.value = "";
+    };
+
+    // Remove file (no revoke)
+    const handleRemove = (file) => {
+      fileList.value = fileList.value.filter((f) => f.uid !== file.uid);
+      emit("file-removed", file);
+    };
+
+    const handlePictureCardPreview = (file) => {
+      dialogImageUrl.value = file.url ?? "";
+      dialogVisible.value = true;
+    };
+
+    const handleDownload = (file) => {
+      if (file.url) {
+        if (file.raw) {
+          const link = document.createElement("a");
+          link.href = file.url;
+          link.download = file.name || "download";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          window.open(file.url, "_blank");
+        }
+      }
+    };
+
+    // No cleanup needed on unmount
+
+    return {
+      fileList,
+      dialogImageUrl,
+      dialogVisible,
+      onFileInputChange,
+      handleRemove,
+      handlePictureCardPreview,
+      handleDownload,
+    };
   }
-  emit("file-selected", fileList);
-};
-
-const handleRemove = (file: UploadFile) => {
-  fileList.value = fileList.value.filter((f) => f.uid !== file.uid);
-  emit("file-removed", file);
-};
-
-const handlePictureCardPreview = (file: UploadFile) => {
-  dialogImageUrl.value = file.url!;
-  dialogVisible.value = true;
-};
-
-const handleDownload = (file: UploadFile) => {
-  window.open(file.url, "_blank");
 };
 </script>
 
 <style lang="scss" scoped>
+.custom-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .upload-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 180px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #b6c2cc;
+    font-size: 28px;
+    transition: border-color 0.3s;
+
+    &:hover {
+      border-color: rgba(197, 207, 216, 0.45);
+      color: rgba(197, 207, 216, 0.65);
+    }
+  }
+
+  .file-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .file-card {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      border: 1px solid #e4e7ed;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #f5f7fa;
+      cursor: pointer;
+
+      .file-thumbnail {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .file-actions {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        gap: 6px;
+        border-radius: 8px;
+        padding: 4px 8px;
+        pointer-events: auto;
+
+        .action-icon {
+          background: rgba(255, 253, 253, 0.12);
+          border-radius: 50%;
+          padding: 6px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background: rgba(133, 136, 143, 0.16);
+            svg {
+              fill: white !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .img-preview {
   width: 100%;
   height: 80%;

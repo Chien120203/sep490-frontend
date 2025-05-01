@@ -99,7 +99,7 @@
           <button @click="$emit('details', scope.row.id)" class="btn-edit">
             <IconEdit />
           </button>
-          <button @click="$emit('delete', scope.row.id)" class="btn-delete">
+          <button v-if="allowDelete(scope.row.status)" @click="$emit('delete', scope.row.id)" class="btn-delete">
             <IconTrash />
           </button>
         </div>
@@ -114,7 +114,8 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
-import {STATUS_LABELS} from "@/constants/project.js";
+import {RECEIVE_STATUS, STATUS_LABELS} from "@/constants/project.js";
+import {EXECUTIVE_BOARD} from "@/constants/roles.js";
 
 export default {
   components: {
@@ -152,6 +153,9 @@ export default {
       return mixinMethods.showDateTime(inputDate, DATE_FORMAT);
     }
 
+    const allowDelete = (status) => {
+      return localStorage.getItem('role') === EXECUTIVE_BOARD && status === RECEIVE_STATUS;
+    }
     const formatCurrency = (inputCurrency) => {
       return mixinMethods.formatCurrency(inputCurrency);
     }
@@ -162,6 +166,7 @@ export default {
 
     return {
       statusClass,
+      allowDelete,
       formatStatus,
       formatDate,
       formatCurrency

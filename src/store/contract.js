@@ -3,10 +3,13 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 export const useContractStore = defineStore(
   "contract",
   () => {
+    const router = useRouter();
     const {t} = useI18n();
     const validation = reactive({value: {}});
     const isShowModalConfirm = reactive({value: false});
@@ -29,40 +32,39 @@ export const useContractStore = defineStore(
       }
     });
 
-    const getListContracts = async (params, isLoading = true) => {
+      const getListContracts = async (params, isLoading = true) => {
+          if (isLoading) mixinMethods.startLoading();
+          await services.ContractAPI.list(
+              params,
+              (response) => {
+                  if (currentPage.value === 1) {
+                      listContracts.value = response.data;
+                  } else {
+                      listContracts.value = [...listContracts.value, ...response.data];
+                  }
+                  totalItems.value = response.meta.total;
+                  currentPage.value = response.meta.index;
+                  mixinMethods.endLoading();
+              },
+              (error) => {
+                  validation.value = mixinMethods.handleErrorResponse(error.responseCode);
+                  mixinMethods.notifyError(t("response.message.get_contracts_failed"));
+                  mixinMethods.endLoading();
+              }
+          );
+      }
+
+    const getContractDetails = async (id, isLoading = true) => {
       if(isLoading) mixinMethods.startLoading();
-      await services.ContractAPI.list(
-        params,
-        (response) => {
-          if (currentPage.value === 1) {
-            listContracts.value = response.data;
-          } else {
-            listContracts.value = [...listContracts.value, ...response.data];
-          }
-          totalItems.value = response.meta.total;
-          currentPage.value = response.meta.index;
-
-          mixinMethods.endLoading();
-        },
-        (error) => {
-          mixinMethods.notifyError(t("response.message.get_contracts_failed"));
-          mixinMethods.endLoading();
-        }
-      );
-    };
-
-    const getContractDetails = async (id) => {
-      mixinMethods.startLoading();
       await services.ContractAPI.details(
         id,
         {},
         (response) => {
           contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
-
-          mixinMethods.endLoading();
+            mixinMethods.endLoading();
         },
         (error) => {
-          mixinMethods.notifyError(t("response.message.get_contract_dtls_failed"));
+          clearContractDetails();
           mixinMethods.endLoading();
         }
       );
@@ -71,16 +73,10 @@ export const useContractStore = defineStore(
     const saveContract = async (params) => {
       mixinMethods.startLoading();
       const formData = mixinMethods.createFormData(params);
-      // var object = {};
-      // formData.forEach(function(value, key){
-      //   object[key] = value;
-      // });
-      // var json = JSON.stringify(object);
-      // console.log(json);
       await services.ContractAPI.save(
         formData,
         (response) => {
-          contractDetails.value = response.data;
+          contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
           mixinMethods.notifySuccess(t("response.message.save_contract_success"));
           mixinMethods.endLoading();
         },
@@ -119,7 +115,7 @@ export const useContractStore = defineStore(
       getContractDetails,
       clearContractDetails,
       saveContract,
-      getListContracts,
+        getListContracts
     };
   }
 );

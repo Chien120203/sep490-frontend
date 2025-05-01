@@ -6,20 +6,20 @@
     </div>
     <div class="contract-save-btn">
       <div class="item">
-        <el-button class="btn btn-save" @click="submitForm()">
+        <el-button v-if="isAllowUpdate" class="btn btn-save" @click="submitForm()">
           {{ $t("common.save") }}
         </el-button>
       </div>
     </div>
     <el-row>
       <el-col :span="17">
-        <ContractItems :isAllowUpdate="true" :items="contractDetails.value.contractDetails"  :isUpdate="isUpdate" @update:items="updateItems"/>
+        <ContractItems :isAllowUpdate="isAllowUpdate" :items="contractDetails.value.contractDetails"  :isUpdate="isUpdate" @update:items="updateItems"/>
       </el-col>
       <el-col :span="7">
         <ContractInformation
             ref="childFormRef"
             :rules="CONTRACT_RULES"
-            :isAllowUpdate="true"
+            :isAllowUpdate="isAllowUpdate"
             :projectId="projectId.value"
             :listProjects="listProjects.value"
             :contractInfo="contractDetails.value"
@@ -41,8 +41,9 @@ import ContractInformation from "@/pages/contract/item/ContractInformation.vue";
 import {useContractStore} from "@/store/contract.js";
 import {getContractRules} from "@/rules/contract/index.js";
 import IconBackMain from "@/svg/IconBackMain.vue";
-import {RECEIVE_STATUS} from "@/constants/project.js";
 import {usePersistenceStore} from "@/store/persistence.js";
+import {BUSINESS_EMPLOYEE} from "@/constants/roles.js";
+import {RECEIVE_STATUS} from "@/constants/project.js";
 
 const projectStore = useProjectStore();
 const contractStore = useContractStore();
@@ -66,7 +67,7 @@ const {
 const CONTRACT_RULES = getContractRules();
 
 const route = useRoute();
-// const isAllowUpdate = computed(() => projectDetails.value.status === PLANNING_STATUS);
+const isAllowUpdate = computed(() => localStorage.getItem("role") === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
 const isUpdate = computed(() => !!route.params.id);
 const router = useRouter();
 

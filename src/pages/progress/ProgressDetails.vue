@@ -1,232 +1,158 @@
 <script setup>
-import {ref} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import ProgressGanttChart from "@/pages/progress/items/ProgressGanttChart.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
 import {useRouter} from "vue-router";
 import {usePersistenceStore} from "@/store/persistence.js";
 import ProgressDetailsModal from "@/pages/progress/items/modal/ProgressDetailsModal.vue"
+import {useProgressStore} from "@/store/progress.js";
+import {useConstructLog} from "@/store/construct-log.js";
+import {usePlanningStore} from "@/store/planning.js";
+import ChangeRequestModal from "@/pages/change-request/item/modal/ChangeRequestModal.vue";
+import {useHumanResourcesStore} from "@/store/human-resources.js";
+import {useMachineResourcesStore} from "@/store/machine-resources.js";
+import {useMaterialResourcesStore} from "@/store/material-resources.js";
+import {useChangeRequestStore} from "@/store/change-request.js";
+import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
+import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
+import {useInventoryStore} from "@/store/inventory.js";
+import {TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {getProgressRules} from "@/rules/progress/index.js";
 
 const router = useRouter();
 const persistenceStore = usePersistenceStore();
+const progressStore = useProgressStore();
+const constructLogStore = useConstructLog();
+const {
+  progressDetails,
+  selectedProgressItem,
+  saveProgressItem,
+  updateItem,
+  clearSelectedProgressItem,
+  getProgressDetails
+} = progressStore;
 
+const {
+  listLogsByTask,
+  getListLogsByTask
+} = constructLogStore;
 const {
   projectId
 } = persistenceStore;
 
-// mock data
-const task2 = ref([
-  {
-    TaskID: 1,
-    TaskName: "Planning",
-    StartDate: new Date("02/03/2017"),
-    EndDate: new Date("02/07/2017"),
-    BaselineStartDate: new Date("02/02/2017"),
-    BaselineEndDate: new Date("02/06/2017"),
-    Progress: 100,
-    Duration: 5,
-    subtasks: [
-      {
-        TaskID: 2,
-        TaskName: "Plan timeline",
-        StartDate: new Date("02/03/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/02/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 5,
-        Progress: 100
-      },
-      {
-        TaskID: 3,
-        TaskName: "Plan budget",
-        StartDate: new Date("02/03/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/02/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 5,
-        Progress: 100,
-        Predecessor: "2SS"
-      },
-      {
-        TaskID: 4,
-        TaskName: "Allocate resources",
-        StartDate: new Date("02/03/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/02/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 5,
-        Progress: 100,
-        Predecessor: "3SS"
-      },
-      {
-        TaskID: 5,
-        TaskName: "Planning complete",
-        StartDate: new Date("02/07/2017"),
-        EndDate: new Date("02/07/2017"),
-        BaselineStartDate: new Date("02/06/2017"),
-        BaselineEndDate: new Date("02/06/2017"),
-        Duration: 0,
-        Progress: 0,
-        Predecessor: "4FS"
-      }
-    ]
-  },
-  {
-    TaskID: 6,
-    TaskName: "Design",
-    StartDate: new Date("02/10/2017"),
-    EndDate: new Date("02/14/2017"),
-    BaselineStartDate: new Date("02/09/2017"),
-    BaselineEndDate: new Date("02/13/2017"),
-    Duration: 3,
-    Progress: 86,
-    subtasks: [
-      {
-        TaskID: 7,
-        TaskName: "Software Specification",
-        StartDate: new Date("02/10/2017"),
-        EndDate: new Date("02/12/2017"),
-        BaselineStartDate: new Date("02/09/2017"),
-        BaselineEndDate: new Date("02/11/2017"),
-        Duration: 3,
-        Progress: 60
-      },
-      {
-        TaskID: 8,
-        TaskName: "Develop prototype",
-        StartDate: new Date("02/10/2017"),
-        EndDate: new Date("02/12/2017"),
-        BaselineStartDate: new Date("02/09/2017"),
-        BaselineEndDate: new Date("02/11/2017"),
-        Duration: 3,
-        Progress: 100,
-        Predecessor: "7SS"
-      },
-      {
-        TaskID: 9,
-        TaskName: "Get approval from customer",
-        StartDate: new Date("02/13/2017"),
-        EndDate: new Date("02/14/2017"),
-        BaselineStartDate: new Date("02/12/2017"),
-        BaselineEndDate: new Date("02/13/2017"),
-        Duration: 2,
-        Progress: 100,
-        Predecessor: "8FS"
-      },
-      {
-        TaskID: 10,
-        TaskName: "Design Documentation",
-        StartDate: new Date("02/13/2017"),
-        EndDate: new Date("02/14/2017"),
-        BaselineStartDate: new Date("02/12/2017"),
-        BaselineEndDate: new Date("02/13/2017"),
-        Duration: 2,
-        Progress: 100,
-        Predecessor: "9SS"
-      },
-      {
-        TaskID: 11,
-        TaskName: "Design complete",
-        StartDate: new Date("02/14/2017"),
-        EndDate: new Date("02/14/2017"),
-        BaselineStartDate: new Date("02/13/2017"),
-        BaselineEndDate: new Date("02/13/2017"),
-        Duration: 0,
-        Progress: 0,
-        Predecessor: "10FS"
-      }
-    ]
-  },
-  {
-    TaskID: 12,
-    TaskName: "Development",
-    StartDate: new Date("02/15/2017"),
-    EndDate: new Date("03/01/2017"),
-    Duration: 10,
-    Progress: 50,
-    subtasks: [
-      {
-        TaskID: 13,
-        TaskName: "Backend Development",
-        StartDate: new Date("02/15/2017"),
-        EndDate: new Date("02/24/2017"),
-        Duration: 7,
-        Progress: 70
-      },
-      {
-        TaskID: 14,
-        TaskName: "Frontend Development",
-        StartDate: new Date("02/16/2017"),
-        EndDate: new Date("02/25/2017"),
-        Duration: 7,
-        Progress: 60,
-        Predecessor: "13FS"
-      },
-      {
-        TaskID: 15,
-        TaskName: "Integration",
-        StartDate: new Date("02/26/2017"),
-        EndDate: new Date("03/01/2017"),
-        Duration: 4,
-        Progress: 30,
-        Predecessor: "14FS"
-      }
-    ]
-  },
-  {
-    TaskID: 16,
-    TaskName: "Testing",
-    StartDate: new Date("03/02/2017"),
-    EndDate: new Date("03/10/2017"),
-    Duration: 7,
-    Progress: 20,
-    subtasks: [
-      {
-        TaskID: 17,
-        TaskName: "Unit Testing",
-        StartDate: new Date("03/02/2017"),
-        EndDate: new Date("03/05/2017"),
-        Duration: 3,
-        Progress: 40
-      },
-      {
-        TaskID: 18,
-        TaskName: "Integration Testing",
-        StartDate: new Date("03/06/2017"),
-        EndDate: new Date("03/08/2017"),
-        Duration: 3,
-        Progress: 30,
-        Predecessor: "17FS"
-      },
-      {
-        TaskID: 19,
-        TaskName: "User Acceptance Testing",
-        StartDate: new Date("03/09/2017"),
-        EndDate: new Date("03/10/2017"),
-        Duration: 2,
-        Progress: 10,
-        Predecessor: "18FS"
-      }
-    ]
-  }
-]);
-const progressItem = ref([]);
 const isShowModal = ref(false);
+const isShowModalSave = ref(false);
+const inventoryStore = useInventoryStore();
+const {
+  inventoryData,
+  getListInventory
+} = inventoryStore;
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
-}
+};
+
+const progressRules = getProgressRules();
+const tasks = ref(progressDetails.value.progressItems);
+const allowEdit = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
+watch(
+    () => progressDetails.value,
+    (newVal) => {
+      tasks.value = newVal.progressItems;
+    },
+    { immediate: true, deep: true }
+)
+onMounted(() => {
+  getProgressDetails(projectId.value, true);
+});
+
+const setTaskIndex = () => {
+  const items = progressDetails.value.progressItems;
+  const parentIndex = selectedProgressItem.value.parentIndex;
+
+  let newIndex;
+
+  if (!parentIndex) {
+    // Case 1: Top-level task (no parentIndex)
+    const topLevelTasks = items.filter(item => !item.parentIndex);
+    const maxTopIndex = topLevelTasks.reduce((max, item) => {
+      const idx = parseInt(item.index, 10);
+      return idx > max ? idx : max;
+    }, 0);
+    newIndex = (maxTopIndex + 1).toString();
+  } else {
+    // Case 2: Child task (has parentIndex)
+    const childTasks = items.filter(item => item.parentIndex === parentIndex);
+    const lastChildIndex = childTasks.reduce((max, item) => {
+      const parts = item.index.split('.');
+      const last = parseInt(parts[parts.length - 1], 10);
+      return last > max ? last : max;
+    }, 0);
+
+    newIndex = `${parentIndex}.${lastChildIndex + 1}`;
+  }
+
+  return newIndex;
+};
+
+
+const materials = computed(() => {
+  return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
+    id: item.resourceId,
+    quantity: item.quantity,
+    unit: item.unit,
+    name: item.name
+  })) || [];
+});
+const listVehicles = computed(() => {
+  return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE).map(item => ({
+    id: item.resourceId,
+    quantity: item.quantity,
+    unit: item.unit,
+    name: item.name
+  })) || [];
+});
+const listEmployees = computed(() => inventoryData.value.filter(item => item.resourceType === HUMAN_TYPE));
 
 const handleEditProgressItem = (item) => {
   isShowModal.value = true;
-  progressItem.value = item;
+  getListLogsByTask(projectId.value, item[0]?.taskData.index);
+  selectedProgressItem.value = item[0]?.taskData;
 }
 
-const handleAddAllocation = () => {
-
+const handleSaveProgressItem = async () => {
+  isShowModalSave.value = false;
+  selectedProgressItem.value.index = await setTaskIndex();
+  selectedProgressItem.value.progressId = progressDetails.value.id;
+  await saveProgressItem(selectedProgressItem.value);
+  clearSelectedProgressItem();
 }
 
-const handleAddTask = () => {
+const handleUpdateProgressItem = async () => {
+  let params = {
+    progressId: progressDetails.value.id,
+    progress: selectedProgressItem.value.progress,
+    id: selectedProgressItem.value.id,
+    status: selectedProgressItem.value.status,
+    planStartDate: selectedProgressItem.value.planStartDate,
+    planEndDate: selectedProgressItem.value.planEndDate,
+    actualStartDate: selectedProgressItem.value.actualStartDate,
+    actualEndDate: selectedProgressItem.value.actualEndDate,
+    itemRelations: selectedProgressItem.value.itemRelations,
+  }
+  await updateItem(params);
+  await clearSelectedProgressItem();
+  handleCloseModal();
+}
 
+const handleAddTask = async () => {
+  await getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 50});
+  isShowModalSave.value = true;
+}
+
+const handleDisplayModalSave = (show = false) => {
+  isShowModalSave.value = show;
+  if(!show) clearSelectedProgressItem();
 }
 
 const handleCloseModal = () => {
@@ -245,19 +171,35 @@ const handleCloseModal = () => {
           }}
         </h3>
       </div>
-      <div>
+      <div v-if="!tasks"></div>
+      <div v-else>
         <ProgressGanttChart
-            :tasks="task2"
+            :tasks="tasks"
             @handleSelectRow="handleEditProgressItem"
             @add-task="handleAddTask"
-            @add-allocation="handleAddAllocation"
         />
       </div>
     </div>
     <ProgressDetailsModal
-        :progressDetails="progressItem"
+        :progressItems="progressDetails.value.progressItems"
+        :progressDetails="selectedProgressItem.value"
+        :allowEdit="allowEdit"
+        :listLogsByTask="listLogsByTask.value"
         :show="isShowModal"
         @close="handleCloseModal"
+        @submit="handleUpdateProgressItem"
+    />
+    <ChangeRequestModal
+        :selectedRow="selectedProgressItem.value"
+        :show="isShowModalSave"
+        :materials="materials"
+        :vehicles="listVehicles"
+        :tasks="progressDetails.value.progressItems"
+        :users="listEmployees"
+        :rules="progressRules"
+        :allowEdit="allowEdit"
+        @close="handleDisplayModalSave"
+        @submit="handleSaveProgressItem"
     />
   </div>
 </template>

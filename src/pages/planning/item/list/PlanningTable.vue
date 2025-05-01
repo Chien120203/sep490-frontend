@@ -48,8 +48,8 @@
         <p v-html="$t('planning.table.header.status')"></p>
       </template>
       <template #default="scope">
-        <span class="planning-status" :class="statusClass(scope.row.status)">
-          {{ $t(formatStatus(scope.row.status)) }}
+        <span class="planning-status" :class="statusClass(getStatus(scope.row).value)">
+        {{ $t(getStatus(scope.row).label) }}
         </span>
       </template>
     </el-table-column>
@@ -63,7 +63,7 @@
           <button @click="$emit('details', scope.row.id)" class="btn-edit">
             <IconEdit />
           </button>
-          <button @click="$emit('delete', scope.row.id)" class="btn-delete">
+          <button v-if="!scope.row.isApproved" @click="$emit('delete', scope.row.id)" class="btn-delete">
             <IconTrash />
           </button>
         </div>
@@ -78,7 +78,7 @@ import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
-import {STATUS_LABELS} from "@/constants/survey.js";
+import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 export default {
   components: {
@@ -92,24 +92,19 @@ export default {
     },
   },
   setup() {
+    const getStatus = (plan) => {
+      const resourceApprove = plan.reviewers.find(p => p.role === RESOURCE_MANAGER)?.isApproved;
+      const techApprove = plan.reviewers.find(p => p.role === TECHNICAL_MANAGER)?.isApproved;
+      const bodApprove = plan.reviewers.find(p => p.role === EXECUTIVE_BOARD)?.isApproved;
+
+      if(bodApprove === false) return {value: "bod-reject", label: "planning.status.re_planning"};
+      if(bodApprove === true) return {value: "bod-approved", label: "planning.status.bod_approved"};
+      if(techApprove === true) return {value: "tech-approved", label: "planning.status.tech_approved"};
+      if(resourceApprove === true) return {value: "resource-approved", label: "planning.status.resource_approved"};
+      if(resourceApprove === null && techApprove === null) return {value: "draft", label: "planning.status.draft"};
+    }
     const statusClass = (status) => {
-      if (status == null) return ""; // Ensure status is not null or undefined
-      switch (status) {
-        case 0:
-          return "planning-receive-planning";
-        case 1:
-          return "planning";
-        case 2:
-          return "planning-in-progress";
-        case 3:
-          return "planning-completed";
-        case 4:
-          return "planning-paused";
-        case 5:
-          return "planning-closed";
-        default:
-          return ""; // Handle unexpected values
-      }
+      return `planning-${status}`;
     };
 
     const formatDate = (inputDate) => {
@@ -120,13 +115,9 @@ export default {
       return mixinMethods.formatCurrency(inputCurrency);
     }
 
-    const formatStatus = (status) => {
-      return STATUS_LABELS[status] || 'Unknown';
-    };
-
     return {
       statusClass,
-      formatStatus,
+      getStatus,
       formatDate,
       formatCurrency
     };
@@ -148,28 +139,24 @@ export default {
     text-align: center;
   }
 
-  &-receive-planning {
-    background: #1f7885;
+  &-draft {
+    background: #b5afaf;
   }
 
-  &-planning {
+  &-resource-approved {
     background: #1f4261;
   }
 
-  &-in-progress {
-    background: #28b5b5;
+  &-tech-approved {
+    background: #1f4261;
   }
 
-  &-completed {
+  &-bod-approved {
     background: #3e8e22;
   }
 
-  &-closed {
-    background: #dc3545;
-  }
-
-  &-paused {
-    background: #4c4b4b;
+  &-bod-reject {
+    background: #dfbe3a;
   }
 }
 

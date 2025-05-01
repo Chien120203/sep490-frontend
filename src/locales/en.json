@@ -116,6 +116,7 @@
     "comment": "Comment by",
     "outgroup": "Out group",
     "placeholder_chat": "Write a message...",
+    "text_vmo": "Copyright 2024@VMO",
     "contract_status": {
       "new": "New",
       "in_progress": "Inprogress",
@@ -136,6 +137,7 @@
     "note": "Note",
     "select_date": "Select date",
     "approve": "Approve",
+    "wait": "Wait for Approval",
     "remain": "Remain",
     "reject": "Reject",
     "review": "Review",
@@ -145,6 +147,22 @@
     "load": "Load",
     "reload": "Reload",
     "get_otp": "Get OTP"
+  },
+  "profile": {
+    "title": "User Profile",
+    "details": {
+      "title": "Profile Details",
+      "change_password": "Change Password",
+      "logout": "Logout",
+      "username": "Username",
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "role": "Role",
+      "gender": "Gender",
+      "image": "Image",
+      "address": "Address"
+    }
   },
   "permission": {
     "menu": "Menus",
@@ -175,7 +193,16 @@
     "status": "Status",
     "admin": "Admin",
     "landlord": "Landlord",
-    "tenant": "Tenant"
+    "tenant": "Tenant",
+    "label": {
+      "construct_manager": "Construction Manager",
+      "employee": "Construction Employee",
+      "business": "Business Employee",
+      "technical": "Technical Manager",
+      "qa": "Quality Assurance",
+      "bod": "Executive Board",
+      "resource": "Resource Manager"
+    }
   },
   "response": {
     "code": {
@@ -197,8 +224,14 @@
     },
     "message": {
       "login_fail": "Login failed",
+      "account_not_found": "Account not existed",
+      "login_success": "Login successfully",
+      "logout_success": "Logout success",
+      "create_success": "Create successfully",
+      "delete_success": "Delete successfully",
       "update_success": "Update Successfully",
       "update_failed": "Update Failed",
+      "error_occurred": "Something wrong happended! Please try again!",
       "get_otp_success": "OTP code has been sent to your email",
       "get_otp_failed": "Sending OTP code failed",
       "reset_password_success": "Reset password successfully",
@@ -208,7 +241,7 @@
       "create_user_success": "Create user successfully",
       "create_user_failed": "Create user failed",
       "delete_user_failed": "Delete user failed",
-      "delete_user_success": "Create user success",
+      "delete_user_success": "Delete user success",
       "get_user_dtls_failed": "Get user details failed",
       "create_contract_success": "Create contract success",
       "create_contract_failed": "Create contract failed",
@@ -219,16 +252,77 @@
       "get_customer_dtls_failed": "Get customer details failed",
       "save_customer_success": "Save Customer Success",
       "save_customer_failed": "Save Customer Failed",
+      "get_user_failed": "Get list users failed",
+      "save_user_success": "Save user success",
+      "save_user_failed": "Save user failed",
       "delete_customer_success": "Delete Customer Success",
       "delete_customer_failed": "Delete Customer Failed",
+      "delete_plan_success": "Delete Plan Success",
+      "delete_plan_failed": "Delete Plan Failed",
       "get_projects_failed": "Get list projects failed",
+      "get_project_details_failed": "Get project details failed",
+      "get_progress_dtls_failed": "Get progress details failed",
+      "save_planning_failed": "Save planning failed",
+      "save_planning_success": "Save planning success",
+      "approve_planning_failed": "Approve planning failed",
+      "approve_planning_success": "Approve planning success",
+      "reject_planning_failed": "Reject planning failed",
+      "reject_planning_success": "Reject planning success",
       "save_project_success": "Save project success",
       "save_project_failed": "Save project failed",
       "save_contract_success": "Save contract success",
       "get_contracts_failed": "Get list contracts failed",
       "save_contract_failed": "Save contract failed",
-      "get_contract_dtls_failed": "Get project details failed",
-      "get_planning_failed": "Get plannings failed"
+      "get_contract_dtls_failed": "Get contract details failed",
+      "get_planning_failed": "Get plannings failed",
+      "get_mobilization_failed": "Get mobilizations requests failed",
+      "save_mobilize_success": "Save mobilization request success",
+      "save_mobilize_failed": "Save mobilization request failed",
+      "delete_mobilize_success": "Delete mobilization request success",
+      "delete_mobilize_failed": "Delete mobilization request failed",
+      "get_survey_dtls_failed": "Get Site Survey failed",
+      "save_survey_success": "Save Site Survey success",
+      "save_survey_failed": "Save Site Survey failed",
+      "get_machine_failed": "Get Machine failed",
+      "get_machine_dtls_failed": "Get Machine details failed",
+      "save_machine_success": "Save Machine Success",
+      "save_machine_failed": "Save Machine Failed",
+      "delete_machine_success": "Delete machine success",
+      "delete_machine_failed": "Delete machine failed",
+      "get_material_failed": "Get Material failed",
+      "get_material_dtls_failed": "Get Material details failed",
+      "save_material_success": "Save Material Success",
+      "save_material_failed": "Save Material Failed",
+      "delete_material_success": "Delete material success",
+      "delete_material_failed": "Delete material failed",
+      "get_human_failed": "Get Human failed",
+      "get_human_dtls_failed": "Get Human details failed",
+      "save_human_success": "Save Human Success",
+      "save_human_failed": "Save Human Failed",
+      "delete_human_success": "Delete construction team success",
+      "delete_human_failed": "Delete construction team failed",
+      "get_planning_dtls_failed": "Get planning details failed",
+      "get_allocation_failed": "Get allocation requests failed",
+      "get_allocation_dtls_failed": "Get allocation request details failed",
+      "get_list_inventory_failed": "Get list inventory failed",
+      "delete_project_success": "Delete Project Success",
+      "delete_project_failed": "Delete Project Failed",
+      "get_inspection_failed": "Get inspection report failed",
+      "get_inspection_dtls_failed": "Get inspection report details failed",
+      "save_inspection_success": "Save inspection report success",
+      "save_inspection_failed": "Save inspection report failed",
+      "get_mobilization_dtls_failed": "Get mobilization details failed",
+      "update_mobilization_status_failed": "Update mobilization status failed",
+      "update_mobilization_status_success": "Update mobilization status success",
+      "remove_member_failed": "Remove team member failed",
+      "remove_member_success": "Remove team member success",
+      "save_construct_log_failed": "Save construct log failed",
+      "save_construct_log_success": "Save construct log success",
+      "get_construct_log_failed": "Get construct log list failed",
+      "get_construct_log_dtls_failed": "Get construct log details failed",
+      "get_logs_by_task_failed": "Get logs by task failed",
+      "save_progress_item_success": "Save progress item success",
+      "save_progress_item_failed": "Save progress item failed"
     }
   },
   "contract": {
@@ -327,9 +421,6 @@
     "date": "Contract Date",
     "status": "Status",
     "type": "Type",
-    "room": "Room",
-    "tenant": "Tenant",
-    "landlord": "Landlord",
     "statuses": {
       "active": "Active",
       "terminated": "Terminated",
@@ -380,7 +471,9 @@
       "status": "Status",
       "comments": "Comments",
       "attachments": "Attachments",
-      "surveyDetails": "Survey Details"
+      "surveyDetails": "Survey Details",
+      "bid_approve": "Approve",
+      "bid_reject": "Reject"
     },
     "table": {
       "header": {
@@ -405,6 +498,172 @@
     "tenant_placeholder": "Contract tenant",
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
+  },
+  "resource": {
+    "title": "Resource Management ",
+    "add_new": "Add New",
+    "keyword": "Keyword",
+    "search": "Search",
+    "machine": {
+      "title": "Machine Resource Management",
+      "add_new": "Add New",
+      "keyword": "Keyword",
+      "search": "Search",
+      "clear": "Clear",
+      "status": "Status",
+      "type": "Type",
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "maintain": "Under Maintenance"
+      },
+      "details": {
+        "title": "Machine Details",
+        "licensePlate": "License Plate",
+        "vehicleName": "Vehicle Name",
+        "brand": "Brand",
+        "yearOfManufacture": "Year of Manufacture",
+        "countryOfManufacture": "Country of Manufacture",
+        "vehicleType": "Vehicle Type",
+        "chassisNumber": "Chassis Number",
+        "engineNumber": "Engine Number",
+        "images": "Images",
+        "status": "Status",
+        "driver": "Driver",
+        "color": "Color",
+        "fuelType": "Fuel Type",
+        "description": "Description",
+        "fuelTankVolume": "Fuel Tank Volume",
+        "fuelUnit": "Fuel Unit",
+        "attachments": "Attachments",
+        "selectYear": "Select Year"
+      },
+      "create": {
+        "title": "Create Machine"
+      },
+      "table": {
+        "header": {
+          "code": "Machine Code",
+          "name": "Machine Name",
+          "licensePlate": "License Plate",
+          "vehicleName": "Vehicle Name",
+          "brand": "Brand",
+          "vehicleType": "Vehicle Type",
+          "driver": "Driver",
+          "type": "Type",
+          "status": "Status",
+          "action": "Action"
+        }
+      },
+      "modal_confirm": {
+        "title": "Confirm delete machine",
+        "message": "Please enter 'Delete' to confirm delete this machine"
+      },
+      "fuelUnit": {
+        "liters": "Liters",
+        "gallons": "Gallons",
+        "cubic_meters": "Cubic meters"
+      }
+    },
+    "material": {
+      "title": "Material Resource Management",
+      "add_new": "Add New",
+      "keyword": "Keyword",
+      "search": "Search",
+      "clear": "Clear",
+      "status": "Status",
+      "type": "Type",
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "details": {
+        "title": "Material Details",
+        "materialCode": "Material Code",
+        "materialName": "Material Name",
+        "unit": "Unit",
+        "branch": "Branch",
+        "status": "Status",
+        "madeIn": "Made In",
+        "chassisNumber": "Chassis Number",
+        "wholesalePrice": "Whole Sale Price",
+        "description": "Description",
+        "retailPrice": "Retail Price",
+        "inventory": "Inventory",
+        "roll_back": "Roll back",
+        "expireDate": "Expire Date",
+        "productionDate": "Production Date",
+        "attachments": "Attachments"
+      },
+      "create": {
+        "title": "Create Material"
+      },
+      "table": {
+        "header": {
+          "materialCode": "Material Code",
+          "materialName": "Material Name",
+          "inventory": "Inventory",
+          "expireDate": "Expire Date",
+          "productionDate": "Production Date",
+          "status": "Status",
+          "action": "Action",
+          "isFlag": "Flag"
+        }
+      },
+      "modal_confirm": {
+        "title": "Confirm delete material",
+        "message": "Please enter 'Delete' to confirm delete this material"
+      }
+    },
+    "human": {
+      "modal_confirm": {
+        "message": "Do you want to delete this team?",
+        "title": "Delete construction team",
+        "title_member": "Delete team member",
+        "msg_member": "Do you want to delete this member?"
+      },
+      "modal_title": "Construction Team Details",
+      "members": "Members Management",
+      "status": "Status",
+      "type": "Type",
+      "statuses": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "details": {
+        "title": "Team Details",
+        "userName": "User Name",
+        "fullName": "Full Name",
+        "phoneNumber": "Phone Number",
+        "teamName": "Team Name",
+        "teamManager": "Team Manager",
+        "manager": {
+          "fullName": "Manager Name"
+        },
+        "status": "Status",
+        "action": "Action",
+        "attachments": "Attachments",
+        "description": "Description"
+      },
+      "create": {
+        "title": "Team Management"
+      },
+      "table": {
+        "header": {
+          "teamName": "Team Name",
+          "manager": {
+            "fullName": "Manager Name",
+            "username": "User Name"
+          },
+          "description": "Description",
+          "status": "Status",
+          "action": "Action"
+        }
+      },
+      "error": {
+        "modal_error": ""
+      }
+    }
   },
   "customer": {
     "title": "Customer",
@@ -446,6 +705,7 @@
         "name": " Customer Names",
         "phone": "Phone Number",
         "fax": "Fax Code",
+        "tax": "Tax Code",
         "address": "Address",
         "email": "Email",
         "action": "Action",
@@ -481,7 +741,7 @@
       "title": "Project Details",
       "financial_summary": "Financial Summary",
       "change_request": "Change Request",
-      "site_survey": "Site Survey",
+      "site-survey": "Site Survey",
       "change_request_table": {
         "header": {
           "request_code": "Request Code",
@@ -518,6 +778,7 @@
       "construct_type": "Construct Type",
       "area": "Area",
       "purpose": "Purpose",
+      "location": "Location",
       "technical_reqs": "Technical Requirements",
       "start_date": "Start Date",
       "end_date": "End Date",
@@ -526,6 +787,7 @@
       "description": "Description",
       "technical_manager": "Technical Manager",
       "resource_manager": "Resource Manager",
+      "qa": "Quality Assurance",
       "construction_manager": "Construction Manager",
       "upload_file": "Upload File"
     },
@@ -566,6 +828,7 @@
   "progress": {
     "add_new_cr": "Add New CR",
     "add_new": "Add New",
+    "hide_gantt_chart": "Hide Gantt Chart",
     "timeline": {
       "day": "Day",
       "week": "Week",
@@ -574,6 +837,13 @@
     },
     "details": {
       "title": "Project Progress"
+    },
+    "status": {
+      "not_started": "Not start",
+      "in_progress": "In Progress",
+      "completed": "Completed",
+      "paused": "Paused",
+      "canceled": "Canceled"
     }
   },
   "planning": {
@@ -582,6 +852,7 @@
     "keyword": "Keyword",
     "search": "Search",
     "clear": "Clear",
+    "modal_title": "Construct Item Details",
     "create": {
       "title": "Create Planning"
     },
@@ -596,6 +867,68 @@
         "creator": "Creator",
         "action": "Action"
       }
+    },
+    "form": {
+      "name": "Plan Name",
+      "inspector": "Reviewers",
+      "ctr_start_date": "Contract Start Date",
+      "ctr_end_date": "Contract End Date",
+      "budget": "Project Budget"
+    },
+    "modal": {
+      "work_name": "Work Name",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "price": "Expected Price",
+      "el_pane": {
+        "depen_work": "Dependency Work",
+        "material": "Material Resource",
+        "human": "Human Resource",
+        "machine": "Machine Resource"
+      }
+    },
+    "errors": {
+      "select_date": "Please select date for task {relatedTaskIndex} before select relation",
+      "SS": "Cannot start task {currentTaskIndex} until the task {relatedTaskIndex} also starts.",
+      "FF": "Cannot finish task {currentTaskIndex} until the task {relatedTaskIndex} is completed.",
+      "SF": "Cannot finish task {currentTaskIndex} until the task {relatedTaskIndex} is started.",
+      "FS": "Cannot start task {currentTaskIndex} until the task {relatedTaskIndex} is completed.",
+      "invalid_form": "Validation failed in {form}",
+      "exceed_budget": "Exceed project budget"
+    },
+    "form_ref": {
+      "planning_info": "Plan Information",
+      "planning_items": "Plan Items",
+      "planning_item_dtls": "Plan Item Details",
+      "dependency": "Task dependency",
+      "material": "Material Form",
+      "machine": "Machine Form",
+      "human": "Human Form"
+    },
+    "items": {
+      "name": "Name",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "price": "Price",
+      "total": "Total Price",
+      "action": "Action",
+      "inventory": "Inventory quantity"
+    },
+    "planned": {
+      "material": "Planned Material Price",
+      "human": "Planned Human Price",
+      "machine": "Planned Machine Price",
+      "total": "Planned Total Price"
+    },
+    "status": {
+      "wait_approved": "Wait for approval",
+      "re_planning": "Re Planning",
+      "bod_approved": "Executive Approved",
+      "tech_approved": "Technical Approved",
+      "resource_approved": "Resource Approved",
+      "draft": "Draft",
+      "rejected": "Rejected",
+      "approved": "Approved"
     }
   },
   "bill": {
@@ -703,10 +1036,6 @@
     "sale_department_type": "Sale Department",
     "prd_department_type": "Production Department",
     "text_create": "Create",
-    "delete": {
-      "title_delete": "Delete User",
-      "text_delete": "Do you want to delete this user?"
-    },
     "messages": {
       "err_get_all_users": "Get all users failed",
       "err_catch_find_user": "Find user failed",
@@ -767,7 +1096,9 @@
     },
     "modal_confirm": {
       "message_delete": "WARNING: You will delete user. Please type 'Delete' to continue.",
-      "title_delete": "Delete User"
+      "title_delete": "Delete User",
+      "title": "Confirm delete user",
+      "message": "Please enter 'Delete' to confirm delete this user"
     },
     "gender": {
       "male": "Male",
@@ -798,10 +1129,22 @@
       "profile": "Profile",
       "contract": "Contracts",
       "customer": "Customer",
-      "project": "Project",
       "planning": "Planning",
       "progress": "Progress",
-      "construct_log": "Construction Log"
+      "construct_log": "Construction Log",
+      "change_request": "Request",
+      "progress_change": "Progress Change",
+      "resource_mobilization": "Mobilization",
+      "resource_allocation": "Allocation",
+      "project": "Project",
+      "inventory": "Inventory",
+      "inspector_report": "Inspection Report",
+      "resource": {
+        "title": "Resource",
+        "machine": "Machine Resource",
+        "material": "Material Resource",
+        "human": "Construction Team"
+      }
     }
   },
   "construct_log": {
@@ -810,9 +1153,174 @@
     },
     "edit": {
       "title": "Construction Log Details"
+    },
+    "modal_title": "List Logs",
+    "log_code": "Log Code",
+    "log_name": "Log Name",
+    "modal_confirm": {
+      "message": "Do you want to change log status!",
+      "title": "Change log status"
+    },
+    "status": {
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "wait_approve": "Wait for Approval"
+    },
+    "log_table": {
+      "previous_year": "Previous Year",
+      "previous_month": "Previous Month",
+      "today": "Today",
+      "next_month": "Next Month",
+      "next_year": "Next Year"
     }
   },
-
+  "mobilization": {
+    "title": "Resource Mobilization",
+    "add_new": "Add New",
+    "keyword": "Key word",
+    "modal_confirm": {
+      "message_delete": "Do you want to delete this request?",
+      "message_change_status": "Do you want to change status this request?",
+      "title": "Confirmation"
+    },
+    "table": {
+      "header": {
+        "code": "Request Code",
+        "name": " Request Name",
+        "priority": "Priority Level",
+        "status": "Status",
+        "date": "Request Date",
+        "action": "Action",
+        "vehicle": "Vehicle",
+        "material": "Material",
+        "human": "Human Resource"
+      }
+    },
+    "modal": {
+      "title": "Save Mobilization Request",
+      "code": "Request Code",
+      "name": " Request Name",
+      "type": "Request Type",
+      "priority": "Priority",
+      "date": "Request date",
+      "description": "Description",
+      "action": "Action",
+      "priority_level": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      }
+    },
+    "statuses": {
+      "draft": "Drafted",
+      "wait_manager": "Wait Manager Approval",
+      "manager_approved": "Manager Approved",
+      "bod_approved": "BOD Approved",
+      "rejected": "Rejected"
+    },
+    "type": {
+      "supply_more": "Supply to project warehouse",
+      "supply_general": "Supply to general warehouse",
+      "add_new": "Add new resource"
+    }
+  },
+  "allocation": {
+    "title": "Resource Allocation",
+    "add_new": "Add New",
+    "keyword": "Key word",
+    "modal_confirm": {
+      "message": "Do you want to delete this request?",
+      "title": "Delete allocation request"
+    },
+    "target_project": "Target Project",
+    "target_task": "Target task",
+    "from_task": "From task",
+    "to_task": "To Task",
+    "table": {
+      "header": {
+        "code": "Request Code",
+        "name": " Request Name",
+        "priority": "Priority Level",
+        "status": "Status",
+        "date": "Request Date",
+        "from": "From Project",
+        "to": "To Project",
+        "action": "Action"
+      }
+    },
+    "type": {
+      "project": "Project to Project",
+      "project_task": "Project to Task",
+      "task": "Task to Task"
+    }
+  },
+  "inventory": {
+    "title": "Inventory",
+    "type": {
+      "team": "Team",
+      "material": "Material",
+      "machine": "Machinne"
+    }
+  },
+  "construct_team": {
+    "title": "Construction Team",
+    "manager": "Construction Manager"
+  },
+  "change_request": {
+    "title": "Change Request",
+    "add_new": "Add New",
+    "type": {
+      "add_new": "Add New",
+      "update": "Modification"
+    },
+    "table": {
+      "header": {
+        "name": "Name",
+        "request_type": "Request Type",
+        "request_date": "Request Date",
+        "creator": "Creator",
+        "no": "No",
+        "action": "Action",
+        "status": "Status"
+      }
+    },
+    "modal": {
+      "request_name": "Request Name",
+      "request_date": "Request Date",
+      "parent_index": "Parent Index",
+      "work_name": "Work Name",
+      "quantity": "Quantity",
+      "total": "Total",
+      "unit": "Unit",
+      "unit_price": "Unit Price",
+      "start_date": "Plan Start Date",
+      "end_date": "Plan End Date"
+    }
+  },
+  "inspection": {
+    "title": "Inspection Report",
+    "edit" : {
+      "title": "Inspection Report Details"
+    },
+    "table": {
+      "header": {
+        "projectCode": "Project Name",
+        "inspectionCode": "Inspection Report Code",
+        "inspectionName": "Inspection Report Name",
+        "inspectorName": "Inspector Name",
+        "location": "Location",
+        "date": "Date",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "status": "Status",
+        "action": "Action"
+      }
+    },
+    "modal_confirm": {
+      "title": "Confirm delete inspection report",
+      "message": "Please enter 'Delete' to confirm delete this inspection report"
+    }
+  },
   "E-CM-001": "Login Failed",
   "E-CM-002": "Required",
   "E-CM-003": "Field must be less than {max} characters",
@@ -834,12 +1342,21 @@
   "E-CM-019": "Number of tenants exceed the room's capacity",
   "E-CM-020": "Start date must be before end date",
   "E-CM-021": "Contract name existed",
-  "E-CM-022": "Start date must greater or equal current date",
+  "E-CM-022": "Selected Date must greater or equal current date",
   "E-CM-023": "Contract date is duplicated with another contract",
   "E-CM-024": "Bill code is existed",
   "E-CM-025": "Utility name has been existed",
   "E-CM-026": "Utility name is duplicated",
   "E-CM-027": "Email is invalid",
+  "E-CM-028": "End date must be greater start date",
+  "E-CM-029": "Date cannot be in the future",
+  "E-CM-030": "End time must be greater start time",
+  "E-CM-031": "Start time must be before end time",
+  "E-CM-032": "Start date must be after its parent start date",
+  "E-CM-033": "End date must be before its parent end date",
+  "E-CM-034": "Phone Number is invalid",
+  "E-CM-035": "Start date must be before its parent end date",
+  "E-CM-036": "Selected date must be between contract start and end date",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",
@@ -849,10 +1366,18 @@
 
   "E-CUS-001": "Customer code is required",
   "E-CUS-002": "Duplicate Customer Code",
-  "E-CUS-004": "Tax code is required",
-  "E-CUS-005": "Phone number is invalid",
+  "E-CUS-004": "Fax code is invalid",
+  "E-CUS-005": "Tax code is invalid",
   "E-CUS-006": "Fax number is invalid",
-  "E-CUS-007": "Tax code is invalid",
+  "E-CUS-007": "Tax code is required",
+  "E-CUS-008": "Phone number is invalid",
+
+  "E-USER-001": "User Name is required",
+  "E-USER-002": "Email is required",
+  "E-USER-003": "Full Name is required",
+  "E-USER-004": "Phone is required",
+  "E-USER-005": "Role is required",
+  "E-USER-006": "Gender is required",
 
   "E-CTR-001": "Contract code is required",
   "E-CTR-002": "Project is required",
@@ -908,5 +1433,59 @@
   "E-SV-001": "The probability must greater than or equal {min}",
   "E-SV-002": "The probability must less than or equal {max}",
   "E-SV-003": "The discount rate must greater than or equal {min}",
-  "E-SV-004": "The discount rate must less than or equal {max}"
+  "E-RR-FE-001": "Request date is required",
+  "E-RR-FE-002": "Selected at least once users or materials or vehicles",
+  "E-RR-FE-003": "Unit is required",
+  "E-RR-FE-004": "Quantity is required",
+  "E-RR-FE-005": "Quantity must greater than or equal {min}",
+  "E-RR-FE-006": "Request type is required",
+  "E-RR-010": "At least one resource must be specified!",
+  "E-SV-004": "The discount rate must less than or equal {max}",
+
+  "E-PLAN-001": "Actual total price exceed the expected price",
+  "E-PLAN-002": "Plan quantity exceeds inventory",
+
+  "E-LOG-001": "Save construction log failed",
+  "E-LOG-002": "Work amount cannot exceed the expected",
+
+  "E-MACH-001": "License Plate is required",
+  "E-MACH-002": "Brand is required",
+  "E-MACH-003": "Year Of Manufacture is required",
+  "E-MACH-004": "Vehicle Name is required",
+  "E-MACH-005": "Vehicle Type is required",
+  "E-MACH-006": "Chassis Number is required",
+  "E-MACH-007": "Engine Number is required",
+  "E-MACH-009": "Status is required",
+  "E-MACH-010": "Driver is required",
+  "E-MACH-011": "Fuel Type is required",
+  "E-MACH-012": "Fuel Tank Volume is required",
+  "E-MACH-013": "Fuel Tank Volume must be a number",
+  "E-MACH-014": "Fuel Unit is required",
+  "E-MACH-015": "Invalid License Plate format",
+  "E-MACH-016": "Invalid Year Of Manufacture",
+  "E-MACH-017": "Invalid Chassis Number format",
+  "E-MACH-018": "Invalid Engine Number format",
+  "E-MACH-020": "Fuel Tank Volume must be must be from 0 to 1,000,000",
+  "E-MACH-022": "Year Of Manufacture must be a number",
+
+  "E-MAT-001": "Material Code is required",
+  "E-MAT-002": "Material Code format is invalid",
+  "E-MAT-003": "Material Name is required",
+  "E-MAT-004": "Unit is required",
+  "E-MAT-005": "Chassis Number is required",
+  "E-MAT-006": "Chassis Number format is invalid",
+  "E-MAT-007": "Wholesale Price is required",
+  "E-MAT-008": "Wholesale Price must be a valid number",
+  "E-MAT-009": "Wholesale Price must be between 0 and 100,000,000,000,000",
+  "E-MAT-010": "Retail Price is required",
+  "E-MAT-011": "Retail Price must be a valid number",
+  "E-MAT-012": "Retail Price must be between 0 and 100,000,000,000,000",
+  "E-MAT-013": "Inventory is required",
+  "E-MAT-014": "Inventory must be a valid number",
+  "E-MAT-015": "Inventory must be a positive integer",
+  "E-MAT-016": "Inventory must be between 0 and 1,000,000",
+  "E-MAT-017": "Attachment size exceeds 10MB",
+  "E-MAT-018": "Expire Date must be a valid date",
+  "E-MAT-019": "Production Date must be a valid date",
+  "E-MAT-020": "Production Date cannot be in the future"
 }
