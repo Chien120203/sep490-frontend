@@ -33,16 +33,16 @@
 
         <el-table-column prop="quantity" label="Số lượng">
           <template #default="{ row, $index }">
-            <el-input-number style="width: 100%" :disabled="!allowEdit" :min="0" :max="getInventory(row.resourceId) - getUsedQuantity(row.resourceId)" v-model.number="row.quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+            <el-input-number style="width: 100%" :disabled="!allowEdit" :min="0" :max="getInventory(row.resourceId) - getUsedQuantity(row.resourceId, data.fromTaskId)" v-model.number="row.quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}
             </p>
           </template>
         </el-table-column>
 
-        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="quantity" label="Số lượng su dung">
+        <el-table-column v-if="resourceType === MATERIAL_TYPE && data.requestType === TASK_TO_TASK" prop="quantity" label="Số lượng su dung">
           <template #default="{ row, $index }">
-           {{getUsedQuantity(row.resourceId)}}
+           {{getUsedQuantity(row.resourceId, data.fromTaskId)}}
           </template>
         </el-table-column>
 
@@ -52,9 +52,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="quantity" label="Số lượng con lai">
+        <el-table-column v-if="resourceType === MATERIAL_TYPE && data.requestType === TASK_TO_TASK" prop="quantity" label="Số lượng con lai">
           <template #default="{ row, $index }">
-            {{getInventory(row.resourceId) - getUsedQuantity(row.resourceId)}}
+            {{getInventory(row.resourceId) - getUsedQuantity(row.resourceId, data.fromTaskId)}}
           </template>
         </el-table-column>
 
@@ -79,12 +79,14 @@ import {REQUEST_ALLOCATION, REQUEST_MOBILIZATION} from "@/constants/change-reque
 import {MATERIAL_TYPE} from "@/constants/resource.js";
 import {useI18n} from "vue-i18n";
 import IconTrash from "@/svg/IconTrash.vue";
+import {TASK_TO_TASK} from "@/constants/allocation.js";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
   resourceType: { type: Number, default: 0 },
+  data: { type: Object, default: () => {} },
   allowEdit: { type: Boolean, default: false },
   rules: {
     type: Object,
@@ -136,8 +138,8 @@ const handleSelectItem = (id) => {
   emit('update-list', listAddedValues.value);
 };
 
-const getUsedQuantity = (resourceId) => {
-  if (!props.progressDetails || !Array.isArray(props.progressDetails.progressItems)) {
+const getUsedQuantity = (resourceId, taskId) => {
+  if (!props.progressDetails || !Array.isArray(props.progressDetails.progressItems) || props.requestType !== TASK_TO_TASK) {
     return 0;
   }
 
