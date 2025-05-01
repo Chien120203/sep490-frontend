@@ -1368,6 +1368,7 @@
   "E-CUS-005": "Mã số thuế không hợp lệ",
   "E-CUS-006": "Số fax không hợp lệ",
   "E-CUS-007": "Mã số thuế là bắt buộc",
+  "E-CUS-008": "Số điện thoại không hợp lệ",
 
   "E-USER-001": "Tên người dùng là bắt buộc",
   "E-USER-002": "Email là bắt buộc",

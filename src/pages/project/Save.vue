@@ -39,7 +39,7 @@
 
             <el-form-item
                 prop="projectName"
-                class="custom-textarea"
+                class="custom-textarea required"
                 :label="$t('project.create.project_name')"
             >
               <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.projectName"/>
@@ -52,7 +52,7 @@
             <div class="item-project-members">
               <el-form-item
                   prop="customerId"
-                  class="input-select-member"
+                  class="input-select-member required"
                   :label="$t('project.create.customer')"
               >
                 <SingleOptionSelect
@@ -69,7 +69,7 @@
                 >{{ $t(validation.value.customerId) }}</label>
               </el-form-item>
 
-              <el-form-item prop="technicalManager" class="input-select-member">
+              <el-form-item prop="technicalManager" class="input-select-member required">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.technical_manager') }}</span>
                 </template>
@@ -90,7 +90,7 @@
             </div>
 
             <div class="item-project-members">
-              <el-form-item prop="resourceManager" class="input-select-member">
+              <el-form-item prop="resourceManager" class="input-select-member required">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.resource_manager') }}</span>
                 </template>
@@ -109,7 +109,7 @@
                 </label>
               </el-form-item>
 
-              <el-form-item prop="constructionManager" class="input-select-member">
+              <el-form-item prop="constructionManager" class="input-select-member required">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.construction_manager') }}</span>
                 </template>
@@ -129,7 +129,7 @@
               </el-form-item>
             </div>
             <div class="item-project-members">
-              <el-form-item prop="qa" class="input-select-member">
+              <el-form-item prop="qa" class="input-select-member required">
                 <template #label>
                   <span class="label-start">{{ $t('project.create.qa') }}</span>
                 </template>
@@ -150,7 +150,7 @@
               <el-form-item
                   :label="$t('project.create.construct_type')"
                   prop="constructType"
-                  class="input-select-member"
+                  class="input-select-member required"
               >
                 <el-input :disabled="!isAllowEdit" v-model="projectDetails.value.constructType"/>
                 <label

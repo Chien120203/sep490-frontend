@@ -3,10 +3,13 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 export const useMaterialResourcesStore = defineStore(
   "materialResources",
   () => {
+    const router = useRouter();
     const {t} = useI18n();
     const validation = reactive({value: {}});
     const isShowModalConfirm = reactive({value: false});
@@ -80,6 +83,7 @@ export const useMaterialResourcesStore = defineStore(
           materialResourcesDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.save_material_success"));
           mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.RESOURCE.MATERIAL.LIST})
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
