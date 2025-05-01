@@ -141,7 +141,8 @@ export default {
 
     const {
       projectId,
-      projectStatus
+      projectStatus,
+      loggedIn
     } = persist;
 
     const activeCollapseItems = ref(["3", "2", "4", "5"]);
@@ -214,10 +215,12 @@ export default {
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
       projectId.value = route.params.id;
-      await getProjectDetails(route.params.id);
-      projectStatus.value = projectDetails.value.status;
-      await getContractDetails(projectId.value, false);
-      await getSurveyDetails(route.params.id, false);
+      if (loggedIn.value) {
+        await getProjectDetails(route.params.id);
+        projectStatus.value = projectDetails.value.status;
+        await getContractDetails(projectId.value, false);
+        await getSurveyDetails(route.params.id, false);
+      }
     });
 
     const getSiteSurveyDetails = () => {

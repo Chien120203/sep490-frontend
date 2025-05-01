@@ -124,6 +124,7 @@ import { useUserStore } from "@/store/user.js";
 import {USER_RULES} from "@/rules/user/index.js";
 import {DATE_FORMAT} from "@/constants/application.js";
 import FileUpload from "@/components/common/FileUpload.vue";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   components: {FileUpload, ImageUpload, IconBackMain },
@@ -142,9 +143,15 @@ export default {
     const router = useRouter();
     const ruleFormRef = ref(null);
     const isCreateMode = ref(false);
-
+    const persist = usePersistenceStore();
+    const {
+      loggedIn
+    } = persist;
+    
     onMounted(async () => {
-      await getUserDetails({userId: localStorage.getItem("userId")});
+      if (loggedIn.value) {
+        await getUserDetails({userId: localStorage.getItem("userId")});
+      }
     });
 
     const handleBack = () => {

@@ -76,7 +76,7 @@ import { ADMIN } from "@/constants/roles.js";
 import { useMaterialResourcesStore } from "@/store/material-resources.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
-
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "materialList",
@@ -107,8 +107,14 @@ export default {
     } = materialStore;
     const isDisabled = ref(false);
     const allowEdit = computed(() => localStorage.getItem('role') === ADMIN);
+    const persist = usePersistenceStore();
+    const {
+      loggedIn
+    } = persist;
     onMounted(() => {
-      getListMaterialResources(searchForms.value);
+      if (loggedIn.value) {
+        getListMaterialResources(searchForms.value);
+      }
     });
 
     onUnmounted(() => {

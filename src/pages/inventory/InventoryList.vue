@@ -86,7 +86,8 @@ const {
   getListInventory
 } = inventoryStore;
 const {
-  projectId
+  projectId,
+  loggedIn
 } = persist;
 
 const listMaterials = computed(() => inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE));
@@ -118,7 +119,9 @@ const handleBack = () => {
 };
 // Lifecycle
 onMounted(() => {
-  getListInventory(searchForms.value);
+  if (loggedIn.value) {
+    getListInventory(searchForms.value);
+  }
 });
 
 onUnmounted(() => {
