@@ -163,7 +163,7 @@ const handleSelectItem = (id) => {
       resourceType: props.resourceType,
       unit: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.unit || "-",
       quantity: 1,
-      inventory: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.quantity || 0,
+      inventory: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.inventory || 0,
       description: "des",
       type: REQUEST_MOBILIZATION
     });

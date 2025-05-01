@@ -5,6 +5,7 @@ import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import {InspectionReportAPI} from "@/services/InspectionReportAPI.js";
 import {QUALITY_ASSURANCE} from "@/constants/roles.js";
+import {INSPECT_DECISION_FAIL, WAIT_FOR_APPROVE} from "@/constants/inspection.js";
 
 export const useInspectionReportStore = defineStore(
   "inspectionReport",
@@ -25,8 +26,8 @@ export const useInspectionReportStore = defineStore(
         inspectEndDate: "",
         location: "",
         attachment: [],
-        inspectionDecision: 0,
-        status: 2,
+        inspectionDecision: INSPECT_DECISION_FAIL,
+        status: WAIT_FOR_APPROVE,
         qualityNote: "",
         otherNote: "",
       }

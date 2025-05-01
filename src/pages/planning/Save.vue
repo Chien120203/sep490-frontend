@@ -12,8 +12,8 @@
         </div>
         <div class="contract-save-btn">
           <div class="btn-container">
-            <el-button v-if="allowApprove" style="height: 36px" type="success" @click="handleApprove()">{{ $t("common.approve") }}</el-button>
-            <el-button v-if="allowReject" class="btn btn-refuse" @click="handleReject()">{{ $t("common.reject") }}</el-button>
+            <el-button v-if="allowApprove && isCurrentUserLock" style="height: 36px" type="success" @click="handleApprove()">{{ $t("common.approve") }}</el-button>
+            <el-button v-if="allowReject && isCurrentUserLock" class="btn btn-refuse" @click="handleReject()">{{ $t("common.reject") }}</el-button>
             <el-button :disabled="disableBtn || !allowEdit || !isCurrentUserLock" v-if="allowEdit" class="btn btn-save" @click="submitForm">
               {{ $t("common.save") }}
             </el-button>
@@ -34,7 +34,7 @@
           <SelectionFilters
               ref="selectionFormRef"
               :allowEdit="allowEdit && isCurrentUserLock"
-              :lockInfo="lockInfo"
+              :lockInfo="lockInfo.value"
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
               :contractDetails="contractDetails.value"

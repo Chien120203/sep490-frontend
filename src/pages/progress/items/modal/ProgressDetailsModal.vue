@@ -11,7 +11,7 @@
     </template>
     <template #body>
       <div>
-        <ModalItemInformation :allowEdit="allowEdit" :rules="progressRules" :allowEditRelation="allowEditRelation" :task="progressDetails"/>
+        <ModalItemInformation :allowEdit="allowEditFields" :rules="progressRules" :allowEditRelation="allowEditRelation" :task="progressDetails"/>
       </div>
       <div style="display: flex">
         <ModalItemProgressDetails :allowEdit="allowEdit" :rules="progressRules" :allowEditRelation="allowEditRelation" :listTasks="progressItems" :task="progressDetails" :listLogsByTask="listLogsByTask" style="width: 100%"/>
@@ -32,7 +32,7 @@ import {useI18n} from "vue-i18n";
 import Modal from "@/components/common/Modal.vue";
 import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemInformation.vue";
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
-import {STATUS_NOT_START} from "@/constants/progress.js";
+import {DONE_PROGRESS, STATUS_NOT_START} from "@/constants/progress.js";
 import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {getProgressRules} from "@/rules/progress/index.js";
 
@@ -62,6 +62,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "submit"]);
 const progressRules = getProgressRules();
+const allowEditFields = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER && props.progressDetails.progress !== DONE_PROGRESS);
 const allowEditRelation = computed(() => {
   const details = props.progressDetails;
   const role = localStorage.getItem("role");

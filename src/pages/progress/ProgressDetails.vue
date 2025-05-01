@@ -54,7 +54,7 @@ const handleBack = () => {
 
 const progressRules = getProgressRules();
 const tasks = ref(progressDetails.value.progressItems);
-const allowEdit = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
+const allowCreate = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
 watch(
     () => progressDetails.value,
     (newVal) => {
@@ -183,7 +183,6 @@ const handleCloseModal = () => {
     <ProgressDetailsModal
         :progressItems="progressDetails.value.progressItems"
         :progressDetails="selectedProgressItem.value"
-        :allowEdit="allowEdit"
         :listLogsByTask="listLogsByTask.value"
         :show="isShowModal"
         @close="handleCloseModal"
@@ -197,7 +196,7 @@ const handleCloseModal = () => {
         :tasks="progressDetails.value.progressItems"
         :users="listEmployees"
         :rules="progressRules"
-        :allowEdit="allowEdit"
+        :allowEdit="allowCreate"
         @close="handleDisplayModalSave"
         @submit="handleSaveProgressItem"
     />

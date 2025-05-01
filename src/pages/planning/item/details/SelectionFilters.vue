@@ -73,13 +73,12 @@
       </div>
     </el-form>
     <!-- Hiển thị thông tin công việc đã chọn -->
-    <div v-if="lockInfo.userName" class="selected-task-display">
+    <div v-if="!lockData?.isCurrentUserLock" class="selected-task-display">
       <el-alert
           type="warning"
           show-icon
-          :title="`This plan is currently being edited by ${lockInfo?.userName}`"
-          :description="`You can view the plan but cannot make changes until they finish editing.\n
-            Lock expires at: ${formatLockTime(lockInfo?.lockExpiresAt)}`"
+          :title="`This plan is currently being edited by ${lockData?.userName}`"
+          :description="`You can view the plan but cannot make changes until they finish editing.`"
           style="margin-bottom: 16px"
       />
     </div>
@@ -121,6 +120,8 @@ const {t} = useI18n();
 const listSelectedUsers = computed(() =>
     props.planDetails.reviewers.map((user) => user.id)
 );
+
+const lockData = computed(() => props.lockInfo);
 
 const totalPrice = computed(() =>
     props.contractDetails.contractDetails.reduce((sum, item) => sum + item.total, 0)

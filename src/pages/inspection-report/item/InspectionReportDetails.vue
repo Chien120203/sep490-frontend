@@ -162,7 +162,7 @@ defineExpose({
 });
 const hasChildren = (parent) => props.progressDtls.progressItems.some(child => child.parentIndex === parent.index);
 
-const listTasks = computed(() => props.progressDtls.progressItems?.filter(item => !hasChildren(item) && item.progress === DONE_PROGRESS));
+const listTasks = computed(() => props.progressDtls.progressItems);
 // Chỉ lưu 1 workAmount cho task đang chọn
 const listWorkAmount = ref([{ workAmount: 0 }]);
 
