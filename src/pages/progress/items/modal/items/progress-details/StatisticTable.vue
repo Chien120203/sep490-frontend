@@ -27,8 +27,7 @@
 
 <script setup>
 import { defineProps, computed } from 'vue';
-import { mixinMethods } from '@/utils/variables.js';
-import { MONTH_DAY_FORMAT } from '@/constants/application.js';
+import dayjs from 'dayjs';
 
 const props = defineProps({
   listLogsByTask: {
@@ -37,7 +36,7 @@ const props = defineProps({
   },
   task: {
     type: Object,
-    default: () => {}
+    default: () => ({})
   }
 });
 
@@ -45,6 +44,16 @@ const resourceTypeNames = {
   1: 'Lao động',
   2: 'Máy móc',
   3: 'Vật liệu'
+};
+
+const sortDateKeys = (dateObj) => {
+  return Object.fromEntries(
+      Object.entries(dateObj).sort(([a], [b]) => {
+        const [dayA, monthA] = a.split('/').map(Number);
+        const [dayB, monthB] = b.split('/').map(Number);
+        return monthA === monthB ? dayA - dayB : monthA - monthB;
+      })
+  );
 };
 
 const generateTaskStats = computed(() => {
@@ -60,7 +69,7 @@ const generateTaskStats = computed(() => {
 
   // Work Amount Processing
   workAmounts.forEach(w => {
-    const date = mixinMethods.showDateTime(w.logDate, MONTH_DAY_FORMAT);
+    const date = dayjs(w.logDate).format('DD/MM');
     allDatesSet.add(date);
     workDates[date] = (workDates[date] || 0) + w.workAmount;
     totalActualWork += w.workAmount;
@@ -72,14 +81,14 @@ const generateTaskStats = computed(() => {
   const planByResourceType = {};
 
   (taskPlanDetails.details || []).forEach(detail => {
-    const type = detail.resource?.type; // Use resource.type
+    const type = detail.resource?.type;
     if (type != null) {
       planByResourceType[type] = (planByResourceType[type] || 0) + detail.quantity;
     }
   });
 
   resources.forEach(res => {
-    const date = mixinMethods.showDateTime(res.logDate, MONTH_DAY_FORMAT);
+    const date = dayjs(res.logDate).format('DD/MM');
     const type = res.resourceType;
     const quantity = res.quantity;
 
@@ -92,7 +101,6 @@ const generateTaskStats = computed(() => {
     actualByResourceType[type] = (actualByResourceType[type] || 0) + quantity;
   });
 
-  // Build children rows (resources)
   const children = Object.entries(groupedResources).map(([type, dateMap], index) => {
     const actual = actualByResourceType[type] || 0;
     const plan = planByResourceType[type] || 0;
@@ -104,13 +112,12 @@ const generateTaskStats = computed(() => {
       name: resourceTypeNames[type] || `Loại tài nguyên ${type}`,
       plan,
       actual,
-      progress: progress + "%",
+      progress: progress + '%',
       unit,
       dates: sortDateKeys(dateMap)
     };
   });
 
-  // Main task row
   const taskPlanQuantity = taskPlanDetails.quantity || 0;
   const taskProgress = taskPlanQuantity > 0 ? Math.round((totalActualWork / taskPlanQuantity) * 100) : 0;
 
@@ -119,8 +126,8 @@ const generateTaskStats = computed(() => {
     name: 'Khối lượng công việc',
     plan: taskPlanQuantity,
     actual: totalActualWork,
-    unit: taskPlanDetails.unit,
-    progress: taskProgress + "%",
+    unit: taskPlanDetails.unit || '',
+    progress: taskProgress + '%',
     dates: sortDateKeys(workDates),
     children
   };
@@ -130,17 +137,23 @@ const generateTaskStats = computed(() => {
 
 const dateColumns = computed(() => {
   const mainTask = generateTaskStats.value?.[0];
-  return mainTask?.dates ? Object.keys(mainTask.dates) : [];
+  const dateSet = new Set();
+
+  if (mainTask?.children) {
+    mainTask.children.forEach(child => {
+      if (child.dates) {
+        Object.keys(child.dates).forEach(date => dateSet.add(date));
+      }
+    });
+  }
+
+  // Convert Set to sorted array (optional)
+  return Array.from(dateSet).sort((a, b) => {
+    const [dayA, monthA] = a.split('/').map(Number);
+    const [dayB, monthB] = b.split('/').map(Number);
+    return monthA === monthB ? dayA - dayB : monthA - monthB;
+  });
 });
-const sortDateKeys = (dateObj) => {
-  return Object.fromEntries(
-      Object.entries(dateObj).sort(([a], [b]) => {
-        const [dayA, monthA] = a.split('/').map(Number);
-        const [dayB, monthB] = b.split('/').map(Number);
-        return monthA === monthB ? dayA - dayB : monthA - monthB;
-      })
-  );
-}
 
 </script>
 

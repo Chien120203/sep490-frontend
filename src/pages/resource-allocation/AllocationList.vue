@@ -91,7 +91,7 @@
         :isShowModal="isShowModalConfirm"
         @close-modal="closeModalConfirm"
         @confirmAction="handleConfirm"
-        :message="$t('mobilization.modal_confirm.message')"
+        :message="$t('mobilization.modal_confirm.message_delete')"
         :title="$t('mobilization.modal_confirm.title')"
     />
     <SaveAllocationModal
@@ -183,6 +183,9 @@ const handleLoadMore = () => {
 const handleSaveRequest = (data) => {
   allocationDetails.value.resourceAllocationDetails = data;
   allocationDetails.value.fromProjectId = projectId.value;
+  if(allocationDetails.value.requestType === PROJECT_TO_TASK || allocationDetails.value.requestType === TASK_TO_TASK) {
+    allocationDetails.value.toProjectId = projectId.value;
+  }
   saveRequest(allocationDetails.value);
   handleDisplayModalSave(false);
 };

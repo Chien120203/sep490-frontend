@@ -138,16 +138,16 @@ watch(() => props.data.resourceAllocationDetails, (data) => {
   }
 }, { deep: true });
 
-watch(props.data.requestType, (newVal) => {
+watch(() => props.data.requestType, (newVal) => {
   switch (newVal) {
     case PROJECT_TO_TASK || PROJECT_TO_PROJECT:
-      getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20});
+      getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20}, false);
       break;
   }
 });
 
 onMounted(() => {
-  getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20});
+  getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20}, false);
 })
 
 const materialOptions = ref({id: "id", value: "name"});
@@ -206,8 +206,6 @@ const listVehicles = computed(() => {
 
   return [];
 });
-// const materials = computed(() => inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE));
-// const listVehicles = computed(() => inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE));
 const listEmployees = computed(() => inventoryData.value.filter(item => item.resourceType === HUMAN_TYPE));
 
 const updateListMaterials = (listData) => {

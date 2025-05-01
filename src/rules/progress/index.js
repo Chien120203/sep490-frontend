@@ -108,6 +108,40 @@ export const getProgressRules = () => {
         trigger: "blur",
       }
     ],
+    actualStartDate: [
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, value, selectedProgressItem.value.actualEndDate, "E-CM-020"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, getParentTask(selectedProgressItem.value.parentIndex)?.actualStartDate, value, "E-CM-032"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback,  value, getParentTask(selectedProgressItem.value.parentIndex)?.actualEndDate, "E-CM-035"),
+        trigger: "blur",
+      }
+    ],
+    actualEndDate: [
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, selectedProgressItem.value.actualStartDate, value, "E-CM-028"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateStartBeforeEnd(rule, value, callback, value, getParentTask(selectedProgressItem.value.parentIndex)?.actualEndDate, "E-CM-033"),
+        trigger: "blur",
+      }
+    ],
     dependency: [
       {
         validator: (rule, value, callback) =>

@@ -20,7 +20,7 @@ export const useAllocationStore = defineStore(
         requestType: 1,
         requestCode: "",
         fromProjectId: 0,
-        toProjectId: 1,
+        toProjectId: 0,
         fromTaskId: null,
         toTaskId: null,
         requestName: "",

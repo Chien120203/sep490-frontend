@@ -53,7 +53,6 @@ const handleBack = () => {
 };
 
 const progressRules = getProgressRules();
-
 const tasks = ref(progressDetails.value.progressItems);
 const allowEdit = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
 watch(

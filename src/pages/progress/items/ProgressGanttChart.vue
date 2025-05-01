@@ -42,8 +42,8 @@ const handleAddNewAllocation = () => {
 const taskSettings = ref({
   id: "id",
   name: "workName",
-  startDate: "actualStartDate",
-  endDate: "actualEndDate",
+  // startDate: "actualStartDate",
+  // endDate: "actualEndDate",
   progress: "progress",
   parentID: "parentId",
   dependency: "predecessor",
@@ -164,10 +164,6 @@ provide('gantt', [Toolbar, Filter, Selection]);
           <ColumnDirective field="index" headerText="STT" width="60"></ColumnDirective>
           <ColumnDirective field="workName" headerText="Công việc" width="200"></ColumnDirective>
           <ColumnDirective field="predecessor" headerText="Dependency" width="120"></ColumnDirective>
-          <ColumnDirective field="actualStartDate" format="yyyy-MM-dd" headerText="Ngày bắt đầu"
-                           width="120"></ColumnDirective>
-          <ColumnDirective field="actualEndDate" format="yyyy-MM-dd" headerText="Ngày kết thúc"
-                           width="120"></ColumnDirective>
           <ColumnDirective field="planStartDate" format="yyyy-MM-dd" headerText="Thời gian bắt đầu dự kiến"
                            width="120"></ColumnDirective>
           <ColumnDirective field="planEndDate" format="yyyy-MM-dd" headerText="Thời gian kết thúc dự kiến"

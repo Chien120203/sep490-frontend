@@ -11,10 +11,10 @@
     </template>
     <template #body>
       <div>
-        <ModalItemInformation :rules="progressRules" :allowEditRelation="allowEditRelation" :task="progressDetails"/>
+        <ModalItemInformation :allowEdit="allowEdit" :rules="progressRules" :allowEditRelation="allowEditRelation" :task="progressDetails"/>
       </div>
       <div style="display: flex">
-        <ModalItemProgressDetails :rules="progressRules" :allowEditRelation="allowEditRelation" :listTasks="progressItems" :task="progressDetails" :listLogsByTask="listLogsByTask" style="width: 100%"/>
+        <ModalItemProgressDetails :allowEdit="allowEdit" :rules="progressRules" :allowEditRelation="allowEditRelation" :listTasks="progressItems" :task="progressDetails" :listLogsByTask="listLogsByTask" style="width: 100%"/>
       </div>
     </template>
     <template #footer>

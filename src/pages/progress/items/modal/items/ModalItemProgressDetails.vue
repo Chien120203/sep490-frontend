@@ -94,6 +94,10 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  allowEdit: {
+    type: Boolean,
+    default: false
+  },
   allowEditRelation: {
     type: Boolean,
     default: false
