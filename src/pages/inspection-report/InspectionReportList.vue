@@ -93,7 +93,8 @@ export default {
     const inspectionStore = useInspectionReportStore();
     const persist = usePersistenceStore();
     const {
-      projectId
+      projectId,
+      loggedIn
     } = persist;
     const {
       validation,
@@ -113,7 +114,9 @@ export default {
     const allowEdit = computed(() => localStorage.getItem('role') === QUALITY_ASSURANCE);
     onMounted(() => {
       currentPage.value = 1;
-      getListInspectionReport(searchForms.value);
+      if (loggedIn.value) {
+        getListInspectionReport(searchForms.value);
+      }
     });
 
     onUnmounted(() => {

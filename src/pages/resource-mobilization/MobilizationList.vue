@@ -133,7 +133,8 @@ const humanStore = useHumanResourcesStore();
 const machineStore = useMachineResourcesStore();
 const materialStore = useMaterialResourcesStore();
 const {
-  projectId
+  projectId,
+  loggedIn
 } = persist;
 const {
   totalItems,
@@ -246,10 +247,12 @@ const handleGetMobilizationDtls = (mobilization_id) => {
 }
 
 onMounted(async () => {
-  await getListMobilizations(searchForms.value);
-  await getListHumanResources({pageIndex: 1}, false);
-  await getListMachineResources({pageIndex: 1}, false);
-  await getListMaterialResources({pageIndex: 1}, false);
+  if (loggedIn.value) {
+    await getListMobilizations(searchForms.value);
+    await getListHumanResources({pageIndex: 1}, false);
+    await getListMachineResources({pageIndex: 1}, false);
+    await getListMaterialResources({pageIndex: 1}, false);
+  }
 });
 
 onUnmounted(() => {

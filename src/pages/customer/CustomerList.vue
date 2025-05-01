@@ -77,6 +77,7 @@ import { ADMIN } from "@/constants/roles.js";
 import {useCustomerStore} from "@/store/customer.js";
 import { useRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
+import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
   name: "CustomerList",
@@ -96,6 +97,10 @@ export default {
     const delete_id = ref();
     const router = useRouter();
     const customerStore = useCustomerStore();
+    const persist = usePersistenceStore();
+    const {
+      loggedIn
+    } = persist;
     const {
       validation,
       listCustomers, // temporary
@@ -108,7 +113,9 @@ export default {
     const isDisabled = ref(false);
 
     onMounted(() => {
-      getListCustomers(searchForms.value);
+      if (loggedIn.value) {
+        getListCustomers(searchForms.value);
+      }
     });
 
     onUnmounted(() => {
