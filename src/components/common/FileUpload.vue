@@ -3,6 +3,7 @@
     <label for="fileInput" class="upload-label">
       {{ $t('common.upload') }}
     </label>
+    <label>({{ allowedTypes }})</label>
     <input
         type="file"
         id="fileInput"

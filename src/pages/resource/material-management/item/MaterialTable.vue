@@ -50,7 +50,7 @@
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.expireDate ? scope.row.expireDate : "-" )}}
+        <span class="data-table">{{ scope.row.expireDate ? formatDate( scope.row.expireDate) : "-" }}
         </span>
         </template>
       </el-table-column>
@@ -61,7 +61,7 @@
         </template>
 
         <template #default="scope">
-        <span class="data-table">{{ formatDate(scope.row.productionDate ? scope.row.productionDate : "-" )}}
+        <span class="data-table">{{ scope.row.productionDate ? formatDate(scope.row.productionDate) : "-"}}
         </span>
         </template>
       </el-table-column>

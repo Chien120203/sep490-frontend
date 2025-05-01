@@ -89,6 +89,7 @@
 
     <!-- Modals -->
     <ModalConfirm
+        style="z-index: 1000000"
         :isShowModal="isShowModalConfirm"
         @close-modal="closeModalConfirm"
         @confirmAction="handleConfirm"
@@ -101,6 +102,7 @@
         :listProjects="listFilteredProjects"
         :progressDetails="progressDetails.value"
         @searchProjects="handleSearchProjects"
+        @changeStatus="handleChangeStatus"
         @searchTask="handleSearchTasks"
         @close="handleDisplayModalSave"
         @submit="handleSaveRequest"
@@ -205,6 +207,7 @@ const closeModalConfirm = () => {
 
 const handleConfirm = async () => {
   closeModalConfirm();
+  isShowModalSave.value = false;
   if(delete_id.value) {
     await handleDeleteAllocation(delete_id.value);
     delete_id.value = null;

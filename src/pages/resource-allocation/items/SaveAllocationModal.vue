@@ -75,7 +75,12 @@
     <template #footer>
       <div class="modal-footer">
         <el-button v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
-        <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t("common.cancel") }}</el-button>
+        <el-button v-if="allowApprove(data)" @click="$emit('changeStatus', {id: data.id, type: 'approve'})" type="success" class="btn btn-save">
+          {{ $t("common.approve") }}
+        </el-button>
+        <el-button v-if="allowReject(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'reject'})" class="btn btn-refuse">
+          {{ $t("common.reject") }}
+        </el-button>
       </div>
     </template>
   </Modal>
@@ -92,10 +97,16 @@ import {
 } from "@/constants/resource.js";
 import AllocateFormInfo from "@/pages/resource-allocation/items/modal/AllocateFormInfo.vue";
 import {useInventoryStore} from "@/store/inventory.js";
-import {DRAFT_STATUS, PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
+import {
+  DRAFT_STATUS, MANAGER_APPROVED,
+  PROJECT_TO_PROJECT,
+  PROJECT_TO_TASK,
+  TASK_TO_TASK,
+  WAIT_MANAGER_APPROVE
+} from "@/constants/allocation.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} from "@/constants/mobilization.js";
-import {RESOURCE_MANAGER} from "@/constants/roles.js";
+import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -112,7 +123,7 @@ const {
   getListInventory
 } = inventoryStore;
 const { projectId } = persist;
-const emit = defineEmits(["close", "submit", "searchProjects", "searchTask"]);
+const emit = defineEmits(["close", "submit", "searchProjects", "searchTask", "changeStatus"]);
 const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
@@ -159,6 +170,16 @@ const materialOptions = ref({id: "id", value: "name"});
 const userOptions = ref({id: "id", value: "name"});
 const vehicleOptions = ref({id: "id", value: "name"});
 const activeTab = ref("materials");
+const currentRole = ref(localStorage.getItem("role"));
+
+const allowApprove = (row) => {
+  if(row.status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
+  return row.status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD;
+}
+
+const allowReject = (status) => {
+  return (status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) || (status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD);
+}
 
 const materials = computed(() => {
   const requestType = props.data.requestType;

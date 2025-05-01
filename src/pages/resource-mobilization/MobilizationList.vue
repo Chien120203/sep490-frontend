@@ -88,6 +88,7 @@
       />
     </div>
     <ModalConfirm
+        style="z-index: 1000000"
         :isShowModal="isShowModalConfirm"
         @close-modal="closeModalConfirm"
         @confirmAction="handleConfirm"
@@ -100,6 +101,7 @@
         :vehicles="listMachineResources.value"
         :users="listHumanResources.value"
         :data="mobilizationDetails.value"
+        @changeStatus="handleChangeStatus"
         @close="handleDisplayModalSave"
         @search="handleSearch"
         @submit="handleSaveRequest"
@@ -231,6 +233,7 @@ const closeModalConfirm = () => {
 
 const handleConfirm = async () => {
   closeModalConfirm();
+  isShowModalSave.value = false;
   if(delete_id.value) {
     await handleDeleteMobilization(delete_id.value);
     delete_id.value = null;

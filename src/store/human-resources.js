@@ -4,10 +4,13 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import {CONSTRUCTION_EMPLOYEE} from "@/constants/roles.js";
+import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 export const useHumanResourcesStore = defineStore(
   "humanResources",
   () => {
+    const router = useRouter();
     const {t} = useI18n();
     const validation = reactive({value: {}});
     const isShowModalConfirm = reactive({value: false});
@@ -78,6 +81,7 @@ export const useHumanResourcesStore = defineStore(
           });
           mixinMethods.notifySuccess(t("response.message.save_human_success"));
           mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.RESOURCE.HUMAN.LIST})
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
