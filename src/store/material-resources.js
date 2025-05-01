@@ -26,6 +26,7 @@ export const useMaterialResourcesStore = defineStore(
         retailPrice: 0,
         inventory: 0,
         attachment: "",
+        canRollBack: false,
         expireDate: "",
         productionDate: "",
         description: "",
@@ -119,6 +120,7 @@ export const useMaterialResourcesStore = defineStore(
         inventory: 0,
         attachment: "",
         expireDate: "",
+        canRollBack: false,
         productionDate: "",
         description: "",
           isFlag: ""
