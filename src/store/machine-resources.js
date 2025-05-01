@@ -75,9 +75,8 @@ export const useMachineResourcesStore = defineStore(
 
     const saveMachineResources = async (params, method) => {
       mixinMethods.startLoading();
-      const formData = mixinMethods.createFormData(params);
       await services.MachineResourceAPI[method](
-        formData,
+        params,
         (response) => {
           machineResourcesDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.save_machine_success"));

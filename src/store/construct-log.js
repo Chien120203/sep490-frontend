@@ -152,7 +152,10 @@ export const useConstructLog = defineStore(
           mixinMethods.notifySuccess(t("response.message.save_construct_log_success"));
           if(params.id !== 0) {
             constructLogDetails.value = {...response.data, images: response.data.images.map(item => item.webContentLink)};
-          } else router.push({name: PAGE_NAME.CONSTRUCT_LOG.DETAILS, params: response.data.id});
+          } else {
+            router.push({name: PAGE_NAME.CONSTRUCT_LOG.DETAILS, params: response.data.id})
+          };
+          // router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
         },
         (error) => {
           mixinMethods.notifyError(t("response.message.save_construct_log_failed"));

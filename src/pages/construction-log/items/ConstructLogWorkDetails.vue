@@ -12,7 +12,7 @@
         @handleSelectedParams="handleSelectTask"
         @remoteSearch="handleSearch"
     />
-    <div v-for="(task, index) in groupedByTasks" :key="task.index">
+    <div v-for="(task, id) in groupedByTasks" :key="task.id">
       <el-divider content-position="left"></el-divider>
       <el-collapse v-model="activeCollapseItems">
         <div class="el-collapse-item-header">
@@ -39,8 +39,8 @@
               <el-input disabled v-model.number="getTaskInfo(task.taskIndex).quantity" type="number" placeholder="Nhập khối lượng dự kiến" />
             </el-form-item>
 
-            <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.${index}.workAmount`" :rules="rules.workAmount.map(rule => ({ ...rule, task: task}))">
-              <el-input-number style="width: 100%" v-model.number="listWorkAmount[index].workAmount" :min="0" :max="getTaskInfo(task.taskIndex).quantity - getTaskInfo(task.taskIndex).usedQuantity" type="number" placeholder="Nhập khối lượng thực tế" />
+            <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.${task.id}.workAmount`" :rules="rules.workAmount.map(rule => ({ ...rule, task: task}))">
+              <el-input-number style="width: 100%" v-model.number="listWorkAmount[task.id].workAmount" :min="0" :max="getTaskInfo(task.taskIndex).quantity - getTaskInfo(task.taskIndex).usedQuantity" type="number" placeholder="Nhập khối lượng thực tế" />
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng hoàn thành" >
@@ -48,7 +48,7 @@
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng còn lại" prop="remaining">
-              <el-input disabled :value="getTaskInfo(task.taskIndex).quantity - getTaskInfo(task.taskIndex).usedQuantity - listWorkAmount[index].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
+              <el-input disabled :value="getTaskInfo(task.taskIndex).quantity - getTaskInfo(task.taskIndex).usedQuantity - listWorkAmount[id].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
             </el-form-item>
           </el-form>
         </div>
@@ -61,6 +61,7 @@
               ref="materialForm"
               :rules="rules"
               :taskIndex="task.taskIndex"
+              :taskId="task.id"
               :allowEdit="allowEdit"
               :resourceType="MATERIAL_TYPE"
               :resources="logDetails.resources"
@@ -80,6 +81,7 @@
               ref="humanForm"
               :rules="rules"
               :taskIndex="task.taskIndex"
+              :taskId="task.id"
               :allowEdit="allowEdit"
               :resourceType="HUMAN_TYPE"
               :resources="logDetails.resources"
@@ -99,6 +101,7 @@
               ref="machineForm"
               :rules="rules"
               :taskIndex="task.taskIndex"
+              :taskId="task.id"
               :allowEdit="allowEdit"
               :resourceType="MACHINE_TYPE"
               :resources="logDetails.resources"
@@ -119,6 +122,7 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from "@/constants/resource.js";
+import {DONE_PROGRESS} from "@/constants/progress.js";
 
 const props = defineProps({
   logDetails: {
@@ -138,16 +142,22 @@ const props = defineProps({
     default: false
   }
 });
+const hasChildren = (parent) => props.progressDtls.progressItems.some(child => child.parentIndex === parent.index);
 
-const listProgressItems = computed(() => props.progressDtls.progressItems?.filter(item => item.progress !== 100 && !groupedByTasks.value[item.index])) || [];
+const listProgressItems = computed(() => props.progressDtls.progressItems?.filter(item => !hasChildren(item) && item.progress !== DONE_PROGRESS && !groupedByTasks.value[item.id])) || [];
 
-const listWorkAmount = computed(() => props.logDetails?.workAmount.reduce((acc, item) => {
-  acc[item.taskIndex] = item
-  return acc
-}, {}));
+const listWorkAmount = ref({});
+watch(() => props.logDetails?.workAmount, (newVal) => {
+  const result = {};
+  newVal?.forEach(item => {
+    result[item.id] = item;
+  });
+  listWorkAmount.value = result;
+}, { immediate: true, deep: true });
+
 const activeCollapseItems = ref(["1", "2", "3"]);
 const groupedByTasks = computed(() => props.logDetails?.resources.reduce((acc, item) => {
-  acc[item.taskIndex] = item;
+  acc[item.id] = item;
   return acc;
 }, {}));
 
@@ -175,11 +185,11 @@ const getTaskInfo = (id) => {
 const handleSelectTask = (id) => {
   selectedRow.value = id;
   const selectedTask = getTaskInfo(id);
-  props.logDetails.workAmount.push({taskIndex: id, workAmount: 0});
+  props.logDetails.workAmount.push({id: selectedTask.id, taskIndex: id, workAmount: 0});
   if (selectedTask) {
-    if (!groupedByTasks.value[selectedTask.index]) {
+    if (!groupedByTasks.value[selectedTask.id]) {
       // Add selected task to grouped tasks if it doesn't exist yet
-      groupedByTasks.value[selectedTask.index] = {taskIndex: selectedTask.index, ...selectedTask};
+      groupedByTasks.value[selectedTask.id] = {taskIndex: selectedTask.index, ...selectedTask};
     }
   }
 };

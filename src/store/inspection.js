@@ -13,7 +13,7 @@ export const useInspectionReportStore = defineStore(
     const validation = reactive({value: {}});
     const isShowModalConfirm = reactive({value: false});
     const totalItems = reactive({value: 0});
-    const currentPage = reactive({value: 0});
+    const currentPage = reactive({value: 1});
     const listInspectionReports = reactive({value: []});
     const inspectionReportDetails = reactive({
       value: {
@@ -119,12 +119,11 @@ export const useInspectionReportStore = defineStore(
       await services.InspectionReportAPI[method](
         id,
         (response) => {
-          // mobilizationDetails.value = response.data;
+          getInspectionReportDetails(id);
           mixinMethods.notifySuccess(t("response.message.save_inspection_success"));
           mixinMethods.endLoading();
         },
-        () => {
-          validation.value = mixinMethods.handleErrorResponse(response);
+        (error) => {
           mixinMethods.notifyError(t("response.message.save_inspection_failed"));
           mixinMethods.endLoading();
         }

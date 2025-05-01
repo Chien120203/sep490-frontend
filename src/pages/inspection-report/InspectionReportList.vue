@@ -112,6 +112,7 @@ export default {
     const isDisabled = ref(false);
     const allowEdit = computed(() => localStorage.getItem('role') === QUALITY_ASSURANCE);
     onMounted(() => {
+      currentPage.value = 1;
       getListInspectionReport(searchForms.value);
     });
 

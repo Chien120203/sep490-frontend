@@ -84,7 +84,7 @@ import {
   RESOURCE_MANAGER_MIDDLEWARE,
   TECHNICAL_MANAGER_MIDDLEWARE
 } from "@/constants/middleware.js";
-import {ADMIN, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {ADMIN, EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 
 export default {
@@ -146,13 +146,8 @@ export default {
             newItem.isShow = PROJECT_SIDEBARS.includes(newItem.function_page_name) && allowedRoutes.includes(newItem.function_page_name);
           } else {
             newItem.isShow = role.value === ADMIN ? allowedRoutes.includes(newItem.function_page_name) : (allowedRoutes.includes(newItem.function_page_name) && !PROJECT_SIDEBARS.includes(newItem.function_page_name));
-            if(role.value === EXECUTIVE_BOARD || role.value === TECHNICAL_MANAGER) {
+            if(role.value === EXECUTIVE_BOARD || role.value === TECHNICAL_MANAGER || role.value === RESOURCE_MANAGER) {
               if(REQUEST_SIDEBAR.includes(newItem.function_page_name)) newItem.isShow = true;
-            }
-            if(role.value === EXECUTIVE_BOARD) {
-              if(newItem.function_page_name === PAGE_NAME.INSPECTION_REPORT.LIST) {
-                newItem.isShow = true;
-              }
             }
           }
 

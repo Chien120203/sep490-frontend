@@ -1305,7 +1305,7 @@
     },
     "table": {
       "header": {
-        "projectCode": "Project Code",
+        "projectCode": "Project Name",
         "inspectionCode": "Inspection Report Code",
         "inspectionName": "Inspection Report Name",
         "inspectorName": "Inspector Name",

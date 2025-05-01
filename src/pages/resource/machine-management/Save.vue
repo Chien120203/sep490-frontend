@@ -170,17 +170,6 @@
                 {{ $t(validation.value.description) }}
               </label>
             </el-form-item>
-
-            <el-form-item prop="attachments" :label="$t('resource.machine.details.attachments')">
-              <FileUpload
-                  :disabled="!allowEdit"
-                  :existingFiles="machineResourcesDetails.value.attachment"
-                  :allowedTypes="'.jpg,.png,.pdf,.docx'"
-                  :fileLimit="3"
-                  class="input-wd-96"
-                  @file-selected="handleFileUpload"
-              />
-            </el-form-item>
           </div>
         </el-form>
       </div>

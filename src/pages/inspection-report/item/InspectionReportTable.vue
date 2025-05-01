@@ -17,7 +17,7 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.projectCode ?? "-" }} </span>
+        <span class="data-table">{{ scope.row.projectName ?? "-" }} </span>
       </template>
     </el-table-column>
 
@@ -67,22 +67,15 @@
 
     <el-table-column min-width="90">
       <template #header>
-        <p v-html="$t('inspection.table.header.action')"></p>
+        <p v-html="$t('customer.table.header.action')"></p>
       </template>
       <template #default="scope">
         <div>
-          <button
-              @click="$emit('details', scope.row.id)"
-              class="btn-action btn-view"
-          >
-            <IconEdit/>
+          <button @click="$emit('details', scope.row.id)" class="btn-edit">
+            <IconEdit />
           </button>
-          <button
-              v-if="allowEdit"
-              @click="$emit('delete', scope.row.id)"
-              class="btn-action btn-delete"
-          >
-            <IconTrash/>
+          <button @click="$emit('delete', scope.row.id)" class="btn-edit">
+            <IconTrash />
           </button>
         </div>
       </template>

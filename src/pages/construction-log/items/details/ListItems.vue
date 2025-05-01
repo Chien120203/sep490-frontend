@@ -54,7 +54,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="quantity" label="Số lượng">
+        <el-table-column prop="quantity" label="Số lượng"  width="180">
           <template #default="{row, $index}">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
               <el-input-number :min="0" :max="getResource(row.resourceId)?.plannedQuantity - getResource(row.resourceId)?.usedQuantity" :disabled="isHuman" v-model.number="listAddedValues[$index].quantity"/>
@@ -86,7 +86,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="unit" label="Đơn vị" width="160">
+        <el-table-column prop="unit" label="Đơn vị" width="110">
           <template #default="scope">
             {{ getResource(scope.row.resourceId).unit || "-" }}
           </template>
@@ -117,6 +117,7 @@ const props = defineProps({
   resources: {type: Array, default: () => []},
   resourceType: {type: Number, default: 0},
   taskIndex: {type: [String, Number], default: ""},
+  taskId: {type: [String, Number], default: ""},
   optionKeys: {type: Object, default: () => ({id: '', value: ''})},
   isExport: {type: Boolean, default: false},
   allowEdit: { type: Boolean, default: false },
@@ -147,6 +148,7 @@ const handleSelectItem = (id) => {
       resourceId: id,
       startTime: "",
       endTime: "",
+      id: props.taskId
     });
   }
 };

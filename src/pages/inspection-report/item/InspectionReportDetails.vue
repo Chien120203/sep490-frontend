@@ -5,7 +5,7 @@
         class="select-item"
         :defaultList="selectedRow"
         :optionKeys="{ id: 'id', value: 'workName' }"
-        :listData="progressDtls.progressItems"
+        :listData="listTasks"
         :isRemote="true"
         :showClearable="true"
         :placeholder="'Chọn công việc'"
@@ -122,6 +122,7 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from "@/constants/resource.js";
+import {DONE_PROGRESS} from "@/constants/progress.js";
 
 const props = defineProps({
   logDetails: {
@@ -159,17 +160,18 @@ defineExpose({
   humanForm,
   workAmountForm
 });
+const hasChildren = (parent) => props.progressDtls.progressItems.some(child => child.parentIndex === parent.index);
 
+const listTasks = computed(() => props.progressDtls.progressItems?.filter(item => !hasChildren(item) && item.progress === DONE_PROGRESS));
 // Chỉ lưu 1 workAmount cho task đang chọn
 const listWorkAmount = ref([{ workAmount: 0 }]);
 
 const selectedTask = computed(() => {
-  if (!selectedRow.value) return null;
-  return props.progressDtls.progressItems.find(task => task.id === selectedRow.value);
+  if (!props.inspectionReportDetails.constructionProgressItemId) return null;
+  return props.progressDtls.progressItems.find(task => task.id === props.inspectionReportDetails.constructionProgressItemId);
 });
 
 const handleSelectTask = (id) => {
-  selectedRow.value = id;
   let selectedItem = props.progressDtls.progressItems.find(task => task.id === id);
   props.inspectionReportDetails.constructionProgressItemId = id;
   listWorkAmount.value = [{ workAmount: selectedItem.usedQuantity }];
@@ -185,7 +187,7 @@ const getListResourcesByType = (task, type) =>
         }));
 
 const handleDeleteLog = (index) => {
-  selectedRow.value = null;
+  props.inspectionReportDetails.constructionProgressItemId = null;
   listWorkAmount.value = [{ workAmount: 0 }];
   emit("remove-task", index);
 };

@@ -6,7 +6,7 @@ const list = async (params, success, error) => {
 };
 
 const details = async (id, params, success, error) => {
-    await get(API_CODE.API_INSPECTION_002 + "/" + id, params, success, error);
+    await get(API_CODE.API_INSPECTION_002 + "/" + id, success, error, params);
 };
 
 const save = async (formData, success, error) => {
@@ -18,11 +18,11 @@ const deleteInspectionReport = async (id, success, error) => {
 };
 
 const approve = async (id, success, error) => {
-    await put(API_CODE.API_INSPECTION_006 + '/' + id, success, error);
+    await put(API_CODE.API_INSPECTION_006 + '/' + id, {}, success, error);
 };
 
 const reject = async (id, success, error) => {
-    await put(API_CODE.API_INSPECTION_007 + '/' + id, success, error);
+    await put(API_CODE.API_INSPECTION_007 + '/' + id, {}, success, error);
 };
 
 export const InspectionReportAPI = {

@@ -10,11 +10,11 @@ const list = async (params, success, error) => {
 };
 
 const create = async (formData, success, error) => {
-    await postFormData(API_CODE.API_MACHINE_003, formData, success, error);
+    await post(API_CODE.API_MACHINE_003, formData, success, error);
 };
 
 const update = async (formData, success, error) => {
-    await putFormData(API_CODE.API_MACHINE_004, formData, success, error);
+    await put(API_CODE.API_MACHINE_004, formData, success, error);
 };
 
 const deleteMachine = async (id, success, error) => {

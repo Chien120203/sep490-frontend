@@ -60,25 +60,25 @@
 
       <el-form-item label="Công tác an toàn" prop="safety">
         <el-radio-group v-model="logDetails.safety">
-          <el-radio label="Tốt" :value="GOOD_CONDITION">Tốt</el-radio>
-          <el-radio label="Trung bình" :value="MEDIUM_CONDITION">Trung bình</el-radio>
-          <el-radio label="Kém" :value="BAD_CONDITION">Kém</el-radio>
+          <el-radio label="Tốt" :value="String(GOOD_CONDITION)">Tốt</el-radio>
+          <el-radio label="Trung bình" :value="String(MEDIUM_CONDITION)">Trung bình</el-radio>
+          <el-radio label="Kém" :value="String(BAD_CONDITION)">Kém</el-radio>
         </el-radio-group>
       </el-form-item>
 
       <el-form-item label="Chất lượng thi công" prop="quality">
         <el-radio-group v-model="logDetails.quality">
-          <el-radio label="Tốt" :value="GOOD_CONDITION">Tốt</el-radio>
-          <el-radio label="Trung bình" :value="MEDIUM_CONDITION">Trung bình</el-radio>
-          <el-radio label="Kém" :value="BAD_CONDITION">Kém</el-radio>
+          <el-radio label="Tốt" :value="String(GOOD_CONDITION)">Tốt</el-radio>
+          <el-radio label="Trung bình" :value="String(MEDIUM_CONDITION)">Trung bình</el-radio>
+          <el-radio label="Kém" :value="String(BAD_CONDITION)">Kém</el-radio>
         </el-radio-group>
       </el-form-item>
 
       <el-form-item label="Tiến độ thi công" prop="progress">
         <el-radio-group v-model="logDetails.progress">
-          <el-radio label="Tốt" :value="GOOD_CONDITION">Tốt</el-radio>
-          <el-radio label="Trung bình" :value="MEDIUM_CONDITION">Trung bình</el-radio>
-          <el-radio label="Kém" :value="BAD_CONDITION">Kém</el-radio>
+          <el-radio label="Tốt" :value="String(GOOD_CONDITION)">Tốt</el-radio>
+          <el-radio label="Trung bình" :value="String(MEDIUM_CONDITION)">Trung bình</el-radio>
+          <el-radio label="Kém" :value="String(BAD_CONDITION)">Kém</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="Báo cáo sự cố">

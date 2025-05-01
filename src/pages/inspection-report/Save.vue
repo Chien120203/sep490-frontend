@@ -12,7 +12,7 @@
         </div>
         <div class="contract-save-btn">
           <div class="item">
-            <el-button class="btn btn-save" @click="submitForm()">
+            <el-button v-if="allowEdit" class="btn btn-save" @click="submitForm()">
               {{ $t("common.save") }}
             </el-button>
             <div class="item" style="display: flex;">
@@ -103,8 +103,8 @@ const changeStatus = ref(null);
 
 onMounted(async () => {
   await getProgressDetails(projectId.value, false);
-  if(route.params.date && !route.params.id) inspectionReportDetails.value.logDate = route.params.date;
-  if(route.params.id) await getInspectionReportDetails(route.params.id);
+  if (route.params.date && !route.params.id) inspectionReportDetails.value.logDate = route.params.date;
+  if (route.params.id) await getInspectionReportDetails(route.params.id);
 });
 
 onUnmounted(() => {
@@ -134,9 +134,6 @@ const formInspectionReportDetailsRef = ref(null);
 const formInspectionReportRef = ref(null);
 
 const submitForm = async () => {
-  if(route.params.id) {
-    await saveInspectionReport(inspectionReportDetails.value);
-  } else
   await saveInspectionReport(inspectionReportDetails.value);
 }
 </script>

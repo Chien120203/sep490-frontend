@@ -78,7 +78,9 @@ const {t} = useI18n();
 const router = useRouter();
 const now = dayjs();
 const listProgressItems = computed(() => {
-  const filteredItems = progressDetails.value.progressItems?.filter(item => item.progress !== 100) || [];
+  const hasChildren = (parent) => progressDetails.value.progressItems.some(child => child.parentIndex === parent.index);
+
+  const filteredItems = progressDetails.value.progressItems?.filter(item => item.progress !== 100 && !hasChildren(item)) || [];
   return [{ index: "all", workName: t('common.all') }, ...filteredItems];
 });
 const fromDate = now.startOf('month').format('YYYY-MM-DD');

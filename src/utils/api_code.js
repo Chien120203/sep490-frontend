@@ -21,6 +21,7 @@ const API_CODE = {
     API_PRJ_003: '/project/detail',
     API_PRJ_004: '/project/list-project-status',
     API_PRJ_005: '/project/delete',
+    API_PRJ_006: '/project/update-status',
 
     API_CTR_001: '/contract/save-contract',
     API_CTR_002: '/contract/list-contract',
@@ -94,7 +95,7 @@ const API_CODE = {
     API_INSPECTION_003: '/inspection-report/save',
     API_INSPECTION_004: '/inspection-report/',
     API_INSPECTION_005: '/inspection-report/project/',
-    API_INSPECTION_006: '/inspection-report/',
+    API_INSPECTION_006: '/inspection-report/approve',
     API_INSPECTION_007: '/inspection-report/reject',
 
   //Construction Log
