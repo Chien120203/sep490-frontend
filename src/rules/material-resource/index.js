@@ -126,10 +126,6 @@ export const getMaterialRules = () => {
         ],
         inventory: [
             {
-                message: t("E-MAT-013"), // Số lượng tồn kho là bắt buộc
-                trigger: "blur",
-            },
-            {
                 pattern: /^\d+$/,
                 message: t("E-MAT-014"), // Số lượng tồn kho phải là số hợp lệ
                 trigger: "change",

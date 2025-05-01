@@ -21,28 +21,6 @@
         </div>
       </div>
 
-      <!-- Lock warning dialog -->
-      <el-dialog
-        v-model="showLockWarning"
-        title="Plan is being edited"
-        width="30%"
-        :close-on-click-modal="false"
-        :close-on-press-escape="false"
-        :show-close="false"
-      >
-        <div>
-          <p>This plan is currently being edited by <strong>{{ lockInfo?.userName || 'another user' }}</strong> ({{ lockInfo?.userEmail }}).</p>
-          <p>You can view the plan but cannot make changes until they finish editing.</p>
-          <p v-if="lockInfo">Lock expires at: {{ formatLockTime(lockInfo.lockExpiresAt) }}</p>
-        </div>
-        <template #footer>
-          <span class="dialog-footer">
-            <el-button @click="handleBack">Go Back</el-button>
-            <el-button type="primary" @click="showLockWarning = false">View in Read-Only Mode</el-button>
-          </span>
-        </template>
-      </el-dialog>
-
       <div>
         <!-- Title Navigation -->
         <TitleNavigation
@@ -56,6 +34,7 @@
           <SelectionFilters
               ref="selectionFormRef"
               :allowEdit="allowEdit && isCurrentUserLock"
+              :lockInfo="lockInfo"
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
               :contractDetails="contractDetails.value"
@@ -121,6 +100,7 @@ import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {useI18n} from "vue-i18n";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 import {CONSTRUCTION_MANAGER, EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {DATE_TIME_FORMAT} from "@/constants/application.js";
 
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
@@ -219,12 +199,6 @@ const isCurrentUserLock = computed(() => {
   if (!isLocked.value || !lockInfo.value) return true; // If not locked, user can edit
   return lockInfo.value.isCurrentUserLock;
 });
-
-const formatLockTime = (dateTimeString) => {
-  if (!dateTimeString) return '';
-  const date = new Date(dateTimeString);
-  return date.toLocaleString();
-};
 
 const statuses = computed(() => {
 
