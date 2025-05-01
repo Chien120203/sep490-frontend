@@ -113,6 +113,7 @@ export const useAllocationStore = defineStore(
       mixinMethods.startLoading();
       await services.AllocationAPI[method](
         id,
+        {comments: `${method} by ${localStorage.getItem('username')}`},
         (response) => {
           if (response.success) {
             mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));
