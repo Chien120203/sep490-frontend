@@ -3,7 +3,7 @@
       :show="show"
       :width="'85%'"
       :containerHeight="'70%'"
-      :isShowFooter="false"
+      :isShowFooter="true"
       @close="closeModal"
   >
     <template #header>
@@ -82,7 +82,8 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-
+    </template>
+    <template #footer>
       <div class="modal-footer">
         <el-button v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
         <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
