@@ -129,6 +129,7 @@ export const useMobilizationStore = defineStore(
       mixinMethods.startLoading();
       await services.MobilizationAPI[method](
         id,
+        {comments: `${method} by ${localStorage.getItem('username')}`},
         (response) => {
           // mobilizationDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.update_mobilization_status_success"));

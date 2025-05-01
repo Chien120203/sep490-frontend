@@ -21,13 +21,13 @@ const send = async (id, success, error) => {
   await put(API_CODE.API_ALLOCATION_005 + '/' + id, {}, success, error);
 };
 
-const approve = async (id, success, error) => {
-  await put(API_CODE.API_ALLOCATION_006 + '/' + id, {comments: "change later"}, success, error);
+const approve = async (id, params, success, error) => {
+  await put(API_CODE.API_ALLOCATION_006 + '/' + id, params, success, error);
 };
 
 
-const reject = async (id, success, error) => {
-  await put(API_CODE.API_ALLOCATION_007 + '/' + id, {reason: "change later"}, success, error);
+const reject = async (id, params, success, error) => {
+  await put(API_CODE.API_ALLOCATION_007 + '/' + id, params, success, error);
 };
 
 export const AllocationAPI = {
