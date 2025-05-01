@@ -72,14 +72,25 @@
         </div>
       </div>
     </el-form>
+    <!-- Hiển thị thông tin công việc đã chọn -->
+    <div v-if="lockInfo.userName" class="selected-task-display">
+      <el-alert
+          type="warning"
+          show-icon
+          :title="`This plan is currently being edited by ${lockInfo?.userName}`"
+          :description="`You can view the plan but cannot make changes until they finish editing.\n
+            Lock expires at: ${formatLockTime(lockInfo?.lockExpiresAt)}`"
+          style="margin-bottom: 16px"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, defineProps,defineEmits, computed } from "vue";
 import { mixinMethods } from "@/utils/variables.js";
-import {MATERIAL_TYPE} from "@/constants/resource.js";
 import {useI18n} from "vue-i18n";
+import {DATE_TIME_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
   planDetails: {
@@ -87,6 +98,10 @@ const props = defineProps({
     default: () => ({}),
   },
   contractDetails: {
+    type: Object,
+    default: () => ({}),
+  },
+  lockInfo: {
     type: Object,
     default: () => ({}),
   },
@@ -110,6 +125,12 @@ const listSelectedUsers = computed(() =>
 const totalPrice = computed(() =>
     props.contractDetails.contractDetails.reduce((sum, item) => sum + item.total, 0)
 );
+
+const formatLockTime = (dateTimeString) => {
+  if (!dateTimeString) return '';
+  const date = new Date(dateTimeString);
+  return mixinMethods.showDateTime(date, DATE_TIME_FORMAT);
+};
 
 const exceedMessages = computed(() => {
   const actualBudget = props.planDetails.planItems.reduce((sum, item) => sum + item.totalPrice, 0);
