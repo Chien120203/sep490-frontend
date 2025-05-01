@@ -21,13 +21,28 @@ const reject = async (params, success, error) => {
   await post(API_CODE.API_PLANNING_007, params, success, error);
 };
 
-
 const deletePlan = async (id, success, error) => {
   await del(API_CODE.API_PLANNING_005 + "/" + id, {}, success, error);
 };
 
 const update = async (params, success, error) => {
   await put(API_CODE.API_PLANNING_004, params, success, error);
+};
+
+const acquireLock = async (params, success, error) => {
+  await post(API_CODE.API_PLANNING_008, params, success, error);
+};
+
+const releaseLock = async (params, success, error) => {
+  await post(API_CODE.API_PLANNING_009, params, success, error);
+};
+
+const getLockStatus = async (planId, success, error) => {
+  await get(`/plans/locks/status/${planId}`, success, error);
+};
+
+const extendLock = async (params, success, error) => {
+  await post(API_CODE.API_PLANNING_011, params, success, error);
 };
 
 export const PlanningAPI = {
@@ -37,5 +52,9 @@ export const PlanningAPI = {
   approve,
   create,
   deletePlan,
-  update
+  update,
+  acquireLock,
+  releaseLock,
+  getLockStatus,
+  extendLock
 };

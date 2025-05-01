@@ -17,6 +17,7 @@ export const MODAL_TITLE = {
 export const COOKIE_EXPIRE_TIME = import.meta.env.VITE_COOKIE_EXPIRE_TIME || 365;
 export const FRONT_END_URL = import.meta.env.VITE_FRONTEND_URL || "http://localhost:9999";
 export const DATE_FORMAT = import.meta.env.VITE_APP_FORMATDATE || "YYYY-MM-DD";
+export const DATE_TIME_FORMAT = import.meta.env.VITE_APP_FORMATDATE || "YYYY-MM-DD HH:mm:ss";
 
 export const DEPARTMENT_ACTIVE = 1;
 
