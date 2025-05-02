@@ -189,12 +189,27 @@ const materials = computed(() => {
   const fromTaskId = props.data.fromTaskId; // directly access it so Vue tracks it
 
   if (requestType === PROJECT_TO_TASK || requestType === PROJECT_TO_PROJECT) {
-    return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
-      id: item.resourceId,
-      quantity: item.quantity,
-      unit: item.unit,
-      name: item.name
-    }));
+    return inventoryData.value
+        .filter(item => item.resourceType === MATERIAL_TYPE)
+        .map(item => {
+          // Calculate total used quantity for this material across all progress items
+          let totalUsedQuantity = props.progressDetails.progressItems.reduce((sum, progressItem) => {
+            const used = (progressItem.details || []).reduce((detailSum, detail) => {
+              if (detail.resourceId === item.resourceId) {
+                return detailSum + (detail.usedQuantity || 0);
+              }
+              return detailSum;
+            }, 0);
+            return sum + used;
+          }, 0);
+
+          return {
+            id: item.resourceId,
+            quantity: item.quantity - totalUsedQuantity, // actual available quantity
+            unit: item.unit,
+            name: item.name
+          };
+        });
   }
 
   if (requestType === TASK_TO_TASK && fromTaskId) {
@@ -204,7 +219,7 @@ const materials = computed(() => {
         .filter(item => item.resourceType === MATERIAL_TYPE && item.resource)
         .map(item => ({
           id: item.resource.id,
-          quantity: item.quantity,
+          quantity: item.quantity - item.usedQuantity,
           unit: item.unit,
           name: item.resource.name
         }));

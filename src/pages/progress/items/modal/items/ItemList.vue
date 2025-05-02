@@ -47,6 +47,12 @@
           </template>
         </el-table-column>
 
+        <el-table-column v-if="resourceType === MATERIAL_TYPE" :label="$t('progress.details.used_quantity')">
+          <template #default="{ row }">
+            {{getUsedQuantity(row.id)}}
+          </template>
+        </el-table-column>
+
         <el-table-column v-if="resourceType === MATERIAL_TYPE" :label="$t('planning.items.inventory')">
           <template #default="{ row }">
             {{getInventory(row.id)}}
@@ -142,6 +148,10 @@ const handleSelectItem = (id) => {
 const getInventory = (id) => {
   const resource = props.selectData.find(item => item.id === id) || null;
   return resource.quantity || "-";
+}
+
+const getUsedQuantity = (id) => {
+  return props.selectedRow.details.find(item => item.id === id)?.usedQuantity || 0;
 }
 </script>
 

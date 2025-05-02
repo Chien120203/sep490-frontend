@@ -839,7 +839,8 @@
       "year": "Year"
     },
     "details": {
-      "title": "Project Progress"
+      "title": "Project Progress",
+      "used_quantity": "Used quantity"
     },
     "status": {
       "not_started": "Not start",

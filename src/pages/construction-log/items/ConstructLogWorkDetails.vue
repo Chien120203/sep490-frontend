@@ -156,10 +156,12 @@ watch(() => props.logDetails?.workAmount, (newVal) => {
 }, { immediate: true, deep: true });
 
 const activeCollapseItems = ref(["1", "2", "3"]);
-const groupedByTasks = computed(() => props.logDetails?.resources.reduce((acc, item) => {
-  acc[item.id] = item;
-  return acc;
-}, {}));
+const groupedByTasks = computed(() => {
+  return props.logDetails?.workAmount?.reduce((acc, item) => {
+    acc[item.id] = item;
+    return acc;
+  }, {});
+});
 
 const emit = defineEmits(["remove-resource", "remove-task"]);
 const materialOptionKeys = ref({id: "id", value: "name"});
@@ -216,7 +218,8 @@ const getListResourcesByType = (task, type) => {
 // Handle Task Deletion
 const handleDeleteLog = (index) => {
   selectedRow.value = null;
-  delete groupedByTasks.value[index];
+  const selectedTask = getTaskInfo(index);
+  delete groupedByTasks.value[selectedTask.id];
   emit("remove-task",  index);
 };
 

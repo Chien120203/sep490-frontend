@@ -14,5 +14,7 @@ export const PROGRESS_STATUS = [
 ];
 
 export const STATUS_NOT_START = 0;
+export const COMPLETED  = 2;
+export const CANCELED  = 4;
 
 export const DONE_PROGRESS = 100;
