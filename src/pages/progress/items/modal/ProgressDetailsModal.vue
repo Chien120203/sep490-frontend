@@ -32,7 +32,7 @@ import {useI18n} from "vue-i18n";
 import Modal from "@/components/common/Modal.vue";
 import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemInformation.vue";
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
-import {DONE_PROGRESS, STATUS_NOT_START} from "@/constants/progress.js";
+import {CANCELED, COMPLETED, DONE_PROGRESS, STATUS_NOT_START} from "@/constants/progress.js";
 import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {getProgressRules} from "@/rules/progress/index.js";
 
@@ -62,7 +62,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "submit"]);
 const progressRules = getProgressRules();
-const allowEditFields = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER && props.progressDetails.progress !== DONE_PROGRESS);
+const allowEditFields = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER && props.progressDetails.status != COMPLETED && props.progressDetails.status != CANCELED);
 const allowEditRelation = computed(() => {
   const details = props.progressDetails;
   const role = localStorage.getItem("role");

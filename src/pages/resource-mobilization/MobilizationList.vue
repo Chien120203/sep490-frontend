@@ -228,7 +228,6 @@ const handleDisplayModal = (mobilization_id) => {
 };
 
 const closeModalConfirm = () => {
-  setMobilizationDefault();
   isShowModalConfirm.value = false;
 };
 
