@@ -42,8 +42,8 @@ const handleAddNewAllocation = () => {
 const taskSettings = ref({
   id: "id",
   name: "workName",
-  // startDate: "actualStartDate",
-  // endDate: "actualEndDate",
+  startDate: "actualStartDate",
+  endDate: "actualEndDate",
   progress: "progress",
   parentID: "parentId",
   dependency: "predecessor",

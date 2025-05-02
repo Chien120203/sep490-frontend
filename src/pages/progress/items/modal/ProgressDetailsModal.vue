@@ -19,7 +19,7 @@
     </template>
     <template #footer>
       <div class="modal-footer">
-        <el-button v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
+        <el-button v-if="allowEditFields" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
         <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
@@ -33,7 +33,7 @@ import Modal from "@/components/common/Modal.vue";
 import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemInformation.vue";
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
 import {CANCELED, COMPLETED, DONE_PROGRESS, STATUS_NOT_START} from "@/constants/progress.js";
-import {TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {getProgressRules} from "@/rules/progress/index.js";
 
 const {t} = useI18n();
@@ -62,7 +62,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "submit"]);
 const progressRules = getProgressRules();
-const allowEditFields = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER && props.progressDetails.status != COMPLETED && props.progressDetails.status != CANCELED);
+const allowEditFields = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER || localStorage.getItem('role') === EXECUTIVE_BOARD) && props.progressDetails.status != COMPLETED && props.progressDetails.status != CANCELED);
 const allowEditRelation = computed(() => {
   const details = props.progressDetails;
   const role = localStorage.getItem("role");

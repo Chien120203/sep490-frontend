@@ -60,7 +60,12 @@ export const useProgressStore = defineStore(
         indexMap.set(item.index, item);
       });
 
-      // Iterate to set parentId based on parentIndex
+      // Clear existing predecessor values first
+      progressItems.forEach(item => {
+        item.predecessor = "";
+      });
+
+      // Set parentId based on parentIndex
       progressItems.forEach(item => {
         if (item.parentIndex) {
           const parentItem = indexMap.get(item.parentIndex);
@@ -70,7 +75,6 @@ export const useProgressStore = defineStore(
         }
       });
 
-      // Iterate to handle itemRelations and set unique predecessors using item.id
       progressItems.forEach((item) => {
         if (item.itemRelations) {
           Object.entries(item.itemRelations).forEach(([relatedIndex, relation]) => {
@@ -80,7 +84,6 @@ export const useProgressStore = defineStore(
               if (!relatedTask.predecessor) {
                 relatedTask.predecessor = newRelation;
               } else {
-                // Split and check for duplicates before adding
                 const existing = new Set(relatedTask.predecessor.split(','));
                 if (!existing.has(newRelation)) {
                   relatedTask.predecessor += `,${newRelation}`;
@@ -118,6 +121,7 @@ export const useProgressStore = defineStore(
         params,
         (response) => {
           getProgressDetails(projectId.value);
+          clearSelectedProgressItem();
           validation.value = [];
           mixinMethods.notifySuccess(t("response.message.save_progress_item_success"));
           mixinMethods.endLoading();

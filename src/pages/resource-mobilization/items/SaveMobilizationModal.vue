@@ -12,18 +12,21 @@
 
     <template #body>
       <div class="modal-body-container">
-        <MobilizeFormInfo 
-          :data="data"
-          :allowEdit="allowSave"
-          :rules="MOBILIZEFORMINFO_RULES"
+        <MobilizeFormInfo
+            ref="mobilizeFormInfo"
+            :data="data"
+            :allowEdit="allowSave"
+            :rules="MOBILIZE_FORM_INFO_RULES"
         />
-        <label class="error-feedback" v-if="data.requestType === REQUEST_TYPE_SUPPLY_MORE && listSelectedMaterials.length <= 0 && listSelectedUsers.length<= 0 && listSelectedVehicles.length <= 0">
+        <label class="error-feedback"
+               v-if="data.requestType === REQUEST_TYPE_SUPPLY_MORE && listSelectedMaterials.length <= 0 && listSelectedUsers.length<= 0 && listSelectedVehicles.length <= 0">
           {{ $t('E-RR-FE-002') }}
         </label>
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
           <el-tab-pane :label="$t('mobilization.table.header.material')" name="materials">
             <ItemList
+                ref="formAllocationMaterialInfos"
                 :selectData="materials"
                 :allowEdit="allowSave"
                 :resourceType="RESOURCE_TYPE_MATERIALS"
@@ -38,6 +41,7 @@
           <!-- Nhân lực -->
           <el-tab-pane :label="$t('mobilization.table.header.human')" name="users">
             <ItemList
+                ref="formAllocationHumanInfos"
                 :selectData="users"
                 :allowEdit="allowSave"
                 :resourceType="RESOURCE_TYPE_USERS"
@@ -52,6 +56,7 @@
           <!-- Phương tiện -->
           <el-tab-pane :label="$t('mobilization.table.header.vehicle')" name="vehicles">
             <ItemList
+                ref="formAllocationVehicleInfos"
                 :selectData="vehicles"
                 :allowEdit="allowSave"
                 :resourceType="RESOURCE_TYPE_VEHICLES"
@@ -68,10 +73,12 @@
     <template #footer>
       <div class="modal-footer">
         <el-button v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
-        <el-button v-if="allowApprove(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'approve'})" type="success" class="btn btn-save">
+        <el-button v-if="allowApprove(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'approve'})"
+                   type="success" class="btn btn-save">
           {{ $t("common.approve") }}
         </el-button>
-        <el-button v-if="allowReject(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'reject'})" class="btn btn-refuse">
+        <el-button v-if="allowReject(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'reject'})"
+                   class="btn btn-refuse">
           {{ $t("common.reject") }}
         </el-button>
       </div>
@@ -84,7 +91,7 @@ import {computed, defineProps, ref, watch} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import MobilizeFormInfo from "@/pages/resource-mobilization/items/modal/MobilizeFormInfo.vue";
 import ItemList from "@/pages/resource-mobilization/items/modal/ItemList.vue";
-import { getMobilizationInfoRules } from "@/rules/mobilization/index.js";
+import {getMobilizationInfoRules} from "@/rules/mobilization/index.js";
 import {
   RESOURCE_TYPE_MATERIALS,
   RESOURCE_TYPE_VEHICLES,
@@ -96,13 +103,13 @@ import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/
 
 const props = defineProps({
   show: {type: Boolean, default: false},
-  data: { type: Object, default: () => ({}) },
+  data: {type: Object, default: () => ({})},
   materials: {type: Array, default: () => []},
   users: {type: Array, default: () => []},
   vehicles: {type: Array, default: () => []},
 });
 const emit = defineEmits(["close", "submit", "changeStatus"]);
-const listSelectedVehicles = ref( []);
+const listSelectedVehicles = ref([]);
 const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
 const materialOptions = ref({id: "id", value: "materialName"});
@@ -110,7 +117,7 @@ const userOptions = ref({id: "id", value: "teamName"});
 const vehicleOptions = ref({id: "id", value: "chassisNumber"});
 const activeTab = ref("materials");
 
-const MOBILIZEFORMINFO_RULES = getMobilizationInfoRules();
+const MOBILIZE_FORM_INFO_RULES = getMobilizationInfoRules();
 
 const updateListMaterials = (listData) => {
   listSelectedMaterials.value = listData;
@@ -129,7 +136,7 @@ const handleSearch = (data) => {
 const currentRole = ref(localStorage.getItem("role"));
 const allowSave = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER && props.data.status === DRAFT_STATUS);
 const allowApprove = (status) => {
-  if(status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
+  if (status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
   return status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD;
 }
 
@@ -144,7 +151,7 @@ watch(() => props.data.resourceMobilizationDetails, (data) => {
     let listMaterials = [];
 
     data.forEach(item => {
-      switch(item.resourceType) {
+      switch (item.resourceType) {
         case RESOURCE_TYPE_MATERIALS:
           listMaterials.push(item);
           break;
@@ -161,7 +168,7 @@ watch(() => props.data.resourceMobilizationDetails, (data) => {
     updateListUsers(listUsers);
     updateListVehicles(listVehicles);
   }
-}, { deep: true });
+}, {deep: true});
 
 const handleSubmit = () => {
   let listRequests = [
@@ -182,6 +189,7 @@ const handleSubmit = () => {
 .modal-title {
   margin: 0;
 }
+
 .modal-body-container {
   min-height: 550px;
 }
