@@ -57,9 +57,9 @@ export function validateDateBetween(rule, value, callback, startDate, endDate, m
 }
 
 
-export function validateChooseDateRelation(rule, value, callback, selectedRow, planList, isPlanning = true) {
+export function validateChooseDateRelation(rule, value, callback, selectedRow, planList, isPlanning = true, isActual = false) {
 
-  const result = validateTaskDateRelation(selectedRow, planList, isPlanning);
+  const result = validateTaskDateRelation(selectedRow, planList, isPlanning, isActual);
   if (!result.valid) {
     callback(new Error(result.message));
   } else {
@@ -132,19 +132,36 @@ const generateErrorMessage = (relatedTaskIndex, relationType, currentTaskIndex) 
   }
 };
 
-const validateTaskDateRelation = (selectedRow, planningList, isPlanning) => {
+const validateTaskDateRelation = (selectedRow, planningList, isPlanning, isActual) => {
   const selectedIndex = selectedRow.index;
-  const startAbove = isPlanning ? selectedRow.startDate : selectedRow.planStartDate;
-  const endAbove = isPlanning ? selectedRow.endDate : selectedRow.planEndDate;
+
+  // Update this section to handle isActual flag
+  let startAbove, endAbove;
+
+  if (isActual) {
+    startAbove = selectedRow.actualStartDate;
+    endAbove = selectedRow.actualEndDate;
+  } else {
+    startAbove = isPlanning ? selectedRow.startDate : selectedRow.planStartDate;
+    endAbove = isPlanning ? selectedRow.endDate : selectedRow.planEndDate;
+  }
+
   const itemRelations = selectedRow.itemRelations;
 
   const getTaskDates = (task) => {
+    if (isActual) {
+      return {
+        start: task.actualStartDate,
+        end: task.actualEndDate
+      };
+    }
     return {
       start: isPlanning ? task.startDate : task.planStartDate,
       end: isPlanning ? task.endDate : task.planEndDate
     };
   };
 
+  // Rest of the function remains the same
   // Check if there are relations for this task
   if (itemRelations) {
     for (let key in itemRelations) {

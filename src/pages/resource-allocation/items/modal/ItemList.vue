@@ -112,7 +112,7 @@ const handleSearch = (value) => {
 }
 const handleChangeValue = (quantity, resourceId) => {
   if (props.resourceType === MATERIAL_TYPE) {
-    let inventory = props.selectData.find(item => item.id === resourceId)?.quantity ?? 0;
+    let inventory = props.selectData.find(item => item[props.optionKeys.id] === resourceId)?.quantity ?? 0;
     if (inventory < quantity) {
       exceedMessages.value[resourceId] = t('E-PLAN-002');
     } else {
@@ -121,7 +121,7 @@ const handleChangeValue = (quantity, resourceId) => {
   }
 };
 const getInventory = (id) => {
-  const resource = props.selectData.find(item => item.id === id) || null;
+  const resource = props.selectData.find(item => item[props.optionKeys.id] === id) || null;
   return resource.quantity || "-";
 }
 const handleSelectItem = (id) => {

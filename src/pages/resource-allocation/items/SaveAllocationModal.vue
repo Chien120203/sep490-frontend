@@ -170,9 +170,9 @@ onMounted(() => {
   getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20}, false);
 })
 
-const materialOptions = ref({id: "id", value: "name"});
-const userOptions = ref({id: "id", value: "name"});
-const vehicleOptions = ref({id: "id", value: "name"});
+const materialOptions = ref({id: "resourceId", value: "name"});
+const userOptions = ref({id: "resourceId", value: "name"});
+const vehicleOptions = ref({id: "resourceId", value: "name"});
 const activeTab = ref("materials");
 const currentRole = ref(localStorage.getItem("role"));
 
@@ -200,7 +200,7 @@ const materials = computed(() => {
     return (progressItem.details || [])
         .filter(item => item.resourceType === MATERIAL_TYPE && item.resource)
         .map(item => ({
-          id: item.resource.id,
+          resourceId: item.resource.id,
           quantity: item.quantity - item.usedQuantity,
           unit: item.unit,
           name: item.resource.name
@@ -223,7 +223,7 @@ const listVehicles = computed(() => {
     return (progressItem.details || [])
         .filter(item => item.resourceType === MACHINE_TYPE && item.resource)
         .map(item => ({
-          id: item.resource.id,
+          resourceId: item.resource.id,
           quantity: item.quantity,
           unit: item.unit,
           name: item.resource.name
@@ -258,36 +258,36 @@ const formAllocationHumanInfos = ref(null);
 const formAllocationInfo = ref(null);
 
 const handleSubmit = async () => {
-  const forms = [
-    {
-      ref: formAllocationMaterialInfos,
-      name: "Material",
-    },
-    {
-      ref: formAllocationVehicleInfos,
-      name:"Vehicle",
-    },
-    {
-      ref: formAllocationHumanInfos,
-      name: "Human",
-    },
-    {
-      ref: formAllocationInfo,
-      name: "Allocation",
-    }
-  ];
-  for (const form of forms) {
-    const isValid = await new Promise((resolve) => {
-      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
-    });
-
-    if (!isValid) {
-      mixinMethods.notifyError(
-          t("planning.errors.invalid_form", {form: form.name})
-      );
-      return; // stop here if one form is invalid
-    }
-  }
+  // const forms = [
+  //   {
+  //     ref: formAllocationMaterialInfos,
+  //     name: "Material",
+  //   },
+  //   {
+  //     ref: formAllocationVehicleInfos,
+  //     name:"Vehicle",
+  //   },
+  //   {
+  //     ref: formAllocationHumanInfos,
+  //     name: "Human",
+  //   },
+  //   {
+  //     ref: formAllocationInfo,
+  //     name: "Allocation",
+  //   }
+  // ];
+  // for (const form of forms) {
+  //   const isValid = await new Promise((resolve) => {
+  //     form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+  //   });
+  //
+  //   if (!isValid) {
+  //     mixinMethods.notifyError(
+  //         t("planning.errors.invalid_form", {form: form.name})
+  //     );
+  //     return; // stop here if one form is invalid
+  //   }
+  // }
   let listData = [
       ...listSelectedMaterials.value,
       ...listSelectedUsers.value,
