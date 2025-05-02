@@ -29,7 +29,6 @@ const {
   selectedProgressItem,
   saveProgressItem,
   updateItem,
-  clearSelectedProgressItem,
   getProgressDetails
 } = progressStore;
 
@@ -45,7 +44,6 @@ const isShowModal = ref(false);
 const isShowModalSave = ref(false);
 const inventoryStore = useInventoryStore();
 const {
-  inventoryData,
   getListInventory
 } = inventoryStore;
 const handleBack = () => {
@@ -60,7 +58,7 @@ watch(
     (newVal) => {
       tasks.value = newVal.progressItems;
     },
-    { immediate: true, deep: true }
+    {immediate: true, deep: true}
 )
 onMounted(() => {
   getProgressDetails(projectId.value, true);
@@ -95,25 +93,6 @@ const setTaskIndex = () => {
   return newIndex;
 };
 
-
-const materials = computed(() => {
-  return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
-    id: item.resourceId,
-    quantity: item.quantity,
-    unit: item.unit,
-    name: item.name
-  })) || [];
-});
-const listVehicles = computed(() => {
-  return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE).map(item => ({
-    id: item.resourceId,
-    quantity: item.quantity,
-    unit: item.unit,
-    name: item.name
-  })) || [];
-});
-const listEmployees = computed(() => inventoryData.value.filter(item => item.resourceType === HUMAN_TYPE));
-
 const handleEditProgressItem = (item) => {
   isShowModal.value = true;
   getListLogsByTask(projectId.value, item[0]?.taskData.index);
@@ -125,7 +104,6 @@ const handleSaveProgressItem = async () => {
   selectedProgressItem.value.index = await setTaskIndex();
   selectedProgressItem.value.progressId = progressDetails.value.id;
   await saveProgressItem(selectedProgressItem.value);
-  clearSelectedProgressItem();
 }
 
 const handleUpdateProgressItem = async () => {
@@ -141,7 +119,6 @@ const handleUpdateProgressItem = async () => {
     itemRelations: selectedProgressItem.value.itemRelations,
   }
   await updateItem(params);
-  await clearSelectedProgressItem();
   handleCloseModal();
 }
 
@@ -152,7 +129,6 @@ const handleAddTask = async () => {
 
 const handleDisplayModalSave = (show = false) => {
   isShowModalSave.value = show;
-  if(!show) clearSelectedProgressItem();
 }
 
 const handleCloseModal = () => {
@@ -191,10 +167,7 @@ const handleCloseModal = () => {
     <ChangeRequestModal
         :selectedRow="selectedProgressItem.value"
         :show="isShowModalSave"
-        :materials="materials"
-        :vehicles="listVehicles"
         :tasks="progressDetails.value.progressItems"
-        :users="listEmployees"
         :rules="progressRules"
         :allowEdit="allowCreate"
         @close="handleDisplayModalSave"

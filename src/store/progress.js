@@ -118,6 +118,7 @@ export const useProgressStore = defineStore(
         params,
         (response) => {
           getProgressDetails(projectId.value);
+          clearSelectedProgressItem();
           validation.value = [];
           mixinMethods.notifySuccess(t("response.message.save_progress_item_success"));
           mixinMethods.endLoading();

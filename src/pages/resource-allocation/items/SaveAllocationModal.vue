@@ -110,6 +110,7 @@ import {
 import {usePersistenceStore} from "@/store/persistence.js";
 import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} from "@/constants/mobilization.js";
 import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -190,26 +191,7 @@ const materials = computed(() => {
 
   if (requestType === PROJECT_TO_TASK || requestType === PROJECT_TO_PROJECT) {
     return inventoryData.value
-        .filter(item => item.resourceType === MATERIAL_TYPE)
-        .map(item => {
-          // Calculate total used quantity for this material across all progress items
-          let totalUsedQuantity = props.progressDetails.progressItems.reduce((sum, progressItem) => {
-            const used = (progressItem.details || []).reduce((detailSum, detail) => {
-              if (detail.resourceId === item.resourceId) {
-                return detailSum + (detail.usedQuantity || 0);
-              }
-              return detailSum;
-            }, 0);
-            return sum + used;
-          }, 0);
-
-          return {
-            id: item.resourceId,
-            quantity: item.quantity - totalUsedQuantity, // actual available quantity
-            unit: item.unit,
-            name: item.name
-          };
-        });
+        .filter(item => item.resourceType === MATERIAL_TYPE);
   }
 
   if (requestType === TASK_TO_TASK && fromTaskId) {
@@ -276,36 +258,36 @@ const formAllocationHumanInfos = ref(null);
 const formAllocationInfo = ref(null);
 
 const handleSubmit = async () => {
-  // const forms = [
-  //   {
-  //     ref: formAllocationMaterialInfos,
-  //     name: "Material",
-  //   },
-  //   {
-  //     ref: formAllocationVehicleInfos,
-  //     name:"Vehicle",
-  //   },
-  //   {
-  //     ref: formAllocationHumanInfos,
-  //     name: "Human",
-  //   },
-  //   {
-  //     ref: formAllocationInfo,
-  //     name: "allocation",
-  //   }
-  // ];
-  // for (const form of forms) {
-  //   const isValid = await new Promise((resolve) => {
-  //     form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
-  //   });
-  //
-  //   if (!isValid) {
-  //     mixinMethods.notifyError(
-  //         t("planning.errors.invalid_form", {form: form.name})
-  //     );
-  //     return; // stop here if one form is invalid
-  //   }
-  // }
+  const forms = [
+    {
+      ref: formAllocationMaterialInfos,
+      name: "Material",
+    },
+    {
+      ref: formAllocationVehicleInfos,
+      name:"Vehicle",
+    },
+    {
+      ref: formAllocationHumanInfos,
+      name: "Human",
+    },
+    {
+      ref: formAllocationInfo,
+      name: "Allocation",
+    }
+  ];
+  for (const form of forms) {
+    const isValid = await new Promise((resolve) => {
+      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+    });
+
+    if (!isValid) {
+      mixinMethods.notifyError(
+          t("planning.errors.invalid_form", {form: form.name})
+      );
+      return; // stop here if one form is invalid
+    }
+  }
   let listData = [
       ...listSelectedMaterials.value,
       ...listSelectedUsers.value,
