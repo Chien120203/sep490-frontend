@@ -6,9 +6,9 @@
         <h3 class="page__ttl">{{ $t("project.title") }}</h3>
       </div>
       <div v-if="isAllowApprove">
-        <el-button class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
-        <el-button class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.reject") }}</el-button>
-        <el-button v-if="projectDetails.value.status === WAIT_TO_COMPLETE" type="success" class="btn btn-refuse" @click="handleChangeStatus(COMPLETE)">{{ $t("common.reject") }}</el-button>
+        <el-button v-if="projectStatus === RECEIVE_STATUS" class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
+        <el-button v-if="projectStatus !== COMPLETE || projectStatus !== CLOSED_STATUS" class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.close") }}</el-button>
+        <el-button v-if="projectStatus === WAIT_TO_COMPLETE" type="success" class="btn" @click="handleChangeStatus(COMPLETE)">{{ $t("common.complete") }}</el-button>
       </div>
     </div>
     <div class="project-details-infor">
@@ -24,7 +24,7 @@
                   @edit="handleRedirectToEdit"
               />
             </el-collapse-item>
-            <el-collapse-item name="2">
+            <el-collapse-item v-if="false" name="2">
               <template #title>
                 <h3>{{ $t("project.details.financial_summary") }}</h3>
               </template>
@@ -154,11 +154,10 @@ export default {
 
     const {
       projectId,
-      projectStatus,
       loggedIn
     } = persist;
 
-    const activeCollapseItems = ref(["3", "2", "4", "5"]);
+    const activeCollapseItems = ref(["3", "2", "4", "5", "1"]);
     const changeRequestData = ref([
       {
         id: 1,
@@ -224,7 +223,8 @@ export default {
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
     const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && contractDetails.value.id === 0));
-    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull.value));
+    const isAllowApprove = computed(() => (localStorage.getItem('role') === EXECUTIVE_BOARD));
+    const projectStatus = computed(() => projectDetails.value.status);
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
       projectId.value = route.params.id;
@@ -289,9 +289,9 @@ export default {
 
     const handleChangeStatus = (status) => {
       isShowModalConfirm.value = true;
-      if(status === PLANNING_STATUS) actionText.value = t('common.approve');
-      if(status === WAIT_TO_COMPLETE) actionText.value = t('project.statuses.wait_to_complete');
-      else actionText.value = t('common.reject');
+      if(status == PLANNING_STATUS) actionText.value = t('common.approve');
+      if(status == COMPLETE) actionText.value = t('project.statuses.wait_to_complete');
+      if(status == CLOSED_STATUS) actionText.value = t('common.close');
     }
 
     return {
@@ -303,6 +303,7 @@ export default {
       WAIT_TO_COMPLETE,
       COMPLETE,
       financialData,
+      projectStatus,
       isAllowCreateContract,
       isAllowApprove,
       projectDetails,

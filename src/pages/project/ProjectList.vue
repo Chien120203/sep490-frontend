@@ -22,15 +22,6 @@
             <DonutChart :chart-data="chartData"/>
           </div>
         </div>
-
-        <!--    financialData-->
-        <div class="project-body">
-          <FinancialSummary :sections="financialData"/>
-        </div>
-      </div>
-      <!--    Task And CR-->
-      <div class="project-task">
-        <TaskAndCR :title="'HÔM NAY'" :date="'Thứ 5, ngày 13/02/2025'" :tasks="tasks"/>
       </div>
     </div>
 

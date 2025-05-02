@@ -125,11 +125,12 @@ export const useMobilizationStore = defineStore(
       await mixinMethods.endLoading();
     };
 
-    const handleChangeRequestStatus = async (id, method) => {
+    const handleChangeRequestStatus = async (id, method, message) => {
       mixinMethods.startLoading();
+      let params = method === 'approve' ? {comments: message} : {reason: message};
       await services.MobilizationAPI[method](
         id,
-        {comments: `${method} by ${localStorage.getItem('username')}`},
+        params,
         (response) => {
           // mobilizationDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.update_mobilization_status_success"));

@@ -109,11 +109,12 @@ export const useAllocationStore = defineStore(
       await mixinMethods.endLoading();
     };
 
-    const handleChangeRequestStatus = async (id, method) => {
+    const handleChangeRequestStatus = async (id, method, message) => {
       mixinMethods.startLoading();
+      let params = method === 'approve' ? {comments: message} : {reason: message};
       await services.AllocationAPI[method](
         id,
-        {comments: `${method} by ${localStorage.getItem('username')}`},
+        params,
         (response) => {
           if (response.success) {
             mixinMethods.notifySuccess(t("response.message.save_mobilize_success"));

@@ -12,7 +12,7 @@
             <el-input disabled v-model="data.requestCode" class="custom-input" />
           </el-form-item>
           <el-form-item :label="$t('mobilization.modal.name')">
-            <el-input v-model="data.requestName" class="custom-input" />
+            <el-input :disabled="!allowEdit" v-model="data.requestName" class="custom-input" />
           </el-form-item>
           <el-form-item prop="requestDate" :label="$t('mobilization.modal.date')">
             <el-date-picker
@@ -31,7 +31,7 @@
 
         <el-col :span="12">
           <el-form-item prop="requestType" :label="$t('mobilization.modal.type')" required>
-            <el-select v-model="data.requestType">
+            <el-select :disabled="!allowEdit" v-model="data.requestType">
               <el-option
                   v-for="request in MOBILIZE_REQUEST_TYPES"
                   :key="request.value"
@@ -45,7 +45,7 @@
             </label>
           </el-form-item>
           <el-form-item :label="$t('mobilization.modal.priority')">
-            <el-select v-model="data.priorityLevel">
+            <el-select :disabled="!allowEdit" v-model="data.priorityLevel">
               <el-option
                   v-for="(status, index) in PRIORITIES"
                   :key="index"
@@ -57,7 +57,7 @@
           </el-form-item>
 
           <el-form-item :label="$t('mobilization.modal.description')">
-            <el-input v-model="data.description" type="textarea" class="custom-input" />
+            <el-input :disabled="!allowEdit" v-model="data.description" type="textarea" class="custom-input" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -76,6 +76,7 @@ const props = defineProps({
     type: Object,
     default: () => {}
   },
+  allowEdit: { type: Boolean, default: false },
   validation: {
     type: Object,
     default: () => ({

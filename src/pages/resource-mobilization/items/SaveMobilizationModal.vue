@@ -14,6 +14,7 @@
       <div class="modal-body-container">
         <MobilizeFormInfo 
           :data="data"
+          :allowEdit="allowSave"
           :rules="MOBILIZEFORMINFO_RULES"
         />
         <label class="error-feedback" v-if="data.requestType === REQUEST_TYPE_SUPPLY_MORE && listSelectedMaterials.length <= 0 && listSelectedUsers.length<= 0 && listSelectedVehicles.length <= 0">
@@ -24,6 +25,7 @@
           <el-tab-pane :label="$t('mobilization.table.header.material')" name="materials">
             <ItemList
                 :selectData="materials"
+                :allowEdit="allowSave"
                 :resourceType="RESOURCE_TYPE_MATERIALS"
                 :requestType="data.requestType"
                 :tableData="listSelectedMaterials"
@@ -37,6 +39,7 @@
           <el-tab-pane :label="$t('mobilization.table.header.human')" name="users">
             <ItemList
                 :selectData="users"
+                :allowEdit="allowSave"
                 :resourceType="RESOURCE_TYPE_USERS"
                 :requestType="data.requestType"
                 :tableData="listSelectedUsers"
@@ -50,6 +53,7 @@
           <el-tab-pane :label="$t('mobilization.table.header.vehicle')" name="vehicles">
             <ItemList
                 :selectData="vehicles"
+                :allowEdit="allowSave"
                 :resourceType="RESOURCE_TYPE_VEHICLES"
                 :requestType="data.requestType"
                 :tableData="listSelectedVehicles"
@@ -61,7 +65,7 @@
         </el-tabs>
       </div>
       <div class="modal-footer">
-        <el-button class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
+        <el-button v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
         <el-button v-if="allowApprove(data.status)" @click="$emit('changeStatus', {id: data.id, type: 'approve'})" type="success" class="btn btn-save">
           {{ $t("common.approve") }}
         </el-button>
@@ -74,7 +78,7 @@
 </template>
 
 <script setup>
-import {defineProps, ref, watch} from "vue";
+import {computed, defineProps, ref, watch} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import MobilizeFormInfo from "@/pages/resource-mobilization/items/modal/MobilizeFormInfo.vue";
 import ItemList from "@/pages/resource-mobilization/items/modal/ItemList.vue";
@@ -85,8 +89,8 @@ import {
   RESOURCE_TYPE_USERS,
   REQUEST_TYPE_SUPPLY_MORE
 } from "@/constants/mobilization";
-import {MANAGER_APPROVED, WAIT_MANAGER_APPROVE} from "@/constants/allocation.js";
-import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {DRAFT_STATUS, MANAGER_APPROVED, WAIT_MANAGER_APPROVE} from "@/constants/allocation.js";
+import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -121,7 +125,7 @@ const handleSearch = (data) => {
 }
 
 const currentRole = ref(localStorage.getItem("role"));
-
+const allowSave = computed(() => localStorage.getItem('role') === RESOURCE_MANAGER && props.data.status === DRAFT_STATUS);
 const allowApprove = (status) => {
   if(status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
   return status === MANAGER_APPROVED && currentRole.value === EXECUTIVE_BOARD;
