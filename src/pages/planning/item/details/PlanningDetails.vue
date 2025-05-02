@@ -282,7 +282,7 @@ const sortItems = () => {
 
         <el-table-column :label="$t('contract.create.item_table.total_price')" resizable width="380">
           <template #default="{ row }">
-            {{ mixinMethods.formatInputMoney(row.totalPrice) }}
+            {{ mixinMethods.formatInputMoney(row.unitPrice * row.quantity) }}
           </template>
         </el-table-column>
       </el-table>

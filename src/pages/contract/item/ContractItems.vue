@@ -3,6 +3,7 @@ import { defineProps, defineEmits, computed, ref, watch } from "vue";
 import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
+import {CURRENCY} from "@/constants/application.js";
 
 const props = defineProps({
   items: Array,
@@ -174,7 +175,7 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column prop="name" :label="$t('contract.create.item_table.item')" min-width="250">
+      <el-table-column prop="name" :label="$t('contract.create.item_table.item')" min-width="160">
         <template #default="{ row }">
           <el-input :disabled="!isAllowUpdate" v-model="row.workName" />
         </template>
@@ -192,17 +193,21 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" width="180">
+      <el-table-column prop="unitPrice" :label="$t('contract.create.item_table.unit_price')" width="240">
         <template #default="{ row }">
           <el-input :formatter="(value) => mixinMethods.formatInputMoney(value)"
                            :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                           v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) || !isAllowUpdate" />
+                    v-model="row.unitPrice" :min="0" @change="recalculateTotal" :disabled="isParent(row) || !isAllowUpdate" >
+            <template #append>
+              {{ CURRENCY }}
+            </template>
+          </el-input>
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('contract.create.item_table.total_price')" width="150">
+      <el-table-column :label="$t('contract.create.item_table.total_price')" width="180">
         <template #default="{ row }">
-          {{ mixinMethods.formatInputMoney(row.total) }}
+          {{`${mixinMethods.formatInputMoney(row.total)} ${CURRENCY}`}}
         </template>
       </el-table-column>
     </el-table>

@@ -7,9 +7,13 @@
         ref="ruleFormRef"
         :rules="rules"
     >
+
+      <el-form-item label="Ten kiểm tra" required>
+        <el-input v-model="inspectionReportDetails.inspectionName" placeholder="Nhập ten kiểm tra" />
+      </el-form-item>
       <!-- Verification code -->
-      <el-form-item label="Mã kiểm tra" prop="inspectCode" required>
-        <el-input v-model="inspectionReportDetails.inspectCode" placeholder="Nhập mã kiểm tra" />
+      <el-form-item label="Mã kiểm tra" prop="inspectCode">
+        <el-input disabled v-model="inspectionReportDetails.inspectCode" placeholder="Nhập mã kiểm tra" />
       </el-form-item>
 
       <!-- Inspection dates -->

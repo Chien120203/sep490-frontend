@@ -27,7 +27,17 @@
       </template>
 
       <template #default="scope">
-        <span class="data-table">{{ scope.row.inspectCode ?? "-" }} </span>
+        <span class="data-table">{{ scope.row.inspectionName ?? "-" }} </span>
+      </template>
+    </el-table-column>
+
+    <el-table-column min-width="130">
+      <template #header>
+        <p v-html="'task name'"></p>
+      </template>
+
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.progressItemName ?? "-" }} </span>
       </template>
     </el-table-column>
 
@@ -61,7 +71,7 @@
         align="left"
     >
       <template #default="scope">
-        <span class="inspection-status"  :class="statusClass(getStatus(scope.row))">{{ $t(getStatus(scope.row.status)) }}</span>
+        <span class="inspection-status " :class="statusClass(scope.row.status)">{{ $t(getStatus(scope.row.status)) }}</span>
       </template>
     </el-table-column>
 
@@ -110,11 +120,11 @@ export default {
     const statusClass = (status) => {
       switch (status) {
         case REJECTED_STATUS:
-          return "status-reject";
+          return "inspection-reject";
         case APPROVED_STATUS:
-          return "status-approved";
+          return "inspection-approved";
         case WAIT_FOR_APPROVE:
-          return "status-draft";
+          return "inspection-draft";
       }
     };
     const formatDate = (inputDate) => {

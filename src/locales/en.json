@@ -378,7 +378,8 @@
         "unit": "Unit",
         "amount": "Amount",
         "unit_price": "Unit Price",
-        "total_price": "Total Price"
+        "total_price": "Total Price",
+        "plan_used_total_price": "Total Price Spending"
       }
     },
     "detail": {
@@ -1320,7 +1321,7 @@
     },
     "modal_confirm": {
       "title": "Confirm delete inspection report",
-      "message": "Please enter 'Delete' to confirm delete this inspection report"
+      "message": "Do you want to delete this inspection report?"
     }
   },
   "E-CM-001": "Login Failed",

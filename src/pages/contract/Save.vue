@@ -73,6 +73,7 @@ const router = useRouter();
 
 onMounted(async () => {
   if(isUpdate.value) await getContractDetails(projectId.value);
+  contractDetails.value.projectId = Number(projectId.value) || 0;
   await getListProjects({
     keyword: '',
     pageIndex: 1,

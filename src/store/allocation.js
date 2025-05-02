@@ -111,7 +111,7 @@ export const useAllocationStore = defineStore(
 
     const handleChangeRequestStatus = async (id, method, message) => {
       mixinMethods.startLoading();
-      let params = method === 'approve' ? {comments: message} : {reason: message};
+      let params = method === 'approve' ? {comments: message || t('common.approve')} : {reason: message || t('common.reject')};
       await services.AllocationAPI[method](
         id,
         params,

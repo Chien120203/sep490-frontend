@@ -87,7 +87,11 @@
               <el-form-item prop="estimatedExpenses" :label="$t('survey.details.estimatedExpenses')">
                 <el-input :formatter="(value) => formatCurrency(value)"
                           :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                          v-model="siteSurveyDetails.value.estimatedExpenses"/>
+                          v-model="siteSurveyDetails.value.estimatedExpenses">
+                  <template #append>
+                    {{ CURRENCY }}
+                  </template>
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -96,14 +100,22 @@
               <el-form-item prop="estimatedProfits" :label="$t('survey.details.estimatedProfits')">
                 <el-input :formatter="(value) => formatCurrency(value)"
                           :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                          v-model="siteSurveyDetails.value.estimatedProfits"/>
+                          v-model="siteSurveyDetails.value.estimatedProfits">
+                  <template #append>
+                    {{ CURRENCY }}
+                  </template>
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item prop="tenderPackagePrice" :label="$t('survey.details.tenderPackagePrice')">
                 <el-input :formatter="(value) => formatCurrency(value)"
                           :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                          v-model="siteSurveyDetails.value.tenderPackagePrice"/>
+                          v-model="siteSurveyDetails.value.tenderPackagePrice">
+                  <template #append>
+                    {{ CURRENCY }}
+                  </template>
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -112,7 +124,11 @@
               <el-form-item prop="totalBidPrice" :label="$t('survey.details.totalBidPrice')">
                 <el-input :formatter="(value) => formatCurrency(value)"
                           :parser="(value) => mixinMethods.parseInputCurrency(value)"
-                          v-model="siteSurveyDetails.value.totalBidPrice"/>
+                          v-model="siteSurveyDetails.value.totalBidPrice">
+                  <template #append>
+                    {{ CURRENCY }}
+                  </template>
+                </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -129,6 +145,9 @@
                 <el-input :formatter="(value) => formatCurrency(value)"
                           :parser="(value) => mixinMethods.parseInputCurrency(value)"
                           v-model="siteSurveyDetails.value.projectCost">
+                  <template #append>
+                    {{ CURRENCY }}
+                  </template>
                 </el-input>
               </el-form-item>
             </el-col>
@@ -136,7 +155,11 @@
               <el-form-item prop="finalProfit" :label="$t('survey.details.finalProfit')">
                 <el-input :formatter="(value) => formatCurrency(value)"
                           :parser="(value) => mixinMethods.parseInputCurrency(value, true)"
-                          v-model="siteSurveyDetails.value.finalProfit"/>
+                          v-model="siteSurveyDetails.value.finalProfit">
+                  <template #append>
+                    {{ CURRENCY }}
+                  </template>
+                </el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -176,7 +199,6 @@
 <script>
 import {ref, onMounted, onUnmounted, computed} from 'vue';
 import {useRoute, useRouter} from 'vue-router';
-import {useI18n} from 'vue-i18n';
 import IconBackMain from '@/svg/IconBackMain.vue';
 import {useSiteSurveyStore} from '@/store/site-survey.js';
 import PAGE_NAME from '@/constants/route-name.js';
@@ -184,9 +206,10 @@ import FileUpload from "@/components/common/FileUpload.vue";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {getSiteSurveyRules} from "@/rules/site-survey/index.js";
 import {mixinMethods} from "@/utils/variables.js";
-import {BUSINESS_EMPLOYEE, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {RECEIVE_STATUS} from "@/constants/project.js";
 import {useProjectStore} from "@/store/project.js";
+import {CURRENCY} from "@/constants/application.js";
 
 export default {
   components: {FileUpload, IconBackMain},
@@ -248,6 +271,7 @@ export default {
 
     return {
       SURVEY_RULES,
+      CURRENCY,
       ruleFormRef,
       siteSurveyDetails,
       isAllowEditSurvey,

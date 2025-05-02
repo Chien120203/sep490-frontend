@@ -6,8 +6,8 @@
         <h3 class="page__ttl">{{ $t("project.title") }}</h3>
       </div>
       <div v-if="isAllowApprove">
-        <el-button v-if="projectStatus === RECEIVE_STATUS" class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
-        <el-button v-if="projectStatus !== COMPLETE || projectStatus !== CLOSED_STATUS" class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.close") }}</el-button>
+        <el-button v-if="isAllowApproveToPlanning" class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
+        <el-button v-if="isAllowClose" class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.close") }}</el-button>
         <el-button v-if="projectStatus === WAIT_TO_COMPLETE" type="success" class="btn" @click="handleChangeStatus(COMPLETE)">{{ $t("common.complete") }}</el-button>
       </div>
     </div>
@@ -222,9 +222,11 @@ export default {
       pageIndex: 1,
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const projectStatus = computed(() => projectDetails.value.status);
+    const isAllowApproveToPlanning = computed(() => projectStatus.value === RECEIVE_STATUS && !isSiteSurveyNull.value);
+    const isAllowClose = computed(() => (projectStatus !== COMPLETE || projectStatus !== CLOSED_STATUS) && !isSiteSurveyNull.value);
     const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && contractDetails.value.id === 0));
     const isAllowApprove = computed(() => (localStorage.getItem('role') === EXECUTIVE_BOARD));
-    const projectStatus = computed(() => projectDetails.value.status);
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
       projectId.value = route.params.id;
@@ -303,6 +305,8 @@ export default {
       WAIT_TO_COMPLETE,
       COMPLETE,
       financialData,
+      isAllowApproveToPlanning,
+      isAllowClose,
       projectStatus,
       isAllowCreateContract,
       isAllowApprove,

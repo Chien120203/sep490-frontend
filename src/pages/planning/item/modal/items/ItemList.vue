@@ -42,7 +42,7 @@
         <el-table-column prop="quantity" :label="$t('planning.items.quantity')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input :disabled="isHuman && !allowEdit" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+              <el-input :disabled="!allowEditQuantity" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             </el-form-item>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}
@@ -130,6 +130,10 @@ const exceedMessages = ref({});
 const listAddedValues = ref(props.tableData);
 const ruleFormRef = ref(null);
 const selectedValue = ref(null);
+const allowEditQuantity = computed(() => {
+ if(props.isHuman) return false;
+ return props.allowEdit;
+})
 defineExpose({
   ruleFormRef,
 });

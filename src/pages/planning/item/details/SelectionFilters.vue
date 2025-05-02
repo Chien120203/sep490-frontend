@@ -73,7 +73,7 @@
       </div>
     </el-form>
     <!-- Hiển thị thông tin công việc đã chọn -->
-    <div v-if="!lockData?.isCurrentUserLock" class="selected-task-display">
+    <div v-if="lockData != null && !lockData?.isCurrentUserLock" class="selected-task-display">
       <el-alert
           type="warning"
           show-icon

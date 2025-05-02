@@ -20,6 +20,7 @@ export const useInspectionReportStore = defineStore(
       value: {
         id: 0,
         inspectCode: "",
+        inspectionName: "",
         constructionProgressItemId: "",
         inspectorId: 0,
         inspectStartDate: "",
@@ -136,7 +137,8 @@ export const useInspectionReportStore = defineStore(
       inspectionReportDetails.value = {
         id: 0,
         projectId: 0,
-        inspectCode: 0,
+        inspectCode: "",
+        inspectionName: "",
         inspectorId: 0,
         inspectorName: "",
         inspectStartDate: "",
@@ -147,8 +149,8 @@ export const useInspectionReportStore = defineStore(
         planName: "",
         location: "",
         attachment: [],
-        inspectionDecision: 0,
-        status: 2,
+        inspectionDecision: INSPECT_DECISION_FAIL,
+        status: WAIT_FOR_APPROVE,
         qualityNote: "",
         otherNote: "",
       };

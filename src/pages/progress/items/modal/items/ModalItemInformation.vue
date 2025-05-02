@@ -11,22 +11,22 @@
             <el-input disabled v-model="task.workName"/>
           </el-form-item>
 
-          <el-form-item :disabled="allowEdit" prop="actualStartDate" label="Ngày bắt đầu thực tế">
-            <el-date-picker style="width: 100%" v-model="task.actualStartDate" type="date" placeholder="Chọn ngày"/>
+          <el-form-item  prop="actualStartDate" label="Ngày bắt đầu thực tế">
+            <el-date-picker  :disabled="!allowEdit" style="width: 100%" v-model="task.actualStartDate" type="date" placeholder="Chọn ngày"/>
           </el-form-item>
 
-          <el-form-item :disabled="allowEdit" prop="actualEndDate" label="Ngày kết thúc thực tế">
-            <el-date-picker style="width: 100%" v-model="task.actualEndDate" type="date" placeholder="Chọn ngày"/>
+          <el-form-item  prop="actualEndDate" label="Ngày kết thúc thực tế">
+            <el-date-picker :disabled="!allowEdit" style="width: 100%" v-model="task.actualEndDate" type="date" placeholder="Chọn ngày"/>
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item :disabled="allowEdit" prop="planStartDate" label="Ngày bắt đầu kế hoạch">
-            <el-date-picker :disabled="!allowEditRelation" style="width: 100%" v-model="task.planStartDate" type="date"
+          <el-form-item  prop="planStartDate" label="Ngày bắt đầu kế hoạch">
+            <el-date-picker  :disabled="!allowEditRelation" style="width: 100%" v-model="task.planStartDate" type="date"
                             placeholder="Chọn ngày"/>
           </el-form-item>
 
-          <el-form-item :disabled="allowEdit" prop="planEndDate" label="Ngày kết thúc kế hoạch">
+          <el-form-item prop="planEndDate" label="Ngày kết thúc kế hoạch">
             <el-date-picker :disabled="!allowEditRelation" style="width: 100%" v-model="task.planEndDate" type="date"
                             placeholder="Chọn ngày"/>
           </el-form-item>
@@ -38,8 +38,8 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item :disabled="!allowEdit" label="Tiến độ">
-            <el-slider v-model="task.progress" :step="1" :max="100" show-input/>
+          <el-form-item  label="Tiến độ">
+            <el-slider :disabled="!allowEdit" v-model="task.progress" :step="1" :max="100" show-input/>
           </el-form-item>
         </el-col>
       </el-row>
