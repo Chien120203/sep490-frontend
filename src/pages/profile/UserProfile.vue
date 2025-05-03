@@ -1,7 +1,6 @@
 <template>
   <div class="profile-header">
     <h3 class="page__ttl">
-      <span class="btn-back" @click="handleBack"><IconBackMain /></span>
       {{ $t('profile.details.title') }}
     </h3>
     <div class="profile-btn-detail">
@@ -148,10 +147,6 @@ export default {
       }
     });
 
-    const handleBack = () => {
-      router.push({ name: PAGE_NAME.HOME });
-    };
-
     const handleSelectFiles = (listFiles) => {
       userDetails.value.picProfile = listFiles;
     }
@@ -172,7 +167,6 @@ export default {
       USER_RULES,
       DATE_FORMAT,
       ruleFormRef,
-      handleBack,
       submitForm,
       route,
       isCreateMode,

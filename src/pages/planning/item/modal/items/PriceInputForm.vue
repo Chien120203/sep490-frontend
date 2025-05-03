@@ -90,7 +90,7 @@
           <el-form-item prop="totalPrice" :label="$t('planning.planned.total')">
             <el-input
                 disabled
-                v-model="selectedRow.totalPrice"
+                v-model="totalPrice"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 class="custom-input"
             >
@@ -106,7 +106,7 @@
 </template>
 
 <script setup>
-import { defineProps, reactive, ref, watch } from "vue";
+import {computed, defineProps, reactive, ref, watch} from "vue";
 import { mixinMethods } from "@/utils/variables.js";
 import {CURRENCY, DATE_FORMAT} from "@/constants/application.js";
 
@@ -137,16 +137,9 @@ const props = defineProps({
   }
 });
 
-const ruleFormRef = ref(null);
+const totalPrice = computed(() => Number(props.total.machine) + Number(props.total.labor) + Number(props.total.material));
 
-// Sync total.totalPrice into selectedRow.totalPrice for validation
-watch(
-    () => props.total.totalPrice,
-    (newVal) => {
-      props.selectedRow.totalPrice = newVal;
-    },
-    { immediate: true }
-);
+const ruleFormRef = ref(null);
 
 defineExpose({
   ruleFormRef,

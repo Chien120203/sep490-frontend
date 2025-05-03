@@ -47,6 +47,7 @@
 import {defineProps, ref} from 'vue';
 import {STATUS_LABELS} from "@/constants/project.js";
 import {mixinMethods} from "@/utils/variables.js";
+import {CURRENCY} from "@/constants/application.js";
 
 const props = defineProps({
   project: {
@@ -78,7 +79,7 @@ const formatStatus = (status) => {
 };
 
 const formatCurrency = (inputCurrency) => {
-  return mixinMethods.formatCurrency(inputCurrency);
+  return `${mixinMethods.formatInputCurrency(inputCurrency)} ${CURRENCY}`;
 }
 
 const formatDate = (date) => {

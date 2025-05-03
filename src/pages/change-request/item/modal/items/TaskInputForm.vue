@@ -3,7 +3,6 @@
     <el-form label-width="30%" :model="selectedRow" ref="ruleFormRef" :rules="rules">
       <el-row :gutter="20">
         <el-col :span="12">
-
           <!-- Parent Index -->
           <el-form-item :label="$t('change_request.modal.parent_index')">
             <SingleOptionSelect
@@ -25,6 +24,7 @@
                 :disabled="!allowEdit"
             />
           </el-form-item>
+
           <!-- Plan Start Date -->
           <el-form-item prop="planStartDate" :label="$t('change_request.modal.start_date')">
             <el-date-picker
@@ -33,7 +33,7 @@
                 type="date"
                 class="custom-input"
                 :disabled="!allowEdit"
-                placeholder="Select Date"
+                :placeholder="$t('change_request.modal.select_date')"
             />
           </el-form-item>
 
@@ -45,7 +45,7 @@
                 type="date"
                 class="custom-input"
                 :disabled="!allowEdit"
-                placeholder="Select Date"
+                :placeholder="$t('change_request.modal.select_date')"
             />
           </el-form-item>
         </el-col>
@@ -60,6 +60,8 @@
                 :disabled="!allowEdit"
             />
           </el-form-item>
+
+          <!-- Unit -->
           <el-form-item :label="$t('change_request.modal.unit')">
             <el-input
                 v-model="selectedRow.unit"
@@ -67,7 +69,6 @@
                 :disabled="!allowEdit"
             />
           </el-form-item>
-
 
           <!-- Unit Price -->
           <el-form-item :label="$t('change_request.modal.unit_price')">
@@ -80,6 +81,7 @@
             />
           </el-form-item>
 
+          <!-- Total -->
           <el-form-item :label="$t('change_request.modal.total')">
             <el-input
                 v-model="totalPrice"
@@ -89,7 +91,6 @@
                 :disabled="true"
             />
           </el-form-item>
-
         </el-col>
       </el-row>
     </el-form>
@@ -97,57 +98,56 @@
 </template>
 
 <script setup>
-import {computed, defineProps, reactive, ref, watch} from "vue";
-import {mixinMethods} from "@/utils/variables.js";
-import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
+import { computed, defineProps, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { mixinMethods } from '@/utils/variables.js';
+import SingleOptionSelect from '@/components/common/SingleOptionSelect.vue';
+
+const { t } = useI18n();
 
 const props = defineProps({
-  selectedRow: {type: Object, default: () => ({})},
-  total: {type: Object, default: () => ({})},
-  tasks: {type: Object, default: () => []},
-  rules: {
-    type: Object,
-    default: () => ({
-      totalPrice: [
-        {required: true, message: "Tổng số tiền không được để trống", trigger: "blur"},
-        {
-          validator: (rule, value, callback) => {
-            if (value <= 0) {
-              callback(new Error("Tổng số tiền phải lớn hơn 0"));
-            } else {
-              callback();
-            }
-          },
-          trigger: "blur"
-        }
-      ]
-    })
-  },
-  allowEdit: {
-    type: Boolean,
-    default: false
-  }
+  selectedRow: { type: Object, default: () => ({}) },
+  total: { type: Object, default: () => ({}) },
+  tasks: { type: Object, default: () => [] },
+  rules: { type: Object, default: () => ({}) },
+  allowEdit: { type: Boolean, default: false }
 });
 
 const ruleFormRef = ref(null);
 
-// Sync total.totalPrice into selectedRow.totalPrice for validation
+// Define rules as a computed property to use t()
+const rules = computed(() => ({
+  totalPrice: [
+    { required: true, message: t('change_request.errors.total_required'), trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        if (value <= 0) {
+          callback(new Error(t('change_request.errors.total_positive')));
+        } else {
+          callback();
+        }
+      },
+      trigger: 'blur'
+    }
+  ]
+}));
+
 watch(
     () => props.total.totalPrice,
     (newVal) => {
       props.selectedRow.totalPrice = newVal;
     },
-    {immediate: true}
+    { immediate: true }
 );
 
 const totalPrice = computed(() => {
   let value = props.selectedRow.unitPrice * props.selectedRow.quantity;
   props.selectedRow.totalPrice = value;
   return value;
-})
+});
 
 defineExpose({
-  ruleFormRef,
+  ruleFormRef
 });
 </script>
 

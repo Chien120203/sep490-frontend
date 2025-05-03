@@ -39,7 +39,7 @@
                 v-model="contractDetails.startDate"
                 type="date"
                 :disabled="true"
-                placeholder="Select Date"
+                :placeholder="$t('planning.form.select_date')"
             />
           </el-form-item>
 
@@ -77,8 +77,8 @@
       <el-alert
           type="warning"
           show-icon
-          :title="`This plan is currently being edited by ${lockData?.userName}`"
-          :description="`You can view the plan but cannot make changes until they finish editing.`"
+          :title="$t('planning.alert.locked_title', { userName: lockData?.userName })"
+          :description="$t('planning.alert.locked_description')"
           style="margin-bottom: 16px"
       />
     </div>

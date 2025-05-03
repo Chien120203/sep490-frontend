@@ -39,7 +39,7 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button v-if="isAllowCreateContract" class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowCreateContract && !isSiteSurveyNull.value" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>

@@ -4,6 +4,9 @@ import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {CURRENCY} from "@/constants/application.js";
+import Papa from 'papaparse';
+import FileUpload from "@/components/common/FileUpload.vue";
+import {useI18n} from "vue-i18n";
 
 const props = defineProps({
   items: Array,
@@ -12,7 +15,137 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  contractInfo: {
+    type: Object,
+    default: () => {},
+  },
+  actualBudget: {
+    type: Number,
+    default: 0,
+  },
 });
+const {t} = useI18n();
+
+const handleCSVSelected = (files) => {
+  if (!files || files.length === 0) return;
+
+  const csvFile = files[0];
+  mixinMethods.startLoading();
+
+  Papa.parse(csvFile, {
+    header: true,
+    skipEmptyLines: true,
+    complete: (results) => {
+      try {
+        if (results.errors.length > 0) {
+          console.error('Papa Parse errors:', results.errors);
+          mixinMethods.notifyError(t('response.message.import_csv_failed'));
+          mixinMethods.endLoading();
+          return;
+        }
+
+        // Map CSV column headers to contract detail fields
+        const fieldMap = {
+          'Index': 'index',
+          'Parent Index': 'parentIndex',
+          'Work Name': 'workName',
+          'Work Code': 'workCode',
+          'Unit': 'unit',
+          'Quantity': 'quantity',
+          'Unit Price': 'unitPrice',
+          'Total': 'total'
+        };
+
+        // Process the parsed data
+        const contractDetails = results.data.map((row) => {
+          const detail = { workCode: "", IsDelete: false };
+
+          // Map fields from CSV to contract detail properties
+          Object.entries(fieldMap).forEach(([csvField, detailField]) => {
+            if (row[csvField] !== undefined) {
+              if (['quantity', 'unitPrice', 'total'].includes(detailField)) {
+                detail[detailField] = parseFloat(row[csvField].replace(/[^\d.-]/g, '') || '0');
+              } else {
+                detail[detailField] = row[csvField];
+              }
+            }
+          });
+
+          // Ensure parentIndex is null (not undefined) for top-level items
+          if (!detail.parentIndex || detail.parentIndex === '') {
+            detail.parentIndex = null;
+          }
+
+          // Calculate total if not provided but quantity and unitPrice are available
+          if ((!detail.total || detail.total === 0) && detail.quantity && detail.unitPrice) {
+            detail.total = detail.quantity * detail.unitPrice;
+          }
+
+          return detail;
+        });
+
+        // Sort the details to ensure parents are processed before children if needed
+        contractDetails.sort((a, b) => {
+          const aDepth = (a.index || '').split('.').length;
+          const bDepth = (b.index || '').split('.').length;
+          return aDepth - bDepth;
+        });
+
+        // Update contract details in the store
+        props.contractInfo.contractDetails = contractDetails;
+
+        mixinMethods.notifySuccess(t('response.message.import_csv_success'));
+      } catch (error) {
+        console.error('Error processing CSV data:', error);
+        mixinMethods.notifyError(t('response.message.import_csv_failed'));
+      }
+
+      mixinMethods.endLoading();
+    },
+    error: (error) => {
+      console.error('Papa Parse error:', error);
+      mixinMethods.notifyError(t('response.message.import_csv_failed'));
+      mixinMethods.endLoading();
+    }
+  });
+};
+
+/**
+ * Generates a sample CSV template for contract details
+ */
+const downloadCSVTemplate = () => {
+  const headers = [
+    'Index', 'Parent Index', 'Work Name', 'Unit', 'Quantity', 'Unit Price', 'Total'
+  ];
+
+  // Sample data rows
+  const sampleData = [
+    ['1', '', 'Main Category', '',  '0', '0', '0'],
+    ['1.1', '1', 'Sub Category',  '', '0', '0', '0'],
+    ['1.1.1', '1.1', 'Work Item 1', 'm²', '100', '50000', '5000000'],
+    ['1.2', '1', 'Work Item 2', 'kg', '200', '30000', '6000000'],
+    ['2', '', 'Another Category', '', '0', '0', '0']
+  ];
+
+  // Create CSV content
+  let csvContent = headers.join(',') + '\n';
+  sampleData.forEach(row => {
+    csvContent += row.join(',') + '\n';
+  });
+
+  // Create and download the file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  const url = URL.createObjectURL(blob);
+
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'contract_details_template.csv');
+  link.style.visibility = 'hidden';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 const listItems = ref([...props.items]);
 
@@ -156,9 +289,31 @@ const hierarchicalItems = computed(() => {
 <template>
   <div class="contract-items">
     <h2>{{ $t('contract.create.items') }}</h2>
-    <el-button class="btn btn-save new-parent-btn" v-if="isAllowUpdate" @click="addItem">
-      {{ $t('contract.create.btn.new_item') }}
-    </el-button>
+    <div style="display: flex; justify-content: space-between; margin-top: 14px; margin-right: 12px;">
+      <div>
+        <el-button class="btn btn-save new-parent-btn" style="margin-bottom: 32px; margin-top: 0" v-if="isAllowUpdate" @click="addItem">
+          {{ $t('contract.create.btn.new_item') }}
+        </el-button>
+      </div>
+      <div style="display: flex; justify-content: space-evenly;">
+        <FileUpload
+            :message="$t('common.csv_upload')"
+            :allowedTypes="'.csv'"
+            :fileLimit="1"
+            :existingFiles="[]"
+            :disabled="!isAllowUpdate"
+            @file-selected="handleCSVSelected"
+        />
+        <el-button
+            style="margin-bottom: 33px; margin-left: 16px"
+            type="info"
+            @click="downloadCSVTemplate()"
+        >
+          {{ $t('contract.create.download_template') }}
+        </el-button>
+      </div>
+    </div>
+
     <el-table :data="hierarchicalItems" style="width: 100%" border>
       <el-table-column :label="$t('contract.create.item_table.no')" width="80">
         <template #default="{ row }">
@@ -175,7 +330,7 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column prop="name" :label="$t('contract.create.item_table.item')" min-width="160">
+      <el-table-column prop="name" :label="$t('contract.create.item_table.item')" min-width="130">
         <template #default="{ row }">
           <el-input :disabled="!isAllowUpdate" v-model="row.workName" />
         </template>
@@ -205,12 +360,16 @@ const hierarchicalItems = computed(() => {
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('contract.create.item_table.total_price')" width="180">
+      <el-table-column :label="$t('contract.create.item_table.total_price')" width="220">
         <template #default="{ row }">
           {{`${mixinMethods.formatInputMoney(row.total)} ${CURRENCY}`}}
         </template>
       </el-table-column>
     </el-table>
+
+    <div class="actual-budget" style="display: flex; justify-content: flex-end; margin-top: 14px; margin-right: 12px">
+      <strong>{{$t('common.total')}}: {{ `${mixinMethods.formatInputMoney(props.actualBudget)} ${CURRENCY}` }}</strong>
+    </div>
   </div>
 </template>
 

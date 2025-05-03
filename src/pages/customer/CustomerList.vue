@@ -93,6 +93,7 @@ export default {
     const searchForms = ref({
       search: "",
       pageIndex: 1,
+      pageSize: 15,
     });
     const delete_id = ref();
     const router = useRouter();

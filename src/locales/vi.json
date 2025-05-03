@@ -415,6 +415,11 @@
     "add_new": "Thêm mới",
     "keyword": "Từ khóa",
     "search": "Tìm kiếm",
+    "financial": "Số liệu khảo sát",
+    "warning": {
+      "expensesExceeded": "Chi phí vượt quá",
+      "projectCostExceeded": "Chi phí vượt quá"
+    },
     "clear": "Xóa",
     "date": "Ngày ký hợp đồng",
     "status": "Trạng thái",
@@ -717,6 +722,7 @@
   "project": {
     "title": "Dự án",
     "add_new": "Thêm mới",
+    "survey_data": "Dữ liệu dự án",
     "keyword": "Từ khóa",
     "search": "Tìm kiếm",
     "clear": "Xóa",

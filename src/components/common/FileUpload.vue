@@ -1,7 +1,7 @@
 <template>
   <div class="custom-file-upload">
     <label for="fileInput" class="upload-label">
-      {{ $t('common.upload') }}
+      {{ message || $t('common.upload') }}
     </label>
     <label>({{ allowedTypes }})</label>
     <input
@@ -42,6 +42,10 @@ const props = defineProps({
   fileLimit: {
     type: Number,
     default: 3,
+  },
+  message: {
+    type: String,
+    default: "",
   },
   existingFiles: {
     type: Array,

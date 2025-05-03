@@ -42,6 +42,7 @@
           />
           <PlanningDetails
               ref="detailsFormRef"
+              :actualBudget="actualBudget"
               :allowEdit="allowEdit && isCurrentUserLock"
               :rules="PLANNING_RULES"
               :items="planningDetails.value.planItems"
@@ -202,6 +203,13 @@ const allowEdit = computed(() => {
   return false;
 });
 
+const hasChildren = (task) => planningDetails.value.planItems.some(child => child.parentIndex === task.index);
+
+// Correctly calculate the actual budget by summing only leaf nodes (items without children)
+const actualBudget = computed(() => planningDetails.value.planItems.reduce((sum, item) => {
+  return sum + (hasChildren(item) ? 0 : parseFloat(item.totalPrice));
+}, 0));
+
 // Check if current user owns the lock
 const isCurrentUserLock = computed(() => {
   if (!isLocked.value || !lockInfo.value) return true; // If not locked, user can edit
@@ -266,9 +274,9 @@ onMounted(async () => {
       }
     }
   }
-  await getListHumanResources({pageIndex: 1}, false);
-  await getListMachineResources({pageIndex: 1}, false);
-  await getListMaterialResources({pageIndex: 1}, false);
+  await getListHumanResources({pageIndex: 1, pageSize: 100}, false);
+  await getListMachineResources({pageIndex: 1, pageSize: 100}, false);
+  await getListMaterialResources({pageIndex: 1, pageSize: 100}, false);
 });
 
 // Watch for lock changes (can happen when acquiring a lock fails)
@@ -368,13 +376,13 @@ const detailsFormRef = ref(null);
 const handleSearch = (data) => {
   switch (data.type) {
     case MACHINE_TYPE:
-      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
+      getListMachineResources({keyWord: data.value, pageIndex: 1, pageSize: 100}, false);
       break;
     case HUMAN_TYPE:
-      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
+      getListHumanResources({teamName: data.value, pageIndex: 1, pageSize: 100}, false);
       break;
     case MATERIAL_TYPE:
-      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
+      getListMaterialResources({keyWord: data.value, pageIndex: 1, pageSize: 100}, false);
   }
 }
 

@@ -3,7 +3,7 @@
       :show="show"
       :width="'85%'"
       :containerHeight="'70%'"
-      :isShowFooter="false"
+      :isShowFooter="true"
       @close="closeModal"
   >
     <template #header>
@@ -35,7 +35,8 @@
           </el-tab-pane>
         </el-tabs>
       </div>
-
+    </template>
+    <template #footer>
       <div class="modal-footer">
         <el-button v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
         <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
@@ -95,7 +96,6 @@ const handleSubmit = async () => {
     teamManager: props.teamInfo.teamManager?.id || props.teamInfo.teamManager
   };
 
-  console.log("Data sent to saveHumanResources:", submitData);
   emit("submit", submitData);
   emit("close");
   activeTab.value = "members";

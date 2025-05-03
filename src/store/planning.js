@@ -4,6 +4,7 @@ import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import {EXECUTIVE_BOARD} from "@/constants/roles.js";
+import PAGE_NAME from "@/constants/route-name.js";
 
 export const usePlanningStore = defineStore(
   "planning",
@@ -134,6 +135,7 @@ export const usePlanningStore = defineStore(
             ...response.data,
             reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]
           };
+          if(method === "create") router.push({name: PAGE_NAME.PLANNING.LIST});
           validation.value = [];
           mixinMethods.notifySuccess(t("response.message.save_planning_success"));
           mixinMethods.endLoading();

@@ -52,7 +52,7 @@
           </template>
           <el-date-picker
               style="width: 96%"
-              :disabled="!isAllowUpdate"
+              :disabled="true"
               :value-format="DATE_FORMAT"
               v-model="contractInfo.startDate"
               placeholder="Select Date"
@@ -69,7 +69,7 @@
           </template>
           <el-date-picker
               style="width: 96%"
-              :disabled="!isAllowUpdate"
+              :disabled="true"
               :value-format="DATE_FORMAT"
               v-model="contractInfo.endDate"
               placeholder="Select Date"

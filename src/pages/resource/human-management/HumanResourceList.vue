@@ -149,7 +149,8 @@ const {
 const searchForms = ref({
   teamManager: "",
   teamName: "",
-  pageIndex: 1
+  pageIndex: 1,
+  pageSize: 15,
 });
 
 // Local state to store cloned and filtered lists

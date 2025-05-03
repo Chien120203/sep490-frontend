@@ -91,6 +91,7 @@ export default {
     const searchForms = ref({
       search: "",
       pageIndex: 1,
+      pageSize: 15,
     });
     const persist = usePersistenceStore();
     const {

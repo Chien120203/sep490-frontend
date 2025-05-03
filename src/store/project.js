@@ -137,8 +137,8 @@ export const useProjectStore = defineStore(
       );
     };
 
-    const getProjectDetails = async (id) => {
-      mixinMethods.startLoading();
+    const getProjectDetails = async (id, isLoading = true) => {
+      if(isLoading) mixinMethods.startLoading();
       await services.ProjectAPI.details(
         id,
         {},
