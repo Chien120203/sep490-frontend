@@ -33,8 +33,8 @@ Follow these steps to set up the project locally:
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/your-username/slms-frontend.git
-   cd slms-frontend
+   git clone https://github.com/Chien120203/sep490-frontend.git
+   cd sep490-frontend
 2. Install Dependencies
     ```bash
     npm install
