@@ -7,7 +7,7 @@
       @close="$emit('close')"
   >
     <template #header>
-      <h4 class="modal-title">{{ $t('mobilization.modal.title') }}</h4>
+      <h4 class="modal-title">{{ $t('allocation.modal.title') }}</h4>
     </template>
 
     <template #body>
@@ -21,12 +21,12 @@
             @searchProject="handleSearchProjects"
             @searchTask="handleSearchTask"
         />
-        <label class="error-feedback" v-if="listSelectedMaterials.length <= 0 && listSelectedUsers.length<= 0 && listSelectedVehicles.length <= 0">
+        <label class="error-feedback" v-if="listSelectedMaterials.length <= 0 && listSelectedUsers.length <= 0 && listSelectedVehicles.length <= 0">
           {{ $t('E-RR-FE-002') }}
         </label>
         <el-tabs v-model="activeTab">
           <!-- Tài nguyên -->
-          <el-tab-pane label="Tài nguyên" name="materials">
+          <el-tab-pane :label="$t('allocation.modal.materials')" name="materials">
             <ItemList
                 ref="formAllocationMaterialInfos"
                 :rules="ALLOCATION_FORM_ITEMS_RULES"
@@ -42,7 +42,7 @@
           </el-tab-pane>
 
           <!-- Nhân lực -->
-          <el-tab-pane label="Nhân lực" name="users">
+          <el-tab-pane :label="$t('allocation.modal.users')" name="users">
             <ItemList
                 ref="formAllocationHumanInfos"
                 :rules="ALLOCATION_FORM_ITEMS_RULES"
@@ -58,7 +58,7 @@
           </el-tab-pane>
 
           <!-- Phương tiện -->
-          <el-tab-pane label="Phương tiện" name="vehicles">
+          <el-tab-pane :label="$t('allocation.modal.vehicles')" name="vehicles">
             <ItemList
                 ref="formAllocationVehicleInfos"
                 :rules="ALLOCATION_FORM_ITEMS_RULES"
