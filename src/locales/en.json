@@ -2,6 +2,7 @@
   "common": {
     "other": "Others",
     "metter_square": "metter square",
+    "csv_upload": "Upload CSV",
     "forgot_password": "Forgot password",
     "change_password": "Change Password",
     "invoice_attachment": "Invoice Attachment",
@@ -224,6 +225,8 @@
       "504": "Gateway Timeout"
     },
     "message": {
+      "import_csv_success": "Contract details imported successfully",
+      "import_csv_failed": "Failed to import contract details",
       "login_fail": "Login failed",
       "account_not_found": "Account not existed",
       "login_success": "Login successfully",
@@ -353,6 +356,8 @@
       "title": "Create Contract",
       "contract_name": "Contract Name",
       "items": "Contract Items",
+      "import_details": "Import Contract Details",
+      "download_template": "Download Template",
       "btn": {
         "new_item": "Add new item"
       },
@@ -422,6 +427,11 @@
     "clear": "Clear",
     "date": "Contract Date",
     "status": "Status",
+    "financial": "Survey Data",
+    "warning": {
+      "expensesExceeded": "Expenses exceeded the allocated budget",
+      "projectCostExceeded": "Project cost exceeded the allowable limit"
+    },
     "type": "Type",
     "statuses": {
       "active": "Active",
@@ -732,6 +742,7 @@
   "project": {
     "title": "Project",
     "add_new": "Add New",
+    "survey_data": "Project Data",
     "keyword": "Keyword",
     "search": "Search",
     "clear": "Clear",
@@ -1171,7 +1182,7 @@
       "message_delete": "WARNING: You will delete user. Please type 'Delete' to continue.",
       "title_delete": "Delete User",
       "title": "Confirm delete user",
-      "message": "Please enter 'Delete' to confirm delete this user"
+      "message": "Do you want to delete this user"
     },
     "gender": {
       "male": "Male",

@@ -58,7 +58,7 @@
                 <SingleOptionSelect
                     :disabled="!isAllowEdit"
                     v-model="projectDetails.value.customerId"
-                    :optionKeys="{ id: 'id', value: 'customerCode' }"
+                    :optionKeys="{ id: 'id', value: 'customerName' }"
                     :listData="listCustomers.value"
                     :isRemote="true"
                     @remoteSearch="handleSearchCustomer"
@@ -359,7 +359,7 @@ export default {
     const router = useRouter();
 
     onMounted(async () => {
-      await getListCustomers({search: "", pageIndex: 1}, false);
+      await getListCustomers({search: "", pageIndex: 1, pageSize: 50}, false);
       await getListUsers({keyWord: "", pageIndex: 1, pageSize: 50}, false);
       if (route.params.id) {
         await getProjectDetails(route.params.id);

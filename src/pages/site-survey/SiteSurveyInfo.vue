@@ -52,6 +52,7 @@ import {BID_DECISION_LABELS, RECEIVE_STATUS, STATUS_LABELS} from "@/constants/su
 import { mixinMethods } from "@/utils/variables.js";
 import { toRefs } from 'vue';
 import {useI18n} from "vue-i18n";
+import {CURRENCY} from "@/constants/application.js";
 
 // Nhận dữ liệu từ component cha
 const props = defineProps({
@@ -83,8 +84,8 @@ const getBidDecision = (bidDecision) => {
 }
 
 const formatCurrency = (inputCurrency) => {
-  return mixinMethods.formatCurrency(inputCurrency);
-};
+  return `${mixinMethods.formatInputCurrency(inputCurrency)} ${CURRENCY}`;
+}
 </script>
 
 <style scoped>

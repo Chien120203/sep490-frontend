@@ -40,7 +40,7 @@ export const getProjectRules = () => {
       { required: true, message: t("E-CM-002"), trigger: "change" },
     ],
     qa: [
-      { required: true, message: t("E-CM-002"), trigger: "change" },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
     ],
     area: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },

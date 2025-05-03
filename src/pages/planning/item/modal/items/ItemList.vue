@@ -4,6 +4,7 @@
         :isDisabled="!allowEdit"
         class="select-item"
         :defaultList="selectedValue"
+        :role="resourceType"
         :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
         :listData="selectData"
         :isRemote="true"
@@ -148,7 +149,7 @@ defineExpose({
 });
 const emit = defineEmits(["search", "update-value"]);
 const handleSearch = (value, role) => {
-  emit('search', {value: value, role: role});
+  emit('search', {value: value, type: role});
 }
 const handleSelectItem = (id) => {
   const exists = listAddedValues.value.some(entry => entry.resourceId === id);

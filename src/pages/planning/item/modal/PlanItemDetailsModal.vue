@@ -134,13 +134,7 @@ const dependentFormRef = ref(null);
 const childFormRef = ref(null);
 const materialOptions = ref({id: "id", value: "materialName"});
 const userOptions = ref({id: "id", value: "teamName"});
-const vehicleOptions = ref({id: "id", value: "chassisNumber"});
-const totalAllPrice = ref({
-  machine: 0,
-  labor: 0,
-  material: 0,
-  totalPrice: 0,
-});
+const vehicleOptions = ref({id: "id", value: "vehicleName"});
 const hasChildren = computed(() => props.tasks.some(child => child.parentIndex === props.selectedRow.index && !child.deleted));
 
 const getListResourceByType = (list, type) => {
@@ -151,30 +145,23 @@ const getListResourceByType = (list, type) => {
 const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_TYPE));
 const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_TYPE));
 const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_TYPE));
-const calculateTotal = () => {
+const totalAllPrice = computed(() => {
   const machine = listSelectedMachines.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
   const labor = listSelectedUsers.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
   const material = listSelectedMaterials.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
 
-  totalAllPrice.value = {
+  return {
     machine: machine.toFixed(2),
     labor: labor.toFixed(2),
     material: material.toFixed(2),
-    totalPrice: (machine + labor + material).toFixed(2),
   };
-};
+});
 
 const handleSearch = (data) => {
   emit("search", data)
 }
 
 const closeModal = () => {
-  totalAllPrice.value = {
-    machine: 0,
-    labor: 0,
-    material: 0,
-    totalPrice: 0,
-  };
   activeTab.value = "tasks"
   emit("close");
 };

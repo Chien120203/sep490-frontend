@@ -90,7 +90,7 @@ export const useUserStore = defineStore(
       mixinMethods.startLoading();
       await services.UserAPI[method](
         {
-          id: params.userId,
+          id: params.userId || 0,
           userName: params.username,
           email: params.email,
           role: params.role,
@@ -104,7 +104,7 @@ export const useUserStore = defineStore(
           userDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.save_user_success"));
           mixinMethods.endLoading();
-          router.push({name: PAGE_NAME.USER.LIST});
+          if(!params.userId) router.push({name: PAGE_NAME.USER.LIST});
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
