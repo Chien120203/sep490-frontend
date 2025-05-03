@@ -159,12 +159,20 @@ const {
 const currentEmail = localStorage.getItem("email");
 const currentRole = localStorage.getItem("role");
 const allowReject = computed(() => {
+  const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
+  const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
   const status = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD && p.email === currentEmail);
+  if(!technicalManagerApproved || !resourceManagerApproved) return false;
   return status?.isApproved === null || status?.isApproved === false;
 });
 
 const allowApprove = computed(() => {
   const status = approveStatuses.value.find(p => p.email === currentEmail);
+  if(currentRole === EXECUTIVE_BOARD) {
+    const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
+    const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
+    return technicalManagerApproved && resourceManagerApproved;
+  };
   return status?.isApproved === null  || status?.isApproved === false;
 });
 const allowEdit = computed(() => {

@@ -38,7 +38,11 @@
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 :parser="(value) => mixinMethods.parseInputCurrency(value)"
                 :value="mixinMethods.formatInputCurrency(selectedRow.quantity * selectedRow.unitPrice)"
-            />
+            >
+              <template #append>
+                {{ CURRENCY }}
+              </template>
+            </el-input>
           </el-form-item>
         </el-col>
 
@@ -49,7 +53,11 @@
                 v-model="total.material"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 class="custom-input"
-            />
+            >
+              <template #append>
+                {{ CURRENCY }}
+              </template>
+            </el-input>
           </el-form-item>
 
           <el-form-item :label="$t('planning.planned.human')">
@@ -58,7 +66,11 @@
                 v-model="total.labor"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 class="custom-input"
-            />
+            >
+              <template #append>
+                {{ CURRENCY }}
+              </template>
+            </el-input>
           </el-form-item>
 
           <el-form-item :label="$t('planning.planned.machine')">
@@ -67,7 +79,11 @@
                 v-model="total.machine"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 class="custom-input"
-            />
+            >
+              <template #append>
+                {{ CURRENCY }}
+              </template>
+            </el-input>
           </el-form-item>
 
           <!-- Validation moved to selectedRow.totalPrice -->
@@ -77,7 +93,11 @@
                 v-model="selectedRow.totalPrice"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
                 class="custom-input"
-            />
+            >
+              <template #append>
+                {{ CURRENCY }}
+              </template>
+            </el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -88,7 +108,7 @@
 <script setup>
 import { defineProps, reactive, ref, watch } from "vue";
 import { mixinMethods } from "@/utils/variables.js";
-import {DATE_FORMAT} from "@/constants/application.js";
+import {CURRENCY, DATE_FORMAT} from "@/constants/application.js";
 
 const props = defineProps({
   selectedRow: { type: Object, default: () => ({}) },

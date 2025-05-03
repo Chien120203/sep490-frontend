@@ -31,10 +31,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="unit" :label="$t('planning.items.unit')">
+        <el-table-column prop="unit" :label="$t('planning.items.unit')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
-              <el-input :disabled="true" v-model="listAddedValues[$index].unit" />
+              <el-input :disabled="resourceType === MATERIAL_TYPE" v-model="listAddedValues[$index].unit" />
             </el-form-item>
           </template>
         </el-table-column>
@@ -42,7 +42,7 @@
         <el-table-column prop="quantity" :label="$t('planning.items.quantity')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input :disabled="!allowEditQuantity" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+              <el-input v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             </el-form-item>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}
@@ -65,7 +65,11 @@
                   :formatter="(value) => mixinMethods.formatInputMoney(value)"
                   :parser="(value) => mixinMethods.parseInputCurrency(value)"
                   @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"
-              />
+              >
+                <template #append>
+                  {{ CURRENCY }}
+                </template>
+              </el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -77,7 +81,11 @@
                   v-model="listAddedValues[$index].total"
                   :disabled="true"
                   :value="mixinMethods.formatInputMoney(row.quantity * row.unitPrice)"
-              />
+              >
+                <template #append>
+                  {{ CURRENCY }}
+                </template>
+              </el-input>
             </el-form-item>
           </template>
         </el-table-column>
@@ -103,6 +111,7 @@ import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
 import {MATERIAL_TYPE} from "@/constants/resource.js";
 import {useI18n} from "vue-i18n";
+import {CURRENCY} from "@/constants/application.js";
 
 const props = defineProps({
   selectData: { type: Array, default: () => [] },

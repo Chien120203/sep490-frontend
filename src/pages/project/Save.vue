@@ -351,7 +351,7 @@ export default {
     const listTechnicalManagers = ref([]);
     const listResourceManagers = ref([]);
     const listQAs = ref([]);
-    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const isAllowEdit = computed(() =>localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
     const projectRules = getProjectRules();
 
     const route = useRoute();

@@ -52,11 +52,11 @@
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.0.workAmount`">
-              <el-input-number disabled style="width: 100%" v-model.number="listWorkAmount[0].workAmount" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
+              <el-input-number disabled style="width: 100%" v-model.number="selectedTask.usedQuantity" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
             </el-form-item>
 
             <el-form-item class="work-amount-item" label="Khối lượng còn lại" prop="remaining">
-              <el-input disabled :value="selectedTask.quantity - listWorkAmount[0].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
+              <el-input disabled :value="selectedTask.quantity - selectedTask.usedQuantity" type="number" placeholder="Nhập khối lượng còn lại" />
             </el-form-item>
           </el-form>
         </div>
@@ -67,14 +67,8 @@
             <h3>Vật Liệu</h3>
           </template>
           <ListItems
-              ref="materialForm"
-              :rules="rules"
-              :taskIndex="selectedTask.index"
               :resourceType="MATERIAL_TYPE"
-              :resources="logDetails.resources"
-              :selectData="getListResourcesByType(selectedTask, MATERIAL_TYPE)"
-              :optionKeys="materialOptionKeys"
-              :isExport="true"
+              :resources="logDetails"
           />
         </el-collapse-item>
 
@@ -84,14 +78,8 @@
             <h3>Nhân Công</h3>
           </template>
           <ListItems
-              ref="humanForm"
-              :rules="rules"
-              :taskIndex="selectedTask.index"
               :resourceType="HUMAN_TYPE"
-              :resources="logDetails.resources"
-              :selectData="getListResourcesByType(selectedTask, HUMAN_TYPE)"
-              :optionKeys="userOptionKeys"
-              :isExport="false"
+              :resources="logDetails"
           />
         </el-collapse-item>
 
@@ -101,14 +89,8 @@
             <h3>Phương Tiện</h3>
           </template>
           <ListItems
-              ref="machineForm"
-              :rules="rules"
-              :taskIndex="selectedTask.index"
               :resourceType="MACHINE_TYPE"
-              :resources="logDetails.resources"
-              :selectData="getListResourcesByType(selectedTask, MACHINE_TYPE)"
-              :optionKeys="vehicleOptionKeys"
-              :isExport="false"
+              :resources="logDetails"
           />
         </el-collapse-item>
       </el-collapse>
@@ -119,16 +101,11 @@
 <script setup>
 import { computed, ref } from 'vue';
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
+import ListItems from "@/pages/inspection-report/item/ListItems.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from "@/constants/resource.js";
-import {DONE_PROGRESS} from "@/constants/progress.js";
 
 const props = defineProps({
-  logDetails: {
-    type: Object,
-    default: () => ({})
-  },
   progressDtls: {
     type: Object,
     default: () => ({})
@@ -161,7 +138,6 @@ defineExpose({
   workAmountForm
 });
 const hasChildren = (parent) => props.progressDtls.progressItems.some(child => child.parentIndex === parent.index);
-
 const listTasks = computed(() => props.progressDtls.progressItems);
 // Chỉ lưu 1 workAmount cho task đang chọn
 const listWorkAmount = ref([{ workAmount: 0 }]);
@@ -170,6 +146,7 @@ const selectedTask = computed(() => {
   if (!props.inspectionReportDetails.constructionProgressItemId) return null;
   return props.progressDtls.progressItems.find(task => task.id === props.inspectionReportDetails.constructionProgressItemId);
 });
+const logDetails = computed(() => selectedTask.value.details);
 
 const handleSelectTask = (id) => {
   let selectedItem = props.progressDtls.progressItems.find(task => task.id === id);

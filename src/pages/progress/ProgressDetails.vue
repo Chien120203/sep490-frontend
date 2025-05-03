@@ -27,6 +27,7 @@ const constructLogStore = useConstructLog();
 const {
   progressDetails,
   selectedProgressItem,
+  isShowModal,
   saveProgressItem,
   updateItem,
   getProgressDetails
@@ -40,7 +41,6 @@ const {
   projectId
 } = persistenceStore;
 
-const isShowModal = ref(false);
 const isShowModalSave = ref(false);
 const inventoryStore = useInventoryStore();
 const {
@@ -119,7 +119,6 @@ const handleUpdateProgressItem = async () => {
     itemRelations: selectedProgressItem.value.itemRelations,
   }
   await updateItem(params);
-  handleCloseModal();
 }
 
 const handleAddTask = async () => {
@@ -160,7 +159,7 @@ const handleCloseModal = () => {
         :progressItems="progressDetails.value.progressItems"
         :progressDetails="selectedProgressItem.value"
         :listLogsByTask="listLogsByTask.value"
-        :show="isShowModal"
+        :show="isShowModal.value"
         @close="handleCloseModal"
         @submit="handleUpdateProgressItem"
     />

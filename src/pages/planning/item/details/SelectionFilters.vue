@@ -134,14 +134,20 @@ const formatLockTime = (dateTimeString) => {
 };
 
 const exceedMessages = computed(() => {
-  const actualBudget = props.planDetails.planItems.reduce((sum, item) => sum + item.totalPrice, 0);
+  const hasChildren = (task) => props.planDetails.planItems.some(child => child.parentIndex === task.index);
+
+  // Correctly calculate the actual budget by summing only leaf nodes (items without children)
+  const actualBudget = props.planDetails.planItems.reduce((sum, item) => {
+    return sum + (hasChildren(item) ? 0 : item.totalPrice);
+  }, 0);
+
   if(totalPrice.value < actualBudget) {
     emit("disable-btn", true);
     return t('planning.errors.exceed_budget');
   }
   emit("disable-btn", false);
-  return ''
-})
+  return '';
+});
 
 defineExpose({
   ruleFormRef,
