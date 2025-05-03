@@ -1331,9 +1331,9 @@
       "select_resource": "Select Resource",
       "index": "No.",
       "name": "Name",
-      "work_time": "Work Time",
+      "work_time": "Start Time",
       "export_time": "Export Time",
-      "break_time": "Break Time",
+      "break_time": "Finish Time",
       "quantity": "Quantity",
       "used_quantity": "Used Quantity",
       "planned_quantity": "Planned Quantity",
@@ -1567,7 +1567,8 @@
         "startDate": "Start Date",
         "endDate": "End Date",
         "status": "Status",
-        "action": "Action"
+        "action": "Action",
+        "taskName": "Task Name"
       }
     },
     "modal": {
