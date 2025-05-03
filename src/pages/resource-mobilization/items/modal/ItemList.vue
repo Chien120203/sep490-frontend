@@ -6,6 +6,7 @@
           :showClearable="true"
           :isDisabled="!allowEdit"
           class="select-item"
+          :role="resourceType"
           :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
           :listData="selectData"
           :isRemote="true"
@@ -111,7 +112,7 @@ const props = defineProps({
   allowEdit: { type: Boolean, default: false },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
-  resourceType: { type: Number, default: 0 }
+  resourceType: { type: [Number, String], default: 0 }
 });
 
 const {t} = useI18n();

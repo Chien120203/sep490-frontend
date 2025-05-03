@@ -11,7 +11,7 @@
         align="right"
     ></el-table-column>
 
-    <el-table-column min-width="80">
+    <el-table-column min-width="180">
       <template #header>
         <p v-html="$t('inspection.table.header.projectCode')"></p>
       </template>
@@ -21,7 +21,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="130">
+    <el-table-column min-width="150">
       <template #header>
         <p v-html="$t('inspection.table.header.inspectionCode')"></p>
       </template>
@@ -41,7 +41,7 @@
       </template>
     </el-table-column>
 
-    <el-table-column min-width="150">
+    <el-table-column min-width="100">
       <template #header>
         <p v-html="$t('inspection.table.header.inspectorName')"></p>
       </template>
@@ -66,7 +66,7 @@
     </el-table-column>
 
     <el-table-column
-        min-width="120"
+        min-width="100"
         :label="$t('common.status')"
         align="left"
     >

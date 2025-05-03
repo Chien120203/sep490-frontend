@@ -198,13 +198,13 @@ const submitForm = () => {
 const handleSearch = (data) => {
   switch (data.type) {
     case MACHINE_TYPE:
-      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
+      getListMachineResources({keyWord: data.value, pageIndex: 1, pageSize: 100}, false);
       break;
     case HUMAN_TYPE:
-      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
+      getListHumanResources({teamName: data.value, pageIndex: 1, pageSize: 100}, false);
       break;
     case MATERIAL_TYPE:
-      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
+      getListMaterialResources({keyWord: data.value, pageIndex: 1, pageSize: 100}, false);
   }
 }
 
@@ -253,9 +253,9 @@ const handleGetMobilizationDtls = (mobilization_id) => {
 onMounted(async () => {
   if (loggedIn.value) {
     await getListMobilizations(searchForms.value);
-    await getListHumanResources({pageIndex: 1}, false);
-    await getListMachineResources({pageIndex: 1}, false);
-    await getListMaterialResources({pageIndex: 1}, false);
+    await getListHumanResources({pageIndex: 1, pageSize: 100}, false);
+    await getListMachineResources({pageIndex: 1, pageSize: 100}, false);
+    await getListMaterialResources({pageIndex: 1, pageSize: 100}, false);
   }
 });
 

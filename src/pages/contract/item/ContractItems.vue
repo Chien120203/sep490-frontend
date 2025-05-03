@@ -25,11 +25,17 @@ const props = defineProps({
   },
 });
 const {t} = useI18n();
+const uploadedFiles = ref([]);
+
+const handleRemoveAttachments = () => {
+  uploadedFiles.vaue = [];
+}
 
 const handleCSVSelected = (files) => {
   if (!files || files.length === 0) return;
 
   const csvFile = files[0];
+  uploadedFiles.value = [csvFile];
   mixinMethods.startLoading();
 
   Papa.parse(csvFile, {
@@ -41,6 +47,8 @@ const handleCSVSelected = (files) => {
           console.error('Papa Parse errors:', results.errors);
           mixinMethods.notifyError(t('response.message.import_csv_failed'));
           mixinMethods.endLoading();
+          // Clear file after error
+          emit("file-removed", csvFile);
           return;
         }
 
@@ -98,21 +106,22 @@ const handleCSVSelected = (files) => {
       } catch (error) {
         console.error('Error processing CSV data:', error);
         mixinMethods.notifyError(t('response.message.import_csv_failed'));
+      } finally {
+        // Clear file after processing (whether successful or failed)
+        emit("file-removed", csvFile);
+        mixinMethods.endLoading();
       }
-
-      mixinMethods.endLoading();
     },
     error: (error) => {
       console.error('Papa Parse error:', error);
       mixinMethods.notifyError(t('response.message.import_csv_failed'));
+      // Clear file after error
+      emit("file-removed", csvFile);
       mixinMethods.endLoading();
     }
   });
 };
 
-/**
- * Generates a sample CSV template for contract details
- */
 const downloadCSVTemplate = () => {
   const headers = [
     'Index', 'Parent Index', 'Work Name', 'Unit', 'Quantity', 'Unit Price', 'Total'
@@ -300,9 +309,10 @@ const hierarchicalItems = computed(() => {
             :message="$t('common.csv_upload')"
             :allowedTypes="'.csv'"
             :fileLimit="1"
-            :existingFiles="[]"
+            :existingFiles="uploadedFiles"
             :disabled="!isAllowUpdate"
             @file-selected="handleCSVSelected"
+            @file-removed="handleRemoveAttachments"
         />
         <el-button
             style="margin-bottom: 33px; margin-left: 16px"
