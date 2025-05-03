@@ -164,7 +164,7 @@ const allowCreate = computed(() => localStorage.getItem('role') === RESOURCE_MAN
 const router = useRouter();
 const title = ref("");
 const changeObject = ref({});
-const searchForms = ref({projectId: projectId.value, pageIndex: 1});
+const searchForms = ref({projectId: projectId.value, pageIndex: 1, pageSize: 15});
 const handleClear = () => {
   searchForms.value.searchTerm = "";
 };

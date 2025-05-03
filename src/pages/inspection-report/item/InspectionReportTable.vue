@@ -33,7 +33,7 @@
 
     <el-table-column min-width="130">
       <template #header>
-        <p v-html="'task name'"></p>
+        <p v-html="$t('inspection.table.header.taskName')"></p>
       </template>
 
       <template #default="scope">

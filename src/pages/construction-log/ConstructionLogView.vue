@@ -3,10 +3,8 @@
     <div class="log log-create log-detail">
       <div class="log-header">
         <h3 class="page__ttl">
-          <span class="btn-back" @click="handleBack"><IconBackMain/></span>
-          {{
-           $t('construct_log.view.title')
-          }}
+          <span class="btn-back" @click="handleBack"><IconBackMain /></span>
+          {{ $t('construct_log.view.title') }}
         </h3>
       </div>
       <SingleOptionSelect
@@ -15,7 +13,7 @@
           :listData="listProgressItems"
           :isRemote="true"
           :showClearable="true"
-          :placeholder="'Chọn công việc'"
+          :placeholder="$t('construct_log.modal.select_task')"
           @handleSelectedParams="handleSelectTask"
       />
       <div>
@@ -37,51 +35,40 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
-import {useRoute, useRouter} from "vue-router";
-import IconBackMain from "@/svg/IconBackMain.vue";
-import PAGE_NAME from "@/constants/route-name.js";
-import {useProjectStore} from "@/store/project.js";
-import ConstructionLogTable from "@/pages/construction-log/items/ConstructionLogTable.vue";
-import {usePersistenceStore} from "@/store/persistence.js";
-import {useConstructLog} from "@/store/construct-log.js";
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import IconBackMain from '@/svg/IconBackMain.vue';
+import PAGE_NAME from '@/constants/route-name.js';
+import { useProjectStore } from '@/store/project.js';
+import ConstructionLogTable from '@/pages/construction-log/items/ConstructionLogTable.vue';
+import { usePersistenceStore } from '@/store/persistence.js';
+import { useConstructLog } from '@/store/construct-log.js';
 import dayjs from 'dayjs';
-import {DATE_FORMAT} from "@/constants/application.js";
-import ListLogsModal from "@/pages/construction-log/items/modal/ListLogsModal.vue";
-import {mixinMethods} from "@/utils/variables.js";
-import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import {useProgressStore} from "@/store/progress.js";
-import {useI18n} from "vue-i18n";
+import { DATE_FORMAT } from '@/constants/application.js';
+import ListLogsModal from '@/pages/construction-log/items/modal/ListLogsModal.vue';
+import { mixinMethods } from '@/utils/variables.js';
+import SingleOptionSelect from '@/components/common/SingleOptionSelect.vue';
+import { useProgressStore } from '@/store/progress.js';
 
 // Store Data
 const constructLog = useConstructLog();
 const projectStore = useProjectStore();
 const persistenceStore = usePersistenceStore();
 const progressStore = useProgressStore();
-const {
-  progressDetails,
-  getProgressDetails
-} = progressStore;
-const {
-  getListProjectLogs,
-  listConstructLog
-} = constructLog;
-const {
-
-} = projectStore;
-const {
-  projectId
-} = persistenceStore;
+const { progressDetails, getProgressDetails } = progressStore;
+const { getListProjectLogs, listConstructLog } = constructLog;
+const { projectId } = persistenceStore;
 
 const route = useRoute();
-const {t} = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const now = dayjs();
 const listProgressItems = computed(() => {
   const hasChildren = (parent) => progressDetails.value.progressItems.some(child => child.parentIndex === parent.index);
 
   const filteredItems = progressDetails.value.progressItems?.filter(item => item.progress !== 100 && !hasChildren(item)) || [];
-  return [{ index: "all", workName: t('common.all') }, ...filteredItems];
+  return [{ index: 'all', workName: t('common.all') }, ...filteredItems];
 });
 const fromDate = now.startOf('month').format('YYYY-MM-DD');
 const toDate = now.endOf('month').format('YYYY-MM-DD');
@@ -91,36 +78,36 @@ const searchForm = ref({
   fromDate: fromDate,
   toDate: toDate,
   pageSize: 100,
-  taskIndex: "",
+  taskIndex: ''
 });
 const constructLogs = ref([]);
 const showLogModal = ref(false);
+
 onMounted(async () => {
   await getListProjectLogs(searchForm.value);
   await getProgressDetails(projectId.value, true);
 });
 
-onUnmounted(() => {
-});
+onUnmounted(() => {});
 
 const handleChangeDate = () => {
   getProgressDetails(projectId.value, true);
   getListProjectLogs(searchForm.value);
-}
+};
 
 const handleSelectTask = (taskIndex) => {
-  searchForm.value.taskIndex = taskIndex === "all" ? "" : taskIndex;
+  searchForm.value.taskIndex = taskIndex === 'all' ? '' : taskIndex;
   getListProjectLogs(searchForm.value);
-}
+};
 
 const handleBack = () => {
-  router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
+  router.push({ name: PAGE_NAME.PROJECT.DETAILS, params: { id: projectId.value } });
 };
 
 const handleCloseModal = () => {
   constructLogs.value = [];
   showLogModal.value = false;
-}
+};
 
 const handleGetLogDetails = (id) => {
   router.push({
@@ -128,18 +115,18 @@ const handleGetLogDetails = (id) => {
     params: { id: id }
   });
   handleCloseModal();
-}
+};
 
 const handleChooseDate = (date) => {
-  if(date.day > dayjs().format(DATE_FORMAT)) {
-    mixinMethods.notifyWarning("Cannot create log in the future");
+  if (date.day > dayjs().format(DATE_FORMAT)) {
+    mixinMethods.notifyWarning(t('construct_log.errors.future_date'));
     return;
   }
   constructLogs.value = listConstructLog.value.filter(log => dayjs(log.logDate).format(DATE_FORMAT) === date.day);
-  if(constructLogs.value.length === 0) {
-    router.push({name: PAGE_NAME.CONSTRUCT_LOG.CREATE, params:{date: date.day}});
+  if (constructLogs.value.length === 0) {
+    router.push({ name: PAGE_NAME.CONSTRUCT_LOG.CREATE, params: { date: date.day } });
   } else showLogModal.value = true;
-}
+};
 </script>
 
 <style scoped>

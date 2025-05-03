@@ -118,7 +118,7 @@
     "comment": "Comment by",
     "outgroup": "Out group",
     "placeholder_chat": "Write a message...",
-    "text_vmo": "Copyright 2024@VMO",
+    "text_vmo": "SLMS 2025@SLMS",
     "contract_status": {
       "new": "New",
       "in_progress": "Inprogress",
@@ -752,6 +752,22 @@
     "room": "Room",
     "tenant": "Tenant",
     "landlord": "Landlord",
+    "modal": {
+      "index": "Index",
+      "task_name": "Task Name",
+      "start_date": "Start Date",
+      "due_date": "Due Date",
+      "depends_type": "Dependency Type"
+    },
+    "dependency": {
+      "finish_start": "Finish to Start",
+      "start_start": "Start to Start",
+      "finish_finish": "Finish to Finish",
+      "start_finish": "Start to Finish"
+    },
+    "errors": {
+      "dependency_required": "Dependency type is required"
+    },
     "statuses": {
       "receive_reqs": "Receive Request",
       "planning": "Planning",
@@ -947,14 +963,23 @@
         "status": "Status",
         "creator": "Creator",
         "action": "Action"
-      }
+      },
+      "task_name": "Task Name",
+      "start_date": "Start Date",
+      "due_date": "Due Date",
+      "dependency_type": "Dependency Type"
     },
     "form": {
       "name": "Plan Name",
       "inspector": "Reviewers",
       "ctr_start_date": "Contract Start Date",
       "ctr_end_date": "Contract End Date",
-      "budget": "Project Budget"
+      "budget": "Project Budget",
+      "select_date": "Select Date"
+    },
+    "alert": {
+      "locked_title": "This plan is currently being edited by {userName}",
+      "locked_description": "You can view the plan but cannot make changes until they finish editing."
     },
     "modal": {
       "work_name": "Work Name",
@@ -1238,6 +1263,87 @@
     "edit": {
       "title": "Construction Log Details"
     },
+    "modal": {
+      "select_task": "Select Task"
+    },
+    "errors": {
+      "future_date": "Cannot create log in the future",
+      "work_amount_required": "Actual quantity is required",
+      "work_amount_exceed": "Actual quantity exceeds available quantity",
+      "log_name_required": "Log name is required",
+      "log_date_required": "Log date is required",
+      "status_required": "Status is required",
+      "safety_required": "Safety status is required",
+      "quality_required": "Quality status is required",
+      "progress_required": "Progress status is required",
+      "start_time_required": "Start time is required",
+      "start_time_invalid": "Start time must be before end time",
+      "end_time_required": "End time is required",
+      "end_time_invalid": "End time must be after start time",
+      "quantity_required": "Quantity is required",
+      "quantity_exceed": "Quantity exceeds available quantity"
+    },
+    "details": {
+      "planned_quantity": "Planned Quantity",
+      "actual_quantity": "Actual Quantity",
+      "completed_quantity": "Completed Quantity",
+      "remaining_quantity": "Remaining Quantity",
+      "enter_planned_quantity": "Enter planned quantity",
+      "enter_actual_quantity": "Enter actual quantity",
+      "enter_completed_quantity": "Enter completed quantity",
+      "enter_remaining_quantity": "Enter remaining quantity",
+      "material": "Material",
+      "human": "Employee",
+      "vehicle": "Vehicle",
+      "select_task": "Select Task",
+      "selected_task": "Selected: {workName}",
+      "task_code": "Task Code: {index}",
+      "search_value": "Search value"
+    },
+    "form": {
+      "images": "Construction Images",
+      "attachments": "Attachments",
+      "log_code": "Log Code",
+      "log_name": "Log Name",
+      "log_date": "Log Date",
+      "status": "Status",
+      "weather": "Weather",
+      "weather_time": "Time",
+      "weather_morning": "Morning",
+      "weather_afternoon": "Afternoon",
+      "weather_evening": "Evening",
+      "weather_night": "Night",
+      "enter_weather_data": "Enter weather data",
+      "safety": "Safety",
+      "quality": "Construction Quality",
+      "progress": "Construction Progress",
+      "problem": "Incident Report",
+      "advice": "Suggestions",
+      "note": "Note",
+      "enter_date": "Select date",
+      "condition": {
+        "good": "Good",
+        "medium": "Medium",
+        "bad": "Bad"
+      }
+    },
+    "items": {
+      "select_resource": "Select Resource",
+      "index": "No.",
+      "name": "Name",
+      "work_time": "Start Time",
+      "export_time": "Export Time",
+      "break_time": "Finish Time",
+      "quantity": "Quantity",
+      "used_quantity": "Used Quantity",
+      "planned_quantity": "Planned Quantity",
+      "remaining_quantity": "Remaining Quantity",
+      "unit": "Unit",
+      "action": "Action",
+      "enter_work_time": "Enter work time",
+      "enter_export_time": "Enter export time",
+      "enter_break_time": "Enter break time"
+    },
     "modal_title": "List Logs",
     "log_code": "Log Code",
     "log_name": "Log Name",
@@ -1248,7 +1354,9 @@
     "status": {
       "approved": "Approved",
       "rejected": "Rejected",
-      "wait_approve": "Wait for Approval"
+      "wait_approve": "Wait for Approval",
+      "draft": "Draft",
+      "submitted": "Submitted"
     },
     "log_table": {
       "previous_year": "Previous Year",
@@ -1261,13 +1369,16 @@
   "mobilization": {
     "title": "Resource Mobilization",
     "add_new": "Add New",
-    "keyword": "Key word",
+    "keyword": "Keyword",
     "modal_confirm": {
       "message_delete": "Do you want to delete this request?",
       "message_change_status": "Do you want to change status this request?",
       "title": "Confirmation"
     },
     "table": {
+      "resource_name": "Resource Name",
+      "unit": "Unit",
+      "quantity": "Quantity",
       "header": {
         "code": "Request Code",
         "name": " Request Name",
@@ -1287,6 +1398,7 @@
       "type": "Request Type",
       "priority": "Priority",
       "date": "Request date",
+      "select_date": "Select Date",
       "description": "Description",
       "action": "Action",
       "priority_level": {
@@ -1316,11 +1428,29 @@
       "message": "Do you want to delete this request?",
       "title": "Delete allocation request"
     },
+    "modal": {
+      "title": "Save Allocation Request",
+      "materials": "Materials",
+      "users": "Human Resources",
+      "vehicles": "Vehicles"
+    },
+    "form": {
+      "material": "Material",
+      "vehicle": "Vehicle",
+      "human": "Human",
+      "allocation": "Allocation"
+    },
     "target_project": "Target Project",
     "target_task": "Target task",
     "from_task": "From task",
     "to_task": "To Task",
     "table": {
+      "resource_name": "Resource Name",
+      "unit": "Unit",
+      "quantity": "Quantity",
+      "used_quantity": "Used Quantity",
+      "remaining_quantity": "Remaining Quantity",
+      "action": "Action",
       "header": {
         "code": "Request Code",
         "name": " Request Name",
@@ -1343,7 +1473,7 @@
     "type": {
       "team": "Team",
       "material": "Material",
-      "machine": "Machinne"
+      "machine": "Machine"
     }
   },
   "construct_team": {
@@ -1378,11 +1508,51 @@
       "unit": "Unit",
       "unit_price": "Unit Price",
       "start_date": "Plan Start Date",
-      "end_date": "Plan End Date"
+      "end_date": "Plan End Date",
+      "select_date": "Select Date"
+    },
+    "errors": {
+      "total_required": "Total amount is required",
+      "total_positive": "Total amount must be greater than 0"
     }
   },
   "inspection": {
     "title": "Inspection Report",
+    "form": {
+      "inspection_name": "Inspection Name",
+      "inspect_code": "Inspection Code",
+      "inspect_start_date": "Inspection Start Date",
+      "inspect_end_date": "Inspection End Date",
+      "location": "Location",
+      "inspection_decision": "Inspection Decision",
+      "statuss": "Status",
+      "quality_note": "Quality Note",
+      "other_note": "Other Note",
+      "attachments": "Attachments",
+      "enter_inspection_name": "Enter inspection name",
+      "enter_inspect_code": "Enter inspection code",
+      "enter_location": "Enter location",
+      "enter_date": "Select date",
+      "decision": {
+        "pass": "Pass",
+        "fail": "Fail"
+      },
+      "status": {
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "wait_for_approve": "Waiting for Approval"
+      }
+    },
+    "errors": {
+      "inspect_code_required": "Inspection code is required",
+      "inspect_start_date_required": "Inspection start date is required",
+      "inspect_start_date_invalid": "Start date must be before end date",
+      "inspect_end_date_required": "Inspection end date is required",
+      "inspect_end_date_invalid": "End date must be after start date",
+      "location_required": "Location is required",
+      "inspection_decision_required": "Inspection decision is required",
+      "status_required": "Status is required"
+    },
     "edit" : {
       "title": "Inspection Report Details"
     },
@@ -1397,8 +1567,14 @@
         "startDate": "Start Date",
         "endDate": "End Date",
         "status": "Status",
-        "action": "Action"
+        "action": "Action",
+        "taskName": "Task Name"
       }
+    },
+    "modal": {
+      "task_dependency_title": "Task Dependency",
+      "task_label": "Task",
+      "dependency_type_label": "Dependency Type"
     },
     "modal_confirm": {
       "title": "Confirm delete inspection report",

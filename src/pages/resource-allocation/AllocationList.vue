@@ -161,7 +161,8 @@ const searchForms = ref({
   fromProjectId: projectId.value,
   searchTerm: "",
   requestType: 1,
-  pageIndex: 1
+  pageIndex: 1,
+  pageSize: 15,
 });
 const formSearchProject = ref({
   keyWord: "",

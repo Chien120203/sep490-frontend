@@ -89,7 +89,8 @@ const delete_id = ref(0);
 const searchForms = ref({
   planName: "",
   projectId: projectId.value,
-  pageIndex: 1
+  pageIndex: 1,
+  pageSize: 15
 });
 
 onMounted(() => {
