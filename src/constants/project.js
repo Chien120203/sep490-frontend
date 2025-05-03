@@ -3,13 +3,16 @@ import PAGE_NAME from "@/constants/route-name.js";
 export const RECEIVE_STATUS = 0;
 export const PLANNING_STATUS = 1;
 export const IN_PROGRESS_STATUS = 2;
-export const CLOSED_STATUS = 5;
+export const COMPLETE = 3;
+export const WAIT_TO_COMPLETE = 4;
+export const CLOSED_STATUS = 6;
 
 export const STATUSES = [
   'Receive Request',
   'Planning',
   'InProgress',
   'Completed',
+  'Waiting Approve To Complete',
   'Paused',
   'Closed'
 ];
@@ -19,6 +22,7 @@ export const STATUS_LABELS = [
   'project.statuses.planning',
   'project.statuses.in_progress',
   'project.statuses.complete',
+  'project.statuses.wait_to_complete',
   'project.statuses.paused',
   'project.statuses.close',
 ];
@@ -44,6 +48,7 @@ export const PROJECT_SIDEBARS = [
 export const REQUEST_SIDEBAR = [
   PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
   PAGE_NAME.RESOURCE_ALLOCATION.LIST,
+  PAGE_NAME.PROJECT.LIST
 ]
 
 export const SS_RELATIONSHIP = "SS";

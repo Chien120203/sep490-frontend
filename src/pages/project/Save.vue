@@ -235,7 +235,11 @@
                   :formatter="(value) => mixinMethods.formatInputMoney(value)"
                   :parser="(value) => mixinMethods.parseInputCurrency(value)"
                   v-model="projectDetails.value.budget"
-              />
+              >
+                <template #append>
+                  {{ CURRENCY }}
+                </template>
+              </el-input>
               <label
                   class="error-feedback-user"
                   v-if="validation && validation.value.budget"
@@ -307,7 +311,7 @@ import {useProjectStore} from "@/store/project.js";
 import {useCustomerStore} from "@/store/customer.js";
 import {mixinMethods} from "@/utils/variables";
 import {getProjectRules} from "@/rules/project/index.js";
-import {DATE_FORMAT} from "@/constants/application.js";
+import {DATE_FORMAT, CURRENCY} from "@/constants/application.js";
 import {useUserStore} from "@/store/user.js";
 import {
   BUSINESS_EMPLOYEE,
@@ -317,9 +321,10 @@ import {
   TECHNICAL_MANAGER
 } from "@/constants/roles.js";
 import {RECEIVE_STATUS} from "@/constants/project.js";
+import IconSetting from "@/svg/IconSettingMain.vue";
 
 export default {
-  components: {IconBackMain, SingleOptionSelect, FileUpload},
+  components: {IconSetting, IconBackMain, SingleOptionSelect, FileUpload},
   setup() {
     const projectStore = useProjectStore();
     const customerStore = useCustomerStore();
@@ -346,7 +351,7 @@ export default {
     const listTechnicalManagers = ref([]);
     const listResourceManagers = ref([]);
     const listQAs = ref([]);
-    const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const isAllowEdit = computed(() =>localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
     const projectRules = getProjectRules();
 
     const route = useRoute();
@@ -429,6 +434,7 @@ export default {
       CONSTRUCTION_MANAGER,
       RESOURCE_MANAGER,
       TECHNICAL_MANAGER,
+      CURRENCY,
       QUALITY_ASSURANCE,
       mixinMethods,
       projectRules,

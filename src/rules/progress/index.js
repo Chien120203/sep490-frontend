@@ -121,6 +121,11 @@ export const getProgressRules = () => {
       },
       {
         validator: (rule, value, callback) =>
+          validateChooseDateRelation(rule, value, callback, selectedProgressItem.value, progressDetails.value.progressItems, false, true),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
           validateStartBeforeEnd(rule, value, callback,  value, getParentTask(selectedProgressItem.value.parentIndex)?.actualEndDate, "E-CM-035"),
         trigger: "blur",
       }
@@ -134,6 +139,11 @@ export const getProgressRules = () => {
       {
         validator: (rule, value, callback) =>
           validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
+        trigger: "blur",
+      },
+      {
+        validator: (rule, value, callback) =>
+          validateChooseDateRelation(rule, value, callback, selectedProgressItem.value, progressDetails.value.progressItems, false, true),
         trigger: "blur",
       },
       {

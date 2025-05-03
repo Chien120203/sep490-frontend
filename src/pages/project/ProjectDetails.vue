@@ -6,8 +6,9 @@
         <h3 class="page__ttl">{{ $t("project.title") }}</h3>
       </div>
       <div v-if="isAllowApprove">
-        <el-button class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
-        <el-button class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.reject") }}</el-button>
+        <el-button v-if="isAllowApproveToPlanning" class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
+        <el-button v-if="isAllowClose && projectStatus !== COMPLETE" class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.close") }}</el-button>
+        <el-button v-if="projectStatus === WAIT_TO_COMPLETE" type="success" class="btn" @click="handleChangeStatus(COMPLETE)">{{ $t("common.complete") }}</el-button>
       </div>
     </div>
     <div class="project-details-infor">
@@ -23,7 +24,7 @@
                   @edit="handleRedirectToEdit"
               />
             </el-collapse-item>
-            <el-collapse-item name="2">
+            <el-collapse-item v-if="false" name="2">
               <template #title>
                 <h3>{{ $t("project.details.financial_summary") }}</h3>
               </template>
@@ -80,7 +81,7 @@ import Modal from "@/components/common/Modal.vue";
 import ModalConfirm from "@/components/common/ModalConfirm.vue";
 import IconBackMain from "@/svg/IconBackMain.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, ref} from "vue";
 import {useI18n} from "vue-i18n";
 import {useRoute, useRouter} from "vue-router";
 import {DATE_FORMAT} from "@/constants/application.js";
@@ -89,7 +90,14 @@ import FinancialSummary from "./item/list/FinancialSummary.vue";
 import ProjectCR from "./item/details/ProjectCR.vue";
 import IconCircleClose from "@/svg/IconCircleClose.vue";
 import IconSetting from "@/svg/IconSettingMain.vue";
-import {STATUSES, PLANNING_STATUS, CLOSED_STATUS, RECEIVE_STATUS} from "@/constants/project.js";
+import {
+  STATUSES,
+  PLANNING_STATUS,
+  CLOSED_STATUS,
+  RECEIVE_STATUS,
+  WAIT_TO_COMPLETE,
+  COMPLETE
+} from "@/constants/project.js";
 import LoadMore from "@/components/common/LoadMore.vue";
 import { useProjectStore } from "@/store/project.js";
 import ContractList from "@/pages/contract/item/ContractTable.vue";
@@ -101,6 +109,11 @@ import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants
 
 export default {
   name: "ProjectDetails",
+  methods: {
+    WAIT_TO_COMPLETE() {
+      return WAIT_TO_COMPLETE
+    }
+  },
   components: {
     SiteSurveyInfo,
     ContractList: ContractList,
@@ -141,11 +154,10 @@ export default {
 
     const {
       projectId,
-      projectStatus,
       loggedIn
     } = persist;
 
-    const activeCollapseItems = ref(["3", "2", "4", "5"]);
+    const activeCollapseItems = ref(["3", "2", "4", "5", "1"]);
     const changeRequestData = ref([
       {
         id: 1,
@@ -210,8 +222,11 @@ export default {
       pageIndex: 1,
     });
     const isAllowEdit = ref(localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS);
+    const projectStatus = computed(() => projectDetails.value.status);
+    const isAllowApproveToPlanning = computed(() => projectStatus.value === RECEIVE_STATUS && !isSiteSurveyNull.value);
+    const isAllowClose = computed(() => (projectStatus !== COMPLETE || projectStatus !== CLOSED_STATUS) && !isSiteSurveyNull.value);
     const isAllowCreateContract = computed(() => (localStorage.getItem('role') === BUSINESS_EMPLOYEE && projectDetails.value.status === RECEIVE_STATUS && contractDetails.value.id === 0));
-    const isAllowApprove = computed(() => (projectDetails.value.status === RECEIVE_STATUS && localStorage.getItem('role') === EXECUTIVE_BOARD && !isSiteSurveyNull.value));
+    const isAllowApprove = computed(() => (localStorage.getItem('role') === EXECUTIVE_BOARD));
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
       projectId.value = route.params.id;
@@ -255,6 +270,8 @@ export default {
       let status = null;
       if(actionText.value === t('common.approve')) {
         status = PLANNING_STATUS;
+      } else if (actionText.value === t('project.statuses.wait_to_complete')) {
+        status = COMPLETE;
       } else status = CLOSED_STATUS;
       updateProjectStatus(projectDetails.value.id, status);
       isShowModalConfirm.value = false;
@@ -274,8 +291,9 @@ export default {
 
     const handleChangeStatus = (status) => {
       isShowModalConfirm.value = true;
-      if(status === PLANNING_STATUS) actionText.value = t('common.approve');
-      else actionText.value = t('common.reject');
+      if(status == PLANNING_STATUS) actionText.value = t('common.approve');
+      if(status == COMPLETE) actionText.value = t('project.statuses.wait_to_complete');
+      if(status == CLOSED_STATUS) actionText.value = t('common.close');
     }
 
     return {
@@ -284,7 +302,12 @@ export default {
       CLOSED_STATUS,
       RECEIVE_STATUS,
       PLANNING_STATUS,
+      WAIT_TO_COMPLETE,
+      COMPLETE,
       financialData,
+      isAllowApproveToPlanning,
+      isAllowClose,
+      projectStatus,
       isAllowCreateContract,
       isAllowApprove,
       projectDetails,

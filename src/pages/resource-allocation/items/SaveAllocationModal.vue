@@ -33,6 +33,7 @@
                 :selectData="materials"
                 :progressDetails="progressDetails"
                 :resourceType="MATERIAL_TYPE"
+                :data="data"
                 :allowEdit="allowSave"
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
@@ -49,6 +50,7 @@
                 :progressDetails="progressDetails"
                 :allowEdit="allowSave"
                 :resourceType="HUMAN_TYPE"
+                :data="data"
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
                 @update-list="updateListUsers"
@@ -64,6 +66,7 @@
                 :progressDetails="progressDetails"
                 :allowEdit="allowSave"
                 :resourceType="MACHINE_TYPE"
+                :data="data"
                 :tableData="listSelectedVehicles"
                 :optionKeys="vehicleOptions"
                 @update-list="updateListVehicles"
@@ -107,6 +110,7 @@ import {
 import {usePersistenceStore} from "@/store/persistence.js";
 import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} from "@/constants/mobilization.js";
 import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {mixinMethods} from "@/utils/variables.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -166,9 +170,9 @@ onMounted(() => {
   getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20}, false);
 })
 
-const materialOptions = ref({id: "id", value: "name"});
-const userOptions = ref({id: "id", value: "name"});
-const vehicleOptions = ref({id: "id", value: "name"});
+const materialOptions = ref({id: "resourceId", value: "name"});
+const userOptions = ref({id: "resourceId", value: "name"});
+const vehicleOptions = ref({id: "resourceId", value: "name"});
 const activeTab = ref("materials");
 const currentRole = ref(localStorage.getItem("role"));
 
@@ -186,12 +190,8 @@ const materials = computed(() => {
   const fromTaskId = props.data.fromTaskId; // directly access it so Vue tracks it
 
   if (requestType === PROJECT_TO_TASK || requestType === PROJECT_TO_PROJECT) {
-    return inventoryData.value.filter(item => item.resourceType === MATERIAL_TYPE).map(item => ({
-      id: item.resourceId,
-      quantity: item.quantity,
-      unit: item.unit,
-      name: item.name
-    }));
+    return inventoryData.value
+        .filter(item => item.resourceType === MATERIAL_TYPE);
   }
 
   if (requestType === TASK_TO_TASK && fromTaskId) {
@@ -200,8 +200,8 @@ const materials = computed(() => {
     return (progressItem.details || [])
         .filter(item => item.resourceType === MATERIAL_TYPE && item.resource)
         .map(item => ({
-          id: item.resource.id,
-          quantity: item.quantity,
+          resourceId: item.resource.id,
+          quantity: item.quantity - item.usedQuantity,
           unit: item.unit,
           name: item.resource.name
         }));
@@ -223,7 +223,7 @@ const listVehicles = computed(() => {
     return (progressItem.details || [])
         .filter(item => item.resourceType === MACHINE_TYPE && item.resource)
         .map(item => ({
-          id: item.resource.id,
+          resourceId: item.resource.id,
           quantity: item.quantity,
           unit: item.unit,
           name: item.resource.name
@@ -273,7 +273,7 @@ const handleSubmit = async () => {
   //   },
   //   {
   //     ref: formAllocationInfo,
-  //     name: "allocation",
+  //     name: "Allocation",
   //   }
   // ];
   // for (const form of forms) {

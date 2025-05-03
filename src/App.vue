@@ -134,15 +134,4 @@ export default {
   overflow-y: auto;
   padding-top: 2px;
 }
-
-.footer {
-  background: #f8f9fa;
-  padding: 10px;
-  text-align: center;
-  font-size: 14px;
-  color: #6c757d;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-}
 </style>

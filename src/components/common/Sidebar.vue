@@ -175,7 +175,7 @@ export default {
       },
       {
         function_name: t("side_bar.label.project"),
-        function_page_name: PAGE_NAME.PROJECT.LIST,
+        function_page_name: PAGE_NAME.PROJECT.DETAILS,
         function_icon: "ProjectIcon",
         isShow: false, // set later
       },
@@ -275,6 +275,12 @@ export default {
 
     const navigateChangeRoute = async (route) => {
       currentPath.value = route.function_page_name;
+      if(route.function_page_name === PAGE_NAME.PROJECT.DETAILS) {
+        if(projectId.value) {
+          await router.push({name: route.function_page_name, params: {id: projectId.value}});
+        } else await router.push({name: PAGE_NAME.PROJECT.LIST});
+        return;
+      }
       await router.push({name: route.function_page_name});
     };
 

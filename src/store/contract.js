@@ -77,6 +77,7 @@ export const useContractStore = defineStore(
         formData,
         (response) => {
           contractDetails.value = {...response.data, projectId: response.data?.project.id, attachments: response.data.attachments || []};
+          if(!params.id) router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: params.projectId}});
           mixinMethods.notifySuccess(t("response.message.save_contract_success"));
           mixinMethods.endLoading();
         },

@@ -91,6 +91,7 @@
     <ModalConfirm
         style="z-index: 1000000"
         :isShowModal="isShowModalConfirm"
+        :isInputMessage="changeObject.type === 'reject'"
         @close-modal="closeModalConfirm"
         @confirmAction="handleConfirm"
         :message="message"
@@ -205,14 +206,14 @@ const closeModalConfirm = () => {
   isShowModalConfirm.value = false;
 };
 
-const handleConfirm = async () => {
+const handleConfirm = async (message = "") => {
   closeModalConfirm();
   isShowModalSave.value = false;
   if(delete_id.value) {
     await handleDeleteAllocation(delete_id.value);
     delete_id.value = null;
   } else {
-    await handleChangeRequestStatus(changeObject.value.id, changeObject.value.type);
+    await handleChangeRequestStatus(changeObject.value.id, changeObject.value.type, message);
   }
   await getListAllocations(searchForms.value);
 };

@@ -29,7 +29,7 @@
             <el-input
                 :placeholder="$t('common.input_keyword')"
                 @keyup.enter="submitForm"
-                v-model="searchForms.search"
+                v-model="searchForms.searchTerm"
                 prop="search"
             >
               <template #append>
@@ -51,7 +51,7 @@
           >
         </div>
       </div>
-      <div class="form-search" :class="{ active: isShowBoxSearch }">
+      <div  style="width: 75%" class="form-search" :class="{ active: isShowBoxSearch }">
         <div class="close-form">
           <IconCircleClose @click="isShowBoxSearch = false"/>
         </div>
@@ -90,6 +90,7 @@
     <ModalConfirm
         style="z-index: 1000000"
         :isShowModal="isShowModalConfirm"
+        :isInputMessage="changeObject.type === 'reject'"
         @close-modal="closeModalConfirm"
         @confirmAction="handleConfirm"
         :message="title"
@@ -165,7 +166,7 @@ const title = ref("");
 const changeObject = ref({});
 const searchForms = ref({projectId: projectId.value, pageIndex: 1});
 const handleClear = () => {
-  searchForms.value.search = "";
+  searchForms.value.searchTerm = "";
 };
 
 const handleSearchForm = () => {
@@ -188,6 +189,7 @@ const handleBack = () => {
 };
 
 const submitForm = () => {
+  isShowBoxSearch.value = false
   searchForms.value.pageIndex = 1;
   currentPage.value = 1;
   getListMobilizations(searchForms.value);
@@ -227,18 +229,17 @@ const handleDisplayModal = (mobilization_id) => {
 };
 
 const closeModalConfirm = () => {
-  setMobilizationDefault();
   isShowModalConfirm.value = false;
 };
 
-const handleConfirm = async () => {
+const handleConfirm = async (message = "") => {
   closeModalConfirm();
   isShowModalSave.value = false;
   if(delete_id.value) {
     await handleDeleteMobilization(delete_id.value);
     delete_id.value = null;
   } else {
-    await handleChangeRequestStatus(changeObject.value.id, changeObject.value.type);
+    await handleChangeRequestStatus(changeObject.value.id, changeObject.value.type, message);
   }
   await getListMobilizations(searchForms.value);
 };

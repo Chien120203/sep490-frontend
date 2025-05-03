@@ -155,7 +155,7 @@ export const useConstructLog = defineStore(
           } else {
             router.push({name: PAGE_NAME.CONSTRUCT_LOG.DETAILS, params: response.data.id})
           };
-          // router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
+          router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
         },
         (error) => {
           mixinMethods.notifyError(t("response.message.save_construct_log_failed"));

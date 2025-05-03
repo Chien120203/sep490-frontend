@@ -82,7 +82,7 @@ const {
   getListPlannings,
   handleDeletePlan
 } = planningStore;
-const allowCreate = computed(() => localStorage.getItem("role") === CONSTRUCTION_MANAGER && projectStatus.value === PLANNING_STATUS)
+const allowCreate = computed(() => localStorage.getItem("role") === CONSTRUCTION_MANAGER)
 const router = useRouter();
 const isShowBoxSearch = ref(false);
 const delete_id = ref(0);

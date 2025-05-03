@@ -41,7 +41,6 @@ export const useProjectStore = defineStore(
         attachments: [],
         description: "",
         viewerUserIds: null,
-        status: RECEIVE_STATUS
       }
     });
     const chartData = reactive({
@@ -201,7 +200,6 @@ export const useProjectStore = defineStore(
         attachment: "",
         description: "",
         viewerUserIds: null,
-        status: RECEIVE_STATUS
       };
     };
 

@@ -62,7 +62,7 @@
             align="left"
         >
           <template #default="scope">
-            <span class="log-status"  :class="statusClass(getStatus(scope.row))">{{ $t(getStatus(scope.row.status)) }}</span>
+            <span class="log-status"  :class="statusClass(scope.row.status)">{{ $t(getStatus(scope.row.status)) }}</span>
           </template>
         </el-table-column>
 
@@ -110,11 +110,11 @@ const getStatus = (status) => {
 const statusClass = (status) => {
   switch (status) {
     case REJECTED_STATUS:
-      return "status-reject";
+      return "log-reject";
     case APPROVED_STATUS:
-      return "status-approved";
+      return "log-approved";
     case WAIT_FOR_APPROVE:
-      return "status-draft";
+      return "log-draft";
   }
 };
 const formatDate = (inputDate) => {

@@ -53,8 +53,6 @@
     <ModalConfirm
         :isShowModal="isShowModalConfirm.value"
         @close-modal="closeModalConfirm"
-        :isConfirmByText="true"
-        :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
         :message="$t('inspection.modal_confirm.message')"
         :title="$t('inspection.modal_confirm.title')"
@@ -103,6 +101,7 @@ export default {
       currentPage,
       isShowModalConfirm,
       getListInspectionReport,
+      clearInspectionReportDetails,
       handleDeleteInspectionReport,
     } = inspectionStore;
     const searchForms = ref({
@@ -120,6 +119,7 @@ export default {
     });
 
     onUnmounted(() => {
+      clearInspectionReportDetails();
       listInspectionReports.value = [];
     });
 

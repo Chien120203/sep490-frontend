@@ -57,7 +57,7 @@
         <el-table-column prop="quantity" label="Số lượng"  width="180">
           <template #default="{row, $index}">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input-number :min="0" :max="getResource(row.resourceId)?.plannedQuantity - getResource(row.resourceId)?.usedQuantity" :disabled="isHuman" v-model.number="listAddedValues[$index].quantity"/>
+              <el-input-number :min="0" :max="getResource(row.resourceId)?.plannedQuantity - getResource(row.resourceId)?.usedQuantity" v-model.number="listAddedValues[$index].quantity"/>
             </el-form-item>
           </template>
         </el-table-column>

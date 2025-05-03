@@ -122,8 +122,8 @@ const handleRemoveResource = (data) => {
 };
 
 const handleRemoveTask = (taskIndex) => {
-  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource => resource.taskIndex !== taskIndex);
-  constructLogDetails.value.workAmount = constructLogDetails.value.workAmount.filter(work => work.taskIndex !== taskIndex);
+  constructLogDetails.value.resources = constructLogDetails.value.resources.filter(resource => resource.taskIndex != taskIndex);
+  constructLogDetails.value.workAmount = constructLogDetails.value.workAmount.filter(work => work.taskIndex != taskIndex);
 }
 
 const handleBack = () => {

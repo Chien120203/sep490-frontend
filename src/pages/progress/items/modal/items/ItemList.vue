@@ -31,7 +31,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="unit" :label="$t('planning.items.unit')">
+        <el-table-column prop="unit" :label="$t('planning.items.unit')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
               <el-input :disabled="true" v-model="listAddedValues[$index].unit" />
@@ -44,6 +44,12 @@
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
               <el-input :disabled="true" v-model.number="listAddedValues[$index].quantity"/>
             </el-form-item>
+          </template>
+        </el-table-column>
+
+        <el-table-column :label="$t('progress.details.used_quantity')">
+          <template #default="{ row }">
+            {{getUsedQuantity(row.id)}}
           </template>
         </el-table-column>
 
@@ -142,6 +148,10 @@ const handleSelectItem = (id) => {
 const getInventory = (id) => {
   const resource = props.selectData.find(item => item.id === id) || null;
   return resource.quantity || "-";
+}
+
+const getUsedQuantity = (id) => {
+  return props.selectedRow.details.find(item => item.id === id)?.usedQuantity || 0;
 }
 </script>
 

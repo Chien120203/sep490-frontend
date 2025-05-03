@@ -10,11 +10,11 @@
       </div>
       <div>
         <el-input
-          v-if="isConfirmByText"
-          :placeholder="placeholder || $t('common.confirm_placeholder')"
-          v-model="inputConfirm"
-          type="text"
-          @keyup.enter="confirmAction"
+            v-if="isConfirmByText || isInputMessage"
+            :placeholder="placeholder || $t('common.confirm_placeholder')"
+            v-model="inputConfirm"
+            type="text"
+            @keyup.enter="confirmAction"
         ></el-input>
       </div>
       <label class="error-text-confirm">{{ validation }}</label>
@@ -22,23 +22,26 @@
     <template #footer>
       <div class="button-wrap">
         <el-button
-          :color="confirmBtnColor"
-          class="btn btn-modal-confirm"
-          plain
-          @click="confirmAction"
-          >{{ $t("common.confirm") }}</el-button
+            :color="confirmBtnColor"
+            class="btn btn-modal-confirm"
+            plain
+            @click="confirmAction"
         >
+          {{ $t("common.confirm") }}
+        </el-button>
         <el-button
-          class="btn btn-cancel"
-          :color="cancelBtnColor"
-          plain
-          @click="close"
-          >{{ $t("common.cancel") }}</el-button
+            class="btn btn-cancel"
+            :color="cancelBtnColor"
+            plain
+            @click="close"
         >
+          {{ $t("common.cancel") }}
+        </el-button>
       </div>
     </template>
   </Modal>
 </template>
+
 <script>
 import Modal from "@/components/common/Modal.vue";
 import IconConfirm from "@/svg/IconConfirm.vue";
@@ -56,6 +59,10 @@ export default {
       default: () => false,
     },
     isConfirmByText: {
+      type: Boolean,
+      default: false,
+    },
+    isInputMessage: {
       type: Boolean,
       default: false,
     },
@@ -92,31 +99,34 @@ export default {
     const { t } = useI18n();
     const inputConfirm = ref("");
     const validation = ref("");
-    const close = (value) => {
-      if (props.isConfirmByText) {
-        inputConfirm.value = "";
-        validation.value = "";
-      }
 
+    const close = (value) => {
+      inputConfirm.value = "";
+      validation.value = "";
       emit("closeModal", value);
     };
 
     const confirmAction = () => {
-      if (props.isConfirmByText) {
-        let inputConfirmText = inputConfirm.value.trim().toLowerCase();
-        if (inputConfirmText !== props.confirmText.trim().toLowerCase()) {
-          validation.value = t("E-CM-014");
+      const input = inputConfirm.value.trim();
 
+      if (props.isConfirmByText) {
+        if (input.toLowerCase() !== props.confirmText.trim().toLowerCase()) {
+          validation.value = t("E-CM-014");
           return;
         }
-
         emit("confirmAction");
-        inputConfirm.value = "";
-        validation.value = "";
-
-        return;
+      } else if (props.isInputMessage) {
+        if (!input) {
+          validation.value = t("E-CM-014"); // Customize this error if needed
+          return;
+        }
+        emit("confirmAction", input);
+      } else {
+        emit("confirmAction", props.id);
       }
-      emit("confirmAction", props.id);
+
+      inputConfirm.value = "";
+      validation.value = "";
     };
 
     return {

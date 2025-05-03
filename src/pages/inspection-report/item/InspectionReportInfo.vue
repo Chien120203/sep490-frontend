@@ -7,9 +7,13 @@
         ref="ruleFormRef"
         :rules="rules"
     >
+
+      <el-form-item label="Ten kiểm tra" required>
+        <el-input v-model="inspectionReportDetails.inspectionName" placeholder="Nhập ten kiểm tra" />
+      </el-form-item>
       <!-- Verification code -->
-      <el-form-item label="Mã kiểm tra" prop="inspectCode" required>
-        <el-input v-model="inspectionReportDetails.inspectCode" placeholder="Nhập mã kiểm tra" />
+      <el-form-item label="Mã kiểm tra" prop="inspectCode">
+        <el-input disabled v-model="inspectionReportDetails.inspectCode" placeholder="Nhập mã kiểm tra" />
       </el-form-item>
 
       <!-- Inspection dates -->
@@ -42,18 +46,17 @@
       <!-- Decision -->
       <el-form-item label="Quyết định kiểm tra" prop="inspectionDecision" required>
         <el-radio-group v-model="inspectionReportDetails.inspectionDecision">
-          <el-radio :label="1">Đạt yêu cầu</el-radio>
-          <el-radio :label="2">Đạt có điều kiện</el-radio>
-          <el-radio :label="3">Không đạt yêu cầu</el-radio>
+          <el-radio :label="INSPECT_DECISION_PASS">Đạt yêu cầu</el-radio>
+          <el-radio :label="INSPECT_DECISION_FAIL">Không đạt yêu cầu</el-radio>
         </el-radio-group>
       </el-form-item>
 
       <!-- Status -->
       <el-form-item label="Trạng thái" prop="status" required>
         <el-radio-group disabled v-model="inspectionReportDetails.status">
-          <el-radio :label="1">Duyệt</el-radio>
-          <el-radio :label="0">Từ chối</el-radio>
-          <el-radio :label="2">Đợi Duyệt</el-radio>
+          <el-radio :label="APPROVED_STATUS">Duyệt</el-radio>
+          <el-radio :label="REJECTED_STATUS">Từ chối</el-radio>
+          <el-radio :label="WAIT_FOR_APPROVE">Đợi Duyệt</el-radio>
         </el-radio-group>
       </el-form-item>
 
@@ -86,6 +89,12 @@
 import { ref } from "vue";
 import FileUpload from "@/components/common/FileUpload.vue";
 import {DATE_FORMAT} from "@/constants/application.js";
+import {
+  APPROVED_STATUS,
+  INSPECT_DECISION_FAIL,
+  INSPECT_DECISION_PASS,
+  REJECTED_STATUS, WAIT_FOR_APPROVE
+} from "@/constants/inspection.js";
 
 const props = defineProps({
   inspectionReportDetails: {

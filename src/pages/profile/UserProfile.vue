@@ -24,12 +24,6 @@
         />
       </div>
       <h2 class="profile-name">{{ userDetails.value.fullName }}</h2>
-
-      <div class="profile-info">
-        <div class="info-row">
-          <div class="info-label">Mô tả</div>
-        </div>
-      </div>
     </div>
 
     <!-- Right panel - Detailed form -->

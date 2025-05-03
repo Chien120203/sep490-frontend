@@ -5,6 +5,7 @@ import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import {InspectionReportAPI} from "@/services/InspectionReportAPI.js";
 import {QUALITY_ASSURANCE} from "@/constants/roles.js";
+import {INSPECT_DECISION_FAIL, WAIT_FOR_APPROVE} from "@/constants/inspection.js";
 
 export const useInspectionReportStore = defineStore(
   "inspectionReport",
@@ -19,14 +20,15 @@ export const useInspectionReportStore = defineStore(
       value: {
         id: 0,
         inspectCode: "",
+        inspectionName: "",
         constructionProgressItemId: "",
         inspectorId: 0,
         inspectStartDate: "",
         inspectEndDate: "",
         location: "",
         attachment: [],
-        inspectionDecision: 0,
-        status: 2,
+        inspectionDecision: INSPECT_DECISION_FAIL,
+        status: WAIT_FOR_APPROVE,
         qualityNote: "",
         otherNote: "",
       }
@@ -135,7 +137,8 @@ export const useInspectionReportStore = defineStore(
       inspectionReportDetails.value = {
         id: 0,
         projectId: 0,
-        inspectCode: 0,
+        inspectCode: "",
+        inspectionName: "",
         inspectorId: 0,
         inspectorName: "",
         inspectStartDate: "",
@@ -146,8 +149,8 @@ export const useInspectionReportStore = defineStore(
         planName: "",
         location: "",
         attachment: [],
-        inspectionDecision: 0,
-        status: 2,
+        inspectionDecision: INSPECT_DECISION_FAIL,
+        status: WAIT_FOR_APPROVE,
         qualityNote: "",
         otherNote: "",
       };

@@ -127,6 +127,13 @@
               </label>
             </el-form-item>
 
+            <el-form-item class="input-item" :label="$t('resource.material.details.roll_back')">
+              <el-select v-model="materialResourcesDetails.value.canRollBack" placeholder="Chọn">
+                <el-option :value="true" :label="$t('resource.material.details.canRollbackYes')" />
+                <el-option :value="false" :label="$t('resource.material.details.canRollbackNo')" />
+              </el-select>
+            </el-form-item>
+
             <el-form-item prop="description" class="input-item" :label="$t('resource.material.details.description')">
               <el-input v-model="materialResourcesDetails.value.description" class="custom-textarea" type="textarea" />
               <label class="error-feedback-material" v-if="validation && validation.value.description">
@@ -134,12 +141,6 @@
               </label>
             </el-form-item>
 
-            <el-form-item class="input-item" :label="$t('resource.material.details.roll_back')">
-              <el-radio-group v-model="materialResourcesDetails.value.canRollBack">
-                <el-radio label="Có thể hoàn" :value="true"/>
-                <el-radio label="Không the hoàn" :value="false"/>
-              </el-radio-group>
-            </el-form-item>
           </div>
         </el-form>
       </div>

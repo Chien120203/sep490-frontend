@@ -32,15 +32,15 @@
           <template #label>
             <span class="label-start">{{ $t('contract.create.infor.label.project') }}</span>
           </template>
-          <SingleOptionSelect
-              v-model="contractInfo.projectId"
-              :optionKeys="{ id: 'id', value: 'projectCode' }"
-              :listData="listProjects"
-              :isRemote="true"
-              :disabled="!isAllowUpdate"
-              class="input-wd-96"
-              @remoteSearch="handleSearchProject"
-          />
+          <el-select disabled v-model="contractInfo.projectId">
+            <el-option
+                v-for="(project) in listProjects"
+                :key="project.id"
+                :label="project.projectCode"
+                :value="project.id"
+            >
+            </el-option>
+          </el-select>
           <label class="error-feedback-customer" v-if="validation && validation.projectId">
             {{ $t(validation.projectId) }}
           </label>

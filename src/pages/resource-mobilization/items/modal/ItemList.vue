@@ -4,6 +4,7 @@
     <div v-if="requestType === REQUEST_TYPE_SUPPLY_MORE || requestType === REQUEST_TYPE_SUPPLY_GENERAL_WAREHOUSE">
       <SingleOptionSelect
           :showClearable="true"
+          :isDisabled="!allowEdit"
           class="select-item"
           :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
           :listData="selectData"
@@ -12,7 +13,7 @@
           @remoteSearch="handleSearch"
       />
     </div>
-    <div v-else-if="requestType === REQUEST_TYPE_ADD_NEW">
+    <div v-else-if="requestType === REQUEST_TYPE_ADD_NEW && allowEdit">
       <el-button style="margin-bottom: 12px" class="btn btn-save" @click="handleAddNewResource">{{ $t("mobilization.add_new") }}</el-button>
     </div>
 
@@ -32,7 +33,7 @@
                 {{ getResourceName(scope.row.resourceId) }}
               </template>
               <template v-else-if="requestType === REQUEST_TYPE_ADD_NEW">
-                <el-input v-model="scope.row.name" @blur="validateForm" />
+                <el-input :disabled="!allowEdit" v-model="scope.row.name" @blur="validateForm" />
               </template>
               <label class="error-feedback" v-if="validationErrors[`name-${scope.$index}`]">
                 {{ validationErrors[`name-${scope.$index}`] }}
@@ -57,7 +58,7 @@
         <el-table-column prop="quantity" label="Số lượng">
           <template #default="{row, $index}">
             <el-form-item :prop="`listAddedValues[${$index}].quantity`">
-              <el-input v-model.number="row.quantity" @blur="validateForm" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+              <el-input :disabled="!allowEdit" v-model.number="row.quantity" @blur="validateForm" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
               <label class="error-feedback" v-if="validationErrors[`quantity-${$index}`]">
                 {{ validationErrors[`quantity-${$index}`] }}
               </label>
@@ -75,7 +76,7 @@
         </el-table-column>
 
         <!-- Actions -->
-        <el-table-column :label="$t('mobilization.modal.action')">
+        <el-table-column v-if="allowEdit" :label="$t('mobilization.modal.action')">
           <template #default="{ row }">
             <div>
               <button @click="handleRemoveResource(row.resourceId || row.tempId); $event.preventDefault()" class="btn-edit">
@@ -107,6 +108,7 @@ import {useI18n} from "vue-i18n";
 const props = defineProps({
   selectData: { type: Array, default: () => [] },
   requestType: {type: [Number, String], default: 1},
+  allowEdit: { type: Boolean, default: false },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
   resourceType: { type: Number, default: 0 }
@@ -163,7 +165,7 @@ const handleSelectItem = (id) => {
       resourceType: props.resourceType,
       unit: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.unit || "-",
       quantity: 1,
-      inventory: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.quantity || 0,
+      inventory: props.selectData.find(item => item?.[props.optionKeys.id] === id)?.inventory || 0,
       description: "des",
       type: REQUEST_MOBILIZATION
     });

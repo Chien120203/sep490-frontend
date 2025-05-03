@@ -12,8 +12,8 @@
         </div>
         <div class="contract-save-btn">
           <div class="btn-container">
-            <el-button v-if="allowApprove" style="height: 36px" type="success" @click="handleApprove()">{{ $t("common.approve") }}</el-button>
-            <el-button v-if="allowReject" class="btn btn-refuse" @click="handleReject()">{{ $t("common.reject") }}</el-button>
+            <el-button v-if="allowApprove && isCurrentUserLock" style="height: 36px" type="success" @click="handleApprove()">{{ $t("common.approve") }}</el-button>
+            <el-button v-if="allowReject && isCurrentUserLock" class="btn btn-refuse" @click="handleReject()">{{ $t("common.reject") }}</el-button>
             <el-button :disabled="disableBtn || !allowEdit || !isCurrentUserLock" v-if="allowEdit" class="btn btn-save" @click="submitForm">
               {{ $t("common.save") }}
             </el-button>
@@ -34,7 +34,7 @@
           <SelectionFilters
               ref="selectionFormRef"
               :allowEdit="allowEdit && isCurrentUserLock"
-              :lockInfo="lockInfo"
+              :lockInfo="lockInfo.value"
               :rules="PLANNING_RULES"
               :planDetails="planningDetails.value"
               :contractDetails="contractDetails.value"
@@ -159,12 +159,20 @@ const {
 const currentEmail = localStorage.getItem("email");
 const currentRole = localStorage.getItem("role");
 const allowReject = computed(() => {
+  const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
+  const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
   const status = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD && p.email === currentEmail);
+  if(!technicalManagerApproved || !resourceManagerApproved) return false;
   return status?.isApproved === null || status?.isApproved === false;
 });
 
 const allowApprove = computed(() => {
   const status = approveStatuses.value.find(p => p.email === currentEmail);
+  if(currentRole === EXECUTIVE_BOARD) {
+    const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
+    const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
+    return technicalManagerApproved && resourceManagerApproved;
+  };
   return status?.isApproved === null  || status?.isApproved === false;
 });
 const allowEdit = computed(() => {
@@ -208,7 +216,9 @@ const statuses = computed(() => {
   const bodStatus = bodApprove === null ? "process" : (bodApprove === true ? "success" : "error");
 
   return [
-    { title: "Khởi tạo", description: "", status: "success" },
+    { title: "Khởi tạo",
+      description: "",
+      status: "success" },
     {
       title: "Phòng tài nguyên",
       status: resourceApprove ? "success" : "process"
