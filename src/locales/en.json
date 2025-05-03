@@ -452,7 +452,7 @@
         "additionalInfo": "Additional Information",
         "conclusion": "Conclusion"
       },
-      "title": "Site Survey Detail",
+      "title": "Site Survey Details",
       "no_survey": "No site survey available",
       "siteSurveyName": "Site Survey Name",
       "projectId": "Project Code",
@@ -500,6 +500,14 @@
     "tenant_placeholder": "Contract tenant",
     "type_placeholder": "Contract type",
     "landlord_placeholder": "Contract landlord"
+  },
+  "workflow": {
+    "status": {
+      "initiated": "Khởi tạo",
+      "resourceDepartment": "Phòng tài nguyên",
+      "techDepartment": "Phòng kỹ thuật",
+      "bodApproval": "Giám đốc duyệt"
+    }
   },
   "resource": {
     "title": "Resource Management ",
@@ -595,7 +603,9 @@
         "roll_back": "Roll back",
         "expireDate": "Expire Date",
         "productionDate": "Production Date",
-        "attachments": "Attachments"
+        "attachments": "Attachments",
+        "canRollbackYes": "Yes",
+        "canRollbackNo": "No"
       },
       "create": {
         "title": "Create Material"
@@ -830,20 +840,33 @@
   },
   "progress": {
     "add_new_cr": "Add New CR",
+    "progress_item_details_title": "Progress Item Details",
     "add_new": "Add New",
     "hide_gantt_chart": "Hide Gantt Chart",
+    "show_gantt_chart": "Show Gantt Chart",
+    "title": "Gantt Chart - Task List",
     "timeline": {
       "day": "Day",
       "week": "Week",
       "month": "Month",
       "year": "Year"
     },
+    "task_card": {
+      "task_code": "Task Code",
+      "task_name": "Task Name",
+      "actual_start_date": "Actual Start Date",
+      "actual_end_date": "Actual End Date",
+      "plan_start_date": "Planning Start Date",
+      "plan_end_date": "Planning End Date",
+      "status": "Status",
+      "progress": "Progress"
+    },
     "details": {
       "title": "Project Progress",
       "used_quantity": "Used quantity"
     },
     "status": {
-      "not_started": "Not start",
+      "not_started": "Not Started",
       "in_progress": "In Progress",
       "completed": "Completed",
       "paused": "Paused",
@@ -852,9 +875,47 @@
     },
     "modal_confirm": {
       "title": "Update progress Item",
-      "message": "Do you want to update this progress item?"
+      "message": "Do you want to update this progress item?",
+      "canceled": "Canceled",
+      "pending": "Pending"
+    },
+    "columns": {
+      "index": "No.",
+      "task": "Task",
+      "dependency": "Dependency",
+      "plan_start_date": "Planning Start Date",
+      "plan_end_date": "Planning End Date",
+      "progress": "Progress (%)"
+    },
+    "tabs": {
+      "statistic": "Statistics",
+      "dependency": "Dependencies",
+      "employee": "Assigned Employees",
+      "material": "Materials",
+      "machine": "Machines"
+    },
+    "table": {
+      "task": "Task",
+      "plan": "Plan",
+      "unit": "Unit",
+      "actual": "Actual",
+      "progress": "Progress",
+      "index": "Index",
+      "task_name": "Task Name",
+      "start_date": "Start Date",
+      "due_date": "Due Date",
+      "dependency_type": "Dependency Type",
+      "actions": "Action",
+      "status": "Status",
+      "assigned_to": "Assigned To"
+    },
+
+    "resource_types": {
+      "labor": "Labor",
+      "machine": "Machine",
+      "material": "Material"
     }
-  },
+},
   "planning": {
     "title": "Project Planning",
     "add_new": "Add New",
@@ -1030,7 +1091,7 @@
     "department_name": "Department",
     "role": "Role",
     "phone": "Phone Number",
-    "actions": "Actions",
+    "actions": "Action",
     "no_data": "No Data",
     "location": "Location",
     "load_more": "Load more",
@@ -1072,7 +1133,10 @@
         "location": "Location",
         "role": "Role",
         "action": "Action",
-        "code": "User Code"
+        "code": "User Code",
+        "dob": "Date of Birth",
+        "gender": "Gender"
+
       }
     },
     "details": {

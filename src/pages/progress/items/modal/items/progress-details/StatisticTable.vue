@@ -6,11 +6,11 @@
       row-key="id"
       default-expand-all
   >
-    <el-table-column fixed prop="name" label="Công việc" width="250" />
-    <el-table-column fixed prop="plan" label="Định mức" />
-    <el-table-column fixed prop="unit" label="Đơn vị" width="80" />
-    <el-table-column fixed prop="actual" label="Thực tế" />
-    <el-table-column fixed prop="progress" label="Tiến độ" />
+    <el-table-column fixed prop="name" :label="t('progress.table.task')" width="250" />
+    <el-table-column fixed prop="plan" :label="t('progress.table.plan')" />
+    <el-table-column fixed prop="unit" :label="t('progress.table.unit')" width="80" />
+    <el-table-column fixed prop="actual" :label="t('progress.table.actual')" />
+    <el-table-column fixed prop="progress" :label="t('progress.table.progress')" />
 
     <el-table-column
         v-for="date in dateColumns"
@@ -29,6 +29,9 @@
 <script setup>
 import { defineProps, computed } from 'vue';
 import dayjs from 'dayjs';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   listLogsByTask: {
@@ -42,9 +45,9 @@ const props = defineProps({
 });
 
 const resourceTypeNames = {
-  1: 'Lao động',
-  2: 'Máy móc',
-  3: 'Vật liệu'
+  1: t('progress.resource_types.labor'),
+  2: t('progress.resource_types.machine'),
+  3: t('progress.resource_types.material')
 };
 
 const sortDateKeys = (dateObj) => {

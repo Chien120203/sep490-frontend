@@ -216,7 +216,9 @@ const statuses = computed(() => {
   const bodStatus = bodApprove === null ? "process" : (bodApprove === true ? "success" : "error");
 
   return [
-    { title: "Khởi tạo", description: "", status: "success" },
+    { title: "Khởi tạo",
+      description: "",
+      status: "success" },
     {
       title: "Phòng tài nguyên",
       status: resourceApprove ? "success" : "process"

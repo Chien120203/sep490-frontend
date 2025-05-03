@@ -3,43 +3,79 @@
     <el-form :rules="rules" :model="task" label-position="top" label-width="auto">
       <el-row :gutter="20" class="task-details">
         <el-col :span="12">
-          <el-form-item label="Mã công việc">
+          <el-form-item :label="$t('progress.task_card.task_code')">
             <el-input disabled v-model="task.index"/>
           </el-form-item>
 
-          <el-form-item label="Tên công việc">
+          <el-form-item :label="$t('progress.task_card.task_name')">
             <el-input disabled v-model="task.workName"/>
           </el-form-item>
 
-          <el-form-item  prop="actualStartDate" label="Ngày bắt đầu thực tế">
-            <el-date-picker  :disabled="!allowEdit" style="width: 100%" v-model="task.actualStartDate" type="date" placeholder="Chọn ngày"/>
+          <el-form-item prop="actualStartDate" :label="$t('progress.task_card.actual_start_date')">
+            <el-date-picker
+                :disabled="!allowEdit"
+                style="width: 100%"
+                v-model="task.actualStartDate"
+                type="date"
+                :placeholder="$t('common.select_date')"
+            />
           </el-form-item>
 
-          <el-form-item  prop="actualEndDate" label="Ngày kết thúc thực tế">
-            <el-date-picker :disabled="!allowEdit" style="width: 100%" v-model="task.actualEndDate" type="date" placeholder="Chọn ngày"/>
+          <el-form-item prop="actualEndDate" :label="$t('progress.task_card.actual_end_date')">
+            <el-date-picker
+                :disabled="!allowEdit"
+                style="width: 100%"
+                v-model="task.actualEndDate"
+                type="date"
+                :placeholder="$t('common.select_date')"
+            />
           </el-form-item>
         </el-col>
 
         <el-col :span="12">
-          <el-form-item  prop="planStartDate" label="Ngày bắt đầu kế hoạch">
-            <el-date-picker  :disabled="!allowEditRelation" style="width: 100%" v-model="task.planStartDate" type="date"
-                            placeholder="Chọn ngày"/>
+          <el-form-item prop="planStartDate" :label="$t('progress.task_card.plan_start_date')">
+            <el-date-picker
+                :disabled="!allowEditRelation"
+                style="width: 100%"
+                v-model="task.planStartDate"
+                type="date"
+                :placeholder="$t('common.select_date')"
+            />
           </el-form-item>
 
-          <el-form-item prop="planEndDate" label="Ngày kết thúc kế hoạch">
-            <el-date-picker :disabled="!allowEditRelation" style="width: 100%" v-model="task.planEndDate" type="date"
-                            placeholder="Chọn ngày"/>
+          <el-form-item prop="planEndDate" :label="$t('progress.task_card.plan_end_date')">
+            <el-date-picker
+                :disabled="!allowEditRelation"
+                style="width: 100%"
+                v-model="task.planEndDate"
+                type="date"
+                :placeholder="$t('common.select_date')"
+            />
           </el-form-item>
 
-          <el-form-item label="Trạng thái">
-            <el-select disabled v-model="task.status" placeholder="Chọn trạng thái">
-              <el-option v-for="(label, index) in PROGRESS_STATUS" :label="$t(label)" :key="index"
-                         :value="index"></el-option>
+          <el-form-item :label="$t('progress.task_card.status')">
+            <el-select
+                disabled
+                v-model="task.status"
+                :placeholder="$t('progress.task_card.status')"
+            >
+              <el-option
+                  v-for="(label, value) in PROGRESS_STATUS"
+                  :label="$t(label)"
+                  :key="value"
+                  :value="value"
+              />
             </el-select>
           </el-form-item>
 
-          <el-form-item  label="Tiến độ">
-            <el-slider :disabled="!allowEdit" v-model="task.progress" :step="1" :max="100" show-input/>
+          <el-form-item :label="$t('progress.task_card.progress')">
+            <el-slider
+                :disabled="!allowEdit"
+                v-model="task.progress"
+                :step="1"
+                :max="100"
+                show-input
+            />
           </el-form-item>
         </el-col>
       </el-row>
