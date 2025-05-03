@@ -108,6 +108,7 @@ export default {
       projectId: projectId.value ? projectId.value : "",
       keyword: "",
       pageIndex: 1,
+      pageSize: 15,
     });
     const isDisabled = ref(false);
     const allowEdit = computed(() => localStorage.getItem('role') === QUALITY_ASSURANCE);

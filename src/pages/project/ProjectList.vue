@@ -156,6 +156,7 @@ export default {
       status: null,
       customerId: null,
       pageIndex: 1,
+      pageSize: 15,
     });
     const projectStore = useProjectStore();
     const persist = usePersistenceStore();

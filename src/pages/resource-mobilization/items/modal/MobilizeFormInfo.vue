@@ -20,7 +20,7 @@
                 :value-format="DATE_FORMAT"
                 v-model="data.requestDate"
                 disabled
-                placeholder="Select Date"
+                :placeholder="$t('mobilization.modal.select_date')"
                 class="input-wd-96"
             />
             <label class="error-feedback-customer" v-if="validation && validation.requestDate">
