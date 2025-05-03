@@ -55,7 +55,7 @@
           <span class="data-table">{{ scope.row.phone ? scope.row.phone : "-"}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions">
+      <el-table-column :label="$t('common.action')">
         <template #default="{ row }">
           <div>
             <button @click="$emit('details', row.id)" class="btn-edit">

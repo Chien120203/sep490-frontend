@@ -107,7 +107,7 @@ provide('gantt', [Toolbar, Filter, Selection]);
 
 <template>
   <div class="gantt-chart-container">
-    <h2 class="text-lg font-bold mb-4">Gantt Chart - Danh sách công việc</h2>
+    <h2 class="text-lg font-bold mb-4">{{ $t('progress.title') }}</h2>
     <div class="project-search">
       <div class="col-md-9 col-lg-9">
         <div class="project-search-box col-md-9 col-lg-9">
@@ -161,14 +161,14 @@ provide('gantt', [Toolbar, Filter, Selection]);
           :rowSelected="rowSelected"
       >
         <ColumnsDirective>
-          <ColumnDirective field="index" headerText="STT" width="60"></ColumnDirective>
-          <ColumnDirective field="workName" headerText="Công việc" width="200"></ColumnDirective>
-          <ColumnDirective field="predecessor" headerText="Dependency" width="120"></ColumnDirective>
-          <ColumnDirective field="planStartDate" format="yyyy-MM-dd" headerText="Thời gian bắt đầu dự kiến"
+          <ColumnDirective field="index" :headerText="$t('progress.columns.index')" width="60"></ColumnDirective>
+          <ColumnDirective field="workName" :headerText="$t('progress.columns.task')" width="200"></ColumnDirective>
+          <ColumnDirective field="predecessor" :headerText="$t('progress.columns.dependency')" width="120"></ColumnDirective>
+          <ColumnDirective field="planStartDate" format="yyyy-MM-dd" :headerText="$t('progress.columns.plan_start_date')"
                            width="120"></ColumnDirective>
-          <ColumnDirective field="planEndDate" format="yyyy-MM-dd" headerText="Thời gian kết thúc dự kiến"
+          <ColumnDirective field="planEndDate" format="yyyy-MM-dd" :headerText="$t('progress.columns.plan_end_date')"
                            width="120"></ColumnDirective>
-          <ColumnDirective field="progress" headerText="Tiến độ (%)" width="100"></ColumnDirective>
+          <ColumnDirective field="progress" :headerText="$t('progress.columns.progress')" width="100"></ColumnDirective>
         </ColumnsDirective>
       </GanttComponent>
     </div>
