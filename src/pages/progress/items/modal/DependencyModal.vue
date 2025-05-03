@@ -62,7 +62,6 @@ import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemIn
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
 import {DATE_FORMAT} from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import FileUpload from "@/components/common/FileUpload.vue";
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
 
 const {t} = useI18n();

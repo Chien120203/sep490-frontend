@@ -76,6 +76,7 @@ import ItemList from "@/pages/progress/items/modal/items/ItemList.vue";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 import dayjs from "dayjs";
 import {usePersistenceStore} from "@/store/persistence.js";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
   listLogsByTask: {
@@ -106,33 +107,20 @@ const props = defineProps({
 const now = dayjs();
 
 const persistenceStore = usePersistenceStore();
+const { t } = useI18n();
 const {
 } = persistenceStore;
 const selectedTab = ref("statistic"); // Default tab
 
 //mock data
-const listTabs =ref([
-  {
-    name: "statistic",
-    label: "Thống kê",
-  },
-  {
-    name: "dependency",
-    label: "Công việc phụ thuộc",
-  },
-  {
-    name: "employee",
-    label: "Danh sách người thực hiện",
-  },
-  {
-    name: "material",
-    label: "Danh sách tài nguyên",
-  },
-  {
-    name: "machine",
-    label: "Danh sách phương tiện",
-  }
+const listTabs = ref([
+  { name: "statistic", label: t("progress.tabs.statistic") },
+  { name: "dependency", label: t("progress.tabs.dependency") },
+  { name: "employee", label: t("progress.tabs.employee") },
+  { name: "material", label: t("progress.tabs.material") },
+  { name: "machine", label: t("progress.tabs.machine") }
 ]);
+
 const materialOptions = ref({id: "id", value: "materialName"});
 const userOptions = ref({id: "id", value: "teamName"});
 const vehicleOptions = ref({id: "id", value: "chassisNumber"});

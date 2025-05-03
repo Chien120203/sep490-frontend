@@ -49,14 +49,14 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="brand" class="custom-textarea required" :label="$t('resource.machine.details.brand')">
+            <el-form-item prop="brand" class="custom-textarea" :label="$t('resource.machine.details.brand')">
               <el-input v-model="machineResourcesDetails.value.brand" />
               <label class="error-feedback-machine" v-if="validation && validation.value.brand">
                 {{ $t(validation.value.brand) }}
               </label>
             </el-form-item>
 
-            <el-form-item prop="yearOfManufacture" class="required" :label="$t('resource.machine.details.yearOfManufacture')">
+            <el-form-item prop="yearOfManufacture" :label="$t('resource.machine.details.yearOfManufacture')">
               <el-date-picker
                   style="width: 100%"
                   v-model="machineResourcesDetails.value.yearOfManufacture"
@@ -98,16 +98,16 @@
                 {{ $t(validation.value.engineNumber) }}
               </label>
             </el-form-item>
+          </div>
 
-            <el-form-item prop="color" class="custom-textarea required" :label="$t('resource.machine.details.color')">
+          <div class="item item-bib-add item-machine-add">
+            <el-form-item prop="color" class="custom-textarea" :label="$t('resource.machine.details.color')">
               <el-input v-model="machineResourcesDetails.value.color" />
               <label class="error-feedback-machine" v-if="validation && validation.value.color">
                 {{ $t(validation.value.color) }}
               </label>
             </el-form-item>
-          </div>
 
-          <div class="item item-bib-add item-machine-add">
             <el-form-item prop="fuelType" class="custom-textarea required" :label="$t('resource.machine.details.fuelType')">
               <el-input v-model="machineResourcesDetails.value.fuelType" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelType">
@@ -123,14 +123,7 @@
             </el-form-item>
 
             <el-form-item prop="fuelUnit" class="custom-textarea required" :label="$t('resource.machine.details.fuelUnit')">
-              <el-select v-model="machineResourcesDetails.value.fuelUnit" class="custom-textarea required">
-                <el-option
-                    v-for="unit in fuelUnitOptions"
-                    :key="unit.value"
-                    :label="$t(unit.label)"
-                    :value="unit.value"
-                />
-              </el-select>
+              <el-input v-model="machineResourcesDetails.value.fuelUnit" />
               <label class="error-feedback-machine" v-if="validation && validation.value.fuelUnit">
                 {{ $t(validation.value.fuelUnit) }}
               </label>
@@ -225,16 +218,9 @@ export default {
 
     // Define status options for the select dropdown
     const statusOptions = [
-      { value: AVAILABLE, label: "resource.machine.statuses.active" },
       { value: UNAVAILABLE, label: "resource.machine.statuses.inactive" },
+      { value: AVAILABLE, label: "resource.machine.statuses.active" },
       { value: MAINTAIN, label: "resource.machine.statuses.maintain" },
-    ];
-
-    // Define fuel unit options for the select dropdown
-    const fuelUnitOptions = [
-      { value: "liters", label: "resource.machine.fuelUnit.liters" },
-      { value: "gallons", label: "resource.machine.fuelUnit.gallons" },
-      { value: "cubic_meters", label: "resource.machine.fuelUnit.cubic_meters" }
     ];
 
     onMounted(() => {
@@ -282,7 +268,6 @@ export default {
       submitForm,
       handleFileUpload,
       statusOptions,
-      fuelUnitOptions,
       constructionEmployees
     };
   },

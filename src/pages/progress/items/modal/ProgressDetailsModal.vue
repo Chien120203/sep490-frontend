@@ -7,7 +7,7 @@
       @close="$emit('close')"
   >
     <template #header>
-      <h4 class="modal-title">Progress Item Details</h4>
+      <h4 class="modal-title">{{ $t('progress.progress_item_details_title') }}</h4>
     </template>
     <template #body>
       <div>

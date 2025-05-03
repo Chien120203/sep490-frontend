@@ -1,40 +1,34 @@
 <template>
   <el-table :data="tasks" style="width: 100%" border stripe>
-    <el-table-column prop="index" label="Index">
+    <el-table-column prop="index" :label="$t('common.index')">
       <template #default="{ row }">
         {{ row.index }}
       </template>
     </el-table-column>
-    <!-- Task Name -->
-    <el-table-column prop="workName" label="Task Name" sortable />
+    <el-table-column prop="workName" :label="$t('progress.table.task_name')" sortable />
 
-    <!-- Status -->
-    <el-table-column v-if="!isPlanning" prop="status" label="Status">
+    <el-table-column v-if="!isPlanning" prop="status" :label="$t('progress.table.status')">
       <template #default="{ row }">
-        <el-tag :type="getStatusTag(row.status)">
-          {{ row.status }}
+        <el-tag :type="getStatusTag(row.status.toLowerCase().replace(' ', '_'))">
+          {{ $t(`progress.status.${row.status.toLowerCase().replace(' ', '_')}`) }}
         </el-tag>
       </template>
     </el-table-column>
 
-    <!-- Assigned To -->
-    <el-table-column v-if="!isPlanning" prop="assignedTo" label="Assigned To" />
+    <el-table-column v-if="!isPlanning" prop="assignedTo" :label="$t('progress.table.assigned_to')" />
 
-    <!-- Due Date -->
-    <el-table-column prop="startDate" label="Start Date" sortable>
+    <el-table-column prop="startDate" :label="$t('progress.table.start_date')" sortable>
       <template #default="{ row }">
         {{ formatDate(row.startDate) }}
       </template>
     </el-table-column>
-    <!-- Due Date -->
-    <el-table-column prop="endDate" label="Due Date" sortable>
+    <el-table-column prop="endDate" :label="$t('progress.table.due_date')" sortable>
       <template #default="{ row }">
         {{ formatDate(row.endDate) }}
       </template>
     </el-table-column>
 
-    <!-- Dependency -->
-    <el-table-column prop="dependency" label="Depends Type">
+    <el-table-column prop="dependency" :label="$t('progress.table.dependency_type')">
       <template #default="{ row }">
         <el-tag v-if="!isPlanning">
           {{ $t(getDependencyTask(row.dependency)) }}
@@ -46,13 +40,12 @@
               :key="index"
               :label="$t(type.label)"
               :value="type.value"
-          >
-          </el-option>
+          />
         </el-select>
       </template>
     </el-table-column>
 
-    <el-table-column label="Actions">
+    <el-table-column :label="$t('common.action')">
       <template #default="{ row }">
         <div>
           <button v-if="!isPlanning" @click="$emit('details', row.id)" class="btn-edit">
@@ -66,11 +59,13 @@
     </el-table-column>
   </el-table>
 </template>
-
 <script setup>
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   isPlanning: {
