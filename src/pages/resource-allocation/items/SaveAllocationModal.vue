@@ -14,6 +14,7 @@
       <div class="modal-body-container">
         <AllocateFormInfo
             ref="formAllocationInfo"
+            :rules="ALLOCATIONFORMINFO_RULES"
             :data="data"
             :listProjects="listProjects"
             :allowEdit="allowSave"
@@ -111,6 +112,7 @@ import {usePersistenceStore} from "@/store/persistence.js";
 import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} from "@/constants/mobilization.js";
 import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {mixinMethods} from "@/utils/variables.js";
+import { getAllocationResourceItemRules } from "@/rules/allocation";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -175,6 +177,8 @@ const userOptions = ref({id: "resourceId", value: "name"});
 const vehicleOptions = ref({id: "resourceId", value: "name"});
 const activeTab = ref("materials");
 const currentRole = ref(localStorage.getItem("role"));
+
+const ALLOCATION_FORM_ITEMS_RULES = getAllocationResourceItemRules();
 
 const allowApprove = (row) => {
   if(row.status === WAIT_MANAGER_APPROVE && currentRole.value === TECHNICAL_MANAGER) return true;
@@ -258,36 +262,35 @@ const formAllocationHumanInfos = ref(null);
 const formAllocationInfo = ref(null);
 
 const handleSubmit = async () => {
-  // const forms = [
-  //   {
-  //     ref: formAllocationMaterialInfos,
-  //     name: "Material",
-  //   },
-  //   {
-  //     ref: formAllocationVehicleInfos,
-  //     name:"Vehicle",
-  //   },
-  //   {
-  //     ref: formAllocationHumanInfos,
-  //     name: "Human",
-  //   },
-  //   {
-  //     ref: formAllocationInfo,
-  //     name: "Allocation",
-  //   }
-  // ];
-  // for (const form of forms) {
-  //   const isValid = await new Promise((resolve) => {
-  //     form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
-  //   });
-  //
-  //   if (!isValid) {
-  //     mixinMethods.notifyError(
-  //         t("planning.errors.invalid_form", {form: form.name})
-  //     );
-  //     return; // stop here if one form is invalid
-  //   }
-  // }
+  const forms = [
+    {
+      ref: formAllocationMaterialInfos,
+      name: "Material",
+    },
+    {
+      ref: formAllocationVehicleInfos,
+      name:"Vehicle",
+    },
+    {
+      ref: formAllocationHumanInfos,
+      name: "Human",
+    },
+    {
+      ref: formAllocationInfo,
+      name: "Allocation",
+    }
+  ];
+  for (const form of forms) {
+    const isValid = await new Promise((resolve) => {
+      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
+    });
+    if (!isValid) {
+      mixinMethods.notifyError(
+          t("planning.errors.invalid_form", {form: form.name})
+      );
+      return; // stop here if one form is invalid
+    }
+  }
   let listData = [
       ...listSelectedMaterials.value,
       ...listSelectedUsers.value,
