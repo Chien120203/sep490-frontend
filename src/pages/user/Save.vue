@@ -67,7 +67,7 @@
                 prop="dob"
             >
               <el-date-picker
-                  style="width: 90%"
+                  style="width: 100%"
                   :format="DATE_FORMAT"
                   :value-format="DATE_FORMAT"
                   v-model="userDetails.value.dob"
@@ -168,6 +168,7 @@ export default {
     const router = useRouter();
 
     onMounted(() => {
+      clearUserDetails();
       if(isUpdate.value) {
         getUserDetails({userId: route.params.id})
       }

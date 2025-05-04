@@ -1,4 +1,5 @@
 import {i18n} from '@/utils/i18n.js';
+import dayjs from 'dayjs';
 import {
     MAX_CHARACTER, RULES_VALIDATION, DATE_FORMAT, PHONE_NUMBER
 } from "@/constants/application.js";
@@ -46,43 +47,44 @@ export const USER_RULES = {
         { required: true, message: i18n.global.t("E-USER-007"), trigger: "change" },
         {
             validator: (rule, value, callback) => {
-                // Chuyển đổi giá trị thành đối tượng Date
-                let dob;
-                try {
-                    dob = new Date(value);
-                    if (isNaN(dob.getTime())) {
-                        callback(new Error(i18n.global.t("E-USER-008")));
-                        return;
-                    }
-                } catch (e) {
+                // Check if value exists and is a valid date
+                if (!value) {
+                    callback();
+                    return;
+                }
+
+                // Parse the date of birth using dayjs
+                const dobDate = dayjs(value);
+
+                // Check if it's a valid date
+                if (!dobDate.isValid()) {
                     callback(new Error(i18n.global.t("E-USER-008")));
                     return;
                 }
 
-                // Lấy ngày hiện tại
-                const today = new Date();
+                // Get current date
+                const today = dayjs();
 
-                // Kiểm tra xem dob có ở quá khứ không
-                if (dob >= today) {
+                // Check if date of birth is in the future
+                if (dobDate.isAfter(today)) {
                     callback(new Error(i18n.global.t("E-USER-009")));
                     return;
                 }
 
-                // Tính ngày cách dob 18 năm
-                const maxYearsLater = new Date(dob.getFullYear() + 18, dob.getMonth(), dob.getDate());
-                const minYearsLater = new Date(dob.getFullYear() - 60, dob.getMonth(), dob.getDate());
+                // Calculate age
+                const age = today.diff(dobDate, 'year');
 
-                // Kiểm tra xem người dùng đã đủ 18 tuổi chưa
-                if (minYearsLater < today < maxYearsLater) {
+                // Check if age is between 18 and 60
+                if (age < 18 || age >= 60) {
                     callback(new Error(i18n.global.t("E-USER-010")));
                     return;
                 }
 
-                // Nếu tất cả điều kiện đều thỏa mãn
+                // If all conditions pass
                 callback();
             },
             trigger: 'change'
         }
-    ],
+    ]
 };
 

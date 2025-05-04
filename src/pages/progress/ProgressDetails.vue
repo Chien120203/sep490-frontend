@@ -28,6 +28,7 @@ const {
   progressDetails,
   selectedProgressItem,
   isShowModal,
+  clearSelectedProgressItem,
   saveProgressItem,
   updateItem,
   getProgressDetails
@@ -128,10 +129,12 @@ const handleAddTask = async () => {
 
 const handleDisplayModalSave = (show = false) => {
   isShowModalSave.value = show;
+  if(!show) clearSelectedProgressItem();
 }
 
 const handleCloseModal = () => {
   isShowModal.value = false;
+  clearSelectedProgressItem();
 }
 </script>
 
