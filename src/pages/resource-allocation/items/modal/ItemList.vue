@@ -27,20 +27,31 @@
 
         <el-table-column prop="unit" :label="$t('allocation.table.unit')">
           <template #default="scope">
-            <el-input disabled v-model="scope.row.unit" />
+            <el-form-item :prop="`listAddedValues[${scope.$index}].unit`">
+              <el-input v-model="scope.row.unit" @blur="validateForm" disabled />
+              <label class="error-feedback" v-if="validationErrors[`unit-${scope.$index}`]">
+                {{ validationErrors[`unit-${scope.$index}`] }}
+              </label>
+            </el-form-item>
           </template>
         </el-table-column>
 
         <el-table-column prop="quantity" :label="$t('allocation.table.quantity')">
           <template #default="{ row, $index }">
-            <el-input-number
+            <el-form-item :prop="`listAddedValues[${$index}].quantity`">
+              <el-input-number
                 style="width: 100%"
                 :disabled="!allowEdit"
                 :min="0"
                 :max="getInventory(row.resourceId) - getUsedQuantity(row.resourceId, data.fromTaskId)"
                 v-model.number="row.quantity"
+                @blur="validateForm"
                 @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"
-            />
+              />
+              <label class="error-feedback" v-if="validationErrors[`quantity-${$index}`]">
+                {{ validationErrors[`quantity-${$index}`] }}
+              </label>
+            </el-form-item>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}
             </p>
@@ -88,13 +99,14 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps, ref, watch } from 'vue';
+import { defineEmits, defineProps, ref, watch, reactive } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SingleOptionSelect from '@/components/common/SingleOptionSelect.vue';
 import { REQUEST_ALLOCATION, REQUEST_MOBILIZATION } from '@/constants/change-request.js';
 import { MATERIAL_TYPE } from '@/constants/resource.js';
 import IconTrash from '@/svg/IconTrash.vue';
 import { TASK_TO_TASK } from '@/constants/allocation.js';
+import {mixinMethods} from "@/utils/variables";
 
 const { t } = useI18n();
 
@@ -120,6 +132,20 @@ const emit = defineEmits(['search', 'update-list']);
 
 const handleSearch = (value) => {
   emit('search', value);
+};
+
+const validationErrors = reactive({});
+const itemRules = props.rules ;
+// Validate form
+const validateForm = () => {
+  validationErrors.value = {}; // Clear previous errors
+
+  listAddedValues.value.forEach((item, index) => {
+    // Validate each field based on its rules
+    Object.keys(itemRules).forEach((field) => {
+      mixinMethods.validateField(index, field, itemRules, item, validationErrors);
+    });
+  });
 };
 
 const handleChangeValue = (quantity, resourceId) => {
