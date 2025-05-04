@@ -8,13 +8,13 @@ export const WAIT_TO_COMPLETE = 4;
 export const CLOSED_STATUS = 6;
 
 export const STATUSES = [
-  'Receive Request',
-  'Planning',
-  'InProgress',
-  'Completed',
-  'Waiting Approve To Complete',
-  'Paused',
-  'Closed'
+  'project.statuses.receive_reqs',
+  'project.statuses.planning',
+  'project.statuses.in_progress',
+  'project.statuses.complete',
+  'project.statuses.wait_to_complete',
+  'project.statuses.paused',
+  'project.statuses.close',
 ];
 
 export const STATUS_LABELS = [
@@ -48,6 +48,7 @@ export const PROJECT_SIDEBARS = [
 export const REQUEST_SIDEBAR = [
   PAGE_NAME.RESOURCE_MOBILIZATION.LIST,
   PAGE_NAME.RESOURCE_ALLOCATION.LIST,
+  PAGE_NAME.PROJECT.LIST
 ]
 
 export const SS_RELATIONSHIP = "SS";

@@ -12,7 +12,7 @@ export const getProjectRules = () => {
   const {t} = useI18n();
   return {
     projectCode: [
-      { required: true, message: t("E-PRJ-009"), trigger: "blur" },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         max: MAX_CHARACTER,
         message: t("E-CM-003", { max: MAX_CHARACTER }),
@@ -20,6 +20,7 @@ export const getProjectRules = () => {
       },
     ],
     projectName: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         max: MAX_CHARACTER,
         message: t("E-CM-003", { max: MAX_CHARACTER }),
@@ -27,10 +28,35 @@ export const getProjectRules = () => {
       },
     ],
     customerId: [
-      { required: true, message: t("E-PRJ-010"), trigger: "blur" },
+      { required: true, message: t("E-CM-002"), trigger: "change" },
+    ],
+    technicalManager: [
+      { required: true, message: t("E-CM-002"), trigger: "change" },
+    ],
+    resourceManager: [
+      { required: true, message: t("E-CM-002"), trigger: "change" },
+    ],
+    constructionManager: [
+      { required: true, message: t("E-CM-002"), trigger: "change" },
+    ],
+    qa: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
     ],
     area: [
-      { required: true, message: t("E-PRJ-003"), trigger: "blur" },
+      {
+        pattern: /^(\d+(\.\d+)?)\s*(m²|m2|ft²|ft2|km²|km2|cm²|cm2|mm²|mm2|ha|acre|sq\s*m|sq\s*ft)$/i,
+        message: t("E-CM-037"),
+        trigger: "blur"
+      },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
+      {
+        max: MAX_CHARACTER,
+        message: t("E-CM-003", { max: MAX_CHARACTER }),
+        trigger: "change",
+      },
+    ],
+    constructType: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         max: MAX_CHARACTER,
         message: t("E-CM-003", { max: MAX_CHARACTER }),
@@ -38,7 +64,7 @@ export const getProjectRules = () => {
       },
     ],
     startDate: [
-      { required: true, message: t("E-PRJ-004"), trigger: "blur" },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         trigger: "change",
       },
@@ -54,7 +80,7 @@ export const getProjectRules = () => {
       }
     ],
     endDate: [
-      { required: true, message: i18n.global.t("E-PRJ-005"), trigger: "blur" },
+      { required: true, message: i18n.global.t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
           validateStartBeforeEnd(rule, value, callback, projectDetails.value.startDate, value, "E-CM-028"),
@@ -67,7 +93,7 @@ export const getProjectRules = () => {
       }
     ],
     budget: [
-      { required: true, message: t("E-PRJ-006"), trigger: "blur" },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
           validateMinMax(
@@ -83,7 +109,7 @@ export const getProjectRules = () => {
       }
     ],
     purpose: [
-      { required: true, message: t("E-PRJ-007"), trigger: "blur" },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         max: MAX_DESCRIPTION,
         message: t("E-CM-003", { max: MAX_DESCRIPTION }),
@@ -91,7 +117,7 @@ export const getProjectRules = () => {
       }
     ],
     technicalReqs: [
-      { required: true, message: t("E-PRJ-008"), trigger: "blur" },
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         max: MAX_DESCRIPTION,
         message: t("E-CM-003", { max: MAX_DESCRIPTION }),

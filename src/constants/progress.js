@@ -11,10 +11,12 @@ export const PROGRESS_STATUS = [
   'progress.status.completed',
   'progress.status.paused',
   'progress.status.canceled',
+  'progress.status.wait_inspection',
 ];
 
 export const STATUS_NOT_START = 0;
+export const IN_PROGRESS = 1;
 export const COMPLETED  = 2;
 export const CANCELED  = 4;
-
+export const PAUSED  = 3;
 export const DONE_PROGRESS = 100;

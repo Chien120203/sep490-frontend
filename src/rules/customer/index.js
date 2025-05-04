@@ -17,6 +17,7 @@ export const getCustomerRules = () => {
       },
     ],
     customerName: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         max: MAX_CHARACTER,
         message: t("E-CM-003", { max: MAX_CHARACTER }),

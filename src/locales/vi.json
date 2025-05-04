@@ -60,7 +60,7 @@
     "status": "Trạng thái",
     "reset": "Đặt lại",
     "stt": "STT",
-    "no": "Không",
+    "no": "STT",
     "month": "Tháng",
     "year": "Năm",
     "type": "Loại",
@@ -415,6 +415,11 @@
     "add_new": "Thêm mới",
     "keyword": "Từ khóa",
     "search": "Tìm kiếm",
+    "financial": "Số liệu khảo sát",
+    "warning": {
+      "expensesExceeded": "Chi phí vượt quá",
+      "projectCostExceeded": "Chi phí vượt quá"
+    },
     "clear": "Xóa",
     "date": "Ngày ký hợp đồng",
     "status": "Trạng thái",
@@ -717,6 +722,7 @@
   "project": {
     "title": "Dự án",
     "add_new": "Thêm mới",
+    "survey_data": "Dữ liệu dự án",
     "keyword": "Từ khóa",
     "search": "Tìm kiếm",
     "clear": "Xóa",
@@ -1278,7 +1284,7 @@
         "request_type": "Loại yêu cầu",
         "request_date": "Ngày yêu cầu",
         "creator": "Người tạo",
-        "no": "Số thứ tự",
+        "no": "STT",
         "action": "Hành động",
         "status": "Trạng thái"
       }

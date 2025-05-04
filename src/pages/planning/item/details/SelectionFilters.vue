@@ -39,7 +39,7 @@
                 v-model="contractDetails.startDate"
                 type="date"
                 :disabled="true"
-                placeholder="Select Date"
+                :placeholder="$t('planning.form.select_date')"
             />
           </el-form-item>
 
@@ -77,8 +77,8 @@
       <el-alert
           type="warning"
           show-icon
-          :title="`This plan is currently being edited by ${lockData?.userName}`"
-          :description="`You can view the plan but cannot make changes until they finish editing.`"
+          :title="$t('planning.alert.locked_title', { userName: lockData?.userName })"
+          :description="$t('planning.alert.locked_description')"
           style="margin-bottom: 16px"
       />
     </div>
@@ -134,14 +134,20 @@ const formatLockTime = (dateTimeString) => {
 };
 
 const exceedMessages = computed(() => {
-  const actualBudget = props.planDetails.planItems.reduce((sum, item) => sum + item.totalPrice, 0);
+  const hasChildren = (task) => props.planDetails.planItems.some(child => child.parentIndex === task.index);
+
+  // Correctly calculate the actual budget by summing only leaf nodes (items without children)
+  const actualBudget = props.planDetails.planItems.reduce((sum, item) => {
+    return sum + (hasChildren(item) ? 0 : item.totalPrice);
+  }, 0);
+
   if(totalPrice.value < actualBudget) {
     emit("disable-btn", true);
     return t('planning.errors.exceed_budget');
   }
   emit("disable-btn", false);
-  return ''
-})
+  return '';
+});
 
 defineExpose({
   ruleFormRef,

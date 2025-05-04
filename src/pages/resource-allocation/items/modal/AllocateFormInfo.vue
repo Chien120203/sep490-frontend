@@ -1,13 +1,14 @@
 <template>
   <div class="price-input-form">
     <el-form
+        ref="ruleFormRef"
         label-width="40%"
         :rules="ALLOCATIONFORMINFO_RULES"
         :model="data"
     >
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="$t('mobilization.modal.code')">
+          <el-form-item prop="requestCode" :label="$t('mobilization.modal.code')">
             <el-input disabled v-model="data.requestCode" class="custom-input" />
           </el-form-item>
           <el-form-item :label="$t('mobilization.modal.name')">
@@ -15,7 +16,7 @@
           </el-form-item>
 
           <!-- Allocation type radio buttons -->
-          <el-form-item :label="$t('mobilization.modal.type')" required>
+          <el-form-item prop="requestType" :label="$t('mobilization.modal.type')" required>
             <el-select class="custom-input" :disabled="!allowEdit" v-model="data.requestType">
               <el-option
                   v-for="request in ALLOCATION_REQUEST_TYPES"
@@ -28,7 +29,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === PROJECT_TO_PROJECT" :label="$t('allocation.target_project')">
+          <el-form-item prop="toProjectId" v-if="data.requestType === PROJECT_TO_PROJECT" :label="$t('allocation.target_project')">
             <div class="select-project-container custom-input">
               <SingleOptionSelect
                   :isDisabled="!allowEdit"
@@ -43,7 +44,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === PROJECT_TO_TASK" :label="$t('allocation.target_task')">
+          <el-form-item prop="toTaskId" v-if="data.requestType === PROJECT_TO_TASK" :label="$t('allocation.target_task')">
             <div class="select-project-container custom-input">
               <SingleOptionSelect
                   v-model="data.toTaskId"
@@ -58,7 +59,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === TASK_TO_TASK" :label="$t('allocation.from_task')">
+          <el-form-item prop="fromTaskId" v-if="data.requestType === TASK_TO_TASK" :label="$t('allocation.from_task')">
             <div class="select-project-container custom-input">
               <SingleOptionSelect
                   v-model="data.fromTaskId"
@@ -73,7 +74,7 @@
           </el-form-item>
 
           <!-- Target project/task selector -->
-          <el-form-item v-if="data.requestType === TASK_TO_TASK && data.fromTaskId" :label="$t('allocation.to_task')">
+          <el-form-item prop="toTaskId"  v-if="data.requestType === TASK_TO_TASK && data.fromTaskId" :label="$t('allocation.to_task')">
             <div class="select-project-container custom-input">
               <SingleOptionSelect
                   v-model="data.toTaskId"
@@ -100,7 +101,7 @@
             />
           </el-form-item>
 
-          <el-form-item :label="$t('mobilization.modal.priority')">
+          <el-form-item prop="priorityLevel" :label="$t('mobilization.modal.priority')">
             <el-select class="custom-input" :disabled="!allowEdit" v-model="data.priorityLevel">
               <el-option
                   v-for="(status, index) in PRIORITIES"
@@ -111,7 +112,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item :label="$t('mobilization.modal.description')">
+          <el-form-item prop="description" :label="$t('mobilization.modal.description')">
             <el-input
                 :disabled="!allowEdit"
                 v-model="data.description"
@@ -126,7 +127,7 @@
 </template>
 
 <script setup>
-import {computed, defineProps} from "vue";
+import {computed, defineProps, ref} from "vue";
 import { PRIORITIES} from "@/constants/mobilization.js";
 import { DATE_FORMAT } from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
@@ -153,6 +154,9 @@ const ALLOCATIONFORMINFO_RULES = getAllocationRules();
 const handleSearchProject = (keyword) => {
   emit("searchProject", keyword);
 };
+
+const ruleFormRef = ref(null);
+defineExpose({ ruleFormRef });
 
 const handleSearchTask = (keyword) => {
   emit("searchTask", keyword);

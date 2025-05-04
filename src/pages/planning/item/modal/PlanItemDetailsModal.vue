@@ -16,6 +16,7 @@
             ref="childFormRef"
             :rules="rules"
             :allowEdit="allowEdit"
+            :isPriceExceeded="isPriceExceeded"
             :total="totalAllPrice"
             :selectedRow="selectedRow"
         />
@@ -44,6 +45,7 @@
                 :optionKeys="materialOptions"
                 @search="handleSearch"
                 @update-value="calculateTotal"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
 
@@ -61,6 +63,7 @@
                 @search="handleSearch"
                 :optionKeys="userOptions"
                 @update-value="calculateTotal"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
 
@@ -78,6 +81,7 @@
                 @search="handleSearch"
                 :optionKeys="vehicleOptions"
                 @update-value="calculateTotal"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
         </el-tabs>
@@ -85,7 +89,7 @@
     </template>
     <template #footer>
       <div class="modal-footer">
-        <el-button v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
+        <el-button :disabled="isPriceExceeded || isExceedQuantity" v-if="allowEdit" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
         <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
       </div>
     </template>
@@ -93,7 +97,7 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw} from "vue";
+import {ref, defineProps, defineEmits, computed, reactive, watch, toRaw, onMounted} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import PriceInputForm from "@/pages/planning/item/modal/items/PriceInputForm.vue";
 import ItemList from "@/pages/planning/item/modal/items/ItemList.vue";
@@ -134,13 +138,7 @@ const dependentFormRef = ref(null);
 const childFormRef = ref(null);
 const materialOptions = ref({id: "id", value: "materialName"});
 const userOptions = ref({id: "id", value: "teamName"});
-const vehicleOptions = ref({id: "id", value: "chassisNumber"});
-const totalAllPrice = ref({
-  machine: 0,
-  labor: 0,
-  material: 0,
-  totalPrice: 0,
-});
+const vehicleOptions = ref({id: "id", value: "vehicleName"});
 const hasChildren = computed(() => props.tasks.some(child => child.parentIndex === props.selectedRow.index && !child.deleted));
 
 const getListResourceByType = (list, type) => {
@@ -151,30 +149,69 @@ const getListResourceByType = (list, type) => {
 const listSelectedMachines = computed(() => getListResourceByType(props.selectedRow?.details, MACHINE_TYPE));
 const listSelectedMaterials = computed(() => getListResourceByType(props.selectedRow?.details, MATERIAL_TYPE));
 const listSelectedUsers = computed(() => getListResourceByType(props.selectedRow?.details, HUMAN_TYPE));
-const calculateTotal = () => {
-  const machine = listSelectedMachines.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
-  const labor = listSelectedUsers.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
-  const material = listSelectedMaterials.value?.reduce((pre, curr) => pre + (curr.quantity * curr.unitPrice || 0), 0) ?? 0;
+// Change from computed to ref
+const totalAllPrice = ref({
+  machine: 0,
+  labor: 0,
+  material: 0
+});
 
+// Function to calculate total prices
+const calculateTotal = () => {
+  // Calculate machine total
+  const machine = listSelectedMachines.value?.reduce(
+      (pre, curr) => pre + (parseFloat(curr.quantity || 0) * parseFloat(curr.unitPrice || 0)),
+      0
+  ) || 0;
+
+  // Calculate labor total
+  const labor = listSelectedUsers.value?.reduce(
+      (pre, curr) => pre + (parseFloat(curr.quantity || 0) * parseFloat(curr.unitPrice || 0)),
+      0
+  ) || 0;
+
+  // Calculate material total
+  const material = listSelectedMaterials.value?.reduce(
+      (pre, curr) => pre + (parseFloat(curr.quantity || 0) * parseFloat(curr.unitPrice || 0)),
+      0
+  ) || 0;
+
+  // Update totalAllPrice ref
   totalAllPrice.value = {
     machine: machine.toFixed(2),
     labor: labor.toFixed(2),
-    material: material.toFixed(2),
-    totalPrice: (machine + labor + material).toFixed(2),
+    material: material.toFixed(2)
   };
+
+  console.log("Total prices recalculated:", totalAllPrice.value);
 };
+const isExceedQuantity = ref(false);
+const isPriceExceeded = computed(() => {
+  if (!props.selectedRow || !props.selectedRow.total) return false;
+  return (Number(totalAllPrice.value.machine) + Number(totalAllPrice.value.labor) + Number(totalAllPrice.value.material)) > Number(props.selectedRow.total);
+});
+
+const handleChangeStatusExceed = (status) => {
+  isExceedQuantity.value = status;
+}
+
+// Watch for changes in the list data to trigger recalculation
+watch(
+    [listSelectedMachines, listSelectedUsers, listSelectedMaterials],
+    () => calculateTotal(),
+    { deep: true }
+);
+
+// Initial calculation when component is mounted
+onMounted(() => {
+  calculateTotal();
+});
 
 const handleSearch = (data) => {
   emit("search", data)
 }
 
 const closeModal = () => {
-  totalAllPrice.value = {
-    machine: 0,
-    labor: 0,
-    material: 0,
-    totalPrice: 0,
-  };
   activeTab.value = "tasks"
   emit("close");
 };

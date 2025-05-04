@@ -7,7 +7,7 @@
       @close="$emit('close')"
   >
     <template #header>
-      <h4 class="modal-title">Task Dependency</h4>
+      <h4 class="modal-title">{{ $t('progress.modal.task_dependency_title') }}</h4>
     </template>
     <template #body>
       <el-form
@@ -19,7 +19,7 @@
         <div class="item">
           <el-form-item prop="taskId" class="input-container">
             <template #label>
-              <span class="label-start">Task</span>
+              <span class="label-start">{{ $t('progress.modal.task_label') }}</span>
             </template>
             <SingleOptionSelect
                 v-model="dependencyObj.taskId"
@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item prop="type" class="input-container">
             <template #label>
-              <span class="label-start">Dependency Type</span>
+              <span class="label-start">{{ $t('progress.modal.dependency_type_label') }}</span>
             </template>
             <el-select v-model="dependencyObj.type">
               <el-option
@@ -62,7 +62,6 @@ import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemIn
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
 import {DATE_FORMAT} from "@/constants/application.js";
 import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import FileUpload from "@/components/common/FileUpload.vue";
 import {TASK_RELATIONSHIPS} from "@/constants/project.js";
 
 const {t} = useI18n();

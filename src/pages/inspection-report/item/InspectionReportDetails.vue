@@ -8,7 +8,7 @@
         :listData="listTasks"
         :isRemote="true"
         :showClearable="true"
-        :placeholder="'Chọn công việc'"
+        :placeholder="$t('construct_log.details.select_task')"
         @handleSelectedParams="handleSelectTask"
         @remoteSearch="handleSearch"
     />
@@ -18,8 +18,8 @@
       <el-alert
           type="info"
           show-icon
-          :title="`Đã chọn: ${selectedTask.workName}`"
-          :description="`Mã công việc: ${selectedTask.index}`"
+          :title="$t('construct_log.details.selected_task', { workName: selectedTask.workName })"
+          :description="$t('construct_log.details.task_code', { index: selectedTask.index })"
           style="margin-bottom: 16px"
       />
     </div>
@@ -30,7 +30,7 @@
       <el-collapse v-model="activeCollapseItems">
         <div class="el-collapse-item-header">
           <div class="el-collapse-item-header-title">
-            <h3>{{ selectedTask.workName ?? "-" }}</h3>
+            <h3>{{ selectedTask.workName ?? '-' }}</h3>
           </div>
           <div class="el-collapse-item-header-icon">
             <IconCircleClose class="close-icon" :width="15" :height="15" @click="handleDeleteLog(selectedTask.id)"/>
@@ -46,17 +46,17 @@
           >
             <el-form-item class="work-amount-item">
               <template #label>
-                <span class="label-start">Khối lượng dự kiến</span>
+                <span class="label-start">{{ $t('construct_log.details.planned_quantity') }}</span>
               </template>
-              <el-input disabled v-model.number="selectedTask.quantity" type="number" placeholder="Nhập khối lượng dự kiến" />
+              <el-input disabled v-model.number="selectedTask.quantity" type="number" :placeholder="$t('construct_log.details.enter_planned_quantity')" />
             </el-form-item>
 
-            <el-form-item class="work-amount-item" label="Khối lượng thực tế" :prop="`listWorkAmount.0.workAmount`">
-              <el-input-number disabled style="width: 100%" v-model.number="listWorkAmount[0].workAmount" :min="0" type="number" placeholder="Nhập khối lượng thực tế" />
+            <el-form-item class="work-amount-item" :label="$t('construct_log.details.actual_quantity')" :prop="`listWorkAmount.0.workAmount`">
+              <el-input-number disabled style="width: 100%" v-model.number="selectedTask.usedQuantity" :min="0" type="number" :placeholder="$t('construct_log.details.enter_actual_quantity')" />
             </el-form-item>
 
-            <el-form-item class="work-amount-item" label="Khối lượng còn lại" prop="remaining">
-              <el-input disabled :value="selectedTask.quantity - listWorkAmount[0].workAmount" type="number" placeholder="Nhập khối lượng còn lại" />
+            <el-form-item class="work-amount-item" :label="$t('construct_log.details.remaining_quantity')" prop="remaining">
+              <el-input disabled :value="selectedTask.quantity - selectedTask.usedQuantity" type="number" :placeholder="$t('construct_log.details.enter_remaining_quantity')" />
             </el-form-item>
           </el-form>
         </div>
@@ -64,51 +64,33 @@
         <!-- Vật liệu -->
         <el-collapse-item :name="selectedTask.index + '-1'">
           <template #title>
-            <h3>Vật Liệu</h3>
+            <h3>{{ $t('construct_log.details.material') }}</h3>
           </template>
           <ListItems
-              ref="materialForm"
-              :rules="rules"
-              :taskIndex="selectedTask.index"
               :resourceType="MATERIAL_TYPE"
-              :resources="logDetails.resources"
-              :selectData="getListResourcesByType(selectedTask, MATERIAL_TYPE)"
-              :optionKeys="materialOptionKeys"
-              :isExport="true"
+              :resources="logDetails"
           />
         </el-collapse-item>
 
         <!-- Nhân công -->
         <el-collapse-item :name="selectedTask.index + '-2'">
           <template #title>
-            <h3>Nhân Công</h3>
+            <h3>{{ $t('construct_log.details.human') }}</h3>
           </template>
           <ListItems
-              ref="humanForm"
-              :rules="rules"
-              :taskIndex="selectedTask.index"
               :resourceType="HUMAN_TYPE"
-              :resources="logDetails.resources"
-              :selectData="getListResourcesByType(selectedTask, HUMAN_TYPE)"
-              :optionKeys="userOptionKeys"
-              :isExport="false"
+              :resources="logDetails"
           />
         </el-collapse-item>
 
         <!-- Phương tiện -->
         <el-collapse-item :name="selectedTask.index + '-3'">
           <template #title>
-            <h3>Phương Tiện</h3>
+            <h3>{{ $t('construct_log.details.vehicle') }}</h3>
           </template>
           <ListItems
-              ref="machineForm"
-              :rules="rules"
-              :taskIndex="selectedTask.index"
               :resourceType="MACHINE_TYPE"
-              :resources="logDetails.resources"
-              :selectData="getListResourcesByType(selectedTask, MACHINE_TYPE)"
-              :optionKeys="vehicleOptionKeys"
-              :isExport="false"
+              :resources="logDetails"
           />
         </el-collapse-item>
       </el-collapse>
@@ -118,50 +100,34 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
-import ListItems from "@/pages/construction-log/items/details/ListItems.vue";
-import IconCircleClose from "@/svg/IconCircleClose.vue";
-import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from "@/constants/resource.js";
-import {DONE_PROGRESS} from "@/constants/progress.js";
+import { useI18n } from 'vue-i18n';
+import SingleOptionSelect from '@/components/common/SingleOptionSelect.vue';
+import ListItems from '@/pages/inspection-report/item/ListItems.vue';
+import IconCircleClose from '@/svg/IconCircleClose.vue';
+import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from '@/constants/resource.js';
+
+const { t } = useI18n();
 
 const props = defineProps({
-  logDetails: {
-    type: Object,
-    default: () => ({})
-  },
-  progressDtls: {
-    type: Object,
-    default: () => ({})
-  },
-  inspectionReportDetails: {
-    type: Object,
-    default: () => ({})
-  },
-  rules: {
-    type: Object,
-    default: () => ({})
-  }
+  progressDtls: { type: Object, default: () => ({}) },
+  inspectionReportDetails: { type: Object, default: () => ({}) },
+  rules: { type: Object, default: () => ({}) }
 });
 
-const activeCollapseItems = ref(["1", "2", "3"]);
-const emit = defineEmits(["remove-task"]);
-const materialOptionKeys = ref({id: "id", value: "name"});
-const userOptionKeys = ref({id: "id", value: "name"});
-const vehicleOptionKeys = ref({id: "id", value: "name"});
+const activeCollapseItems = ref(['1', '2', '3']);
+const emit = defineEmits(['remove-task']);
+const materialOptionKeys = ref({ id: 'id', value: 'name' });
+const userOptionKeys = ref({ id: 'id', value: 'name' });
+const vehicleOptionKeys = ref({ id: 'id', value: 'name' });
 const selectedRow = ref(null);
 
 const machineForm = ref(null);
 const materialForm = ref(null);
 const humanForm = ref(null);
 const workAmountForm = ref(null);
-defineExpose({
-  machineForm,
-  materialForm,
-  humanForm,
-  workAmountForm
-});
-const hasChildren = (parent) => props.progressDtls.progressItems.some(child => child.parentIndex === parent.index);
+defineExpose({ machineForm, materialForm, humanForm, workAmountForm });
 
+const hasChildren = (parent) => props.progressDtls.progressItems.some(child => child.parentIndex === parent.index);
 const listTasks = computed(() => props.progressDtls.progressItems);
 // Chỉ lưu 1 workAmount cho task đang chọn
 const listWorkAmount = ref([{ workAmount: 0 }]);
@@ -170,6 +136,7 @@ const selectedTask = computed(() => {
   if (!props.inspectionReportDetails.constructionProgressItemId) return null;
   return props.progressDtls.progressItems.find(task => task.id === props.inspectionReportDetails.constructionProgressItemId);
 });
+const logDetails = computed(() => selectedTask.value.details);
 
 const handleSelectTask = (id) => {
   let selectedItem = props.progressDtls.progressItems.find(task => task.id === id);
@@ -189,11 +156,11 @@ const getListResourcesByType = (task, type) =>
 const handleDeleteLog = (index) => {
   props.inspectionReportDetails.constructionProgressItemId = null;
   listWorkAmount.value = [{ workAmount: 0 }];
-  emit("remove-task", index);
+  emit('remove-task', index);
 };
 
 const handleSearch = (value) => {
-  console.log("Search value:", value);
+  console.log(`${t('construct_log.details.search_value')}:`, value);
 };
 </script>
 

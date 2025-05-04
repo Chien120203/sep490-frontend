@@ -80,7 +80,6 @@
     <ModalConfirm
         :isShowModal="isShowModalConfirm.value"
         @close-modal="closeModalConfirm"
-        :isConfirmByText="true"
         :confirmText="TEXT_CONFIRM_DELETE"
         @confirmAction="handleConfirm"
         :message="$t('user.modal_confirm.message')"
@@ -125,6 +124,7 @@ export default {
     const searchForms = ref({
       keyWord: "",
       pageIndex: 1,
+      pageSize: 15,
     });
     const delete_id = ref();
     const isShowBoxSearch = ref(false);

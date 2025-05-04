@@ -97,7 +97,8 @@ const listTeams = computed(() => inventoryData.value.filter(item => item.resourc
 const searchForms = ref({
   projectId: projectId.value,
   type: HUMAN_TYPE,
-  pageIndex: 1
+  pageIndex: 1,
+  pageSize: 15,
 });
 
 // Methods

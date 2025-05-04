@@ -66,7 +66,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="chassisNumber" class="custom-textarea" :label="$t('resource.material.details.chassisNumber')">
+            <el-form-item prop="chassisNumber" class="custom-textarea required" :label="$t('resource.material.details.chassisNumber')">
               <el-input v-model="materialResourcesDetails.value.chassisNumber" />
               <label class="error-feedback-material" v-if="validation && validation.value.chassisNumber">
                 {{ $t(validation.value.chassisNumber) }}
@@ -77,7 +77,7 @@
           </div>
 
           <div class="item item-bib-add item-material-add">
-            <el-form-item prop="wholesalePrice" class="custom-textarea" :label="$t('resource.material.details.wholesalePrice')">
+            <el-form-item prop="wholesalePrice" class="custom-textarea required" :label="$t('resource.material.details.wholesalePrice')">
               <el-input :formatter="(value) => mixinMethods.formatInputMoney(value)"
                         :parser="(value) => mixinMethods.parseInputCurrency(value)"
                         v-model="materialResourcesDetails.value.wholesalePrice"
@@ -87,7 +87,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="retailPrice" class="custom-textarea" :label="$t('resource.material.details.retailPrice')">
+            <el-form-item prop="retailPrice" class="custom-textarea required" :label="$t('resource.material.details.retailPrice')">
               <el-input :formatter="(value) => mixinMethods.formatInputMoney(value)"
                         :parser="(value) => mixinMethods.parseInputCurrency(value)"
                         v-model="materialResourcesDetails.value.retailPrice" />
@@ -103,7 +103,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="expireDate" class="custom-textarea" :label="$t('resource.material.details.expireDate')">
+            <el-form-item prop="expireDate" class="custom-textarea required" :label="$t('resource.material.details.expireDate')">
               <el-date-picker
                   style="width: 90%"
                   :format="DATE_FORMAT"
@@ -115,7 +115,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="productionDate" class="custom-textarea" :label="$t('resource.material.details.productionDate')">
+            <el-form-item prop="productionDate" class="custom-textarea required" :label="$t('resource.material.details.productionDate')">
               <el-date-picker
                   style="width: 90%"
                   :format="DATE_FORMAT"
@@ -127,6 +127,13 @@
               </label>
             </el-form-item>
 
+            <el-form-item class="input-item required" :label="$t('resource.material.details.roll_back')">
+              <el-select v-model="materialResourcesDetails.value.canRollBack" placeholder="Chọn">
+                <el-option :value="true" :label="$t('resource.material.details.canRollbackYes')" />
+                <el-option :value="false" :label="$t('resource.material.details.canRollbackNo')" />
+              </el-select>
+            </el-form-item>
+
             <el-form-item prop="description" class="input-item" :label="$t('resource.material.details.description')">
               <el-input v-model="materialResourcesDetails.value.description" class="custom-textarea" type="textarea" />
               <label class="error-feedback-material" v-if="validation && validation.value.description">
@@ -134,12 +141,6 @@
               </label>
             </el-form-item>
 
-            <el-form-item class="input-item" :label="$t('resource.material.details.roll_back')">
-              <el-radio-group v-model="materialResourcesDetails.value.canRollBack">
-                <el-radio label="Có thể hoàn" :value="true"/>
-                <el-radio label="Không the hoàn" :value="false"/>
-              </el-radio-group>
-            </el-form-item>
           </div>
         </el-form>
       </div>

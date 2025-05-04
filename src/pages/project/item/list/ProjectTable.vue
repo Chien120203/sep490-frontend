@@ -113,7 +113,7 @@
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {mixinMethods} from "@/utils/variables.js";
-import {DATE_FORMAT} from "@/constants/application.js";
+import {CURRENCY, DATE_FORMAT} from "@/constants/application.js";
 import {RECEIVE_STATUS, STATUS_LABELS} from "@/constants/project.js";
 import {EXECUTIVE_BOARD} from "@/constants/roles.js";
 
@@ -157,7 +157,7 @@ export default {
       return localStorage.getItem('role') === EXECUTIVE_BOARD && status === RECEIVE_STATUS;
     }
     const formatCurrency = (inputCurrency) => {
-      return mixinMethods.formatCurrency(inputCurrency);
+      return mixinMethods.formatInputMoney(inputCurrency) + " " + CURRENCY;
     }
 
     const formatStatus = (status) => {

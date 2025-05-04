@@ -1,12 +1,12 @@
 <template>
   <div class="custom-file-upload">
-    <label for="fileInput" class="upload-label">
-      {{ $t('common.upload') }}
+    <label :for="inputId" class="upload-label">
+      {{ message || $t('common.upload') }}
     </label>
     <label>({{ allowedTypes }})</label>
     <input
         type="file"
-        id="fileInput"
+        :id="inputId"
         :disabled="disabled"
         @change="handleFileChange"
         :accept="allowedTypes"
@@ -43,6 +43,10 @@ const props = defineProps({
     type: Number,
     default: 3,
   },
+  message: {
+    type: String,
+    default: "",
+  },
   existingFiles: {
     type: Array,
     default: () => [],
@@ -50,8 +54,19 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false,
+  },
+  autoRemove: {
+    type: Boolean,
+    default: false,
+  },
+  componentId: {
+    type: String,
+    default: "default"
   }
 });
+
+// Create a unique ID for the file input element based on componentId
+const inputId = computed(() => `fileInput_${props.componentId}`);
 
 const emit = defineEmits(["file-selected", "file-removed"]);
 const route = useRoute();
@@ -61,7 +76,35 @@ const fileList = computed(() => props.existingFiles || []);
 const handleFileChange = (event) => {
   const files = [...event.target.files];
 
-  if (files.length + fileList.value.length > props.fileLimit) {
+  // Validate file types
+  const allowedTypesArray = props.allowedTypes.split(',');
+  const invalidFiles = files.filter(file => {
+    const extension = '.' + file.name.split('.').pop().toLowerCase();
+    return !allowedTypesArray.includes(extension);
+  });
+
+  if (invalidFiles.length > 0) {
+    const fileNames = invalidFiles.map(f => f.name).join(', ');
+    alert(`Invalid file type(s): ${fileNames}\nAllowed types: ${props.allowedTypes}`);
+    event.target.value = "";
+    return;
+  }
+
+  if (props.autoRemove) {
+    // Remove all existing files first
+    const removedFiles = [...fileList.value];
+    fileList.value.length = 0;
+
+    // Emit removed files
+    removedFiles.forEach(file => {
+      emit("file-removed", file);
+    });
+  }
+
+  if (!props.autoRemove && files.length + fileList.value.length > props.fileLimit) {
+    alert(`You can only upload up to ${props.fileLimit} files.`);
+    return;
+  } else if (props.autoRemove && files.length > props.fileLimit) {
     alert(`You can only upload up to ${props.fileLimit} files.`);
     return;
   }
@@ -83,7 +126,6 @@ const removeFile = (index, file) => {
 const downloadFile = (url) => {
   window.open(url, "_blank");
 }
-
 </script>
 
 <style scoped>

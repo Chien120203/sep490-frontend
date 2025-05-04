@@ -82,7 +82,7 @@
                 <el-option
                     v-for="(status, index) in STATUSES"
                     :key="index"
-                    :label="status"
+                    :label="$t(status)"
                     :value="index"
                 >
                 </el-option>
@@ -156,6 +156,7 @@ export default {
       status: null,
       customerId: null,
       pageIndex: 1,
+      pageSize: 15,
     });
     const projectStore = useProjectStore();
     const persist = usePersistenceStore();

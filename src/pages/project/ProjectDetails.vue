@@ -7,7 +7,7 @@
       </div>
       <div v-if="isAllowApprove">
         <el-button v-if="isAllowApproveToPlanning" class="btn btn-save" @click="handleChangeStatus(PLANNING_STATUS)">{{ $t("common.approve") }}</el-button>
-        <el-button v-if="isAllowClose" class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.close") }}</el-button>
+        <el-button v-if="isAllowClose && projectStatus !== COMPLETE" class="btn btn-refuse" @click="handleChangeStatus(CLOSED_STATUS)">{{ $t("common.close") }}</el-button>
         <el-button v-if="projectStatus === WAIT_TO_COMPLETE" type="success" class="btn" @click="handleChangeStatus(COMPLETE)">{{ $t("common.complete") }}</el-button>
       </div>
     </div>
@@ -39,7 +39,7 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button v-if="isAllowCreateContract" class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowCreateContract && !isSiteSurveyNull.value" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>

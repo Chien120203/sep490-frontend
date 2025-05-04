@@ -37,7 +37,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="customerName" class="custom-textarea" :label="$t('customer.details.customer_name')">
+            <el-form-item prop="customerName" class="custom-textarea required" :label="$t('customer.details.customer_name')">
               <el-input v-model="customerDetails.value.customerName" />
               <label class="error-feedback-customer" v-if="validation && validation.value.customerName">
                 {{ $t(validation.value.customerName) }}

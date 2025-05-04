@@ -52,7 +52,7 @@
           </template>
           <el-date-picker
               style="width: 96%"
-              :disabled="!isAllowUpdate"
+              :disabled="true"
               :value-format="DATE_FORMAT"
               v-model="contractInfo.startDate"
               placeholder="Select Date"
@@ -69,7 +69,7 @@
           </template>
           <el-date-picker
               style="width: 96%"
-              :disabled="!isAllowUpdate"
+              :disabled="true"
               :value-format="DATE_FORMAT"
               v-model="contractInfo.endDate"
               placeholder="Select Date"
@@ -125,6 +125,7 @@
           <FileUpload
               :existingFiles="contractInfo.attachments"
               :allowedTypes="'.jpg,.png,.pdf,.docx'"
+              component-id="contractInfoUpload"
               :fileLimit="3"
               :disabled="!isAllowUpdate"
               class="input-wd-96"

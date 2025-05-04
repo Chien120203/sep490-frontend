@@ -12,6 +12,7 @@ export const useProgressStore = defineStore(
     const persist = usePersistenceStore();
     const { projectId } = persist;
     const validation = reactive({value: {}});
+    const isShowModal = reactive({value: false});
     const progressDetails = reactive({
       value: {}
     });
@@ -121,7 +122,6 @@ export const useProgressStore = defineStore(
         params,
         (response) => {
           getProgressDetails(projectId.value);
-          clearSelectedProgressItem();
           validation.value = [];
           mixinMethods.notifySuccess(t("response.message.save_progress_item_success"));
           mixinMethods.endLoading();
@@ -160,6 +160,7 @@ export const useProgressStore = defineStore(
       validation,
       progressDetails,
       selectedProgressItem,
+      isShowModal,
       updateItem,
       saveProgressItem,
       getProgressDetails,

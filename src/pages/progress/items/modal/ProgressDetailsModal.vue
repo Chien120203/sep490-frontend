@@ -7,7 +7,7 @@
       @close="$emit('close')"
   >
     <template #header>
-      <h4 class="modal-title">Progress Item Details</h4>
+      <h4 class="modal-title">{{ $t('progress.progress_item_details_title') }}</h4>
     </template>
     <template #body>
       <div>
@@ -19,11 +19,21 @@
     </template>
     <template #footer>
       <div class="modal-footer">
-        <el-button v-if="allowEditFields" class="btn btn-save" @click="handleSubmit">{{ $t('common.save') }}</el-button>
-        <el-button class="btn btn-refuse" @click="$emit('close')">{{ $t('common.cancel') }}</el-button>
+        <el-button v-if="allowEditFields && (progressDetails.status !== CANCELED || progressDetails.status !== COMPLETED || progressDetails.status !== PAUSED)" type="warning" class="btn" @click="handleSubmit('change-status', PAUSED)">{{ $t('progress.status.paused') }}</el-button>
+        <el-button v-if="allowEditFields && (progressDetails.status !== CANCELED || progressDetails.status !== COMPLETED)" type="danger" class="btn" @click="handleSubmit('change-status', CANCELED)">{{ $t('progress.status.canceled') }}</el-button>
+        <el-button v-if="allowEditFields && progressDetails.status === PAUSED" type="primary" class="btn btn-save" @click="handleSubmit('change-status', IN_PROGRESS)">{{ $t('progress.status.in_progress') }}</el-button>
+        <el-button v-if="allowEditFields" class="btn btn-save" @click="handleSubmit('save')">{{ $t('common.save') }}</el-button>
       </div>
     </template>
   </Modal>
+  <ModalConfirm
+      style="z-index: 100000000"
+      :isShowModal="isShowModalConfirm"
+      @close-modal="() => isShowModalConfirm = false"
+      @confirmAction="handleConfirm"
+      :message="$t('progress.modal_confirm.message')"
+      :title="$t('progress.modal_confirm.title')"
+  />
 </template>
 
 <script setup>
@@ -32,9 +42,10 @@ import {useI18n} from "vue-i18n";
 import Modal from "@/components/common/Modal.vue";
 import ModalItemInformation from "@/pages/progress/items/modal/items/ModalItemInformation.vue";
 import ModalItemProgressDetails from "@/pages/progress/items/modal/items/ModalItemProgressDetails.vue";
-import {CANCELED, COMPLETED, DONE_PROGRESS, STATUS_NOT_START} from "@/constants/progress.js";
+import {CANCELED, COMPLETED, DONE_PROGRESS, IN_PROGRESS, PAUSED, STATUS_NOT_START} from "@/constants/progress.js";
 import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {getProgressRules} from "@/rules/progress/index.js";
+import ModalConfirm from "@/components/common/ModalConfirm.vue";
 
 const {t} = useI18n();
 const props = defineProps({
@@ -61,6 +72,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["close", "submit"]);
+const isShowModalConfirm = ref(false);
+const itemStatus = ref(null);
+const method = ref(null);
 const progressRules = getProgressRules();
 const allowEditFields = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER || localStorage.getItem('role') === EXECUTIVE_BOARD) && props.progressDetails.status != COMPLETED && props.progressDetails.status != CANCELED);
 const allowEditRelation = computed(() => {
@@ -81,9 +95,26 @@ const allowEditRelation = computed(() => {
   return relatedTasks?.every(task => task.status === STATUS_NOT_START);
 });
 
+const handleConfirm = () => {
+  isShowModalConfirm.value = false;
 
-const handleSubmit = () => {
+  if(method.value === 'change-status') {
+    props.progressDetails.status = itemStatus.value;
+  }
   emit("submit");
+
+  // Reset the values after emitting
+  method.value = null;
+  itemStatus.value = null;
+};
+
+const handleSubmit = (actionMethod, newStatus = null) => {
+  // Set the method and status values
+  method.value = actionMethod;
+  itemStatus.value = newStatus;
+
+  // Show the confirmation modal
+  isShowModalConfirm.value = true;
 };
 </script>
 

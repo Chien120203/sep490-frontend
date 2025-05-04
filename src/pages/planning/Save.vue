@@ -42,6 +42,7 @@
           />
           <PlanningDetails
               ref="detailsFormRef"
+              :actualBudget="actualBudget"
               :allowEdit="allowEdit && isCurrentUserLock"
               :rules="PLANNING_RULES"
               :items="planningDetails.value.planItems"
@@ -159,12 +160,20 @@ const {
 const currentEmail = localStorage.getItem("email");
 const currentRole = localStorage.getItem("role");
 const allowReject = computed(() => {
+  const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
+  const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
   const status = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD && p.email === currentEmail);
+  if(!technicalManagerApproved || !resourceManagerApproved) return false;
   return status?.isApproved === null || status?.isApproved === false;
 });
 
 const allowApprove = computed(() => {
   const status = approveStatuses.value.find(p => p.email === currentEmail);
+  if(currentRole === EXECUTIVE_BOARD) {
+    const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
+    const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
+    return technicalManagerApproved && resourceManagerApproved;
+  };
   return status?.isApproved === null  || status?.isApproved === false;
 });
 const allowEdit = computed(() => {
@@ -194,6 +203,13 @@ const allowEdit = computed(() => {
   return false;
 });
 
+const hasChildren = (task) => planningDetails.value.planItems.some(child => child.parentIndex === task.index);
+
+// Correctly calculate the actual budget by summing only leaf nodes (items without children)
+const actualBudget = computed(() => planningDetails.value.planItems.reduce((sum, item) => {
+  return sum + (hasChildren(item) ? 0 : parseFloat(item.totalPrice));
+}, 0));
+
 // Check if current user owns the lock
 const isCurrentUserLock = computed(() => {
   if (!isLocked.value || !lockInfo.value) return true; // If not locked, user can edit
@@ -208,7 +224,9 @@ const statuses = computed(() => {
   const bodStatus = bodApprove === null ? "process" : (bodApprove === true ? "success" : "error");
 
   return [
-    { title: "Khởi tạo", description: "", status: "success" },
+    { title: "Khởi tạo",
+      description: "",
+      status: "success" },
     {
       title: "Phòng tài nguyên",
       status: resourceApprove ? "success" : "process"
@@ -256,9 +274,9 @@ onMounted(async () => {
       }
     }
   }
-  await getListHumanResources({pageIndex: 1}, false);
-  await getListMachineResources({pageIndex: 1}, false);
-  await getListMaterialResources({pageIndex: 1}, false);
+  await getListHumanResources({pageIndex: 1, pageSize: 100}, false);
+  await getListMachineResources({pageIndex: 1, pageSize: 100}, false);
+  await getListMaterialResources({pageIndex: 1, pageSize: 100}, false);
 });
 
 // Watch for lock changes (can happen when acquiring a lock fails)
@@ -358,13 +376,13 @@ const detailsFormRef = ref(null);
 const handleSearch = (data) => {
   switch (data.type) {
     case MACHINE_TYPE:
-      getListMachineResources({licensePlate: data.value, pageIndex: 1}, false);
+      getListMachineResources({keyWord: data.value, pageIndex: 1, pageSize: 100}, false);
       break;
     case HUMAN_TYPE:
-      getListHumanResources({teamName: data.value, pageIndex: 1}, false);
+      getListHumanResources({teamName: data.value, pageIndex: 1, pageSize: 100}, false);
       break;
     case MATERIAL_TYPE:
-      getListMaterialResources({materialName: data.value, pageIndex: 1}, false);
+      getListMaterialResources({keyWord: data.value, pageIndex: 1, pageSize: 100}, false);
   }
 }
 

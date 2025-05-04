@@ -4,7 +4,7 @@ import IconPlus from "@/svg/IconPlus.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import IconEdit from "@/svg/IconEdit.vue";
 import {mixinMethods} from "@/utils/variables.js";
-import {DATE_FORMAT} from "@/constants/application.js";
+import {DATE_FORMAT, CURRENCY} from "@/constants/application.js";
 
 const props = defineProps({
   items: Array,
@@ -33,6 +33,10 @@ const props = defineProps({
   allowEdit: {
     type: Boolean,
     default: false
+  },
+  actualBudget: {
+    type: Number,
+    default: 0
   }
 });
 const ruleFormRef = ref(null);
@@ -41,7 +45,9 @@ defineExpose({
 });
 
 const listItems = ref([...props.items]);
-
+onMounted(() => {
+  recalculateTotal();
+})
 watch(() => props.items, (newItems) => {
   listItems.value = [...newItems];
   sortItems(); // Sort items whenever props.items change
@@ -179,6 +185,19 @@ const sortItems = () => {
     return 0;
   });
 };
+
+// Calculate the total price for a row, handling both parent and child items
+const calculateRowTotal = (row) => {
+  // If this is a parent item (has children)
+  if (hasChildren(row)) {
+    // Calculate sum of children's totalPrice
+    return listItems.value
+        .filter((child) => child.parentIndex === row.index && !child.deleted)
+        .reduce((sum, child) => sum + (child.totalPrice || 0), 0);
+  }
+  // For leaf items, use unit price * quantity or fallback to totalPrice
+  return (row.unitPrice * row.quantity) || row.totalPrice || 0;
+};
 </script>
 
 <template>
@@ -199,7 +218,7 @@ const sortItems = () => {
           </template>
         </el-table-column>
 
-        <el-table-column :label="$t('contract.create.item_table.action')" resizable width="180">
+        <el-table-column :label="$t('contract.create.item_table.action')" resizable width="120">
           <template #default="{ row }">
             <div class="action-btn">
               <IconPlus v-if="allowEdit" @click="addSubItem(row)"/>
@@ -275,14 +294,18 @@ const sortItems = () => {
                   :parser="(value) => mixinMethods.parseInputCurrency(value)"
                   @change="recalculateTotal"
                   :disabled="isParent(row)"
-              />
+              >
+                <template #append>
+                  {{CURRENCY}}
+                </template>
+              </el-input>
             </el-form-item>
           </template>
         </el-table-column>
 
         <el-table-column :label="$t('contract.create.item_table.total_price')" resizable width="380">
           <template #default="{ row }">
-            {{ mixinMethods.formatInputMoney(row.unitPrice * row.quantity) }}
+            {{ `${mixinMethods.formatInputMoney(calculateRowTotal(row))} ${CURRENCY}`}}
           </template>
         </el-table-column>
       </el-table>

@@ -1,105 +1,103 @@
 <template>
-    <el-table
-        :data="data"
-        style="width: 100%"
-        class="el-tbl-custom room-tbl"
-    >
-      <el-table-column
-          type="index"
-          min-width="53"
-          :label="$t('common.no')"
-          align="right"
-      ></el-table-column>
+  <el-table
+      :data="data"
+      style="width: 100%"
+      class="el-tbl-custom room-tbl"
+  >
+    <el-table-column
+        type="index"
+        min-width="53"
+        :label="$t('common.no')"
+        align="right"
+    ></el-table-column>
 
-      <el-table-column min-width="120">
-        <template #header>
-          <p v-html="$t('resource.machine.table.header.vehicleName')"></p>
-        </template>
+    <el-table-column min-width="120">
+      <template #header>
+        <p v-html="$t('resource.machine.table.header.vehicleName')"></p>
+      </template>
 
-        <template #default="scope">
-          <span class="data-table">{{ scope.row.vehicleName ?? "-" }}</span>
-        </template>
-      </el-table-column>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.vehicleName ?? "-" }}</span>
+      </template>
+    </el-table-column>
 
-      <el-table-column min-width="120">
-        <template #header>
-          <p v-html="$t('resource.machine.table.header.licensePlate')"></p>
-        </template>
+    <el-table-column min-width="120">
+      <template #header>
+        <p v-html="$t('resource.machine.table.header.licensePlate')"></p>
+      </template>
 
-        <template #default="scope">
-          <span class="data-table">{{ scope.row.licensePlate ?? "-" }}</span>
-        </template>
-      </el-table-column>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.licensePlate ?? "-" }}</span>
+      </template>
+    </el-table-column>
 
-      <el-table-column min-width="80">
-        <template #header>
-          <p v-html="$t('resource.machine.table.header.brand')"></p>
-        </template>
+    <el-table-column min-width="80">
+      <template #header>
+        <p v-html="$t('resource.machine.table.header.brand')"></p>
+      </template>
 
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.brand ? scope.row.brand : "-" }}
-        </span>
-        </template>
-      </el-table-column>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.brand ? scope.row.brand : "-" }}</span>
+      </template>
+    </el-table-column>
 
-      <el-table-column min-width="100">
-        <template #header>
-          <p v-html="$t('resource.machine.table.header.vehicleType')"></p>
-        </template>
+    <el-table-column min-width="100">
+      <template #header>
+        <p v-html="$t('resource.machine.table.header.vehicleType')"></p>
+      </template>
 
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.vehicleType ? scope.row.vehicleType : "-" }}
-        </span>
-        </template>
-      </el-table-column>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.vehicleType ? scope.row.vehicleType : "-" }}</span>
+      </template>
+    </el-table-column>
 
-      <el-table-column min-width="100">
-        <template #header>
-          <p v-html="$t('resource.machine.table.header.driver')"></p>
-        </template>
+    <el-table-column min-width="100">
+      <template #header>
+        <p v-html="$t('resource.machine.table.header.driver')"></p>
+      </template>
 
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.driver ? scope.row.driver : "-" }}
-        </span>
-        </template>
-      </el-table-column>
+      <template #default="scope">
+        <span class="data-table">{{ scope.row.user.fullName ? scope.row.user.fullName : "-" }}</span>
+      </template>
+    </el-table-column>
 
-      <el-table-column min-width="80">
-        <template #header>
-          <p v-html="$t('resource.machine.table.header.status')"></p>
-        </template>
+    <el-table-column min-width="80">
+      <template #header>
+        <p v-html="$t('resource.machine.table.header.status')"></p>
+      </template>
 
-        <template #default="scope">
-        <span class="data-table">{{ scope.row.status ? scope.row.status : "-" }}
-        </span>
-        </template>
-      </el-table-column>
+      <template #default="scope">
+        <span class="data-table">{{ getStatusText(scope.row.status) }}</span>
+      </template>
+    </el-table-column>
 
-      <el-table-column min-width="90">
-        <template #header>
-          <p v-html="$t('resource.machine.table.header.action')"></p>
-        </template>
-        <template #default="scope">
-          <div>
-            <button @click="$emit('details', scope.row.id)" class="btn-edit">
-              <IconEdit/>
-            </button>
-            <button v-if="allowEdit" @click="$emit('delete', scope.row.id)" class="btn-edit">
-              <IconTrash/>
-            </button>
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-table-column min-width="90">
+      <template #header>
+        <p v-html="$t('resource.machine.table.header.action')"></p>
+      </template>
+      <template #default="scope">
+        <div>
+          <button @click="$emit('details', scope.row.id)" class="btn-edit">
+            <IconEdit/>
+          </button>
+          <button v-if="allowEdit" @click="$emit('delete', scope.row.id)" class="btn-edit">
+            <IconTrash/>
+          </button>
+        </div>
+      </template>
+    </el-table-column>
+  </el-table>
 </template>
 
 <script>
 import IconEdit from "@/svg/IconEdit.vue";
 import IconTrash from "@/svg/IconTrash.vue";
+import {useI18n} from "vue-i18n";
 
 export default {
   name: 'MachineTable',
-  components: {IconTrash, IconEdit},
+  components: { IconTrash, IconEdit },
+
   props: {
     data: {
       type: Array,
@@ -110,9 +108,25 @@ export default {
       default: false,
     },
   },
-  setup(props, {emit}) {
-    return {};
-  },
+  setup() {
+    const { t } = useI18n();
+
+    const statusTranslations = {
+      0: t('resource.machine.statuses.inactive'),
+      1: t('resource.machine.statuses.active'),
+      2: t('resource.machine.statuses.maintain'),
+    };
+
+    const getStatusText = (status) => {
+      return typeof status === 'number' && statusTranslations.hasOwnProperty(status)
+          ? statusTranslations[status]
+          : '-';
+    };
+
+    return {
+      getStatusText,
+    };
+  }
 };
 </script>
 
@@ -188,4 +202,3 @@ export default {
   }
 }
 </style>
-

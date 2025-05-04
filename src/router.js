@@ -2,13 +2,6 @@ import { createWebHistory, createRouter } from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import PAGES from "@/utils/pages";
 import {
-  ADMIN,
-  BUSINESS_EMPLOYEE, CONSTRUCTION_EMPLOYEE,
-  CONSTRUCTION_MANAGER, EXECUTIVE_BOARD,
-  QUALITY_ASSURANCE, RESOURCE_MANAGER,
-  TECHNICAL_MANAGER
-} from "@/constants/roles.js";
-import {
   ADMIN_MIDDLEWARE,
   AUTHENTICATION_MIDDLEWARE,
   BUSINESS_EMPLOYEE_MIDDLEWARE, CONSTRUCTION_EMPLOYEE_MIDDLEWARE,

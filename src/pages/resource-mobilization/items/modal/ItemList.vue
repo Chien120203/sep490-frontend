@@ -6,6 +6,7 @@
           :showClearable="true"
           :isDisabled="!allowEdit"
           class="select-item"
+          :role="resourceType"
           :optionKeys="{ id: optionKeys.id, value: optionKeys.value }"
           :listData="selectData"
           :isRemote="true"
@@ -19,14 +20,14 @@
 
     <el-form ref="ruleFormRef" :model="listAddedValues" :rules="rules">
       <el-table :data="listAddedValues" border style="width: 100%">
-        <el-table-column prop="index" label="STT" width="60">
+        <el-table-column prop="index" :label="$t('common.no')" width="60">
           <template #default="scope">
             {{ scope.$index + 1 }}
           </template>
         </el-table-column>
 
-        <!-- Conditional Tên tài nguyên -->
-        <el-table-column prop="name" label="Tên tài nguyên">
+        <!-- Tên tài nguyên -->
+        <el-table-column prop="name" :label="$t('mobilization.table.resource_name')">
           <template #default="scope">
             <el-form-item :prop="`listAddedValues[${scope.$index}].name`">
               <template v-if="requestType === REQUEST_TYPE_SUPPLY_MORE || requestType === REQUEST_TYPE_SUPPLY_GENERAL_WAREHOUSE">
@@ -42,11 +43,11 @@
           </template>
         </el-table-column>
 
-        <!-- Unit -->
-        <el-table-column prop="unit" label="Đơn vị">
+        <!-- Đơn vị -->
+        <el-table-column prop="unit" :label="$t('mobilization.table.unit')">
           <template #default="scope">
             <el-form-item :prop="`listAddedValues[${scope.$index}].unit`">
-              <el-input v-model="scope.row.unit" @blur="validateForm" disabled/>
+              <el-input v-model="scope.row.unit" @blur="validateForm" disabled />
               <label class="error-feedback" v-if="validationErrors[`unit-${scope.$index}`]">
                 {{ validationErrors[`unit-${scope.$index}`] }}
               </label>
@@ -54,11 +55,11 @@
           </template>
         </el-table-column>
 
-        <!-- Quantity -->
-        <el-table-column prop="quantity" label="Số lượng">
-          <template #default="{row, $index}">
+        <!-- Số lượng -->
+        <el-table-column prop="quantity" :label="$t('mobilization.table.quantity')">
+          <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues[${$index}].quantity`">
-              <el-input :disabled="!allowEdit" v-model.number="row.quantity" @blur="validateForm" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+              <el-input :disabled="!allowEdit" v-model.number="row.quantity" @blur="validateForm" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)" />
               <label class="error-feedback" v-if="validationErrors[`quantity-${$index}`]">
                 {{ validationErrors[`quantity-${$index}`] }}
               </label>
@@ -71,11 +72,11 @@
 
         <el-table-column v-if="resourceType === MATERIAL_TYPE && requestType === REQUEST_TYPE_SUPPLY_MORE" :label="$t('planning.items.inventory')">
           <template #default="{ row }">
-            {{row.inventory}}
+            {{ row.inventory }}
           </template>
         </el-table-column>
 
-        <!-- Actions -->
+        <!-- Hành động -->
         <el-table-column v-if="allowEdit" :label="$t('mobilization.modal.action')">
           <template #default="{ row }">
             <div>
@@ -111,7 +112,7 @@ const props = defineProps({
   allowEdit: { type: Boolean, default: false },
   tableData: { type: Array, default: () => [] },
   optionKeys: { type: Object, default: () => ({ id: '', value: '' }) },
-  resourceType: { type: Number, default: 0 }
+  resourceType: { type: [Number, String], default: 0 }
 });
 
 const {t} = useI18n();

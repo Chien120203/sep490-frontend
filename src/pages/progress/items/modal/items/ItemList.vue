@@ -31,7 +31,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="resourceType === MATERIAL_TYPE" prop="unit" :label="$t('planning.items.unit')">
+        <el-table-column prop="unit" :label="$t('planning.items.unit')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
               <el-input :disabled="true" v-model="listAddedValues[$index].unit" />
@@ -47,7 +47,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column v-if="resourceType === MATERIAL_TYPE" :label="$t('progress.details.used_quantity')">
+        <el-table-column :label="$t('progress.details.used_quantity')">
           <template #default="{ row }">
             {{getUsedQuantity(row.id)}}
           </template>

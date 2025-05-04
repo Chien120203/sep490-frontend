@@ -15,29 +15,25 @@
       class="form-search-box"
   >
     <el-table :data="listSelectedTasks" style="width: 100%" border stripe>
-      <el-table-column label="Index">
+      <el-table-column :label="$t('common.no')">
         <template #default="{ row }">
           {{ row.index }}
         </template>
       </el-table-column>
-      <!-- Task Name -->
-      <el-table-column prop="workName" label="Task Name" sortable/>
+      <el-table-column prop="workName" :label="$t('planning.table.task_name')" sortable />
 
-      <!-- Due Date -->
-      <el-table-column label="Start Date" sortable>
+      <el-table-column :label="$t('planning.table.start_date')" sortable>
         <template #default="{ row }">
           {{ mixinMethods.showDateTime(row.startDate) ?? "-" }}
         </template>
       </el-table-column>
-      <!-- Due Date -->
-      <el-table-column label="Due Date" sortable>
+      <el-table-column :label="$t('planning.table.due_date')" sortable>
         <template #default="{ row }">
           {{ mixinMethods.showDateTime(row.endDate) ?? "-" }}
         </template>
       </el-table-column>
 
-      <!-- Dependency -->
-      <el-table-column label="Depends Type" width="390">
+      <el-table-column :label="$t('planning.table.dependency_type')" width="390">
         <template #default="{ row }">
           <el-form-item :prop="`itemRelations.${row.index}`" :rules="rules.dependency.map(rule => ({ ...rule, relatedIndex: row.index }))">
             <el-select :disabled="!allowEdit" v-model="selectedRow.itemRelations[row.index]">
@@ -46,19 +42,17 @@
                   :key="index"
                   :label="$t(type.label)"
                   :value="type.value"
-              >
-              </el-option>
+              />
             </el-select>
           </el-form-item>
         </template>
       </el-table-column>
 
-
-      <el-table-column label="Actions" width="100">
+      <el-table-column :label="$t('common.action')" width="100">
         <template #default="{ row }">
           <div>
             <button v-if="allowEdit" @click="handleRemoveTask(row.index); $event.preventDefault()" class="btn-edit">
-              <IconTrash/>
+              <IconTrash />
             </button>
           </div>
         </template>
@@ -73,6 +67,9 @@ import SingleOptionSelect from "@/components/common/SingleOptionSelect.vue";
 import IconTrash from "@/svg/IconTrash.vue";
 import {computed, reactive, ref} from "vue";
 import {mixinMethods} from "@/utils/variables.js";
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedRow: {
