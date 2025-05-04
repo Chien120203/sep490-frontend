@@ -88,13 +88,13 @@
           <el-radio :label="$t('construct_log.form.condition.bad')" :value="String(BAD_CONDITION)">{{ $t('construct_log.form.condition.bad') }}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item :label="$t('construct_log.form.problem')">
+      <el-form-item :label="$t('construct_log.form.problem')" prop="problem">
         <el-input type="textarea" v-model="logDetails.problem" />
       </el-form-item>
-      <el-form-item :label="$t('construct_log.form.advice')">
+      <el-form-item :label="$t('construct_log.form.advice')" prop="advice">
         <el-input type="textarea" v-model="logDetails.advice" />
       </el-form-item>
-      <el-form-item :label="$t('construct_log.form.note')">
+      <el-form-item :label="$t('construct_log.form.note')" prop="note">
         <el-input type="textarea" v-model="logDetails.note" />
       </el-form-item>
     </el-form>

@@ -1527,6 +1527,10 @@
       "total_positive": "Total amount must be greater than 0"
     }
   },
+  "weather": {
+    "condition": "Condition",
+    "temperature": "Temperature"
+  },
   "inspection": {
     "title": "Inspection Report",
     "form": {

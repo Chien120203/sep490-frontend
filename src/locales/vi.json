@@ -419,6 +419,10 @@
     "type_placeholder": "Loại hợp đồng",
     "landlord_placeholder": "Chủ nhà hợp đồng"
   },
+  "weather": {
+    "condition": "Điều kiện",
+    "temperature": "Nhiệt độ"
+  },
   "survey": {
     "title": "Khảo sát công trình",
     "add_new": "Thêm mới",

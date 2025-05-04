@@ -1,58 +1,32 @@
 import { useI18n } from "vue-i18n";
-import {
-    validateStartBeforeEnd,
-    validateChooseDateRelation,
-} from "@/rules/validation/validation.js";
+import {useInspectionReportStore} from "@/store/inspection.js";
+import {validateStartBeforeEnd} from "@/rules/validation/validation.js";
 
-export const getInspectionRules = (inspectionReportDetails) => {
+export const getInspectionRules = () => {
     const { t } = useI18n();
-
-    // Ensure inspectionReportDetails exists to avoid undefined errors
-    if (!inspectionReportDetails) {
-        console.error("Error: inspectionReportDetails is undefined or null.");
-        return {};
-    }
-
+    const inspectStore = useInspectionReportStore();
+    const {inspectionReportDetails} = inspectStore;
     return {
-        inspectionName: [
+        inspectCode: [
+            { required: true, message: t("E-CM-002"), trigger: "blur" }
+        ],
+        inspectorId: [
+            { required: true, message: t("E-CM-002"), trigger: "blur" },
+            { type: 'number', message: t("E-CM-XXX"), trigger: "blur" }
+        ],
+        inspectorName: [
             { required: true, message: t("E-CM-002"), trigger: "blur" }
         ],
         inspectStartDate: [
             { required: true, message: t("E-CM-002"), trigger: "blur" },
             {
                 validator: (rule, value, callback) =>
-                    validateStartBeforeEnd(
-                        rule,
-                        value,
-                        callback,
-                        new Date(), // Ngày hiện tại
-                        value,
-                        t("E-CM-022") // "Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại"
-                    ),
+                    validateStartBeforeEnd(rule, value, callback, value, inspectionReportDetails.value.inspectEndDate, "E-CM-020"),
                 trigger: "blur",
             },
             {
                 validator: (rule, value, callback) =>
-                    validateStartBeforeEnd(
-                        rule,
-                        value,
-                        callback,
-                        value,
-                        inspectionReportDetails?.inspectEndDate,
-                        t("E-CM-031") // "Ngày bắt đầu phải trước ngày kết thúc"
-                    ),
-                trigger: "blur",
-            },
-            {
-                validator: (rule, value, callback) =>
-                    validateChooseDateRelation(
-                        rule,
-                        value,
-                        callback,
-                        inspectionReportDetails,
-                        [],
-                        false
-                    ),
+                    validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
                 trigger: "blur",
             }
         ],
@@ -60,60 +34,39 @@ export const getInspectionRules = (inspectionReportDetails) => {
             { required: true, message: t("E-CM-002"), trigger: "blur" },
             {
                 validator: (rule, value, callback) =>
-                    validateStartBeforeEnd(
-                        rule,
-                        value,
-                        callback,
-                        inspectionReportDetails?.inspectStartDate,
-                        value,
-                        t("E-CM-030") // "Ngày kết thúc phải sau ngày bắt đầu"
-                    ),
+                    validateStartBeforeEnd(rule, value, callback, inspectionReportDetails.value.inspectStartDate, value, "E-CM-028"),
                 trigger: "blur",
             },
             {
                 validator: (rule, value, callback) =>
-                    validateStartBeforeEnd(
-                        rule,
-                        value,
-                        callback,
-                        new Date(), // Ngày hiện tại
-                        value,
-                        t("E-CM-022") // "Ngày kết thúc phải lớn hơn hoặc bằng ngày hiện tại"
-                    ),
-                trigger: "blur",
-            },
-            {
-                validator: (rule, value, callback) =>
-                    validateChooseDateRelation(
-                        rule,
-                        value,
-                        callback,
-                        inspectionReportDetails,
-                        [],
-                        false
-                    ),
+                    validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
                 trigger: "blur",
             }
+        ],
+        progressId: [
+            { required: true, message: t("E-CM-002"), trigger: "blur" },
+            { type: 'number', message: t("E-CM-XXX"), trigger: "blur" }
+        ],
+        progressName: [
+            { required: true, message: t("E-CM-002"), trigger: "blur" }
+        ],
+        planId: [
+            { required: true, message: t("E-CM-002"), trigger: "blur" },
+            { type: 'number', message: t("E-CM-XXX"), trigger: "blur" }
+        ],
+        planName: [
+            { required: true, message: t("E-CM-002"), trigger: "blur" }
         ],
         location: [
             { required: true, message: t("E-CM-002"), trigger: "blur" }
         ],
         inspectionDecision: [
-            { required: true, message: t("E-CM-002"), trigger: "blur" }
+            { required: true, message: t("E-CM-002"), trigger: "blur" },
+            { type: 'number', message: t("E-CM-XXX"), trigger: "blur" }
         ],
         status: [
-            { required: true, message: t("E-CM-002"), trigger: "blur" }
-        ],
-        attachment: [
-            {
-                validator: (rule, value, callback) => {
-                    if (value && value.length > 3) {
-                        return callback(new Error(t("E-CM-050"))); // "Tối đa 3 tệp được phép tải lên"
-                    }
-                    callback();
-                },
-                trigger: "change",
-            }
+            { required: true, message: t("E-CM-002"), trigger: "blur" },
+            { type: 'number', message: t("E-CM-XXX"), trigger: "blur" }
         ]
     };
 };

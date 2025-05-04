@@ -28,8 +28,8 @@ export const useConstructLog = defineStore(
         resources: [],
         workAmount: [],
         weather: [
-          {type: "Điều kiện", values: ["", "", "", ""]},
-          {type: "Nhiệt độ", values: ["", "", "", ""]},
+          {type: t("weather.condition"), values: ["", "", "", ""]},
+          {type: t("weather.temperature"), values: ["", "", "", ""]},
         ],
         safety: "",
         quality: "",
@@ -188,10 +188,10 @@ export const useConstructLog = defineStore(
         projectId: 0,
         resources: [],
         workAmount: [],
-        weather: [
-          {type: "Điều kiện", values: ["", "", "", ""]},
-          {type: "Nhiệt độ", values: ["", "", "", ""]},
-        ],
+          weather: [
+              {type: t("weather.condition"), values: ["", "", "", ""]},
+              {type: t("weather.temperature"), values: ["", "", "", ""]},
+          ],
         safety: "",
         quality: "",
         progress: "",
