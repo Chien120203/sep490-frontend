@@ -105,7 +105,7 @@ import SingleOptionSelect from '@/components/common/SingleOptionSelect.vue';
 import ListItems from '@/pages/inspection-report/item/ListItems.vue';
 import IconCircleClose from '@/svg/IconCircleClose.vue';
 import { HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE } from '@/constants/resource.js';
-import {COMPLETED} from "@/constants/progress.js";
+import {WAIT_FOR_INSPECT} from "@/constants/progress.js";
 
 const { t } = useI18n();
 
@@ -125,7 +125,7 @@ const workAmountForm = ref(null);
 defineExpose({ machineForm, materialForm, humanForm, workAmountForm });
 
 const hasChildren = (parent) => props.progressDtls.progressItems.some(child => child.parentIndex === parent.index);
-const listTasks = computed(() => props.progressDtls.progressItems?.filter(item => item.status !== COMPLETED && !hasChildren(item)) || []);
+const listTasks = computed(() => props.progressDtls.progressItems?.filter(item => item.status === WAIT_FOR_INSPECT) || []);
 // Chỉ lưu 1 workAmount cho task đang chọn
 const listWorkAmount = ref([{ workAmount: 0 }]);
 

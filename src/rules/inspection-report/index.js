@@ -1,8 +1,11 @@
 import { useI18n } from "vue-i18n";
+import {useInspectionReportStore} from "@/store/inspection.js";
+import {validateStartBeforeEnd} from "@/rules/validation/validation.js";
 
 export const getInspectionRules = () => {
     const { t } = useI18n();
-
+    const inspectStore = useInspectionReportStore();
+    const {inspectionReportDetails} = inspectStore;
     return {
         inspectCode: [
             { required: true, message: t("E-CM-002"), trigger: "blur" }
@@ -17,35 +20,27 @@ export const getInspectionRules = () => {
         inspectStartDate: [
             { required: true, message: t("E-CM-002"), trigger: "blur" },
             {
-                validator: (rule, value, callback) => {
-                    if (!value) return callback(new Error(t("E-CM-002")));
-                    const inspection = rule.inspection; // Assume inspection object is passed
-                    if (!inspection?.inspectEndDate) {
-                        return callback();
-                    }
-                    if (new Date(value).getTime() >= new Date(inspection.inspectEndDate).getTime()) {
-                        return callback(new Error(t("E-CM-031")));
-                    }
-                    callback();
-                },
-                trigger: "blur"
+                validator: (rule, value, callback) =>
+                  validateStartBeforeEnd(rule, value, callback, value, inspectionReportDetails.value.inspectEndDate, "E-CM-020"),
+                trigger: "blur",
+            },
+            {
+                validator: (rule, value, callback) =>
+                  validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
+                trigger: "blur",
             }
         ],
         inspectEndDate: [
             { required: true, message: t("E-CM-002"), trigger: "blur" },
             {
-                validator: (rule, value, callback) => {
-                    if (!value) return callback(new Error(t("E-CM-002")));
-                    const inspection = rule.inspection;
-                    if (!inspection?.inspectStartDate) {
-                        return callback();
-                    }
-                    if (new Date(value).getTime() <= new Date(inspection.inspectStartDate).getTime()) {
-                        return callback(new Error(t("E-CM-030")));
-                    }
-                    callback();
-                },
-                trigger: "blur"
+                validator: (rule, value, callback) =>
+                  validateStartBeforeEnd(rule, value, callback, inspectionReportDetails.value.inspectStartDate, value, "E-CM-028"),
+                trigger: "blur",
+            },
+            {
+                validator: (rule, value, callback) =>
+                  validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
+                trigger: "blur",
             }
         ],
         progressId: [

@@ -116,6 +116,7 @@ import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} fr
 import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {mixinMethods} from "@/utils/variables.js";
 import { getAllocationResourceItemRules } from "@/rules/allocation";
+import {AVAILABLE} from "@/constants/machine.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -225,7 +226,7 @@ const listVehicles = computed(() => {
   const fromTaskId = props.data.fromTaskId; // directly access it so Vue tracks it
 
   if (requestType === PROJECT_TO_TASK || requestType === PROJECT_TO_PROJECT) {
-    return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE);
+    return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE && item.status === AVAILABLE);
   }
 
   if (requestType === TASK_TO_TASK && fromTaskId) {

@@ -14,7 +14,7 @@
       <div class="modal-body-container">
         <TaskInputForm
             ref="childFormRef"
-            :rules="rules"
+            :rules="progressRules"
             :allowEdit="allowEdit"
             :tasks="tasks"
             :total="totalAllPrice"
@@ -26,7 +26,7 @@
             <DependencyTaskTable
                 ref="dependentFormRef"
                 :allowEdit="allowEdit"
-                :rules="rules"
+                :rules="progressRules"
                 :tasks="tasks"
                 :selectedRow="selectedRow"
             />
@@ -44,12 +44,13 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits} from "vue";
+import {ref, defineProps, defineEmits, watch} from "vue";
 import Modal from "@/components/common/Modal.vue";
 import DependencyTaskTable from "@/pages/change-request/item/modal/items/DependencyTaskTable.vue";
 import {useI18n} from "vue-i18n";
 import TaskInputForm from "@/pages/change-request/item/modal/items/TaskInputForm.vue";
 import {mixinMethods} from "@/utils/variables.js";
+import {getProgressRules} from "@/rules/progress/index.js";
 
 const props = defineProps({
   selectedRow: {type: Object, default: () => ({})},
@@ -70,7 +71,7 @@ const props = defineProps({
 
 const emit = defineEmits(["close", "submit", "search"]);
 const {t} = useI18n();
-
+const progressRules = getProgressRules();
 const activeTab = ref("tasks");
 const dependentFormRef = ref(null);
 const childFormRef = ref(null);
@@ -80,11 +81,41 @@ const totalAllPrice = ref({
   material: 0,
   totalPrice: 0,
 });
+const setTaskIndex = () => {
+  const items = props.tasks.progressItems;
+  const parentIndex = props.selectedRow.parentIndex;
+  if(!items) return;
+  let newIndex;
 
-const getListResourceByType = (list, type) => {
-  if (!Array.isArray(list)) return [];
-  return list.filter(item => item.resourceType === type);
+  if (!parentIndex) {
+    // Case 1: Top-level task (no parentIndex)
+    const topLevelTasks = items.filter(item => !item.parentIndex);
+    const maxTopIndex = topLevelTasks.reduce((max, item) => {
+      const idx = parseInt(item.index, 10);
+      return idx > max ? idx : max;
+    }, 0);
+    newIndex = (maxTopIndex + 1).toString();
+  } else {
+    // Case 2: Child task (has parentIndex)
+    const childTasks = items?.filter(item => item.parentIndex === parentIndex);
+    const lastChildIndex = childTasks?.reduce((max, item) => {
+      const parts = item.index.split('.');
+      const last = parseInt(parts[parts.length - 1], 10);
+      return last > max ? last : max;
+    }, 0);
+
+    newIndex = `${parentIndex}.${lastChildIndex + 1}`;
+  }
+
+  return newIndex;
 };
+watch(
+    () => props.selectedRow.parentIndex,
+    (newVal) => {
+      props.index = setTaskIndex();
+    },
+    {immediate: true, deep: true}
+)
 
 const closeModal = () => {
   activeTab.value = "tasks"
@@ -102,25 +133,23 @@ const handleSubmit = async () => {
       name: t("planning.form_ref.planning_info"),
     }
   ];
-  //
-  for (const form of forms) {
-    const isValid = await new Promise((resolve) => {
-      form.ref.value?.ruleFormRef.validate((valid) => resolve(valid));
-    });
 
-    if (!isValid) {
-      mixinMethods.notifyError(
-          t("planning.errors.invalid_form", {form: form.name})
-      );
-      return; // stop here if one form is invalid
+  for (const form of forms) {
+    try {
+      if (form.ref.value) {
+        await form.ref.value.$refs.ruleFormRef.validate();
+      }
+    } catch (error) {
+      console.error(`Validation failed for ${form.name}:`, error);
+      return;
     }
   }
 
   console.log(props.selectedRow);
 
-  emit("submit");
-  emit("close");
-  activeTab.value = "tasks"
+  // emit("submit");
+  // emit("close");
+  // activeTab.value = "tasks"
 };
 
 </script>
