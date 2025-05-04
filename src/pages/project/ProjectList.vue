@@ -82,7 +82,7 @@
                 <el-option
                     v-for="(status, index) in STATUSES"
                     :key="index"
-                    :label="status"
+                    :label="$t(status)"
                     :value="index"
                 >
                 </el-option>

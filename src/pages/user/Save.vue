@@ -63,6 +63,7 @@
 
             <el-form-item
                 :label="$t('user.details.dob')"
+                class="custom-textarea required"
                 prop="dob"
             >
               <el-date-picker

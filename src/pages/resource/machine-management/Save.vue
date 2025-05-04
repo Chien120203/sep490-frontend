@@ -216,7 +216,6 @@ export default {
 
     const constructionEmployees = computed(() => listUsers.value.filter(user => user.role === CONSTRUCTION_EMPLOYEE));
 
-    // Define status options for the select dropdown
     const statusOptions = [
       { value: UNAVAILABLE, label: "resource.machine.statuses.inactive" },
       { value: AVAILABLE, label: "resource.machine.statuses.active" },

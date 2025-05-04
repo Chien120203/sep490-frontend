@@ -1638,6 +1638,10 @@
   "E-USER-004": "Phone is required",
   "E-USER-005": "Role is required",
   "E-USER-006": "Gender is required",
+  "E-USER-007": "Date of birth is required",
+  "E-USER-008": "Invalid date format",
+  "E-USER-009": "Date of birth does not match",
+  "E-USER-010": "Age not valid",
 
   "E-CTR-001": "Contract code is required",
   "E-CTR-002": "Project is required",

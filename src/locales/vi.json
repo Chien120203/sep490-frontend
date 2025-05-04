@@ -60,7 +60,7 @@
     "status": "Trạng thái",
     "reset": "Đặt lại",
     "stt": "STT",
-    "no": "Số thứ tự",
+    "no": "STT",
     "month": "Tháng",
     "year": "Năm",
     "type": "Loại",
@@ -1284,7 +1284,7 @@
         "request_type": "Loại yêu cầu",
         "request_date": "Ngày yêu cầu",
         "creator": "Người tạo",
-        "no": "Số thứ tự",
+        "no": "STT",
         "action": "Hành động",
         "status": "Trạng thái"
       }

@@ -42,5 +42,47 @@ export const USER_RULES = {
     gender: [
         {required: true, message: i18n.global.t("E-USER-006"), trigger: "change"},
     ],
+    dob: [
+        { required: true, message: i18n.global.t("E-USER-007"), trigger: "change" },
+        {
+            validator: (rule, value, callback) => {
+                // Chuyển đổi giá trị thành đối tượng Date
+                let dob;
+                try {
+                    dob = new Date(value);
+                    if (isNaN(dob.getTime())) {
+                        callback(new Error(i18n.global.t("E-USER-008")));
+                        return;
+                    }
+                } catch (e) {
+                    callback(new Error(i18n.global.t("E-USER-008")));
+                    return;
+                }
+
+                // Lấy ngày hiện tại
+                const today = new Date();
+
+                // Kiểm tra xem dob có ở quá khứ không
+                if (dob >= today) {
+                    callback(new Error(i18n.global.t("E-USER-009")));
+                    return;
+                }
+
+                // Tính ngày cách dob 18 năm
+                const maxYearsLater = new Date(dob.getFullYear() + 18, dob.getMonth(), dob.getDate());
+                const minYearsLater = new Date(dob.getFullYear() - 60, dob.getMonth(), dob.getDate());
+
+                // Kiểm tra xem người dùng đã đủ 18 tuổi chưa
+                if (minYearsLater < today < maxYearsLater) {
+                    callback(new Error(i18n.global.t("E-USER-010")));
+                    return;
+                }
+
+                // Nếu tất cả điều kiện đều thỏa mãn
+                callback();
+            },
+            trigger: 'change'
+        }
+    ],
 };
 
