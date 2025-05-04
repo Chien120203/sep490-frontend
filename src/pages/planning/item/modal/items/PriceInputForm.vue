@@ -52,6 +52,7 @@
                 disabled
                 v-model="total.material"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                :parser="(value) => mixinMethods.parseInputCurrency(value)"
                 class="custom-input"
             >
               <template #append>
@@ -65,6 +66,7 @@
                 disabled
                 v-model="total.labor"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                :parser="(value) => mixinMethods.parseInputCurrency(value)"
                 class="custom-input"
             >
               <template #append>
@@ -78,6 +80,7 @@
                 disabled
                 v-model="total.machine"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                :parser="(value) => mixinMethods.parseInputCurrency(value)"
                 class="custom-input"
             >
               <template #append>
@@ -87,17 +90,21 @@
           </el-form-item>
 
           <!-- Validation moved to selectedRow.totalPrice -->
-          <el-form-item prop="totalPrice" :label="$t('planning.planned.total')">
+          <el-form-item :label="$t('planning.planned.total')">
             <el-input
                 disabled
                 v-model="totalPrice"
                 :formatter="(value) => mixinMethods.formatInputCurrency(value)"
+                :parser="(value) => mixinMethods.parseInputCurrency(value)"
                 class="custom-input"
             >
               <template #append>
                 {{ CURRENCY }}
               </template>
             </el-input>
+            <p style="margin-bottom: 18px" v-if="isPriceExceeded" class="error-feedback">
+              {{ $t('E-PLAN-001')}}
+            </p>
           </el-form-item>
         </el-col>
       </el-row>
@@ -109,10 +116,12 @@
 import {computed, defineProps, reactive, ref, watch} from "vue";
 import { mixinMethods } from "@/utils/variables.js";
 import {CURRENCY, DATE_FORMAT} from "@/constants/application.js";
+import {MATERIAL_TYPE} from "@/constants/resource.js";
 
 const props = defineProps({
   selectedRow: { type: Object, default: () => ({}) },
   total: { type: Object, default: () => ({}) },
+  isPriceExceeded: { type: Boolean, default: false },
   rules: {
     type: Object,
     default: () => ({

@@ -309,9 +309,6 @@ const calculateRowTotal = (row) => {
           </template>
         </el-table-column>
       </el-table>
-      <div class="actual-budget" style="display: flex; justify-content: flex-end; margin-top: 14px; margin-right: 12px">
-        <strong>{{$t('common.total')}}: {{ `${mixinMethods.formatInputMoney(props.actualBudget)} ${CURRENCY}` }}</strong>
-      </div>
     </div>
   </el-form>
 </template>

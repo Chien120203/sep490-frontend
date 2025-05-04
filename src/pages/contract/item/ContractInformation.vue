@@ -125,6 +125,7 @@
           <FileUpload
               :existingFiles="contractInfo.attachments"
               :allowedTypes="'.jpg,.png,.pdf,.docx'"
+              component-id="contractInfoUpload"
               :fileLimit="3"
               :disabled="!isAllowUpdate"
               class="input-wd-96"

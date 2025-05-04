@@ -1617,6 +1617,7 @@
   "E-CM-034": "Phone Number is invalid",
   "E-CM-035": "Start date must be before its parent end date",
   "E-CM-036": "Selected date must be between contract start and end date",
+  "E-CM-037": "Invalid area",
   "E-CM-403": "You are not allowed.",
   "E-CM-401": "Not authenticated.",
   "E-CM-404": "Not found.",

@@ -147,7 +147,7 @@ const allowEditQuantity = computed(() => {
 defineExpose({
   ruleFormRef,
 });
-const emit = defineEmits(["search", "update-value"]);
+const emit = defineEmits(["search", "update-value", "disable-submit"]);
 const handleSearch = (value, role) => {
   emit('search', {value: value, type: role});
 }
@@ -182,8 +182,10 @@ const handleChangeValue = (quantity, resourceId) => {
     let inventory = props.selectData.find(item => item.id === resourceId)?.inventory ?? 0;
     if (inventory < quantity) {
       exceedMessages.value[resourceId] = t('E-PLAN-002');
+      emit("disable-submit", true);
     } else {
       exceedMessages.value[resourceId] = '';
+      emit("disable-submit", false);
     }
   }
   emit("update-value");

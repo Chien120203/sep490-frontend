@@ -5,6 +5,7 @@ import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
 import {EXECUTIVE_BOARD} from "@/constants/roles.js";
 import PAGE_NAME from "@/constants/route-name.js";
+import {useRouter} from "vue-router";
 
 export const usePlanningStore = defineStore(
   "planning",
@@ -12,6 +13,7 @@ export const usePlanningStore = defineStore(
     const {t} = useI18n();
     const validation = reactive({value: {}});
     const isShowModalConfirm = reactive({value: false});
+    const router = useRouter();
     const totalItems = reactive({value: 0});
     const currentPage = reactive({value: 0});
     const listPlannings = reactive({value: []});
@@ -135,10 +137,10 @@ export const usePlanningStore = defineStore(
             ...response.data,
             reviewers: [...response.data.reviewers.map(reviewer => reviewer.id)]
           };
-          if(method === "create") router.push({name: PAGE_NAME.PLANNING.LIST});
-          validation.value = [];
           mixinMethods.notifySuccess(t("response.message.save_planning_success"));
           mixinMethods.endLoading();
+          if(method === "create") router.push({name: PAGE_NAME.PLANNING.LIST});
+          validation.value = [];
         },
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);

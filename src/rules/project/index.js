@@ -43,6 +43,11 @@ export const getProjectRules = () => {
       { required: true, message: t("E-CM-002"), trigger: "blur" },
     ],
     area: [
+      {
+        pattern: /^(\d+(\.\d+)?)\s*(m²|m2|ft²|ft2|km²|km2|cm²|cm2|mm²|mm2|ha|acre|sq\s*m|sq\s*ft)$/i,
+        message: t("E-CM-037"),
+        trigger: "blur"
+      },
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         max: MAX_CHARACTER,

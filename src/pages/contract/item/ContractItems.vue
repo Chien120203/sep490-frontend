@@ -308,11 +308,12 @@ const hierarchicalItems = computed(() => {
         <FileUpload
             :message="$t('common.csv_upload')"
             :allowedTypes="'.csv'"
+            component-id="contractItemsUpload"
             :fileLimit="1"
+            :auto-remove="true"
             :existingFiles="uploadedFiles"
             :disabled="!isAllowUpdate"
             @file-selected="handleCSVSelected"
-            @file-removed="handleRemoveAttachments"
         />
         <el-button
             style="margin-bottom: 33px; margin-left: 16px"
