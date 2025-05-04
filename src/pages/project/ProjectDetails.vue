@@ -28,7 +28,7 @@
               <template #title>
                 <h3>{{ $t("project.details.financial_summary") }}</h3>
               </template>
-              <FinancialSummary :sections="financialData"/>
+              <DonutChart :chart-data="projectFinancial"/>
             </el-collapse-item>
             <el-collapse-item name="4">
               <template #title>
@@ -106,6 +106,7 @@ import SiteSurveyInfo from "@/pages/site-survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import DonutChart from "@/pages/project/item/list/ProjectChart.vue";
 
 export default {
   name: "ProjectDetails",
@@ -115,6 +116,7 @@ export default {
     }
   },
   components: {
+    DonutChart,
     SiteSurveyInfo,
     ContractList: ContractList,
     LoadMore,
@@ -139,9 +141,10 @@ export default {
     const {
       isShowModalConfirm,
       projectDetails,
+      projectFinancial,
       getProjectDetails,
       updateProjectStatus,
-      saveProject
+      getProjectStatistic
     } = projectStore;
 
     const {
@@ -212,6 +215,7 @@ export default {
     const isAllowApprove = computed(() => (localStorage.getItem('role') === EXECUTIVE_BOARD));
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
+      await getProjectStatistic(route.params.id);
       projectId.value = route.params.id;
       if (loggedIn.value) {
         await getProjectDetails(route.params.id);
@@ -298,6 +302,7 @@ export default {
       changeRequestData,
       isShowModalConfirm,
       activeCollapseItems,
+      projectFinancial,
       searchCRForms,
       isShowBoxSearch,
       isAllowCreateSiteSurvey,

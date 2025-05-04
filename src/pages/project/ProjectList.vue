@@ -18,8 +18,15 @@
       <div class="project-items">
         <!--    charts-->
         <div class="project-body">
-          <div v-if="listProjects.value !== 0" class="project-chart">
-            <DonutChart :chart-data="chartData"/>
+          <div v-if="listProjects.value.length !== 0" class="project-chart">
+            <div class="chart-container">
+              <div class="chart-item">
+                <DonutChart :chart-data="chartData"/>
+              </div>
+              <div class="chart-item">
+                <DonutChart :chart-data="projectFinancial"/>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -171,10 +178,12 @@ export default {
       currentPage,
       projectDetails,
       isShowModalConfirm,
+      projectFinancial,
       chartData,
       isShowModalCreate,
       getListProjects,
       getProjectChart,
+      getProjectStatistic,
       handleDeleteProject
     } = projectStore;
     const {
@@ -228,6 +237,7 @@ export default {
     ]);
 
     onMounted(() => {
+      getProjectStatistic();
       if(role === ADMIN) router.push({name: PAGE_NAME.USER.LIST});
       projectId.value = null;
       if (loggedIn.value) {
@@ -312,6 +322,7 @@ export default {
       isShowModalCreate,
       projectDetails,
       allowCreateProject,
+      projectFinancial,
       handleSearchForm,
       handleSearchCustomer,
       handleClear,
@@ -341,6 +352,18 @@ export default {
   svg {
     height: 30px;
   }
+}
+.chart-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.chart-item {
+  min-height: 300px; /* Set a consistent height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .project-chart {

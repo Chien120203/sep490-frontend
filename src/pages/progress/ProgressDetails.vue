@@ -50,6 +50,34 @@ const {
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
+const setTaskIndex = () => {
+  const items = progressDetails.value.progressItems;
+  const parentIndex = selectedProgressItem.value.parentIndex;
+
+  let newIndex;
+
+  if (!parentIndex) {
+    // Case 1: Top-level task (no parentIndex)
+    const topLevelTasks = items.filter(item => !item.parentIndex);
+    const maxTopIndex = topLevelTasks.reduce((max, item) => {
+      const idx = parseInt(item.index, 10);
+      return idx > max ? idx : max;
+    }, 0);
+    newIndex = (maxTopIndex + 1).toString();
+  } else {
+    // Case 2: Child task (has parentIndex)
+    const childTasks = items.filter(item => item.parentIndex === parentIndex);
+    const lastChildIndex = childTasks.reduce((max, item) => {
+      const parts = item.index.split('.');
+      const last = parseInt(parts[parts.length - 1], 10);
+      return last > max ? last : max;
+    }, 0);
+
+    newIndex = `${parentIndex}.${lastChildIndex + 1}`;
+  }
+
+  return newIndex;
+};
 
 const tasks = ref(progressDetails.value.progressItems);
 const allowCreate = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
@@ -72,6 +100,7 @@ const handleEditProgressItem = (item) => {
 
 const handleSaveProgressItem = async () => {
   isShowModalSave.value = false;
+  selectedProgressItem.value.index = await setTaskIndex();
   selectedProgressItem.value.progressId = progressDetails.value.id;
   await saveProgressItem(selectedProgressItem.value);
 }
@@ -137,6 +166,7 @@ const handleCloseModal = () => {
     />
     <ChangeRequestModal
         :selectedRow="selectedProgressItem.value"
+        :rules="getProgressRules()"
         :show="isShowModalSave"
         :tasks="progressDetails.value.progressItems"
         :allowEdit="allowCreate"

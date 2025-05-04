@@ -17,6 +17,22 @@ export const useProjectStore = defineStore(
     const isShowModalCreate = reactive({value: false});
     const totalItems = reactive({value: 0});
     const currentPage = reactive({value: 1});
+    const projectFinancial = reactive({
+      labels: [
+        "Planned budget",
+        "Đã thực hiện",
+        "Đã nghiệm thu",
+        "Con lai",
+      ],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: ['#4B77BE', '#F9BF3B', '#1ABC9C', '#E74C3C'],
+          hoverBackgroundColor: ['#5D8DC9', '#FCC962', '#26C6A9', '#ED6B5A'],
+          hoverOffset: 4,
+        },
+      ],
+    });
     const listProjects = reactive({value: []});
     const projectDetails = reactive({
       value: {
@@ -78,6 +94,21 @@ export const useProjectStore = defineStore(
         },
         (error) => {
           mixinMethods.notifyError(t("response.message.get_projects_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const getProjectStatistic = async (projectId = "", isLoading) => {
+      if (isLoading) mixinMethods.startLoading();
+      await services.ProjectAPI.getStatistic(
+        projectId,
+        {},
+        (response) => {
+          projectFinancial.datasets[0].data = response.data.statistics.map(item => item.value);
+          mixinMethods.endLoading();
+        },
+        (error) => {
           mixinMethods.endLoading();
         }
       );
@@ -208,6 +239,7 @@ export const useProjectStore = defineStore(
       listProjects, // temporary
       totalItems,
       currentPage,
+      projectFinancial,
       projectDetails,
       isShowModalConfirm,
       chartData,
@@ -219,7 +251,8 @@ export const useProjectStore = defineStore(
       clearProjectDetails,
       getListProjects,
       handleGetProjectDtls,
-      handleDeleteProject
+      handleDeleteProject,
+      getProjectStatistic
     };
   }
 );
