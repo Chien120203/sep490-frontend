@@ -39,6 +39,7 @@
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
                 @update-list="updateListMaterials"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
 
@@ -55,6 +56,7 @@
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
                 @update-list="updateListUsers"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
 
@@ -71,6 +73,7 @@
                 :tableData="listSelectedVehicles"
                 :optionKeys="vehicleOptions"
                 @update-list="updateListVehicles"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
         </el-tabs>
@@ -78,7 +81,7 @@
     </template>
     <template #footer>
       <div class="modal-footer">
-        <el-button v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
+        <el-button :disabled="isExceedQuantity" v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
         <el-button v-if="allowApprove(data)" @click="$emit('changeStatus', {id: data.id, type: 'approve'})" type="success" class="btn btn-save">
           {{ $t("common.approve") }}
         </el-button>
@@ -170,7 +173,11 @@ watch(() => props.data.requestType, (newVal) => {
 
 onMounted(() => {
   getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20}, false);
-})
+});
+const isExceedQuantity = ref(false);
+const handleChangeStatusExceed = (status) => {
+  isExceedQuantity.value = status;
+}
 
 const materialOptions = ref({id: "resourceId", value: "name"});
 const userOptions = ref({id: "resourceId", value: "name"});
