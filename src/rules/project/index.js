@@ -50,6 +50,14 @@ export const getProjectRules = () => {
         trigger: "change",
       },
     ],
+    constructType: [
+      { required: true, message: t("E-CM-002"), trigger: "blur" },
+      {
+        max: MAX_CHARACTER,
+        message: t("E-CM-003", { max: MAX_CHARACTER }),
+        trigger: "change",
+      },
+    ],
     startDate: [
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
