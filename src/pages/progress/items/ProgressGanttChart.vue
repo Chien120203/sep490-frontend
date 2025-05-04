@@ -1,8 +1,9 @@
 <!-- GanttChart.vue -->
 <script setup>
-import {defineEmits, defineProps, ref, watch} from 'vue';
+import {computed, defineEmits, defineProps, ref, watch} from 'vue';
 import {provide} from "vue";
 import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Filter, Selection} from "@syncfusion/ej2-vue-gantt";
+import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 
 // Accept dataset from the parent component
 const props = defineProps({
@@ -50,7 +51,7 @@ const taskSettings = ref({
   baselineStartDate: "planStartDate",
   baselineEndDate: "planEndDate"
 });
-
+const currentRole = computed(() => localStorage.getItem("role"));
 const labelSettings = {
   taskLabel: '${progress}%'
 };
@@ -130,7 +131,7 @@ provide('gantt', [Toolbar, Filter, Selection]);
             {{ $t("common.clear") }}
           </el-button>
           <el-button class="btn btn-clear" @click="handleRefresh">
-            Refresh
+            {{ $t("common.refresh") }}
           </el-button>
         </div>
       </div>
@@ -138,7 +139,7 @@ provide('gantt', [Toolbar, Filter, Selection]);
         <el-button class="btn btn-save" @click="change(isCollapse)"
         >{{$t('progress.hide_gantt_chart')}}
         </el-button>
-        <el-button @click="handleAddNewTask" class="btn btn-save">
+        <el-button v-if="currentRole === TECHNICAL_MANAGER || currentRole === EXECUTIVE_BOARD" @click="handleAddNewTask" class="btn btn-save">
           {{ $t('common.add_new') }}
         </el-button>
       </div>
