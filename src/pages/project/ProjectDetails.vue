@@ -24,7 +24,7 @@
                   @edit="handleRedirectToEdit"
               />
             </el-collapse-item>
-            <el-collapse-item v-if="false" name="2">
+            <el-collapse-item name="2">
               <template #title>
                 <h3>{{ $t("project.details.financial_summary") }}</h3>
               </template>
@@ -187,23 +187,6 @@ export default {
           { label: "Đã thực hiện", value: 30226660535 },
           { label: "Đã nghiệm thu", value: 29676324721 },
           { label: "CĐT còn nợ", value: -18958404654 },
-        ],
-      },
-      {
-        title: "NHÀ THẦU (NT)",
-        bgColor: "#FEE2E2",
-        data: [
-          { label: "Hợp đồng", value: 36644729318 },
-          { label: "Đã thực hiện", value: 11101225831 },
-          { label: "Còn nợ NT", value: -2580925000 },
-        ],
-      },
-      {
-        title: "NHÀ CUNG CẤP (NCC)",
-        bgColor: "#FFF5D1",
-        data: [
-          { label: "Hợp đồng", value: 31715860099 },
-          { label: "Còn nợ NCC", value: 5369219239 },
         ],
       },
     ]);

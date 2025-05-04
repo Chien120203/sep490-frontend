@@ -897,8 +897,9 @@
       "in_progress": "In Progress",
       "completed": "Completed",
       "paused": "Paused",
-      "canceled": "Cancel",
-      "wait_inspection": "Wait for Inspection"
+      "canceled": "Canceled",
+      "wait_inspection": "Wait for Inspection",
+      "inspection_failed": "Inspection Failed"
     },
     "modal_confirm": {
       "title": "Update progress Item",

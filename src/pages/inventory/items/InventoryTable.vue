@@ -13,15 +13,6 @@
 
     <el-table-column min-width="100">
       <template #header>
-        <p>Resource ID</p>
-      </template>
-      <template #default="scope">
-        <span class="data-table">{{ scope.row.resourceId }}</span>
-      </template>
-    </el-table-column>
-
-    <el-table-column min-width="100">
-      <template #header>
         <p>Resource Type</p>
       </template>
       <template #default="scope">
