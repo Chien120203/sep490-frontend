@@ -533,8 +533,8 @@
       "status": "Status",
       "type": "Type",
       "statuses": {
-        "active": "Active",
-        "inactive": "Inactive",
+        "active": "Available",
+        "inactive": "Unavailable",
         "maintain": "Under Maintenance"
       },
       "details": {
@@ -897,13 +897,13 @@
       "in_progress": "In Progress",
       "completed": "Completed",
       "paused": "Paused",
-      "canceled": "Canceled",
+      "canceled": "Cancel",
       "wait_inspection": "Wait for Inspection"
     },
     "modal_confirm": {
       "title": "Update progress Item",
       "message": "Do you want to update this progress item?",
-      "canceled": "Canceled",
+      "canceled": "Cancel",
       "pending": "Pending"
     },
     "columns": {
@@ -955,6 +955,10 @@
     },
     "edit": {
       "title": "Edit Planning"
+    },
+    "tabs": {
+      "info": "Info",
+      "activity": "Activity"
     },
     "table": {
       "header": {
@@ -1010,6 +1014,12 @@
       "material": "Material Form",
       "machine": "Machine Form",
       "human": "Human Form"
+    },
+    "statuses": {
+      "created": "Created",
+      "resourceDepartment": "Resource Department",
+      "technicalDepartment": "Technical Department",
+      "directorApproval": "DOB Approval"
     },
     "items": {
       "name": "Name",

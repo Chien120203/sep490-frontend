@@ -134,7 +134,11 @@ const formInspectionReportDetailsRef = ref(null);
 const formInspectionReportRef = ref(null);
 
 const submitForm = async () => {
-  await saveInspectionReport(inspectionReportDetails.value);
+  formInspectionReportRef.value.ruleFormRef.validate((valid) => {
+    if (valid) {
+      saveInspectionReport(inspectionReportDetails.value);
+    }
+  });
 }
 </script>
 <style scoped>

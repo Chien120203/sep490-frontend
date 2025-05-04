@@ -5,7 +5,7 @@
       <el-tab-pane
           v-for="tab in listTabs"
           :key="tab.name"
-          :label="tab.label"
+          :label="$t(tab.label)"
           :name="tab.name"
       ></el-tab-pane>
     </el-tabs>
