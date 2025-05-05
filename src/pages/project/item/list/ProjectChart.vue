@@ -4,7 +4,7 @@
     <ul class="legend">
       <li v-for="(label, index) in chartData.labels" :key="index">
         <span :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></span>
-        {{ label }}: {{ chartData.datasets[0].data[index] }}
+        {{ label }}: {{ formatNumber(chartData.datasets[0].data[index]) }}
       </li>
     </ul>
   </div>
@@ -30,6 +30,15 @@ const chartOptions = {
       display: false,
     },
   },
+};
+
+// Hàm để format số
+const formatNumber = (number) => {
+  return `${new Intl.NumberFormat("en-US", {
+    style: "decimal",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(number)} `;
 };
 </script>
 

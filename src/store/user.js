@@ -143,12 +143,23 @@ export const useUserStore = defineStore(
         id: 0,
         username: "",
         email: "",
-        role: "",
+        role: "Construction Employee",
         fullName: "",
         phone: "",
-        gender: "",
+        gender: true,
         dob: ""
       };
+      userProfileDetails.value = {
+        id: 0,
+        username: "",
+        email: "",
+        role: "Construction Employee",
+        fullName: "",
+        phone: "",
+        gender: true,
+        dob: "",
+        picProfile: []
+      }
     };
 
     const updateUserProfile = async (params) => {

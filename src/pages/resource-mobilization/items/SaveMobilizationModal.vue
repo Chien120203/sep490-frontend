@@ -114,7 +114,7 @@ const listSelectedMaterials = ref([]);
 const listSelectedUsers = ref([]);
 const materialOptions = ref({id: "id", value: "materialName"});
 const userOptions = ref({id: "id", value: "teamName"});
-const vehicleOptions = ref({id: "id", value: "chassisNumber"});
+const vehicleOptions = ref({id: "id", value: "vehicleName"});
 const activeTab = ref("materials");
 
 const MOBILIZE_FORM_INFO_RULES = getMobilizationInfoRules();

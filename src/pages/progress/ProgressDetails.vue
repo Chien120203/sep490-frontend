@@ -8,14 +8,7 @@ import {usePersistenceStore} from "@/store/persistence.js";
 import ProgressDetailsModal from "@/pages/progress/items/modal/ProgressDetailsModal.vue"
 import {useProgressStore} from "@/store/progress.js";
 import {useConstructLog} from "@/store/construct-log.js";
-import {usePlanningStore} from "@/store/planning.js";
 import ChangeRequestModal from "@/pages/change-request/item/modal/ChangeRequestModal.vue";
-import {useHumanResourcesStore} from "@/store/human-resources.js";
-import {useMachineResourcesStore} from "@/store/machine-resources.js";
-import {useMaterialResourcesStore} from "@/store/material-resources.js";
-import {useChangeRequestStore} from "@/store/change-request.js";
-import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
-import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {useInventoryStore} from "@/store/inventory.js";
 import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {getProgressRules} from "@/rules/progress/index.js";
@@ -28,6 +21,7 @@ const {
   progressDetails,
   selectedProgressItem,
   isShowModal,
+  clearSelectedProgressItem,
   saveProgressItem,
   updateItem,
   getProgressDetails
@@ -49,21 +43,6 @@ const {
 const handleBack = () => {
   router.push({name: PAGE_NAME.PROJECT.DETAILS, params: {id: projectId.value}});
 };
-
-const progressRules = getProgressRules();
-const tasks = ref(progressDetails.value.progressItems);
-const allowCreate = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
-watch(
-    () => progressDetails.value,
-    (newVal) => {
-      tasks.value = newVal.progressItems;
-    },
-    {immediate: true, deep: true}
-)
-onMounted(() => {
-  getProgressDetails(projectId.value, true);
-});
-
 const setTaskIndex = () => {
   const items = progressDetails.value.progressItems;
   const parentIndex = selectedProgressItem.value.parentIndex;
@@ -92,6 +71,19 @@ const setTaskIndex = () => {
 
   return newIndex;
 };
+
+const tasks = ref(progressDetails.value.progressItems);
+const allowCreate = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
+watch(
+    () => progressDetails.value,
+    (newVal) => {
+      tasks.value = newVal.progressItems;
+    },
+    {immediate: true, deep: true}
+)
+onMounted(() => {
+  getProgressDetails(projectId.value, true);
+});
 
 const handleEditProgressItem = (item) => {
   isShowModal.value = true;
@@ -128,10 +120,12 @@ const handleAddTask = async () => {
 
 const handleDisplayModalSave = (show = false) => {
   isShowModalSave.value = show;
+  if(show) clearSelectedProgressItem();
 }
 
 const handleCloseModal = () => {
   isShowModal.value = false;
+  clearSelectedProgressItem();
 }
 </script>
 
@@ -165,9 +159,9 @@ const handleCloseModal = () => {
     />
     <ChangeRequestModal
         :selectedRow="selectedProgressItem.value"
+        :rules="getProgressRules()"
         :show="isShowModalSave"
         :tasks="progressDetails.value.progressItems"
-        :rules="progressRules"
         :allowEdit="allowCreate"
         @close="handleDisplayModalSave"
         @submit="handleSaveProgressItem"

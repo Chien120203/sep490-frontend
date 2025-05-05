@@ -28,8 +28,8 @@ export const useConstructLog = defineStore(
         resources: [],
         workAmount: [],
         weather: [
-          {type: "Điều kiện", values: ["", "", "", ""]},
-          {type: "Nhiệt độ", values: ["", "", "", ""]},
+          {type: t("weather.condition"), values: ["", "", "", ""]},
+          {type: t("weather.temperature"), values: ["", "", "", ""]},
         ],
         safety: "",
         quality: "",
@@ -153,9 +153,8 @@ export const useConstructLog = defineStore(
           if(params.id !== 0) {
             constructLogDetails.value = {...response.data, images: response.data.images.map(item => item.webContentLink)};
           } else {
-            router.push({name: PAGE_NAME.CONSTRUCT_LOG.DETAILS, params: response.data.id})
+            router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
           };
-          router.push({name: PAGE_NAME.CONSTRUCT_LOG.VIEW});
         },
         (error) => {
           mixinMethods.notifyError(t("response.message.save_construct_log_failed"));
@@ -189,10 +188,10 @@ export const useConstructLog = defineStore(
         projectId: 0,
         resources: [],
         workAmount: [],
-        weather: [
-          {type: "Điều kiện", values: ["", "", "", ""]},
-          {type: "Nhiệt độ", values: ["", "", "", ""]},
-        ],
+          weather: [
+              {type: t("weather.condition"), values: ["", "", "", ""]},
+              {type: t("weather.temperature"), values: ["", "", "", ""]},
+          ],
         safety: "",
         quality: "",
         progress: "",

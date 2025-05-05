@@ -53,14 +53,12 @@ import { useProgressStore } from '@/store/progress.js';
 
 // Store Data
 const constructLog = useConstructLog();
-const projectStore = useProjectStore();
 const persistenceStore = usePersistenceStore();
 const progressStore = useProgressStore();
 const { progressDetails, getProgressDetails } = progressStore;
 const { getListProjectLogs, listConstructLog } = constructLog;
 const { projectId } = persistenceStore;
 
-const route = useRoute();
 const { t } = useI18n();
 const router = useRouter();
 const now = dayjs();

@@ -153,8 +153,10 @@ const handleChangeValue = (quantity, resourceId) => {
     let inventory = props.selectData.find(item => item[props.optionKeys.id] === resourceId)?.quantity ?? 0;
     if (inventory < quantity) {
       exceedMessages.value[resourceId] = t('E-PLAN-002');
+      emit("disable-submit", true);
     } else {
       exceedMessages.value[resourceId] = '';
+      emit("disable-submit", false);
     }
   }
 };

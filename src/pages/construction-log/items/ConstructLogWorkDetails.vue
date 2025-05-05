@@ -189,7 +189,7 @@ defineExpose({
 });
 
 const getTaskInfo = (id) => {
-  return props.progressDtls.progressItems.find(task => task.index === id);
+  return props.progressDtls.progressItems.find(task => task.index === id) || null;
 };
 
 const handleSelectTask = (id) => {

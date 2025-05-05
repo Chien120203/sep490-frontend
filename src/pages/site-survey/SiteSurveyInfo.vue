@@ -123,7 +123,6 @@ const formatCurrency = (inputCurrency) => {
 }
 
 .btn-save {
-  background-color: #4CAF50;
   color: white;
   position: absolute;
   top: 20px;
@@ -131,12 +130,13 @@ const formatCurrency = (inputCurrency) => {
 }
 
 .btn-create {
-  background-color: #4CAF50;
+  background-color: #5A6ACF;
+  border: 1px solid #3C4EC0;
   color: white;
 }
 
 .attachment a {
-  color: #007bff;
+  color: #5A6ACF;
   text-decoration: none;
 }
 

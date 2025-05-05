@@ -39,6 +39,7 @@
                 :tableData="listSelectedMaterials"
                 :optionKeys="materialOptions"
                 @update-list="updateListMaterials"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
 
@@ -55,6 +56,7 @@
                 :tableData="listSelectedUsers"
                 :optionKeys="userOptions"
                 @update-list="updateListUsers"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
 
@@ -71,6 +73,7 @@
                 :tableData="listSelectedVehicles"
                 :optionKeys="vehicleOptions"
                 @update-list="updateListVehicles"
+                @disable-submit="handleChangeStatusExceed"
             />
           </el-tab-pane>
         </el-tabs>
@@ -78,7 +81,7 @@
     </template>
     <template #footer>
       <div class="modal-footer">
-        <el-button v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
+        <el-button :disabled="isExceedQuantity" v-if="allowSave" class="btn btn-save" @click="handleSubmit">{{ $t("common.save") }}</el-button>
         <el-button v-if="allowApprove(data)" @click="$emit('changeStatus', {id: data.id, type: 'approve'})" type="success" class="btn btn-save">
           {{ $t("common.approve") }}
         </el-button>
@@ -113,6 +116,7 @@ import {RESOURCE_TYPE_MATERIALS, RESOURCE_TYPE_USERS, RESOURCE_TYPE_VEHICLES} fr
 import {EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {mixinMethods} from "@/utils/variables.js";
 import { getAllocationResourceItemRules } from "@/rules/allocation";
+import {AVAILABLE} from "@/constants/machine.js";
 
 const props = defineProps({
   show: {type: Boolean, default: false},
@@ -170,7 +174,11 @@ watch(() => props.data.requestType, (newVal) => {
 
 onMounted(() => {
   getListInventory({projectId: projectId.value, pageIndex: 1, pageSize: 20}, false);
-})
+});
+const isExceedQuantity = ref(false);
+const handleChangeStatusExceed = (status) => {
+  isExceedQuantity.value = status;
+}
 
 const materialOptions = ref({id: "resourceId", value: "name"});
 const userOptions = ref({id: "resourceId", value: "name"});
@@ -218,7 +226,7 @@ const listVehicles = computed(() => {
   const fromTaskId = props.data.fromTaskId; // directly access it so Vue tracks it
 
   if (requestType === PROJECT_TO_TASK || requestType === PROJECT_TO_PROJECT) {
-    return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE);
+    return inventoryData.value.filter(item => item.resourceType === MACHINE_TYPE && item.status === AVAILABLE);
   }
 
   if (requestType === TASK_TO_TASK && fromTaskId) {

@@ -1,8 +1,18 @@
 <!-- GanttChart.vue -->
 <script setup>
-import {defineEmits, defineProps, ref, watch} from 'vue';
+import {computed, defineEmits, defineProps, ref, watch} from 'vue';
 import {provide} from "vue";
-import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Filter, Selection} from "@syncfusion/ej2-vue-gantt";
+import {GanttComponent, ColumnsDirective, ColumnDirective, Toolbar, Filter, Selection, CriticalPath} from "@syncfusion/ej2-vue-gantt";
+import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {
+  CANCELED,
+  COMPLETED,
+  IN_PROGRESS,
+  INSPECT_FAILED,
+  PAUSED,
+  STATUS_NOT_START,
+  WAIT_FOR_INSPECT
+} from "@/constants/progress.js";
 
 // Accept dataset from the parent component
 const props = defineProps({
@@ -50,11 +60,49 @@ const taskSettings = ref({
   baselineStartDate: "planStartDate",
   baselineEndDate: "planEndDate"
 });
-
+const currentRole = computed(() => localStorage.getItem("role"));
 const labelSettings = {
   taskLabel: '${progress}%'
 };
 
+const queryTaskbarInfo = (args) => {
+  // Set progress bar color based on task status
+  switch (args.data.taskData.status) {
+    case STATUS_NOT_START: // 0
+      args.progressBarBgColor = "#808080"; // Gray
+      args.taskbarBgColor = "#A9A9A9"; // Darker Gray
+      break;
+    case IN_PROGRESS: // 1
+      args.progressBarBgColor = "#1E90FF"; // DodgerBlue
+      args.taskbarBgColor = "#87CEFA"; // LightSkyBlue (lighter)
+      break;
+    case COMPLETED: // 2
+      args.progressBarBgColor = "#32CD32"; // LimeGreen
+      args.taskbarBgColor = "#90EE90"; // LightGreen (lighter)
+      break;
+    case PAUSED: // 3
+      args.progressBarBgColor = "#FFA500"; // Orange
+      args.taskbarBgColor = "#FFD700"; // Gold (lighter)
+      break;
+    case CANCELED: // 4
+      args.progressBarBgColor = "#FF0000"; // Red
+      args.taskbarBgColor = "#FFA07A"; // LightSalmon (lighter)
+      break;
+    case WAIT_FOR_INSPECT: // 5
+      args.progressBarBgColor = "#9370DB"; // MediumPurple
+      args.taskbarBgColor = "#B19CD9"; // Light Purple (lighter)
+      break;
+    case INSPECT_FAILED: // 6
+      args.progressBarBgColor = "#FF6347"; // Tomato
+      args.taskbarBgColor = "#FFA07A"; // LightSalmon (lighter)
+      break;
+    default:
+      args.progressBarBgColor = "#808080"; // Default gray
+      args.taskbarBgColor = "#A9A9A9"; // Default darker gray
+  }
+}
+const taskbarHeight = 40;
+const rowHeight = 40;
 const toolbar = [
   'Add',
   'Edit',
@@ -102,7 +150,7 @@ const change = (isOpen) => {
   isCollapse.value = !isOpen;
 }
 
-provide('gantt', [Toolbar, Filter, Selection]);
+provide('gantt', [Toolbar, Filter, Selection, CriticalPath]);
 </script>
 
 <template>
@@ -130,7 +178,7 @@ provide('gantt', [Toolbar, Filter, Selection]);
             {{ $t("common.clear") }}
           </el-button>
           <el-button class="btn btn-clear" @click="handleRefresh">
-            Refresh
+            {{ $t("common.refresh") }}
           </el-button>
         </div>
       </div>
@@ -138,7 +186,7 @@ provide('gantt', [Toolbar, Filter, Selection]);
         <el-button class="btn btn-save" @click="change(isCollapse)"
         >{{$t('progress.hide_gantt_chart')}}
         </el-button>
-        <el-button @click="handleAddNewTask" class="btn btn-save">
+        <el-button v-if="currentRole === TECHNICAL_MANAGER || currentRole === EXECUTIVE_BOARD" @click="handleAddNewTask" class="btn btn-save">
           {{ $t('common.add_new') }}
         </el-button>
       </div>
@@ -151,7 +199,11 @@ provide('gantt', [Toolbar, Filter, Selection]);
           :labelSettings="labelSettings"
           :height="'100%'"
           :width="'100%'"
+          :taskbarHeight="taskbarHeight"
+          :rowHeight="rowHeight"
+          :queryTaskbarInfo="queryTaskbarInfo"
           :timelineSettings="timelineSettings"
+          :enableCriticalPath="true"
           :selectionSettings="selectionOptions"
           :renderBaseline="true"
           :allowFiltering='true'

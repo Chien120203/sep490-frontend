@@ -13,7 +13,7 @@
 
     <el-table-column min-width="180">
       <template #header>
-        <p v-html="$t('inspection.table.header.projectCode')"></p>
+        <p v-html="$t('project.details.infor.project_name')"></p>
       </template>
 
       <template #default="scope">
@@ -84,7 +84,7 @@
           <button @click="$emit('details', scope.row.id)" class="btn-edit">
             <IconEdit />
           </button>
-          <button @click="$emit('delete', scope.row.id)" class="btn-edit">
+          <button v-if="scope.row.status === WAIT_FOR_APPROVE && currentRole === QUALITY_ASSURANCE" @click="$emit('delete', scope.row.id)" class="btn-edit">
             <IconTrash />
           </button>
         </div>
@@ -99,6 +99,8 @@ import IconTrash from "@/svg/IconTrash.vue";
 import {APPROVED_STATUS, REJECTED_STATUS, WAIT_FOR_APPROVE, LIST_INSPECT_STATUSES} from "@/constants/inspection.js";
 import {mixinMethods} from "@/utils/variables.js";
 import {DATE_FORMAT} from "@/constants/application.js";
+import {QUALITY_ASSURANCE} from "@/constants/roles.js";
+import {computed} from "vue";
 
 export default {
   name: "InspectionReportTable",
@@ -117,6 +119,7 @@ export default {
     },
   },
   setup(props, {emit}) {
+    const currentRole = computed(() => localStorage.getItem('role'));
     const statusClass = (status) => {
       switch (status) {
         case REJECTED_STATUS:
@@ -136,6 +139,9 @@ export default {
     return {
       statusClass,
       getStatus,
+      WAIT_FOR_APPROVE,
+      QUALITY_ASSURANCE,
+      currentRole,
       formatDate
     };
   },

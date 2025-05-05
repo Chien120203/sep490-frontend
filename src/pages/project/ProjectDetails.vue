@@ -24,11 +24,18 @@
                   @edit="handleRedirectToEdit"
               />
             </el-collapse-item>
-            <el-collapse-item v-if="false" name="2">
+            <el-collapse-item name="2">
               <template #title>
-                <h3>{{ $t("project.details.financial_summary") }}</h3>
+                <h3>{{ $t("project.details.statistic") }}</h3>
               </template>
-              <FinancialSummary :sections="financialData"/>
+              <div style="display: flex; justify-content: space-evenly; min-height: 550px">
+                <div style="width: 30%;">
+                  <DonutChart :chart-data="projectFinancial" />
+                </div>
+                <div style="width: 70%; min-height: 520px;">
+                  <WorkLogStatistic :construction-log-data="listConstructLog.value"/>
+                </div>
+              </div>
             </el-collapse-item>
             <el-collapse-item name="4">
               <template #title>
@@ -39,7 +46,7 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button v-if="isAllowCreateContract && !isSiteSurveyNull.value" class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowCreateContract" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>
@@ -106,6 +113,9 @@ import SiteSurveyInfo from "@/pages/site-survey/SiteSurveyInfo.vue";
 import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
+import DonutChart from "@/pages/project/item/list/ProjectChart.vue";
+import WorkLogStatistic from "@/pages/project/item/list/WorkLogStatistic.vue";
+import {useConstructLog} from "@/store/construct-log.js";
 
 export default {
   name: "ProjectDetails",
@@ -115,6 +125,8 @@ export default {
     }
   },
   components: {
+    WorkLogStatistic,
+    DonutChart,
     SiteSurveyInfo,
     ContractList: ContractList,
     LoadMore,
@@ -135,15 +147,18 @@ export default {
     const contractStore = useContractStore();
     const surveyStore = useSiteSurveyStore();
     const persist = usePersistenceStore();
-
+    const constructLogStore = useConstructLog()
     const {
       isShowModalConfirm,
       projectDetails,
+      projectFinancial,
       getProjectDetails,
       updateProjectStatus,
-      saveProject
+      getProjectStatistic
     } = projectStore;
-
+    const {
+      getListProjectLogs, listConstructLog
+    } = constructLogStore;
     const {
       totalItems,
       contractDetails,
@@ -178,35 +193,6 @@ export default {
         request_date: "2024-02-10T14:20:00",
       },
     ]);
-    const financialData = ref([
-      {
-        title: "CHỦ ĐẦU TƯ (CĐT)",
-        bgColor: "#DFF5E1",
-        data: [
-          { label: "Hợp đồng", value: 484974055904 },
-          { label: "Đã thực hiện", value: 30226660535 },
-          { label: "Đã nghiệm thu", value: 29676324721 },
-          { label: "CĐT còn nợ", value: -18958404654 },
-        ],
-      },
-      {
-        title: "NHÀ THẦU (NT)",
-        bgColor: "#FEE2E2",
-        data: [
-          { label: "Hợp đồng", value: 36644729318 },
-          { label: "Đã thực hiện", value: 11101225831 },
-          { label: "Còn nợ NT", value: -2580925000 },
-        ],
-      },
-      {
-        title: "NHÀ CUNG CẤP (NCC)",
-        bgColor: "#FFF5D1",
-        data: [
-          { label: "Hợp đồng", value: 31715860099 },
-          { label: "Còn nợ NCC", value: 5369219239 },
-        ],
-      },
-    ]);
 
     const isShowBoxSearch = ref(false);
     const actionText = ref('');
@@ -229,6 +215,8 @@ export default {
     const isAllowApprove = computed(() => (localStorage.getItem('role') === EXECUTIVE_BOARD));
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
+      await getListProjectLogs({projectId: route.params.id, pageSize: 100}, false);
+      await getProjectStatistic(route.params.id);
       projectId.value = route.params.id;
       if (loggedIn.value) {
         await getProjectDetails(route.params.id);
@@ -304,9 +292,9 @@ export default {
       PLANNING_STATUS,
       WAIT_TO_COMPLETE,
       COMPLETE,
-      financialData,
       isAllowApproveToPlanning,
       isAllowClose,
+      listConstructLog,
       projectStatus,
       isAllowCreateContract,
       isAllowApprove,
@@ -315,6 +303,7 @@ export default {
       changeRequestData,
       isShowModalConfirm,
       activeCollapseItems,
+      projectFinancial,
       searchCRForms,
       isShowBoxSearch,
       isAllowCreateSiteSurvey,
@@ -419,4 +408,5 @@ export default {
 h3 {
   margin: auto 12px;
 }
+
 </style>

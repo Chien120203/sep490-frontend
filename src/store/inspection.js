@@ -3,15 +3,17 @@ import {reactive} from "vue";
 import {mixinMethods} from "@/utils/variables";
 import services from "@/plugins/services";
 import {useI18n} from "vue-i18n";
-import {InspectionReportAPI} from "@/services/InspectionReportAPI.js";
 import {QUALITY_ASSURANCE} from "@/constants/roles.js";
 import {INSPECT_DECISION_FAIL, WAIT_FOR_APPROVE} from "@/constants/inspection.js";
+import {useRouter} from "vue-router";
+import PAGE_NAME from "@/constants/route-name.js";
 
 export const useInspectionReportStore = defineStore(
   "inspectionReport",
   () => {
     const {t} = useI18n();
     const validation = reactive({value: {}});
+    const router = useRouter();
     const isShowModalConfirm = reactive({value: false});
     const totalItems = reactive({value: 0});
     const currentPage = reactive({value: 1});
@@ -88,6 +90,7 @@ export const useInspectionReportStore = defineStore(
           inspectionReportDetails.value = response.data;
           mixinMethods.notifySuccess(t("response.message.save_inspection_success"));
           mixinMethods.endLoading();
+          router.push({name: PAGE_NAME.INSPECTION_REPORT.LIST})
         },
         (error) => {
           mixinMethods.notifyError(t("response.message.save_inspection_failed"));

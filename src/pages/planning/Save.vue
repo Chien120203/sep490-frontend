@@ -87,8 +87,6 @@ import SelectionFilters from "@/pages/planning/item/details/SelectionFilters.vue
 import PlanningDetails from "@/pages/planning/item/details/PlanningDetails.vue";
 import ActivityComponent from "@/pages/planning/item/details/ActivityComponent.vue";
 import PAGE_NAME from "@/constants/route-name.js";
-import {useProjectStore} from "@/store/project.js";
-import {useUserStore} from "@/store/user.js";
 import PlanItemDetailsModal from "@/pages/planning/item/modal/PlanItemDetailsModal.vue";
 import {useContractStore} from "@/store/contract.js";
 import {usePlanningStore} from "@/store/planning.js";
@@ -101,17 +99,17 @@ import {useMaterialResourcesStore} from "@/store/material-resources.js";
 import {useI18n} from "vue-i18n";
 import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 import {CONSTRUCTION_MANAGER, EXECUTIVE_BOARD, RESOURCE_MANAGER, TECHNICAL_MANAGER} from "@/constants/roles.js";
-import {DATE_TIME_FORMAT} from "@/constants/application.js";
 
+const { t } = useI18n();
 const selectedTab = ref("info"); // Default tab
 const listTabs = ref([
   {
     name: "info",
-    label: "Info",
+    label: 'planning.tabs.info',
   },
   {
     name: "activity",
-    label: "Activity",
+    label: 'planning.tabs.activity',
   },
 ]);
 const isShowModalItemDtls = ref(false);
@@ -124,7 +122,7 @@ const heartbeatInterval = ref(null);
 
 const currentStep = ref(1);
 const activities = ref([]); // Placeholder for activity data
-const {t} = useI18n();
+
 // Store Data
 const contractStore = useContractStore();
 const planningStore = usePlanningStore();
@@ -172,6 +170,8 @@ const allowApprove = computed(() => {
   if(currentRole === EXECUTIVE_BOARD) {
     const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
     const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
+    const executiveBoardApproved = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD)?.isApproved === true;
+    if(executiveBoardApproved) return false;
     return technicalManagerApproved && resourceManagerApproved;
   };
   return status?.isApproved === null  || status?.isApproved === false;
@@ -224,22 +224,10 @@ const statuses = computed(() => {
   const bodStatus = bodApprove === null ? "process" : (bodApprove === true ? "success" : "error");
 
   return [
-    { title: "Khởi tạo",
-      description: "",
-      status: "success" },
-    {
-      title: "Phòng tài nguyên",
-      status: resourceApprove ? "success" : "process"
-    },
-    {
-      title: "Phòng kỹ thuật",
-      status: techApprove ? "success" : "process"
-    },
-    {
-      title: "Giám đốc duyệt",
-      description: "",
-      status: bodStatus
-    }
+    { title: t("planning.statuses.created"), description: "", status: "success" },
+    { title: t("planning.statuses.resourceDepartment"), status: resourceApprove ? "success" : "process" },
+    { title: t("planning.statuses.technicalDepartment"), status: techApprove ? "success" : "process" },
+    { title: t("planning.statuses.directorApproval"), description: "", status: bodStatus }
   ];
 });
 const route = useRoute();

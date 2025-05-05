@@ -215,10 +215,7 @@ const base64ToFile = (base64String, fileName) => {
 const handleErrorResponse = (error) => {
   const errors = error?.errors || {};
   return Object.entries(errors).reduce((acc, [field, messages]) => {
-    const message = messages?.[0] || 'Validation error';
-    field.split(',').map(f => f.trim()).forEach(f => {
-      acc[f] = message;
-    });
+    acc[messages.field || ''] = messages.message || '';
     return acc;
   }, {});
 };

@@ -54,15 +54,14 @@
           <!-- Quantity -->
           <el-form-item prop="quantity" :label="$t('change_request.modal.quantity')">
             <el-input
-                v-model.number="selectedRow.quantity"
-                type="number"
+                v-model="selectedRow.quantity"
                 class="custom-input"
                 :disabled="!allowEdit"
             />
           </el-form-item>
 
           <!-- Unit -->
-          <el-form-item :label="$t('change_request.modal.unit')">
+          <el-form-item prop="unit" :label="$t('change_request.modal.unit')">
             <el-input
                 v-model="selectedRow.unit"
                 class="custom-input"
@@ -71,7 +70,7 @@
           </el-form-item>
 
           <!-- Unit Price -->
-          <el-form-item :label="$t('change_request.modal.unit_price')">
+          <el-form-item prop="unitPrice" :label="$t('change_request.modal.unit_price')">
             <el-input
                 v-model="selectedRow.unitPrice"
                 :formatter="(value) => mixinMethods.formatInputMoney(value)"
@@ -107,38 +106,12 @@ const { t } = useI18n();
 
 const props = defineProps({
   selectedRow: { type: Object, default: () => ({}) },
-  total: { type: Object, default: () => ({}) },
   tasks: { type: Object, default: () => [] },
   rules: { type: Object, default: () => ({}) },
   allowEdit: { type: Boolean, default: false }
 });
 
 const ruleFormRef = ref(null);
-
-// Define rules as a computed property to use t()
-const rules = computed(() => ({
-  totalPrice: [
-    { required: true, message: t('change_request.errors.total_required'), trigger: 'blur' },
-    {
-      validator: (rule, value, callback) => {
-        if (value <= 0) {
-          callback(new Error(t('change_request.errors.total_positive')));
-        } else {
-          callback();
-        }
-      },
-      trigger: 'blur'
-    }
-  ]
-}));
-
-watch(
-    () => props.total.totalPrice,
-    (newVal) => {
-      props.selectedRow.totalPrice = newVal;
-    },
-    { immediate: true }
-);
 
 const totalPrice = computed(() => {
   let value = props.selectedRow.unitPrice * props.selectedRow.quantity;

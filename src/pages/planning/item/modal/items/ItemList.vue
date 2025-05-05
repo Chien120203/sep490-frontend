@@ -35,7 +35,7 @@
         <el-table-column prop="unit" :label="$t('planning.items.unit')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.unit`" :rules="rules.unit">
-              <el-input :disabled="resourceType === MATERIAL_TYPE" v-model="listAddedValues[$index].unit" />
+              <el-input :disabled="!allowEdit" v-model="listAddedValues[$index].unit" />
             </el-form-item>
           </template>
         </el-table-column>
@@ -43,7 +43,7 @@
         <el-table-column prop="quantity" :label="$t('planning.items.quantity')">
           <template #default="{ row, $index }">
             <el-form-item :prop="`listAddedValues.${$index}.quantity`" :rules="rules.quantity">
-              <el-input v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
+              <el-input :disabled="!allowEdit" v-model.number="listAddedValues[$index].quantity" @change="handleChangeValue(listAddedValues[$index].quantity, row.resourceId)"/>
             </el-form-item>
             <p style="margin-bottom: 18px" v-if="resourceType === MATERIAL_TYPE && exceedMessages[row.resourceId]" class="error-feedback">
               {{ exceedMessages[row.resourceId] }}

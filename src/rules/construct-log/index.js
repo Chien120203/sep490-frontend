@@ -42,7 +42,7 @@ export const getConstructLogRules = () => {
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
-          validateStartBeforeEnd(rule, value, callback, value, new Date(), "E-CM-029"),
+            validateStartBeforeEnd(rule, value, callback, value, new Date(), "E-CM-029"),
         trigger: "blur",
       }
     ],
@@ -62,15 +62,15 @@ export const getConstructLogRules = () => {
       { required: true, message: t("E-CM-002"), trigger: "blur" },
       {
         validator: (rule, value, callback) =>
-          validateMinMax(
-            rule,
-            value,
-            callback,
-            MIN_NUMBER,
-            MAX_NUMBER,
-            t("E-CM-015", { min: MIN_NUMBER }),
-            t("E-CM-018", { max: MAX_NUMBER })
-          ),
+            validateMinMax(
+                rule,
+                value,
+                callback,
+                MIN_NUMBER,
+                MAX_NUMBER,
+                t("E-CM-015", { min: MIN_NUMBER }),
+                t("E-CM-018", { max: MAX_NUMBER })
+            ),
         trigger: "blur",
       }
     ],
