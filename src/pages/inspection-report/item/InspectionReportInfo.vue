@@ -70,7 +70,7 @@
       </el-form-item>
 
       <!-- Attachments -->
-      <el-form-item prop="attachment" :label="$t('inspection.form.attachments')">
+      <el-form-item v-if="false" prop="attachment" :label="$t('inspection.form.attachments')">
         <FileUpload
             :existingFiles="inspectionReportDetails.attachment"
             :allowedTypes="'.jpg,.png,.pdf,.docx'"

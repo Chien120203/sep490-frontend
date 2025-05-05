@@ -9,7 +9,7 @@
             @file-removed="handleRemoveFile"
         />
       </el-form-item>
-      <el-form-item :label="$t('construct_log.form.attachments')">
+      <el-form-item v-if="false" :label="$t('construct_log.form.attachments')">
         <FileUpload
             :existingFiles="logDetails.attachmentFiles"
             :allowedTypes="'.jpg,.png,.pdf,.docx'"
