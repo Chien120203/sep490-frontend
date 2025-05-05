@@ -6,12 +6,15 @@ import {useI18n} from "vue-i18n";
 import {useRouter} from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
 import {CONSTRUCTION_MANAGER} from "@/constants/roles.js";
+import {useProgressStore} from "@/store/progress.js";
 
 export const useConstructLog = defineStore(
   "construct-log",
   () => {
     const {t} = useI18n();
     const validation = reactive({value: {}});
+    const progressStore = useProgressStore();
+    const {clearAllCache} = progressStore;
     const router = useRouter();
     const isShowModalConfirm = reactive({value: false});
     const isShowModalCreate = reactive({value: false});
@@ -170,6 +173,7 @@ export const useConstructLog = defineStore(
         {},
         (response) => {
           getConstructLogDetails(id, false);
+          clearAllCache();
           mixinMethods.endLoading();
           mixinMethods.notifySuccess(t("response.message.save_construct_log_success"));
         },

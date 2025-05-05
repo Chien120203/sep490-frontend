@@ -10,7 +10,7 @@ export const useProgressStore = defineStore(
   () => {
     const {t} = useI18n();
     const persist = usePersistenceStore();
-    const { projectId } = persist;
+    const {projectId} = persist;
     const validation = reactive({value: {}});
     const isShowModal = reactive({value: false});
     const progressDetails = reactive({
@@ -38,7 +38,7 @@ export const useProgressStore = defineStore(
       },
     })
     const getProgressDetails = async (projectId, isLoading) => {
-      if(isLoading) mixinMethods.startLoading();
+      if (isLoading) mixinMethods.startLoading();
       await services.ProgressAPI.details(
         projectId,
         {},
@@ -104,6 +104,7 @@ export const useProgressStore = defineStore(
         params,
         (response) => {
           getProgressDetails(projectId.value);
+          clearAllCache();
           validation.value = [];
           mixinMethods.notifySuccess(t("response.message.save_progress_item_success"));
           mixinMethods.endLoading();
@@ -111,6 +112,18 @@ export const useProgressStore = defineStore(
         (error) => {
           validation.value = mixinMethods.handleErrorResponse(error.responseCode);
           mixinMethods.notifyError(t("response.message.save_progress_item_failed"));
+          mixinMethods.endLoading();
+        }
+      );
+    };
+
+    const clearAllCache = async () => {
+      await services.ProgressAPI.clearCache(
+        {},
+        (response) => {
+          mixinMethods.endLoading();
+        },
+        (error) => {
           mixinMethods.endLoading();
         }
       );
@@ -165,7 +178,8 @@ export const useProgressStore = defineStore(
       saveProgressItem,
       getProgressDetails,
       convertProgressToTasks,
-      clearSelectedProgressItem
+      clearSelectedProgressItem,
+      clearAllCache
     };
   }
 );
