@@ -25,10 +25,12 @@
               />
             </el-collapse-item>
             <el-collapse-item name="2">
-              <template #title>
-                <h3>{{ $t("project.details.financial_summary") }}</h3>
-              </template>
-              <DonutChart :chart-data="projectFinancial"/>
+              <div>
+                <DonutChart :chart-data="projectFinancial"/>
+              </div>
+              <div>
+                <WorkLogStatistic :construction-log-data="constructionLogData"/>
+              </div>
             </el-collapse-item>
             <el-collapse-item name="4">
               <template #title>
@@ -107,6 +109,7 @@ import {useSiteSurveyStore} from "@/store/site-survey.js";
 import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import DonutChart from "@/pages/project/item/list/ProjectChart.vue";
+import WorkLogStatistic from "@/pages/project/item/list/WorkLogStatistic.vue";
 
 export default {
   name: "ProjectDetails",
@@ -116,6 +119,7 @@ export default {
     }
   },
   components: {
+    WorkLogStatistic,
     DonutChart,
     SiteSurveyInfo,
     ContractList: ContractList,
