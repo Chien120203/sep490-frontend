@@ -8,14 +8,7 @@ import {usePersistenceStore} from "@/store/persistence.js";
 import ProgressDetailsModal from "@/pages/progress/items/modal/ProgressDetailsModal.vue"
 import {useProgressStore} from "@/store/progress.js";
 import {useConstructLog} from "@/store/construct-log.js";
-import {usePlanningStore} from "@/store/planning.js";
 import ChangeRequestModal from "@/pages/change-request/item/modal/ChangeRequestModal.vue";
-import {useHumanResourcesStore} from "@/store/human-resources.js";
-import {useMachineResourcesStore} from "@/store/machine-resources.js";
-import {useMaterialResourcesStore} from "@/store/material-resources.js";
-import {useChangeRequestStore} from "@/store/change-request.js";
-import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
-import {PROJECT_TO_PROJECT, PROJECT_TO_TASK, TASK_TO_TASK} from "@/constants/allocation.js";
 import {useInventoryStore} from "@/store/inventory.js";
 import {TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {getProgressRules} from "@/rules/progress/index.js";

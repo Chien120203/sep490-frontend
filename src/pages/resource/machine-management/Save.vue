@@ -18,7 +18,6 @@
       </div>
 
       <div class="machine-body mt-0">
-        {{validation.value.value}}
         <el-form
             :disabled="!allowEdit"
             ref="ruleFormRef"
@@ -71,7 +70,7 @@
               </label>
             </el-form-item>
 
-            <el-form-item prop="countryOfManufacture required" :label="$t('resource.machine.details.countryOfManufacture')">
+            <el-form-item prop="countryOfManufacture" :label="$t('resource.machine.details.countryOfManufacture')">
               <el-input v-model="machineResourcesDetails.value.countryOfManufacture" />
               <label class="error-feedback-machine" v-if="validation && validation.value.countryOfManufacture">
                 {{ $t(validation.value.countryOfManufacture) }}
@@ -91,16 +90,16 @@
                 {{ $t(validation.value.chassisNumber) }}
               </label>
             </el-form-item>
+          </div>
 
+          <div class="item item-bib-add item-machine-add">
             <el-form-item prop="engineNumber" class="custom-textarea required" :label="$t('resource.machine.details.engineNumber')">
               <el-input v-model="machineResourcesDetails.value.engineNumber" />
               <label class="error-feedback-machine" v-if="validation && validation.value.engineNumber">
                 {{ $t(validation.value.engineNumber) }}
               </label>
             </el-form-item>
-          </div>
 
-          <div class="item item-bib-add item-machine-add">
             <el-form-item prop="color" class="custom-textarea" :label="$t('resource.machine.details.color')">
               <el-input v-model="machineResourcesDetails.value.color" />
               <label class="error-feedback-machine" v-if="validation && validation.value.color">
@@ -130,7 +129,7 @@
             </el-form-item>
 
             <el-form-item prop="status" :label="$t('resource.machine.details.status')" class="required">
-              <el-select v-model="machineResourcesDetails.value.status" class="custom-textarea required">
+              <el-select v-model="machineResourcesDetails.value.status" :disabled="true" class="custom-textarea required">
                 <el-option
                     v-for="status in statusOptions"
                     :key="status.value"
@@ -232,6 +231,8 @@ export default {
       }
       if (isUpdate.value) {
         getMachineResourcesDetails(route.params.id);
+      } else {
+        machineResourcesDetails.value.status = AVAILABLE;
       }
     });
 

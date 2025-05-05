@@ -7,7 +7,7 @@
         ref="ruleFormRef"
         :rules="rules"
     >
-      <el-form-item :label="$t('inspection.form.inspection_name')" required>
+      <el-form-item :label="$t('inspection.form.inspection_name')" prop="inspectionName" required>
         <el-input v-model="inspectionReportDetails.inspectionName" :placeholder="$t('inspection.form.enter_inspection_name')" />
       </el-form-item>
       <!-- Verification code -->
