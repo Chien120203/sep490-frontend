@@ -528,6 +528,10 @@
     "add_new": "Thêm mới",
     "keyword": "Từ khóa",
     "search": "Tìm kiếm",
+    "name": "Tên",
+    "unit": "Đơn vị",
+    "quantity": "Hàng tồn kho",
+    "type": "Loại",
     "machine": {
       "title": "Quản lý tài nguyên máy móc",
       "add_new": "Thêm mới",
@@ -1519,7 +1523,7 @@
     "modal": {
       "request_name": "Tên yêu cầu",
       "request_date": "Ngày yêu cầu",
-      "parent_index": "Chỉ số cha",
+      "parent_index": "Công việc phụ thuộc",
       "work_name": "Tên công việc",
       "quantity": "Số lượng",
       "total": "Tổng",

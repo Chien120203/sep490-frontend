@@ -1,38 +1,31 @@
 <template>
   <el-table :data="data" style="width: 100%; height: 95%" class="el-tbl-custom room-tbl">
+    <!-- Index column (already using i18n) -->
     <el-table-column type="index" min-width="53" :label="$t('common.no')" align="right" />
 
-    <el-table-column min-width="160">
-      <template #header>
-        <p>Name</p>
-      </template>
+    <!-- Name column -->
+    <el-table-column min-width="160" :label="$t('resource.name')">
       <template #default="scope">
         <span class="data-table">{{ scope.row.name || "-" }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column min-width="100">
-      <template #header>
-        <p>Resource Type</p>
-      </template>
+    <!-- Resource Type column -->
+    <el-table-column min-width="100" :label="$t('resource.type')">
       <template #default="scope">
         <span class="data-table">{{ $t(getResourceType(scope.row.resourceType)) }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column min-width="100">
-      <template #header>
-        <p>Unit</p>
-      </template>
+    <!-- Unit column -->
+    <el-table-column min-width="100" :label="$t('resource.unit')">
       <template #default="scope">
         <span class="data-table">{{ scope.row.unit }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column min-width="120">
-      <template #header>
-        <p>Quantity</p>
-      </template>
+    <!-- Quantity column -->
+    <el-table-column min-width="120" :label="$t('resource.quantity')">
       <template #default="scope">
         <span class="data-table">{{ scope.row.quantity }}</span>
       </template>

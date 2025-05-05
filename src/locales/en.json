@@ -524,6 +524,10 @@
     "add_new": "Add New",
     "keyword": "Keyword",
     "search": "Search",
+    "name": "Name",
+    "unit": "Unit",
+    "quantity": "Inventory",
+    "type": "Type",
     "machine": {
       "title": "Machine Resource Management",
       "add_new": "Add New",

@@ -61,12 +61,12 @@ export const useProjectStore = defineStore(
     });
     const chartData = reactive({
       labels: [
-        t('project.statuses.receive_reqs'),
-        t('project.statuses.planning'),
-        t('project.statuses.in_progress'),
-        t('project.statuses.complete'),
-        t('project.statuses.paused'),
-        t('project.statuses.close'),
+        'project.statuses.receive_reqs',
+        'project.statuses.planning',
+        'project.statuses.in_progress',
+        'project.statuses.complete',
+        'project.statuses.paused',
+        'project.statuses.close',
       ],
       datasets: [
         {
