@@ -308,8 +308,9 @@ export default {
   align-items: center;
 }
 .forgot-password-link {
-  color: #ff6600;
+  color: #3C4EC0;
   text-align: right;
   display: block;
 }
 </style>
+

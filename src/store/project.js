@@ -19,10 +19,10 @@ export const useProjectStore = defineStore(
     const currentPage = reactive({value: 1});
     const projectFinancial = reactive({
       labels: [
-          'project.financial.planned_budget',
-          'project.financial.executed',
-          'project.financial.accepted',
-          'project.financial.remaining',
+          t('project.financial.planned_budget'),
+          t('project.financial.executed') ,
+          t('project.financial.accepted'),
+          t('project.financial.remaining'),
       ],
       datasets: [
         {
@@ -61,12 +61,12 @@ export const useProjectStore = defineStore(
     });
     const chartData = reactive({
       labels: [
-        'project.statuses.receive_reqs',
-        'project.statuses.planning',
-        'project.statuses.in_progress',
-        'project.statuses.complete',
-        'project.statuses.paused',
-        'project.statuses.close',
+          t('project.statuses.receive_reqs'),
+          t('project.statuses.planning'),
+          t('project.statuses.in_progress'),
+          t('project.statuses.complete'),
+          t('project.statuses.paused'),
+          t('project.statuses.close'),
       ],
       datasets: [
         {

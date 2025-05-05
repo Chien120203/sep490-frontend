@@ -1,34 +1,35 @@
 <template>
   <div class="chart-container">
-    <h3>Construction Progress & Resource Usage</h3>
+    <h3>{{ $t('chart.title') }}</h3>
     <canvas ref="chartCanvas"></canvas>
     <div class="chart-legend" v-if="hasData">
       <div class="legend-item">
         <div class="legend-color work-amount"></div>
-        <span>Work Amount</span>
+        <span>{{ $t('chart.legend.workAmount') }}</span>
       </div>
       <div class="legend-item">
         <div class="legend-color material"></div>
-        <span>Materials</span>
+        <span>{{ $t('chart.legend.materials') }}</span>
       </div>
       <div class="legend-item">
         <div class="legend-color labor"></div>
-        <span>Labor</span>
+        <span>{{ $t('chart.legend.labor') }}</span>
       </div>
       <div class="legend-item">
         <div class="legend-color equipment"></div>
-        <span>Equipment</span>
+        <span>{{ $t('chart.legend.equipment') }}</span>
       </div>
     </div>
-    <div v-if="!hasData" class="no-data">
-      No data available to display
-    </div>
+    <div v-if="!hasData" class="no-data">{{ $t('chart.noData') }}</div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, defineProps, watch, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import Chart from 'chart.js/auto';
+
+const { t, locale } = useI18n(); // Access i18n translation function and current locale
 
 const props = defineProps({
   constructionLogData: {
@@ -74,9 +75,9 @@ const processDataForChart = (logs) => {
   const materialData = [];
 
   sortedLogs.forEach(log => {
-    // Format the date for display
+    // Format the date for display using current locale
     const date = new Date(log.logDate);
-    const formattedDate = date.toLocaleDateString('en-US', {
+    const formattedDate = date.toLocaleDateString(locale.value, {
       month: 'short',
       day: 'numeric',
       year: 'numeric'
@@ -106,6 +107,8 @@ const processDataForChart = (logs) => {
           case RESOURCE_TYPE.MATERIAL:
             materialTotal += resource.quantity;
             break;
+          default:
+            break;
         }
       });
     }
@@ -133,7 +136,6 @@ const createChart = () => {
   const { labels, workAmountData, laborData, equipmentData, materialData } = processDataForChart(props.constructionLogData);
 
   if (labels.length === 0) {
-    // No data to display
     return;
   }
 
@@ -145,7 +147,7 @@ const createChart = () => {
       labels: labels,
       datasets: [
         {
-          label: 'Work Amount',
+          label: t('chart.legend.workAmount'),
           data: workAmountData,
           type: 'line',
           borderColor: '#FF6384',
@@ -158,19 +160,19 @@ const createChart = () => {
           pointBackgroundColor: '#FF6384',
         },
         {
-          label: 'Materials',
+          label: t('chart.legend.materials'),
           data: materialData,
           backgroundColor: 'rgba(54, 162, 235, 0.7)',
           yAxisID: 'y',
         },
         {
-          label: 'Labor',
+          label: t('chart.legend.labor'),
           data: laborData,
           backgroundColor: 'rgba(255, 206, 86, 0.7)',
           yAxisID: 'y',
         },
         {
-          label: 'Equipment',
+          label: t('chart.legend.equipment'),
           data: equipmentData,
           backgroundColor: 'rgba(75, 192, 192, 0.7)',
           yAxisID: 'y',
@@ -194,8 +196,8 @@ const createChart = () => {
                 label += ': ';
               }
               if (context.parsed.y !== null) {
-                if (label.includes('Work Amount')) {
-                  label += new Intl.NumberFormat('vi-VN').format(context.parsed.y);
+                if (label.includes(t('chart.legend.workAmount'))) {
+                  label += new Intl.NumberFormat(locale.value).format(context.parsed.y);
                 } else {
                   label += context.parsed.y;
                 }
@@ -209,14 +211,14 @@ const createChart = () => {
         },
         title: {
           display: true,
-          text: 'Construction Progress & Resource Usage'
+          text: t('chart.title')
         }
       },
       scales: {
         y: {
           title: {
             display: true,
-            text: 'Resource Quantity'
+            text: t('chart.axes.resourceQuantity')
           },
           beginAtZero: true,
           position: 'left',
@@ -224,7 +226,7 @@ const createChart = () => {
         y1: {
           title: {
             display: true,
-            text: 'Work Amount'
+            text: t('chart.axes.workAmount')
           },
           beginAtZero: true,
           position: 'right',

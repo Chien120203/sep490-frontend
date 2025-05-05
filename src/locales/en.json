@@ -519,6 +519,20 @@
       "bodApproval": "Giám đốc duyệt"
     }
   },
+  "chart": {
+    "title": "Construction Progress & Resource Usage",
+    "legend": {
+      "workAmount": "Work Amount",
+      "materials": "Materials",
+      "labor": "Labor",
+      "equipment": "Equipment"
+    },
+    "noData": "No data available",
+    "axes": {
+      "resourceQuantity": "Resource Quantity",
+      "workAmount": "Work Amount"
+    }
+  },
   "resource": {
     "title": "Resource Management ",
     "add_new": "Add New",
@@ -789,6 +803,7 @@
     },
     "details": {
       "title": "Project Details",
+      "statistic": "Statistic",
       "financial_summary": "Financial Summary",
       "change_request": "Change Request",
       "site-survey": "Site Survey",
