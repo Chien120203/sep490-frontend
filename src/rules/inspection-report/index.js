@@ -7,9 +7,6 @@ export const getInspectionRules = () => {
     const inspectStore = useInspectionReportStore();
     const {inspectionReportDetails} = inspectStore;
     return {
-        inspectCode: [
-            { required: true, message: t("E-CM-002"), trigger: "blur" }
-        ],
         inspectorId: [
             { required: true, message: t("E-CM-002"), trigger: "blur" },
             { type: 'number', message: t("E-CM-XXX"), trigger: "blur" }

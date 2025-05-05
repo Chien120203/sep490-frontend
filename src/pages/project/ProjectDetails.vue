@@ -24,11 +24,11 @@
                   @edit="handleRedirectToEdit"
               />
             </el-collapse-item>
-            <el-collapse-item style="min-height: 550px" name="2">
+            <el-collapse-item name="2">
               <template #title>
                 <h3>{{ "Statistic " }}</h3>
               </template>
-              <div style="display: flex; justify-content: space-evenly">
+              <div style="display: flex; justify-content: space-evenly; min-height: 550px">
                 <div style="width: 30%;">
                   <DonutChart :chart-data="projectFinancial"/>
                 </div>
@@ -46,7 +46,7 @@
                   <el-row
                       class="mb-4"
                   >
-                    <el-button v-if="isAllowCreateContract && !isSiteSurveyNull.value" class="btn btn-save" @click="handleRedirectToCreate"
+                    <el-button v-if="isAllowCreateContract" class="btn btn-save" @click="handleRedirectToCreate"
                     >{{ $t("project.add_new") }}
                     </el-button>
                   </el-row>
@@ -215,7 +215,7 @@ export default {
     const isAllowApprove = computed(() => (localStorage.getItem('role') === EXECUTIVE_BOARD));
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
-      await getListProjectLogs({projectId: projectId.value,pageSize: 100}, false);
+      await getListProjectLogs({projectId: route.params.id, pageSize: 100}, false);
       await getProjectStatistic(route.params.id);
       projectId.value = route.params.id;
       if (loggedIn.value) {

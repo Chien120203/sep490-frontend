@@ -4,3 +4,5 @@ export const STATUS_LABELS = [
   'planning.status.rejected',
   'planning.status.approved',
 ]
+
+export const PLAN_APPROVED = 2;

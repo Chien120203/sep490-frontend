@@ -170,6 +170,8 @@ const allowApprove = computed(() => {
   if(currentRole === EXECUTIVE_BOARD) {
     const technicalManagerApproved = approveStatuses.value.find(p => p.role === TECHNICAL_MANAGER)?.isApproved === true;
     const resourceManagerApproved = approveStatuses.value.find(p => p.role === RESOURCE_MANAGER)?.isApproved === true;
+    const executiveBoardApproved = approveStatuses.value.find(p => p.role === EXECUTIVE_BOARD)?.isApproved === true;
+    if(executiveBoardApproved) return false;
     return technicalManagerApproved && resourceManagerApproved;
   };
   return status?.isApproved === null  || status?.isApproved === false;
