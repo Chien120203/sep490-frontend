@@ -10,7 +10,7 @@ import {useProgressStore} from "@/store/progress.js";
 import {useConstructLog} from "@/store/construct-log.js";
 import ChangeRequestModal from "@/pages/change-request/item/modal/ChangeRequestModal.vue";
 import {useInventoryStore} from "@/store/inventory.js";
-import {TECHNICAL_MANAGER} from "@/constants/roles.js";
+import {EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import {getProgressRules} from "@/rules/progress/index.js";
 
 const router = useRouter();
@@ -73,7 +73,7 @@ const setTaskIndex = () => {
 };
 
 const tasks = ref(progressDetails.value.progressItems);
-const allowCreate = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER);
+const allowCreate = computed(() => localStorage.getItem('role') === TECHNICAL_MANAGER || localStorage.getItem('role') === EXECUTIVE_BOARD);
 watch(
     () => progressDetails.value,
     (newVal) => {
@@ -102,6 +102,7 @@ const handleUpdateProgressItem = async () => {
   let params = {
     progressId: progressDetails.value.id,
     progress: selectedProgressItem.value.progress,
+    quantity: selectedProgressItem.value.quantity,
     id: selectedProgressItem.value.id,
     status: selectedProgressItem.value.status,
     planStartDate: selectedProgressItem.value.planStartDate,

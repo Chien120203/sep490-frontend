@@ -112,6 +112,7 @@ const API_CODE = {
     //Progress
     API_PROGRESS_001: '/construction-progress/get-by-project',
     API_PROGRESS_002: '/construction-progress/item/create',
+    API_PROGRESS_004: '/cache/clear-all',
     API_PROGRESS_003: '/construction-progress/item/update',
 
 };

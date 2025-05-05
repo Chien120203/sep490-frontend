@@ -7,6 +7,7 @@ import {QUALITY_ASSURANCE} from "@/constants/roles.js";
 import {INSPECT_DECISION_FAIL, WAIT_FOR_APPROVE} from "@/constants/inspection.js";
 import {useRouter} from "vue-router";
 import PAGE_NAME from "@/constants/route-name.js";
+import {useProgressStore} from "@/store/progress.js";
 
 export const useInspectionReportStore = defineStore(
   "inspectionReport",
@@ -18,6 +19,8 @@ export const useInspectionReportStore = defineStore(
     const totalItems = reactive({value: 0});
     const currentPage = reactive({value: 1});
     const listInspectionReports = reactive({value: []});
+    const progressStore = useProgressStore();
+    const {clearAllCache} = progressStore;
     const inspectionReportDetails = reactive({
       value: {
         id: 0,
@@ -125,6 +128,7 @@ export const useInspectionReportStore = defineStore(
         id,
         (response) => {
           getInspectionReportDetails(id);
+          clearAllCache();
           mixinMethods.notifySuccess(t("response.message.save_inspection_success"));
           mixinMethods.endLoading();
         },

@@ -30,6 +30,9 @@
                 :placeholder="$t('common.select_date')"
             />
           </el-form-item>
+          <el-form-item :label="$t('progress.task_card.quantity')">
+            <el-input-number style="width: 100%" :disabled="!allowEdit" :min="task.usedQuantity"  v-model="task.quantity" />
+          </el-form-item>
         </el-col>
 
         <el-col :span="12">

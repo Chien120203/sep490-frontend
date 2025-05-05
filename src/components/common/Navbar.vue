@@ -28,11 +28,11 @@
           <el-sub-menu index="2">
             <template #title>
               {{
-                selectedLanguage === EN_LOCALE ? "ENGLISH" : "Tiếng Việt"
+                selectedLanguage === EN_LOCALE ? "English" : "Tiếng Việt"
               }}</template
             >
             <el-menu-item @click="changeLocale(EN_LOCALE)" index="3-1"
-            >ENGLISH</el-menu-item
+            >English</el-menu-item
             >
             <el-menu-item @click="changeLocale(VI_LOCALE)" index="3-2"
             >Tiếng Việt</el-menu-item
