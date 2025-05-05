@@ -777,6 +777,12 @@
       "paused": "Paused",
       "close": "Closed"
     },
+    "financial": {
+      "planned_budget": "Planned Budget",
+      "executed": "Executed",
+      "accepted": "Accepted",
+      "remaining": "Remaining"
+    },
     "details": {
       "title": "Project Details",
       "financial_summary": "Financial Summary",
@@ -897,7 +903,7 @@
       "in_progress": "In Progress",
       "completed": "Completed",
       "paused": "Paused",
-      "canceled": "Canceled",
+      "canceled": "Cancel",
       "wait_inspection": "Wait for Inspection",
       "inspection_failed": "Inspection Failed"
     },

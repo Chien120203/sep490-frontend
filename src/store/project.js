@@ -19,10 +19,10 @@ export const useProjectStore = defineStore(
     const currentPage = reactive({value: 1});
     const projectFinancial = reactive({
       labels: [
-        "Planned budget",
-        "Đã thực hiện",
-        "Đã nghiệm thu",
-        "Con lai",
+          'project.financial.planned_budget',
+          'project.financial.executed',
+          'project.financial.accepted',
+          'project.financial.remaining',
       ],
       datasets: [
         {

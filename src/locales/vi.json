@@ -781,6 +781,12 @@
       "paused": "Tạm dừng",
       "close": "Đã đóng"
     },
+    "financial": {
+      "planned_budget": "Ngân sách dự kiến",
+      "executed": "Đã thực hiện",
+      "accepted": "Đã nghiệm thu",
+      "remaining": "Còn lại"
+    },
     "details": {
       "title": "Chi tiết dự án",
       "financial_summary": "Tóm tắt tài chính",
