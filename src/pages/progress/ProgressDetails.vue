@@ -102,6 +102,7 @@ const handleUpdateProgressItem = async () => {
   let params = {
     progressId: progressDetails.value.id,
     progress: selectedProgressItem.value.progress,
+    quantity: selectedProgressItem.value.quantity,
     id: selectedProgressItem.value.id,
     status: selectedProgressItem.value.status,
     planStartDate: selectedProgressItem.value.planStartDate,

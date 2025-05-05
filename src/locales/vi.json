@@ -915,7 +915,8 @@
       "plan_start_date": "Ngày bắt đầu theo kế hoạch",
       "plan_end_date": "Ngày kết thúc theo kế hoạch",
       "status": "Trạng thái",
-      "progress": "Tiến độ"
+      "progress": "Tiến độ",
+      "quantity": "Khối lượng"
     },
     "details": {
       "title": "Tiến độ dự án",

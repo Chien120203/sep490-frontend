@@ -169,6 +169,7 @@ export const useConstructLog = defineStore(
         id,
         {},
         (response) => {
+          getConstructLogDetails(id, false);
           mixinMethods.endLoading();
           mixinMethods.notifySuccess(t("response.message.save_construct_log_success"));
         },

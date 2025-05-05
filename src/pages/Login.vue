@@ -22,7 +22,7 @@
               'btn-language': selectedLanguage.value !== EN_LOCALE,
             }"
           >
-            ENGLISH
+            English
           </button>
         </div>
         <div class="login-form-container">

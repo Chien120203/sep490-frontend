@@ -911,7 +911,8 @@
       "plan_start_date": "Planning Start Date",
       "plan_end_date": "Planning End Date",
       "status": "Status",
-      "progress": "Progress"
+      "progress": "Progress",
+      "quantity": "Quantity"
     },
     "details": {
       "title": "Project Progress",
