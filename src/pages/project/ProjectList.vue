@@ -17,7 +17,7 @@
     <div class="project-container">
       <div class="project-items">
         <!--    charts-->
-        <div class="project-body">
+        <div>
           <div v-if="listProjects.value.length !== 0" class="project-chart">
             <div class="chart-container">
               <div class="chart-item">
@@ -368,6 +368,7 @@ export default {
 
 .project-chart {
   display: flex;
+  width: 100%;
   justify-content: center;
 }
 
@@ -375,7 +376,7 @@ export default {
   display: flex;
 
   .project-items {
-    width: 80%;
+    width: 100%;
   }
 
   .project-task {

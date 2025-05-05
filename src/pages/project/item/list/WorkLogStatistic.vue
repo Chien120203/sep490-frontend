@@ -2,7 +2,7 @@
   <div class="chart-container">
     <h3>Construction Progress & Resource Usage</h3>
     <canvas ref="chartCanvas"></canvas>
-    <div class="chart-legend">
+    <div class="chart-legend" v-if="hasData">
       <div class="legend-item">
         <div class="legend-color work-amount"></div>
         <span>Work Amount</span>
@@ -20,28 +20,39 @@
         <span>Equipment</span>
       </div>
     </div>
+    <div v-if="!hasData" class="no-data">
+      No data available to display
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, watch } from 'vue';
+import { ref, onMounted, defineProps, watch, computed } from 'vue';
 import Chart from 'chart.js/auto';
-import {HUMAN_TYPE, MACHINE_TYPE, MATERIAL_TYPE} from "@/constants/resource.js";
 
 const props = defineProps({
   constructionLogData: {
-    type: Object,
+    type: Array,
     required: true
   }
 });
 
 const chartCanvas = ref(null);
 let chart = null;
+const hasData = computed(() => {
+  return processDataForChart(props.constructionLogData).labels.length > 0;
+});
 
+// Resource type constants
+const RESOURCE_TYPE = {
+  LABOR: 1,
+  EQUIPMENT: 2,
+  MATERIAL: 3
+};
 
 // Function to process the data for the chart
-const processDataForChart = (data) => {
-  if (!data || !data.workAmount || !data.resources) {
+const processDataForChart = (logs) => {
+  if (!logs || !Array.isArray(logs) || logs.length === 0) {
     return {
       labels: [],
       workAmountData: [],
@@ -51,63 +62,66 @@ const processDataForChart = (data) => {
     };
   }
 
-  // Get unique dates from both workAmount and resources
-  const allDates = [
-    ...new Set([
-      ...data.workAmount.map(item => item.logDate),
-      ...data.resources.map(item => item.logDate)
-    ])
-  ].sort();
+  // Sort logs by date ascending
+  const sortedLogs = [...logs].sort((a, b) =>
+      new Date(a.logDate) - new Date(b.logDate)
+  );
 
-  // Prepare data for each date
+  const labels = [];
   const workAmountData = [];
   const laborData = [];
   const equipmentData = [];
   const materialData = [];
 
-  allDates.forEach(date => {
-    // Find work amount for this date
-    const workAmountItem = data.workAmount.find(item => item.logDate === date);
-    workAmountData.push(workAmountItem ? workAmountItem.workAmount : 0);
+  sortedLogs.forEach(log => {
+    // Format the date for display
+    const date = new Date(log.logDate);
+    const formattedDate = date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    labels.push(formattedDate);
 
-    // Process resources by type for this date
-    const dateResources = data.resources.filter(item => item.logDate === date);
+    // Process work amount
+    const totalWorkAmount = log.workAmount && log.workAmount.length > 0
+        ? log.workAmount.reduce((sum, item) => sum + item.workAmount, 0)
+        : 0;
+    workAmountData.push(totalWorkAmount);
 
-    // Sum quantities by resource type
-    const labor = dateResources
-        .filter(res => res.resourceType === HUMAN_TYPE)
-        .reduce((sum, res) => sum + res.quantity, 0);
+    // Process resources by type
+    let laborTotal = 0;
+    let equipmentTotal = 0;
+    let materialTotal = 0;
 
-    const equipment = dateResources
-        .filter(res => res.resourceType === MACHINE_TYPE)
-        .reduce((sum, res) => sum + res.quantity, 0);
+    if (log.resources && log.resources.length > 0) {
+      log.resources.forEach(resource => {
+        switch (resource.resourceType) {
+          case RESOURCE_TYPE.LABOR:
+            laborTotal += resource.quantity;
+            break;
+          case RESOURCE_TYPE.EQUIPMENT:
+            equipmentTotal += resource.quantity;
+            break;
+          case RESOURCE_TYPE.MATERIAL:
+            materialTotal += resource.quantity;
+            break;
+        }
+      });
+    }
 
-    const material = dateResources
-        .filter(res => res.resourceType === MATERIAL_TYPE)
-        .reduce((sum, res) => sum + res.quantity, 0);
-
-    laborData.push(labor);
-    equipmentData.push(equipment);
-    materialData.push(material);
+    laborData.push(laborTotal);
+    equipmentData.push(equipmentTotal);
+    materialData.push(materialTotal);
   });
 
   return {
-    labels: allDates.map(date => formatDate(date)),
+    labels,
     workAmountData,
     laborData,
     equipmentData,
     materialData
   };
-};
-
-// Format dates to be more readable
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  });
 };
 
 // Create or update the chart
@@ -116,8 +130,14 @@ const createChart = () => {
     chart.destroy();
   }
 
-  const ctx = chartCanvas.value.getContext('2d');
   const { labels, workAmountData, laborData, equipmentData, materialData } = processDataForChart(props.constructionLogData);
+
+  if (labels.length === 0) {
+    // No data to display
+    return;
+  }
+
+  const ctx = chartCanvas.value.getContext('2d');
 
   chart = new Chart(ctx, {
     type: 'bar',
@@ -164,6 +184,25 @@ const createChart = () => {
         tooltip: {
           mode: 'index',
           intersect: false,
+          callbacks: {
+            title: function(tooltipItems) {
+              return tooltipItems[0].label;
+            },
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.parsed.y !== null) {
+                if (label.includes('Work Amount')) {
+                  label += new Intl.NumberFormat('vi-VN').format(context.parsed.y);
+                } else {
+                  label += context.parsed.y;
+                }
+              }
+              return label;
+            }
+          }
         },
         legend: {
           display: false, // Using custom legend
@@ -204,7 +243,7 @@ watch(() => props.constructionLogData, () => {
 }, { deep: true });
 
 onMounted(() => {
-  if (props.constructionLogData) {
+  if (props.constructionLogData && props.constructionLogData.length) {
     createChart();
   }
 });
@@ -262,5 +301,14 @@ h3 {
   text-align: center;
   margin-bottom: 15px;
   color: #333;
+}
+
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 16px;
+  color: #999;
 }
 </style>

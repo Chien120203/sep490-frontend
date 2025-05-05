@@ -24,12 +24,17 @@
                   @edit="handleRedirectToEdit"
               />
             </el-collapse-item>
-            <el-collapse-item name="2">
-              <div>
-                <DonutChart :chart-data="projectFinancial"/>
-              </div>
-              <div>
-                <WorkLogStatistic :construction-log-data="constructionLogData"/>
+            <el-collapse-item style="min-height: 550px" name="2">
+              <template #title>
+                <h3>{{ "Statistic " }}</h3>
+              </template>
+              <div style="display: flex; justify-content: space-evenly">
+                <div style="width: 30%;">
+                  <DonutChart :chart-data="projectFinancial"/>
+                </div>
+                <div style="width: 70%; min-height: 520px;">
+                  <WorkLogStatistic :construction-log-data="listConstructLog.value"/>
+                </div>
               </div>
             </el-collapse-item>
             <el-collapse-item name="4">
@@ -110,6 +115,7 @@ import {usePersistenceStore} from "@/store/persistence.js";
 import {BUSINESS_EMPLOYEE, EXECUTIVE_BOARD, TECHNICAL_MANAGER} from "@/constants/roles.js";
 import DonutChart from "@/pages/project/item/list/ProjectChart.vue";
 import WorkLogStatistic from "@/pages/project/item/list/WorkLogStatistic.vue";
+import {useConstructLog} from "@/store/construct-log.js";
 
 export default {
   name: "ProjectDetails",
@@ -141,7 +147,7 @@ export default {
     const contractStore = useContractStore();
     const surveyStore = useSiteSurveyStore();
     const persist = usePersistenceStore();
-
+    const constructLogStore = useConstructLog()
     const {
       isShowModalConfirm,
       projectDetails,
@@ -150,7 +156,9 @@ export default {
       updateProjectStatus,
       getProjectStatistic
     } = projectStore;
-
+    const {
+      getListProjectLogs, listConstructLog
+    } = constructLogStore;
     const {
       totalItems,
       contractDetails,
@@ -185,18 +193,6 @@ export default {
         request_date: "2024-02-10T14:20:00",
       },
     ]);
-    const financialData = ref([
-      {
-        title: "CHỦ ĐẦU TƯ (CĐT)",
-        bgColor: "#DFF5E1",
-        data: [
-          { label: "Hợp đồng", value: 484974055904 },
-          { label: "Đã thực hiện", value: 30226660535 },
-          { label: "Đã nghiệm thu", value: 29676324721 },
-          { label: "CĐT còn nợ", value: -18958404654 },
-        ],
-      },
-    ]);
 
     const isShowBoxSearch = ref(false);
     const actionText = ref('');
@@ -219,6 +215,7 @@ export default {
     const isAllowApprove = computed(() => (localStorage.getItem('role') === EXECUTIVE_BOARD));
     const isAllowCreateSiteSurvey = computed(() => (localStorage.getItem('role') === TECHNICAL_MANAGER && isSiteSurveyNull.value));
     onMounted(async () => {
+      await getListProjectLogs({projectId: projectId.value,pageSize: 100}, false);
       await getProjectStatistic(route.params.id);
       projectId.value = route.params.id;
       if (loggedIn.value) {
@@ -295,9 +292,9 @@ export default {
       PLANNING_STATUS,
       WAIT_TO_COMPLETE,
       COMPLETE,
-      financialData,
       isAllowApproveToPlanning,
       isAllowClose,
+      listConstructLog,
       projectStatus,
       isAllowCreateContract,
       isAllowApprove,
