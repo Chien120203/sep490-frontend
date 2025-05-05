@@ -21,12 +21,12 @@ export const getInspectionRules = () => {
             { required: true, message: t("E-CM-002"), trigger: "blur" },
             {
                 validator: (rule, value, callback) =>
-                  validateStartBeforeEnd(rule, value, callback, value, inspectionReportDetails.value.inspectEndDate, "E-CM-020"),
+                    validateStartBeforeEnd(rule, value, callback, value, inspectionReportDetails.value.inspectEndDate, "E-CM-020"),
                 trigger: "blur",
             },
             {
                 validator: (rule, value, callback) =>
-                  validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
+                    validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
                 trigger: "blur",
             }
         ],
@@ -34,12 +34,12 @@ export const getInspectionRules = () => {
             { required: true, message: t("E-CM-002"), trigger: "blur" },
             {
                 validator: (rule, value, callback) =>
-                  validateStartBeforeEnd(rule, value, callback, inspectionReportDetails.value.inspectStartDate, value, "E-CM-028"),
+                    validateStartBeforeEnd(rule, value, callback, inspectionReportDetails.value.inspectStartDate, value, "E-CM-028"),
                 trigger: "blur",
             },
             {
                 validator: (rule, value, callback) =>
-                  validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
+                    validateStartBeforeEnd(rule, value, callback, new Date(), value, "E-CM-022"),
                 trigger: "blur",
             }
         ],

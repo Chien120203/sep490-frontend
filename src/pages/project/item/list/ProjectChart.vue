@@ -4,7 +4,7 @@
     <ul class="legend">
       <li v-for="(label, index) in chartData.labels" :key="index">
         <span :style="{ backgroundColor: chartData.datasets[0].backgroundColor[index] }"></span>
-        {{ label }}: {{ chartData.datasets[0].data[index] }}
+        {{ $t(label) }}: {{ chartData.datasets[0].data[index] }}
       </li>
     </ul>
   </div>

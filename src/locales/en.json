@@ -524,6 +524,10 @@
     "add_new": "Add New",
     "keyword": "Keyword",
     "search": "Search",
+    "name": "Name",
+    "unit": "Unit",
+    "quantity": "Inventory",
+    "type": "Type",
     "machine": {
       "title": "Machine Resource Management",
       "add_new": "Add New",
@@ -533,8 +537,8 @@
       "status": "Status",
       "type": "Type",
       "statuses": {
-        "active": "Active",
-        "inactive": "Inactive",
+        "active": "Available",
+        "inactive": "Unavailable",
         "maintain": "Under Maintenance"
       },
       "details": {
@@ -777,6 +781,12 @@
       "paused": "Paused",
       "close": "Closed"
     },
+    "financial": {
+      "planned_budget": "Planned Budget",
+      "executed": "Executed",
+      "accepted": "Accepted",
+      "remaining": "Remaining"
+    },
     "details": {
       "title": "Project Details",
       "financial_summary": "Financial Summary",
@@ -897,14 +907,14 @@
       "in_progress": "In Progress",
       "completed": "Completed",
       "paused": "Paused",
-      "canceled": "Canceled",
+      "canceled": "Cancel",
       "wait_inspection": "Wait for Inspection",
       "inspection_failed": "Inspection Failed"
     },
     "modal_confirm": {
       "title": "Update progress Item",
       "message": "Do you want to update this progress item?",
-      "canceled": "Canceled",
+      "canceled": "Cancel",
       "pending": "Pending"
     },
     "columns": {
@@ -956,6 +966,10 @@
     },
     "edit": {
       "title": "Edit Planning"
+    },
+    "tabs": {
+      "info": "Info",
+      "activity": "Activity"
     },
     "table": {
       "header": {
@@ -1011,6 +1025,12 @@
       "material": "Material Form",
       "machine": "Machine Form",
       "human": "Human Form"
+    },
+    "statuses": {
+      "created": "Created",
+      "resourceDepartment": "Resource Department",
+      "technicalDepartment": "Technical Department",
+      "directorApproval": "DOB Approval"
     },
     "items": {
       "name": "Name",
@@ -1516,6 +1536,10 @@
       "total_required": "Total amount is required",
       "total_positive": "Total amount must be greater than 0"
     }
+  },
+  "weather": {
+    "condition": "Condition",
+    "temperature": "Temperature"
   },
   "inspection": {
     "title": "Inspection Report",
