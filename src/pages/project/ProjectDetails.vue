@@ -26,11 +26,11 @@
             </el-collapse-item>
             <el-collapse-item name="2">
               <template #title>
-                <h3>{{ "Statistic " }}</h3>
+                <h3>{{ $t("project.details.statistic") }}</h3>
               </template>
               <div style="display: flex; justify-content: space-evenly; min-height: 550px">
                 <div style="width: 30%;">
-                  <DonutChart :chart-data="projectFinancial"/>
+                  <DonutChart :chart-data="projectFinancial" />
                 </div>
                 <div style="width: 70%; min-height: 520px;">
                   <WorkLogStatistic :construction-log-data="listConstructLog.value"/>
@@ -408,4 +408,5 @@ export default {
 h3 {
   margin: auto 12px;
 }
+
 </style>

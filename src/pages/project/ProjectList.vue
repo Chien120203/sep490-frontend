@@ -21,10 +21,10 @@
           <div v-if="listProjects.value.length !== 0" class="project-chart">
             <div class="chart-container">
               <div class="chart-item">
-                <DonutChart :chart-data="chartData"/>
+                <DonutChart :chart-data="chartData" />
               </div>
               <div class="chart-item">
-                <DonutChart :chart-data="projectFinancial"/>
+                <DonutChart :chart-data="projectFinancial" />
               </div>
             </div>
           </div>

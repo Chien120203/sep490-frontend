@@ -523,6 +523,20 @@
       "bodApproval": "Giám đốc duyệt"
     }
   },
+  "chart": {
+    "title": "Tiến độ xây dựng và sử dụng tài nguyên",
+    "legend": {
+      "workAmount": "Khối lượng công việc",
+      "materials": "Vật liệu",
+      "labor": "Nhân công",
+      "equipment": "Thiết bị"
+    },
+    "noData": "Không có dữ liệu",
+    "axes": {
+      "resourceQuantity": "Số lượng tài nguyên",
+      "workAmount": "Khối lượng công việc"
+    }
+  },
   "resource": {
     "title": "Quản lý tài nguyên",
     "add_new": "Thêm mới",
@@ -793,6 +807,7 @@
     },
     "details": {
       "title": "Chi tiết dự án",
+      "statistic": "Thống kê",
       "financial_summary": "Tóm tắt tài chính",
       "change_request": "Yêu cầu thay đổi",
       "site-survey": "Khảo sát công trình",
